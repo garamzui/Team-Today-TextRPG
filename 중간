@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading;
 
 enum DUNGEON_DIFF
@@ -8,22 +7,6 @@ enum DUNGEON_DIFF
     Normal,
     Hard,
     Hell
-}
-
-class Monster
-{
-    public string Name;
-    public int Hp;
-    public int Attack;
-    public int Reward;
-
-    public Monster(string name, int hp, int attack, int reward)
-    {
-        Name = name;
-        Hp = hp;
-        Attack = attack;
-        Reward = reward;
-    }
 }
 
 class Dungeon
@@ -35,4 +18,31 @@ class Dungeon
     private int exp;
     private int defLevel;
     private DUNGEON_DIFF diff;
-}
+
+    private bool isInHellDungeon = false;
+
+    public Dungeon(string[] info)
+    {
+        if (info.Length >= 6)
+        {
+            code = int.Parse(info[0]);
+            name = info[1];
+            reward = int.Parse(info[2]);
+            exp = int.Parse(info[3]);
+            defLevel = int.Parse(info[4]);
+            diff = (DUNGEON_DIFF)Enum.Parse(typeof(DUNGEON_DIFF), info[5]);
+        }
+    }
+
+    public void EnterDungeon(Player player, Func<int, Monster> getMonster)
+    {
+        Console.WriteLine($"\n[{name}] 던전에 입장했습니다!");
+
+        if (diff == DUNGEON_DIFF.Hell)
+        {
+            isInHellDungeon = true;
+            new Thread(() => HellDamageOverTime(player)).Start();
+        }
+
+        int currentFloor = 1;
+        int maxFloor = 5;
