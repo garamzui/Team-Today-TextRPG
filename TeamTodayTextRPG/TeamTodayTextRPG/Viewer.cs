@@ -1,6 +1,4 @@
-﻿using TeamTodayTextRPG;
-
-public enum VIEW_TYPE
+﻿public enum VIEW_TYPE
 {
     MAIN,           // 게임 시작 화면
     STATUS,         // 상태 보기 화면
