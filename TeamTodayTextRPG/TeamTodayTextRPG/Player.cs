@@ -16,6 +16,7 @@ namespace TeamTodayTextRPG
 
         public void SetCharacter(int stat, string name)
         {
+            //Character 스크립트에서 스탯의 정보를 받아온다
 
         }
 
@@ -26,7 +27,7 @@ namespace TeamTodayTextRPG
 
         public bool CheckBag(int hasBag)
         {
-
+            
         }
 
         public void InputBag(int inBag)
