@@ -1,0 +1,38 @@
+using System;
+using System.Collections.Generic;
+using System.Threading;
+
+enum DUNGEON_DIFF
+{
+    Easy,
+    Normal,
+    Hard,
+    Hell
+}
+
+class Monster
+{
+    public string Name;
+    public int Hp;
+    public int Attack;
+    public int Reward;
+
+    public Monster(string name, int hp, int attack, int reward)
+    {
+        Name = name;
+        Hp = hp;
+        Attack = attack;
+        Reward = reward;
+    }
+}
+
+class Dungeon
+{
+    private Random rand = new Random();
+    private int code;
+    private string name;
+    private int reward;
+    private int exp;
+    private int defLevel;
+    private DUNGEON_DIFF diff;
+}
