@@ -22,6 +22,10 @@ namespace TeamTodayTextRPG
 
         public void LevelUp(int requiredExp)
         {
+            if (exp >= requiredExp)
+            {
+                
+            }
 
         }
 
