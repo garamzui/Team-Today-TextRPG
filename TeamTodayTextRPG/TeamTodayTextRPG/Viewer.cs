@@ -34,24 +34,31 @@ public class MainViewer : Viewer
 
     public override VIEW_TYPE NextView(GameManager gameManager, int input)
     {
-        return input switch
+        switch (input)
         {
-            1 => VIEW_TYPE.STATUS,
-            2 => VIEW_TYPE.INVENTORY,
-            3 => VIEW_TYPE.EQUIP,
-            4 => VIEW_TYPE.SHOP,
-            5 => VIEW_TYPE.DUNGEON,
-            6 => ExitGame(),  // 게임 종료 처리
-            _ => VIEW_TYPE.MAIN  // 잘못된 입력 처리
-        };
+            case 1:
+                return VIEW_TYPE.STATUS;
+            case 2:
+                return VIEW_TYPE.INVENTORY;
+            case 3:
+                return VIEW_TYPE.EQUIP;
+            case 4:
+                return VIEW_TYPE.SHOP;
+            case 5:
+                return VIEW_TYPE.DUNGEON;
+            case 6:
+                ExitGame();  // 게임 종료 처리
+                return VIEW_TYPE.MAIN; // 이 라인은 실제로 실행되지 않음
+            default:
+                return VIEW_TYPE.MAIN;  // 잘못된 입력 처리
+        }
     }
 
     // 게임 종료 처리
-    private VIEW_TYPE ExitGame()
+    private void ExitGame()
     {
         Console.WriteLine("게임 종료 중...");
         Environment.Exit(0); // 게임 종료
-        return VIEW_TYPE.MAIN; // 이 라인은 실제로 실행되지 않음
     }
 }
 
@@ -69,7 +76,13 @@ public class StatusViewer : Viewer
 
     public override VIEW_TYPE NextView(GameManager gameManager, int input)
     {
-        return input == 1 ? VIEW_TYPE.MAIN : VIEW_TYPE.STATUS;
+        switch (input)
+        {
+            case 1:
+                return VIEW_TYPE.MAIN;
+            default:
+                return VIEW_TYPE.STATUS;
+        }
     }
 }
 
@@ -85,13 +98,17 @@ public class InventoryViewer : Viewer
 
     public override VIEW_TYPE NextView(GameManager gameManager, int input)
     {
-        return input switch
+        switch (input)
         {
-            1 => VIEW_TYPE.INVENTORY,
-            2 => VIEW_TYPE.INVENTORY,
-            3 => VIEW_TYPE.MAIN,
-            _ => VIEW_TYPE.INVENTORY
-        };
+            case 1:
+                return VIEW_TYPE.INVENTORY;
+            case 2:
+                return VIEW_TYPE.INVENTORY;
+            case 3:
+                return VIEW_TYPE.MAIN;
+            default:
+                return VIEW_TYPE.INVENTORY;
+        }
     }
 }
 
@@ -107,13 +124,17 @@ public class EquipViewer : Viewer
 
     public override VIEW_TYPE NextView(GameManager gameManager, int input)
     {
-        return input switch
+        switch (input)
         {
-            1 => VIEW_TYPE.EQUIP,
-            2 => VIEW_TYPE.EQUIP,
-            3 => VIEW_TYPE.MAIN,
-            _ => VIEW_TYPE.EQUIP
-        };
+            case 1:
+                return VIEW_TYPE.EQUIP;
+            case 2:
+                return VIEW_TYPE.EQUIP;
+            case 3:
+                return VIEW_TYPE.MAIN;
+            default:
+                return VIEW_TYPE.EQUIP;
+        }
     }
 }
 
@@ -129,13 +150,17 @@ public class ShopViewer : Viewer
 
     public override VIEW_TYPE NextView(GameManager gameManager, int input)
     {
-        return input switch
+        switch (input)
         {
-            1 => VIEW_TYPE.PURCHASE,
-            2 => VIEW_TYPE.SALE,
-            3 => VIEW_TYPE.MAIN,
-            _ => VIEW_TYPE.SHOP
-        };
+            case 1:
+                return VIEW_TYPE.PURCHASE;
+            case 2:
+                return VIEW_TYPE.SALE;
+            case 3:
+                return VIEW_TYPE.MAIN;
+            default:
+                return VIEW_TYPE.SHOP;
+        }
     }
 }
 
@@ -150,12 +175,15 @@ public class PurchaseViewer : Viewer
 
     public override VIEW_TYPE NextView(GameManager gameManager, int input)
     {
-        return input switch
+        switch (input)
         {
-            1 => VIEW_TYPE.PURCHASE,
-            2 => VIEW_TYPE.SHOP,
-            _ => VIEW_TYPE.PURCHASE
-        };
+            case 1:
+                return VIEW_TYPE.PURCHASE;
+            case 2:
+                return VIEW_TYPE.SHOP;
+            default:
+                return VIEW_TYPE.PURCHASE;
+        }
     }
 }
 
@@ -170,12 +198,15 @@ public class SaleViewer : Viewer
 
     public override VIEW_TYPE NextView(GameManager gameManager, int input)
     {
-        return input switch
+        switch (input)
         {
-            1 => VIEW_TYPE.SALE,
-            2 => VIEW_TYPE.SHOP,
-            _ => VIEW_TYPE.SALE
-        };
+            case 1:
+                return VIEW_TYPE.SALE;
+            case 2:
+                return VIEW_TYPE.SHOP;
+            default:
+                return VIEW_TYPE.SALE;
+        }
     }
 }
 
@@ -190,12 +221,15 @@ public class DungeonViewer : Viewer
 
     public override VIEW_TYPE NextView(GameManager gameManager, int input)
     {
-        return input switch
+        switch (input)
         {
-            1 => VIEW_TYPE.DUNGEON,
-            2 => VIEW_TYPE.MAIN,
-            _ => VIEW_TYPE.DUNGEON
-        };
+            case 1:
+                return VIEW_TYPE.DUNGEON;
+            case 2:
+                return VIEW_TYPE.MAIN;
+            default:
+                return VIEW_TYPE.DUNGEON;
+        }
     }
 }
 
@@ -226,13 +260,18 @@ public class BattleViewer : Viewer
 
     public override VIEW_TYPE NextView(GameManager gameManager, int input)
     {
-        return input switch
+        switch (input)
         {
-            1 => VIEW_TYPE.BATTLE,  // 공격 선택
-            2 => VIEW_TYPE.BATTLE,  // 방어 선택
-            3 => VIEW_TYPE.BATTLE,  // 도망 선택
-            4 => VIEW_TYPE.MAIN,    // 메인 화면으로 돌아가기
-            _ => VIEW_TYPE.BATTLE   // 잘못된 입력 처리
-        };
+            case 1:
+                return VIEW_TYPE.BATTLE;  // 공격 선택
+            case 2:
+                return VIEW_TYPE.BATTLE;  // 방어 선택
+            case 3:
+                return VIEW_TYPE.BATTLE;  // 도망 선택
+            case 4:
+                return VIEW_TYPE.MAIN;    // 메인 화면으로 돌아가기
+            default:
+                return VIEW_TYPE.BATTLE;   // 잘못된 입력 처리
+        }
     }
 }
