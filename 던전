@@ -1,0 +1,17 @@
+enum DUNGEON_DIFF
+{
+    Easy,
+    Normal,
+    Hard,
+    Hell
+}
+
+class Dungeon
+{
+    private Random rand = new Random();
+    private int code;
+    private string name;
+    private int reward;      // 기본 골드 보상
+    private int exp;         // 경험치 보상
+    private int defLevel;    // 권장 레벨
+    private DUNGEON_DIFF diff; // 난이도
