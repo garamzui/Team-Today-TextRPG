@@ -8,5 +8,6 @@ namespace TeamTodayTextRPG
 {
     internal class Character
     {
+        //asd
     }
 }
