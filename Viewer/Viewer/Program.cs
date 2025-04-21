@@ -17,9 +17,6 @@ public abstract class Viewer
     protected int startIndex;
     protected int endIndex;
     protected int dungeonCode;
-
     public abstract void ViewAction(GameManager);
-
-   
     public abstract VIEW_TYPE NextView(GameManager, int);
 }
