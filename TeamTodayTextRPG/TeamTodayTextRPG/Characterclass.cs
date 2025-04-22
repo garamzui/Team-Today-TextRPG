@@ -23,7 +23,15 @@ namespace TeamTodayTextRPG
             public int maxHp { get; set; }
             public int mp { get; set; } // 새로운 스탯 mp추가 했습니다
             public int maxMp { get; set; }
-            public int dodge { get; set; } // 직업간 차이를 두어 보고자 dodge 스탯도 추가 해 봤습니다. 
+            public int dodge { get; set; }
+            // 직업간 차이를 두어 보고자 dodge 스탯도 추가 해 봤습니다.
+            // 전투가 어떻게 이루어질지에 따라 추가해야 할 계산식이 달라질 것 같습니다.
+            // 예를 들면 
+            //public static Random dodgeR = new Random();
+            //int num = dodgeR.Next(0, 51);
+            //if ((num += Charater.dodge) >25)
+            //{공격을 무효화하는 매서드}
+            // 이런식으로 설계하면 어떨까 합니다.
             public int gold { get; set; }
             public string[] initstr { get; set; }
             public string[] strary { get; set; }
@@ -97,11 +105,13 @@ namespace TeamTodayTextRPG
             public static Worrior Default()
             {
                 Worrior w = new Worrior();
-                w.init("전사,10,5,100,20,1,1000,쾅 내려치기,전사의 피부");
+                w.init("전사,10,5,100,40,1,1000,쾅 내려치기,전사의 피부");
                 return w;
             }
             public override void ActiveSkill()
             {
+               
+                
                 base.ActiveSkill();
             }
 
@@ -132,6 +142,8 @@ namespace TeamTodayTextRPG
                 base.ActiveSkill();
             }
         }
+
+       
     }
 
 
