@@ -23,7 +23,14 @@ namespace TeamTodayTextRPG
             public int maxHp { get; set; }
             public int mp { get; set; } // 새로운 스탯 mp추가 했습니다
             public int maxMp { get; set; }
-            public int dodge { get; set; } // 직업간 차이를 두어 보고자 dodge 스탯도 추가 해 봤습니다. 
+            public int dodge { get; set; }
+            // 직업간 차이를 두어 보고자 dodge 스탯도 추가 해 봤습니다.
+            // 전투가 어떻게 이루어질지에 따라 추가해야 할 계산식이 달라질 것 같습니다.
+            // 예를 들면 
+            //int num = new Random().Next(0, 26); 또는 GameManager에 static Random하나 만들어두고 돌려쓰기
+            //if ((num += Charater.dodge > 20)
+            //{공격을 무효화하기}
+            // 이런식으로 설계하면 어떨까 합니다.
             public int gold { get; set; }
             public string[] initstr { get; set; }
             public string[] strary { get; set; }
@@ -55,7 +62,8 @@ namespace TeamTodayTextRPG
 
             //기본공격을 두고, 래밸을 올리면 스킬이
             //해금되는 방식을 적용해 보고 싶었습니다.
-            // 추후에 구현이 어려울 시 조건부는 빼 버리는 것으로 하면 될 것 같습니다. 
+            // 추후에 구현이 어려울 시 조건부는 빼 버리는 것으로 하면 될 것 같습니다.
+            // 스킬 이름은 스탯과 함께 초기화해서 저장해두게 해놨습니다.
             //Player의 필드들이 private되어있어 접근이 안됩니다. 요 부분은 회의 때 조율 해야 할 것 같아요.
             public virtual void DefaultAttack()
             {
@@ -70,10 +78,7 @@ namespace TeamTodayTextRPG
             {
                 
 
-                if (Player.level >= 2)
-                {
-
-                }
+               
                 Console.WriteLine($"{jobname}의 기술 {actskillName}");
             }
 
@@ -97,11 +102,13 @@ namespace TeamTodayTextRPG
             public static Worrior Default()
             {
                 Worrior w = new Worrior();
-                w.init("전사,10,5,100,20,1,1000,쾅 내려치기,전사의 피부");
+                w.init("전사,10,5,100,40,1,1000,쾅 내려치기,전사의 피부");
                 return w;
             }
             public override void ActiveSkill()
             {
+               
+                
                 base.ActiveSkill();
             }
 
@@ -132,6 +139,8 @@ namespace TeamTodayTextRPG
                 base.ActiveSkill();
             }
         }
+
+       
     }
 
 
