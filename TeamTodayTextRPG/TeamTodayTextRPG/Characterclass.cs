@@ -62,8 +62,9 @@ namespace TeamTodayTextRPG
         {
             public static Worrior Default()
             { 
-            Worrior w = new Worrior();
-                w.initstr("Chad,전사,10,3,5,2,100,100,1000");
+                Worrior w = new Worrior();
+                w.init("Chad,전사,10,3,5,2,100,100,1000");
+                return w;
             }
 
 
