@@ -17,14 +17,17 @@ namespace TeamTodayTextRPG
             public string jobname { get; set; }
             public int attack { get; set; }
             public int plusAtk { get; set; }
+            public int totalAtk { get; set; } = attack + plusAtk; //다른 계산에 필요할까 싶어 합산되어 적용될 값을 따로 만들어 보았습니다.
             public int def { get; set; }
             public int plusDef { get; set; }
+            public int totalDef { get; set; }
             public int hp { get; set; }
             public int maxHp { get; set; }
             public int mp { get; set; } // 새로운 스탯 mp추가 했습니다
             public int maxMp { get; set; }
             public int dodge { get; set; }
             public int plusDodge { get; set; }
+            public int totalDodge { get; set; }
             // 직업간 차이를 두어 보고자 dodge 스탯도 추가 해 봤습니다.
             // 전투가 어떻게 이루어질지에 따라 추가해야 할 계산식이 달라질 것 같습니다.
             // 예를 들면 
@@ -117,7 +120,7 @@ namespace TeamTodayTextRPG
 
             public override void PassiveSkill(Player p)
             {
-                if (p.level >= 5)
+                if (p.level >= 5 && passiveSkillLevel < 5)
                 {
                     def += 2;
                     
@@ -147,7 +150,7 @@ namespace TeamTodayTextRPG
             }
             public override void PassiveSkill(Player p)
             {
-                if (p.level >= 5)
+                if (p.level >= 5 && passiveSkillLevel< 5)
                 {
                     attack += 1;
                     mp += 50;
@@ -184,7 +187,7 @@ namespace TeamTodayTextRPG
             }
             public override void PassiveSkill(Player p)
             {
-                if (p.level >= 5)
+                if (p.level >= 5 && passiveSkillLevel < 5)
                 {
                     dodge += 2;
 
