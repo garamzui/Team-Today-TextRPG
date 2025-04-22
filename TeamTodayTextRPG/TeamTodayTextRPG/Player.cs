@@ -9,22 +9,22 @@ namespace TeamTodayTextRPG
 {
     class Player
     {
-        private Characterclass characterclass;
+        private Characterclass characterClass;
         private List<int> bag;
         private List<int> equip;
         private int level;
         private int exp;
 
         //private DataManager dataManager;
-        
-
-
+        //아이템의 code나 가격, ITEM_TYPE 등
+        //생각보다 ItemDatabase에 접근할 일이 많은 것 같은데
+        //DataManager를 써야 할까요?
 
         //Characterclass에서 스탯의 정보를 받아온다
         public void SetCharacter()
         {
             //초기 소지 장비를 bag과 equip 리스트에 저장한다
-            //characterclass.
+            //characterClass.
         }
 
         public void LevelUp()
@@ -46,10 +46,6 @@ namespace TeamTodayTextRPG
             }
 
         }
-        //아이템에 코드값을 받아서 그 아이템이 내 인벤에 있는지 없는지 체크하는 불값
-        //플레이어 bag이라는 리스트가 아이템의 코드번호를 가지고 저장
-        //0~7 아이템 있는데 6번 찾고 싶으면 bag(6)을 입력하면 true 반환 하는 식으로 제작
-        //equipItem의 경우는 같은 장비군은 중복장착하면 안되니까 세부내용 조금 다름
 
         //인벤토리에 해당 아이템이 있으면
         public bool CheckBag(int code)
@@ -62,16 +58,34 @@ namespace TeamTodayTextRPG
         //인벤토리에 아이템이 들어오는 경우
         public void InputBag()
         {
+            //잠깐 여기서 사용하려고 선언&초기화
             int code = 0;
+            int gold = 0;
+            int prise = 0;
 
-            //상점에서 아이템 구매 || 몬스터 드롭
-            if(상점에서 아이템을 구매하면)
+            //상점에서 아이템 구매
+            if(상점에서 아이템을 구매하려할 때)
             {
+                if(gold >= prise)
+                {
+                    gold -= prise;
 
+                    //해당 아이템의 코드를 bag에 저장
+                    //code = 해당 아이템 코드;
+                    //이렇게 거쳐서 저장하는게 괜찮나?
+                    bag.Add(code);
+                }
 
-                //해당 아이템의 코드를 bag에 저장
-                //code = 해당 아이템 코드;
-                //이렇게 거쳐서 저장하는게 괜찮나?
+                else
+                {
+                    Console.WriteLine("소지금이 부족합니다!");
+                }
+            }
+
+            if(전투가 끝났을 때)
+            {
+                //n% 확률로 랜덤 아이템 드롭
+                //근데 여기서 처리하는게 맞나?
                 bag.Add(code);
             }
         }
@@ -79,11 +93,22 @@ namespace TeamTodayTextRPG
         //인벤토리에 아이템이 나가는 경우
         public void RemoveBag()
         {
-            //상점에서 아이템 판매
+            int code = 0;
+            int gold = 0;
+            int prise = 0;
 
+            //상점에서 아이템 판매
+            if (CheckBag(code) == true && 상점에서 판매할 때)
+            {
+                gold += (int)(prise * 0.85f);
+                bag.Remove(code);
+            }
 
             //버리기
-
+            if(CheckBag(code) == true && 인벤토리에서 버릴 때)
+            {
+                bag.Remove(code);
+            }
 
         }
 
@@ -95,16 +120,42 @@ namespace TeamTodayTextRPG
             return equipItem;
         }
 
-
         public void EquipItem()
         {
+            int code = 0;
+            int equiped = 0;
 
+            //아이템 소지 && 미장착
+            if(CheckBag(code) == true && CheckEquip(code) == false)
+            {
+                //같은 타입 아이템 미장착
+                if(해당 ITEM_TYPE을 장착하지 않았을 때)
+                {
+                    equip.Add(code);
+                }
+
+                //같은 타입 아이템 장착중
+                else
+                {
+                    //장착중이던 아이템 해제
+                    equip.Remove(equiped);
+
+                    //장착하려는 아이템 착용
+                    equip.Add(code);
+                }
+            }
         }
 
         public void UnEquipItem()
         {
-            
+            int code = 0;
 
+            //장착중 이라면
+            if(CheckEquip(code) == true)
+            {
+                //equip List에서 삭제
+                equip.Remove(code);
+            }
         }
     }
 }
