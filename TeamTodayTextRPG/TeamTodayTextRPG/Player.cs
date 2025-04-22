@@ -15,10 +15,15 @@ namespace TeamTodayTextRPG
         private int level;
         private int exp;
 
-        //Characterclass 스크립트에서 스탯의 정보를 받아온다
+        //private DataManager dataManager;
+        
+
+
+
+        //Characterclass에서 스탯의 정보를 받아온다
         public void SetCharacter()
         {
-
+            //초기 소지 장비를 bag과 equip 리스트에 저장한다
 
         }
 
@@ -47,22 +52,29 @@ namespace TeamTodayTextRPG
         //equipItem의 경우는 같은 장비군은 중복장착하면 안되니까 세부내용 조금 다름
 
         //인벤토리에 해당 아이템이 있으면
+        //언제 쓰이나? RemoveBag() 하기전에?
         public bool CheckBag(int code)
         {
-            //bag에 Item의 code를 인덱스로 저장한다
-            
-
-            
+            //해당 코드의 아이템이 bag에 있는지
+            bool hasItem = bag.Contains(code);
+            return hasItem;
         }
 
         //인벤토리에 아이템이 들어오는 경우
         public void InputBag()
         {
-            //상점에서 아이템 구매
+            int code = 0;
+
+            //상점에서 아이템 구매 || 몬스터 드롭
+            if(상점에서 아이템을 구매하면)
+            {
 
 
-            //몬스터 드랍
-
+                //해당 아이템의 코드를 bag에 저장
+                //code = 해당 아이템 코드;
+                //이렇게 거쳐서 저장하는게 괜찮나?
+                bag.Add(code);
+            }
         }
 
         //인벤토리에 아이템이 나가는 경우
@@ -79,7 +91,9 @@ namespace TeamTodayTextRPG
         //인벤토리에 해당 아이템이 있으면
         public bool CheckEquip(int code)
         {
-
+            //해당 코드의 아이템을 장착하고 있는지
+            bool equipItem = equip.Contains(code);
+            return equipItem;
         }
 
 
