@@ -130,7 +130,7 @@ class Dungeon
 
         if (player.Hp > 0 && currentFloor > maxFloor)
         {
-            Console.WriteLine("\n🎉 던전을 모두 클리어했습니다! 🎉");
+            Console.WriteLine("\n 던전을 모두 클리어했습니다!");
         }
 
         isInHellDungeon = false;
