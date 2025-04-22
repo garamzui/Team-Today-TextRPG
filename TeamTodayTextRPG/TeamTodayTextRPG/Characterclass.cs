@@ -27,9 +27,9 @@ namespace TeamTodayTextRPG
             // 직업간 차이를 두어 보고자 dodge 스탯도 추가 해 봤습니다.
             // 전투가 어떻게 이루어질지에 따라 추가해야 할 계산식이 달라질 것 같습니다.
             // 예를 들면 
-            //int num = new Random().Next(0, 51); 또는 GameManager에 static Random하나 만들어두고 돌려쓰기
-            //if ((num += Charater.dodge) >25)
-            //{공격을 무효화하는 매서드}
+            //int num = new Random().Next(0, 26); 또는 GameManager에 static Random하나 만들어두고 돌려쓰기
+            //if ((num += Charater.dodge > 20)
+            //{공격을 무효화하기}
             // 이런식으로 설계하면 어떨까 합니다.
             public int gold { get; set; }
             public string[] initstr { get; set; }
