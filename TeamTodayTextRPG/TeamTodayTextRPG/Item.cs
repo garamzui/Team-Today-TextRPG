@@ -11,7 +11,7 @@ using System.Numerics;
 
 namespace TeamTodayTextRPG
 {
-    enum ITEMTYPE
+    enum ITEM_TYPE
     {
         WEAPON = 0,
         ARMOR = 1
@@ -25,7 +25,7 @@ namespace TeamTodayTextRPG
         private int def;
         private string text;
         private int value;
-        private ITEMTYPE type;
+        private ITEM_TYPE type;
 
         public Item(string[] str) //Parse로 데이터 변환
         {
@@ -35,17 +35,16 @@ namespace TeamTodayTextRPG
             def = int.Parse(str[3]);
             text = str[4];
             value = int.Parse(str[5]);
-            if (int.Parse(str[6]) == (int)ITEMTYPE.WEAPON)
+            if (int.Parse(str[6]) == (int)ITEM_TYPE.WEAPON)
             {
-                type = ITEMTYPE.WEAPON;
+                type = ITEM_TYPE.WEAPON;
             }
-            else if (int.Parse(str[6]) == (int)ITEMTYPE.ARMOR)
+            else if (int.Parse(str[6]) == (int)ITEM_TYPE.ARMOR)
             {
-                type = ITEMTYPE.ARMOR;
+                type = ITEM_TYPE.ARMOR;
             }
         }
 
- kimheejoo(Item)
         public int Code { get; private set; }
         public string Name { get; private set; }
         public int Atk { get; private set; }
@@ -53,7 +52,7 @@ namespace TeamTodayTextRPG
         public string Text { get; private set; }
         public int Value { get ; private set; }
 
-        private ITEMTYPE Type { get ;set; }
+        private ITEM_TYPE Type { get ;set; }
     }
 
 
@@ -61,7 +60,6 @@ namespace TeamTodayTextRPG
         public class ItemDatabase
     {   //Item형식의 값을 저장할 공간
         private List<Item> itemList = new List<Item>();
- kimheejoo(Item)
         public List<Item> ItemList => itemList;
         private int Atk;
         private int Def;
@@ -103,7 +101,6 @@ namespace TeamTodayTextRPG
         {
             foreach (var item in itemList)
             {
- kimheejoo(Item)
                 Console.WriteLine($"{item.Code}: {item.Name} (공격력: {item.Atk}, 방어력: {item.Def}) - {item.Text} [가격: {item.Value} G]");
 
             }
@@ -119,7 +116,6 @@ namespace TeamTodayTextRPG
             if (Def != 0) Console.Write($"Def {(Def >= 0 ? " + " : "")}{Def}");
         }
 
- kimheejoo(Item)
         public void ShowInventory(GameManager gameManager , VIEW_TYPE vIEW_TYPE)
         {
 
@@ -144,9 +140,6 @@ namespace TeamTodayTextRPG
                 {
 
                 }
- kimheejoo(Item)
-
-
             }
         }
 
