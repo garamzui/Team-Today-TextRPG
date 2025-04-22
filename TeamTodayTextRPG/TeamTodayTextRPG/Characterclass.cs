@@ -21,16 +21,16 @@ namespace TeamTodayTextRPG
             public int plusDef { get; set; }
             public int hp { get; set; }
             public int maxHp { get; set; }
-            public int mp { get; set; }
+            public int mp { get; set; } // 새로운 스탯 mp추가 했습니다
             public int maxMp { get; set; }
-            public int dodge { get; set; }
+            public int dodge { get; set; } // 직업간 차이를 두어 보고자 dodge 스탯도 추가 해 봤습니다. 
             public int gold { get; set; }
             public string[] initstr { get; set; }
             public string[] strary { get; set; }
             public string actskillName { get; set; }
             public string passkillName {  get; set; }
 
-            public void init(string data)
+            public void init(string data) //우선은 임의로 매서드로 초기화할 필드를 변경해 놓았습니다.
             {
                 initstr = data.Split(',');
                 jobname = initstr[0];
@@ -52,6 +52,11 @@ namespace TeamTodayTextRPG
                 Console.WriteLine($"{jobname} - 공격력 {attack} (+{plusAtk}), 방어력 {def} (+{plusDef}), HP {hp}/{maxHp}, Gold {gold}");
             }
 
+
+            //기본공격을 두고, 래밸을 올리면 스킬이
+            //해금되는 방식을 적용해 보고 싶었습니다.
+            // 추후에 구현이 어려울 시 조건부는 빼 버리는 것으로 하면 될 것 같습니다. 
+            //Player의 필드들이 private되어있어 접근이 안됩니다. 요 부분은 회의 때 조율 해야 할 것 같아요.
             public virtual void DefaultAttack()
             {
                 Console.WriteLine($"{jobname}의 기본 공격");
