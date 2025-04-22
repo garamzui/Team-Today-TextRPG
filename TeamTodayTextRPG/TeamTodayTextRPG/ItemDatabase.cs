@@ -8,6 +8,7 @@ using System.Xml.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Numerics;
 
+
 namespace TeamTodayTextRPG
 {
     enum ITEMTYPE
@@ -50,6 +51,7 @@ namespace TeamTodayTextRPG
         public int Def { get ; private set; }
         public string Text { get; private set; }
         public int Value { get ; private set; }
+
         private ITEMTYPE Type { get ;set; }
     }
 
@@ -62,6 +64,7 @@ namespace TeamTodayTextRPG
         private int Atk;
         private int Def;
 
+
         public ItemDatabase() 
         {
             InitItem();
@@ -71,6 +74,7 @@ namespace TeamTodayTextRPG
         {
             itemList = new List<Item>();
             {
+
                 string data =
                "0/수련자 갑옷/0/5/수련에 도움을 주는 갑옷입니다./1000/0" +
                "1/무쇠 갑옷/0/9/무쇠로 만들어져 튼튼한 갑옷입니다./2000/0" +
@@ -89,6 +93,7 @@ namespace TeamTodayTextRPG
                         itemList.Add(item);
                     }
                 }
+
             }
         }
 
@@ -97,6 +102,7 @@ namespace TeamTodayTextRPG
             foreach (var item in itemList)
             {
                 Console.WriteLine($"{item.Code}: {item.Name} (공격력: {item.Atk}, 방어력: {item.Def}) - {item.Text} [가격: {item.Value} G]");
+
             }
         }
 
@@ -155,6 +161,7 @@ namespace TeamTodayTextRPG
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("구매 완료");
                 }
+
                 else
                 {
                     Console.WriteLine($"{item.Value} G");
@@ -167,8 +174,7 @@ namespace TeamTodayTextRPG
         public void ShowsShopSale(GameManager gameManager)
         {
 
-        }
-            
+        }   
     }
 }
 
