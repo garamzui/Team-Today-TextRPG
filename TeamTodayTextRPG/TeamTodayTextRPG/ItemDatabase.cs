@@ -43,12 +43,12 @@ namespace TeamTodayTextRPG
             }
         }
 
-        public int Code { get; set; }
-        public string Name { get; set; }
-        public int Atk { get; set; }
-        public int Def { get ; set; }
-        public string Text { get; set; }
-        public int Value { get ;set; }
+        public int Code { get; private set; }
+        public string Name { get; private set; }
+        public int Atk { get; private set; }
+        public int Def { get ; private set; }
+        public string Text { get; private set; }
+        public int Value { get ; private set; }
         private ITEMTYPE Type { get ;set; }
     }
 
@@ -57,10 +57,9 @@ namespace TeamTodayTextRPG
         public class ItemDatabase
     {   //Item형식의 값을 저장할 공간
         private List<Item> itemList = new List<Item>();
+        public List<Item> ItemList => itemList;
         private int Atk;
         private int Def;
-
-        public List<Item> ItemList { get; set; }
 
         public ItemDatabase() 
         {
@@ -96,7 +95,7 @@ namespace TeamTodayTextRPG
         {
             foreach (var item in itemList)
             {
-                Console.WriteLine($"{item.Code}: {item.Name} (Atk: {item.Atk}, Def: {item.Def}) - {item.Text} [가격: {item.Value}]");
+                Console.WriteLine($"{item.Code}: {item.Name} (공격력: {item.Atk}, 방어력: {item.Def}) - {item.Text} [가격: {item.Value} G]");
             }
         }
 
