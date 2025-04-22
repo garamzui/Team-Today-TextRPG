@@ -100,14 +100,34 @@ namespace TeamTodayTextRPG
             //상점에서 아이템 판매
             if (CheckBag(code) == true && 상점에서 판매할 때)
             {
-                gold += (int)(prise * 0.85f);
-                bag.Remove(code);
+                //장착중이라면
+                if (CheckEquip(code) == true)
+                {
+                    Console.WriteLine("장착중인 아이템은 판매할 수 없습니다.");
+                }
+
+                //장착중이 아니라면
+                else
+                {
+                    gold += (int)(prise * 0.85f);
+                    bag.Remove(code);
+                }
             }
 
             //버리기
             if(CheckBag(code) == true && 인벤토리에서 버릴 때)
             {
-                bag.Remove(code);
+                //장착중이라면
+                if(CheckEquip(code) == true)
+                {
+                    Console.WriteLine("장착중인 아이템은 버릴 수 없습니다.")
+                }
+
+                //장착중이 아니라면
+                else
+                {
+                    bag.Remove(code);
+                }
             }
 
         }
