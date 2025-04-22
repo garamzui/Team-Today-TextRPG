@@ -14,7 +14,7 @@ namespace TeamTodayTextRPG
         public abstract class Character
         {
            
-           public string job { get; set; }
+           public string jobname { get; set; }
            public  int attack { get; set; }
            public  int plusAtk { get; set; }
            public  int def { get; set; }
@@ -30,7 +30,7 @@ namespace TeamTodayTextRPG
             {
                 initstr = data.Split(',');
                
-                job = initstr[1];
+                jobname = initstr[1];
                 attack = int.Parse(initstr[2]);
                 plusAtk = int.Parse(initstr[3]);
                 def = int.Parse(initstr[4]);
@@ -45,12 +45,14 @@ namespace TeamTodayTextRPG
 
             }
 
-            void ViewStatus(GameManager)
+            public void ViewStatus(GameManager. )
             { }
 
-            void Skill()
+            public virtual void Skill()
 
-            { }
+            {
+                Console.WriteLine($"{jobname}의 기술1");
+            }
         }
 
 
@@ -61,18 +63,16 @@ namespace TeamTodayTextRPG
         public class Worrior : Character
         {
             public static Worrior Default()
-            { 
+            {
                 Worrior w = new Worrior();
                 w.init("전사,10,3,5,2,100,100,1000");
                 return w;
             }
+            public override void Skill()
+            {
+                base.Skill();
+            }
 
-
-
-
-
-
-            
         }
         public class Megician : Character 
         {
