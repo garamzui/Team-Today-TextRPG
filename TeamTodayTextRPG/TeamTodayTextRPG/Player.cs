@@ -86,7 +86,14 @@ namespace TeamTodayTextRPG
             {
                 //n% 확률로 랜덤 아이템 드롭
                 //근데 여기서 처리하는게 맞나?
-                bag.Add(code);
+                Random random = new Random();
+                int ItemDrop = random.Next(0, 101);
+                if(ItemDrop >= 85)
+                {
+                    Random dropItemCode = new Random();
+                    code = dropItemCode.Next(0, 15);
+                    bag.Add(code);
+                }
             }
         }
 
