@@ -55,32 +55,6 @@ namespace TeamTodayTextRPG
         }
     }
 
-    public class StatusViewer : Viewer
-    {
-        public override void ViewAction(GameManager gameManager)
-        {
-            Console.Clear();
-            Console.WriteLine("플레이어 상태");
-            Console.WriteLine("====================");
-
-            var player = gameManager.Player;
-            Console.WriteLine($"이름: {player.Name}");
-            Console.WriteLine($"레벨: {player.Level}");
-            Console.WriteLine($"체력: {player.Health}/{player.MaxHealth}");
-            Console.WriteLine($"금액: {player.Gold}G");
-
-            // Player 클래스에서 속성 변화 시, 이 부분 수정 필요
-            // 예: Player 클래스에서 Health, MaxHealth, Gold 속성 변경 시 수정해야 할 부분
-            Console.WriteLine("====================");
-            Console.WriteLine("1. 메인으로 돌아가기");
-
-            int input = gameManager.InputAction(startIndex, endIndex);
-
-            VIEW_TYPE nextView = NextView(gameManager, input);
-            gameManager.SceneManager.SwitchScene(nextView);
-        }
-    }
-
     public class InventoryViewer : Viewer
     {
         public override void ViewAction(GameManager gameManager)
@@ -95,7 +69,7 @@ namespace TeamTodayTextRPG
             // InventoryItems 목록이나 Item 클래스가 변경될 경우 수정 필요
             for (int i = 0; i < inventory.Count; i++)
             {
-                Console.WriteLine($"{i + 1}. {inventory[i].Name}");
+                Console.WriteLine($"{i + 1}. {inventory[i].Name} - 공격력: {inventory[i].Atk} / 방어력: {inventory[i].Def}");
             }
 
             Console.WriteLine("====================");
@@ -176,11 +150,11 @@ namespace TeamTodayTextRPG
             Console.WriteLine("====================");
 
             var player = gameManager.Player;
-            var shopItems = gameManager.ShopItems;
+            var shopItems = gameManager.ShopItems;  // 상점 아이템 목록
 
-            // 아이템 구매 로직에서 player.Gold, shopItems 변경 시, 이 부분 수정 필요
             Console.WriteLine($"플레이어 금액: {player.Gold}G");
 
+            // 상점에서 판매하는 아이템 출력
             Console.WriteLine("구매할 아이템을 선택하세요:");
             for (int i = 0; i < shopItems.Count; i++)
             {
@@ -204,7 +178,7 @@ namespace TeamTodayTextRPG
             }
             else if (input > 0 && input <= shopItems.Count)
             {
-                // 구매 처리 로직
+                // 아이템 구매 처리
                 var item = shopItems[input - 1];
                 if (player.Gold >= item.Price)
                 {
@@ -226,6 +200,7 @@ namespace TeamTodayTextRPG
         }
     }
 
+
     public class SaleViewer : Viewer
     {
         public override void ViewAction(GameManager gameManager)
@@ -235,9 +210,8 @@ namespace TeamTodayTextRPG
             Console.WriteLine("====================");
 
             var player = gameManager.Player;
-            var playerItems = player.GetInventoryItems();
+            var playerItems = player.GetInventoryItems();  // 플레이어 인벤토리에서 아이템 목록 가져오기
 
-            // playerItems나 아이템 가격 변경 시, 이 부분 수정 필요
             Console.WriteLine("판매할 아이템을 선택하세요:");
             for (int i = 0; i < playerItems.Count; i++)
             {
@@ -259,9 +233,9 @@ namespace TeamTodayTextRPG
                 // 구매 화면으로 이동
                 gameManager.SceneManager.SwitchScene(VIEW_TYPE.PURCHASE);
             }
-            else if (input > 0 && input <= playerItems.Count) // Fixed missing condition
+            else if (input > 0 && input <= playerItems.Count)
             {
-                // 판매 처리 로직
+                // 아이템 판매 처리
                 var item = playerItems[input - 1];
                 player.Gold += item.Price;
                 player.RemoveItem(item);
@@ -275,6 +249,7 @@ namespace TeamTodayTextRPG
             gameManager.SceneManager.SwitchScene(VIEW_TYPE.SHOP);
         }
     }
+
 
     public class DungeonViewer : Viewer
     {
@@ -346,31 +321,9 @@ namespace TeamTodayTextRPG
             var player = gameManager.Player;
             var enemy = gameManager.BattleEnemy;
 
-            // Player, Enemy의 Health 등 속성 변경 시, 이 부분 수정 필요
+            // 플레이어와 적의 체력이 갱신될 때마다 출력
             Console.WriteLine($"플레이어 체력: {player.Health}/{player.MaxHealth}");
             Console.WriteLine($"적 몬스터 체력: {enemy.Health}/{enemy.MaxHealth}");
-
-            Console.WriteLine("1. 공격");
-            Console.WriteLine("2. 도망");
-
-            int input = gameManager.InputAction(startIndex, endIndex);
-
-            VIEW_TYPE nextView = NextView(gameManager, input);
-            gameManager.SceneManager.SwitchScene(nextView);
-        }
-    }
-
-    public class BattleEnemyViewer : Viewer
-    {
-        public override void ViewAction(GameManager gameManager)
-        {
-            Console.Clear();
-            Console.WriteLine("배틀 - 적");
-            Console.WriteLine("====================");
-
-            var enemy = gameManager.BattleEnemy;
-            Console.WriteLine($"적 몬스터: {enemy.Name}");
-            Console.WriteLine($"체력: {enemy.Health}/{enemy.MaxHealth}");
 
             Console.WriteLine("1. 공격");
             Console.WriteLine("2. 도망");
