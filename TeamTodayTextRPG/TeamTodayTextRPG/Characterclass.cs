@@ -23,19 +23,26 @@ namespace TeamTodayTextRPG
 
            public  int maxHp { get; set; }
            public  int gold { get; set; }
-           public  string[] inistr { get; set; }
-           public  string[] stray { get; set; }
+           public string[] initstr { get; set; }
+           public  string[] strary { get; set; }
 
-            public virtual void init(string data)
-            { 
-                
+            public  void init(string data)
+            {
+                initstr = data.Split(',');
+                name = initstr[0];
+                job = initstr[1];
+                attack = int.Parse(initstr[2]);
+                plusAtk = int.Parse(initstr[3]);
+                def = int.Parse(initstr[4]);
+                plusDef = int.Parse(initstr[5]);
+                hp = int.Parse(initstr[6]);
+                maxHp = int.Parse(initstr[7]);
+                gold = int.Parse(initstr[8]);
 
-            
-            
-            
-            
-            
-            
+
+
+
+
             }
 
             void ViewStatus(GameManager)
@@ -53,26 +60,18 @@ namespace TeamTodayTextRPG
 
         public class Worrior : Character
         {
-            public override void init(string data)
-            {
-                string[] parts = data.Split(',');
-                name = parts[0];
-                job = parts[1];
-                attack = int.Parse(parts[2]);
-                plusAtk = int.Parse(parts[3]);
-                def = int.Parse(parts[4]);
-                plusDef = int.Parse(parts[5]);
-                hp = int.Parse(parts[6]);
-                maxHp = int.Parse(parts[7]);
-                gold = int.Parse(parts[8]);
-
-
-
-
-
-
-
+            public static Worrior Default()
+            { 
+            Worrior w = new Worrior();
+                w.initstr("Chad,전사,10,3,5,2,100,100,1000");
             }
+
+
+
+
+
+
+            
         }
         public class megician : Character 
         { }
