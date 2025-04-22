@@ -13,23 +13,25 @@ namespace TeamTodayTextRPG
     {
         public abstract class Character
         {
-           
-           public string jobname { get; set; }
-           public  int attack { get; set; }
-           public  int plusAtk { get; set; }
-           public  int def { get; set; }
-           public  int plusDef { get; set; }
-           public  int hp { get; set; }
 
-           public  int maxHp { get; set; }
-           public  int gold { get; set; }
-           public string[] initstr { get; set; }
-           public  string[] strary { get; set; }
+            public string jobname { get; set; }
+            public int attack { get; set; }
+            public int plusAtk { get; set; }
+            public int def { get; set; }
+            public int plusDef { get; set; }
+            public int hp { get; set; }
 
-            public  void init(string data)
+            public int maxHp { get; set; }
+            public int gold { get; set; }
+            public string[] initstr { get; set; }
+            public string[] strary { get; set; }
+            public string actskillName { get; set; }
+
+
+            public void init(string data)
             {
                 initstr = data.Split(',');
-               
+
                 jobname = initstr[1];
                 attack = int.Parse(initstr[2]);
                 plusAtk = int.Parse(initstr[3]);
@@ -48,19 +50,30 @@ namespace TeamTodayTextRPG
             public void ViewStatus(GameManager. )
             { }
 
+            public virtual void DefaultAttack()
+            {
+                Console.WriteLine($"{jobname}의 기본 공격");
+            }
+
             public virtual void ActiveSkill()
 
             {
-                Console.WriteLine($"{jobname}의 기술1");
+                actskillName = string.Empty;
+
+                if (Player.level >= 2)
+                {
+
+                }
+                Console.WriteLine($"{jobname}의 기술 {actskillName}");
             }
 
             public virtual void PassiveSkill()
             {
                 if (Player.level >= 5)
-                { 
-                
+                {
+
                 }
-                Console.WriteLine(); 
+                Console.WriteLine();
             }
         }
 
@@ -83,9 +96,9 @@ namespace TeamTodayTextRPG
             }
 
         }
-        public class Megician : Character 
+        public class Megician : Character
         {
-            public static  Megician Default()
+            public static Megician Default()
             {
                 Megician m = new Megician();
                 m.init("전사,10,3,5,2,100,100,1000");
