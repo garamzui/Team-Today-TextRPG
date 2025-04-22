@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using static TeamTodayTextRPG.Characterclass;
 
 namespace TeamTodayTextRPG
@@ -11,31 +13,22 @@ namespace TeamTodayTextRPG
     {
         public abstract class Character
         {
-            string name { get; set; }
-            string job { get; set; }
-            int attack { get; set; }
-            int plusAtk { get; set; }
-            int def { get; set; }
-            int plusDef { get; set; }
-            int hp { get; set; }
+           public string name { get; set; }
+           public string job { get; set; }
+           public  int attack { get; set; }
+           public  int plusAtk { get; set; }
+           public  int def { get; set; }
+           public  int plusDef { get; set; }
+           public  int hp { get; set; }
 
-            int maxHp { get; set; }
-            int gold { get; set; }
-            string[] inistr { get; set; }
-            string[] stray { get; set; }
+           public  int maxHp { get; set; }
+           public  int gold { get; set; }
+           public  string[] inistr { get; set; }
+           public  string[] stray { get; set; }
 
             public virtual void init(string data)
             { 
-                string[]parts = data.Split(',');
-                name = parts[0];
-                job = parts[1];
-                attack = int.Parse(parts[2]);
-                plusAtk = int.Parse(parts[3]);       
-                def = int.Parse(parts[4]);
-                plusDef = int.Parse(parts[5]);
-                hp = int.Parse(parts[6]);
-                maxHp = int.Parse(parts[7]);
-                gold = int.Parse(parts[8]);
+                
 
             
             
@@ -59,7 +52,28 @@ namespace TeamTodayTextRPG
 
 
         public class Worrior : Character
-        { }
+        {
+            public override void init(string data)
+            {
+                string[] parts = data.Split(',');
+                name = parts[0];
+                job = parts[1];
+                attack = int.Parse(parts[2]);
+                plusAtk = int.Parse(parts[3]);
+                def = int.Parse(parts[4]);
+                plusDef = int.Parse(parts[5]);
+                hp = int.Parse(parts[6]);
+                maxHp = int.Parse(parts[7]);
+                gold = int.Parse(parts[8]);
+
+
+
+
+
+
+
+            }
+        }
         public class megician : Character 
         { }
         public class Assassing : Character
