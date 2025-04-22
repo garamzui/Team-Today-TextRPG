@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 using System.Threading;
 
 enum DUNGEON_DIFF
@@ -130,7 +131,7 @@ class Dungeon
 
         if (player.Hp > 0 && currentFloor > maxFloor)
         {
-            Console.WriteLine("\n 던전을 모두 클리어했습니다!");
+            Console.WriteLine("\n 던전을 모두 클리어했습니다! ");
         }
 
         isInHellDungeon = false;
@@ -205,4 +206,3 @@ class Dungeon
         Console.WriteLine($"추천 레벨: {defLevel} / 기본 보상: {reward}G / 경험치: {exp}Exp");
     }
 }
-ㅍ
