@@ -58,7 +58,7 @@ namespace TeamTodayTextRPG
         //인벤토리에 아이템이 들어오는 경우
         public void InputBag()
         {
-            //잠깐 여기서 사용하려고 선언&초기화
+            //임시로 선언&초기화
             int code = 0;
             int gold = 0;
             int prise = 0;
@@ -100,6 +100,7 @@ namespace TeamTodayTextRPG
         //인벤토리에 아이템이 나가는 경우
         public void RemoveBag()
         {
+            //임시로 선언&초기화
             int code = 0;
             int gold = 0;
             int prise = 0;
@@ -149,6 +150,7 @@ namespace TeamTodayTextRPG
 
         public void EquipItem()
         {
+            //임시로 선언&초기화
             int code = 0;
             int equiped = 0;
 
@@ -175,6 +177,7 @@ namespace TeamTodayTextRPG
 
         public void UnEquipItem()
         {
+            //임시로 선언&초기화
             int code = 0;
 
             //장착중 이라면
@@ -182,6 +185,11 @@ namespace TeamTodayTextRPG
             {
                 //equip List에서 삭제
                 equip.Remove(code);
+            }
+
+            else
+            {
+                Console.WriteLine("장착중인 아이템이 아닙니다!");
             }
         }
     }
