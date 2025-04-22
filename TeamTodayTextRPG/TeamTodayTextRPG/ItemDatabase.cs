@@ -8,6 +8,7 @@ using System.Xml.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Numerics;
 
+
 namespace TeamTodayTextRPG
 {
     enum ITEMTYPE
@@ -44,12 +45,14 @@ namespace TeamTodayTextRPG
             }
         }
 
+ kimheejoo(Item)
         public int Code { get; private set; }
         public string Name { get; private set; }
         public int Atk { get; private set; }
         public int Def { get ; private set; }
         public string Text { get; private set; }
         public int Value { get ; private set; }
+
         private ITEMTYPE Type { get ;set; }
     }
 
@@ -58,9 +61,11 @@ namespace TeamTodayTextRPG
         public class ItemDatabase
     {   //Item형식의 값을 저장할 공간
         private List<Item> itemList = new List<Item>();
+ kimheejoo(Item)
         public List<Item> ItemList => itemList;
         private int Atk;
         private int Def;
+
 
         public ItemDatabase() 
         {
@@ -71,6 +76,7 @@ namespace TeamTodayTextRPG
         {
             itemList = new List<Item>();
             {
+
                 string data =
                "0/수련자 갑옷/0/5/수련에 도움을 주는 갑옷입니다./1000/0" +
                "1/무쇠 갑옷/0/9/무쇠로 만들어져 튼튼한 갑옷입니다./2000/0" +
@@ -89,6 +95,7 @@ namespace TeamTodayTextRPG
                         itemList.Add(item);
                     }
                 }
+
             }
         }
 
@@ -96,7 +103,9 @@ namespace TeamTodayTextRPG
         {
             foreach (var item in itemList)
             {
+ kimheejoo(Item)
                 Console.WriteLine($"{item.Code}: {item.Name} (공격력: {item.Atk}, 방어력: {item.Def}) - {item.Text} [가격: {item.Value} G]");
+
             }
         }
 
@@ -110,6 +119,7 @@ namespace TeamTodayTextRPG
             if (Def != 0) Console.Write($"Def {(Def >= 0 ? " + " : "")}{Def}");
         }
 
+ kimheejoo(Item)
         public void ShowInventory(GameManager gameManager , VIEW_TYPE vIEW_TYPE)
         {
 
@@ -134,6 +144,9 @@ namespace TeamTodayTextRPG
                 {
 
                 }
+ kimheejoo(Item)
+
+
             }
         }
 
