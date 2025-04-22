@@ -128,7 +128,13 @@ namespace TeamTodayTextRPG
 
         public void ShowShop(GameManager gameManager, VIEW_TYPE vIEW_TYPE)
         {
+            if (itemList != null)
+            {
+                foreach (var item in itemList)
+                {
 
+                }
+            }
         }
 
         public void ShowsShopSale(GameManager gameManager)
