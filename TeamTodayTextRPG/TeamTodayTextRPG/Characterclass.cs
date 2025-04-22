@@ -13,7 +13,7 @@ namespace TeamTodayTextRPG
     {
         public abstract class Character
         {
-           public string name { get; set; }
+           
            public string job { get; set; }
            public  int attack { get; set; }
            public  int plusAtk { get; set; }
@@ -29,7 +29,7 @@ namespace TeamTodayTextRPG
             public  void init(string data)
             {
                 initstr = data.Split(',');
-                name = initstr[0];
+               
                 job = initstr[1];
                 attack = int.Parse(initstr[2]);
                 plusAtk = int.Parse(initstr[3]);
@@ -63,7 +63,7 @@ namespace TeamTodayTextRPG
             public static Worrior Default()
             { 
                 Worrior w = new Worrior();
-                w.init("Chad,전사,10,3,5,2,100,100,1000");
+                w.init("전사,10,3,5,2,100,100,1000");
                 return w;
             }
 
@@ -74,10 +74,24 @@ namespace TeamTodayTextRPG
 
             
         }
-        public class megician : Character 
-        { }
-        public class Assassing : Character
-        { }
+        public class Megician : Character 
+        {
+            public static  Megician Default()
+            {
+                Megician m = new Megician();
+                m.init("전사,10,3,5,2,100,100,1000");
+                return m;
+            }
+        }
+        public class Assassin : Character
+        {
+            public static Assassin Default()
+            {
+                Assassin a = new Assassin();
+                a.init("전사,10,3,5,2,100,100,1000");
+                return a;
+            }
+        }
     }
 
 
