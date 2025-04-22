@@ -62,6 +62,9 @@ namespace TeamTodayTextRPG
                 Console.WriteLine($"{jobname}의 기본 공격");
             }
 
+
+            //active 스킬은 몬스터 체력을 -= 하는 방식으로 
+            //passive 스킬은 각각 직업 특성에 맞는 스탯값을 += 하는 방식으로 만들어 보려 합니다.
             public virtual void ActiveSkill()
 
             {
