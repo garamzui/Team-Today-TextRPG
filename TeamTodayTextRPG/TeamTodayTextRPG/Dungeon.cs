@@ -1,12 +1,11 @@
 using System;
-using System.Threading;
 
 enum DUNGEON_DIFF
 {
-    Easy,
-    Normal,
-    Hard,
-    Hell
+    Easy = 0
+    Normal = 1,
+    Hard = 2,
+    Hell = 3
 }
 
 class Dungeon
@@ -18,8 +17,6 @@ class Dungeon
     private int exp;
     private int defLevel;
     private DUNGEON_DIFF diff;
-
-    private bool isInHellDungeon = false;
 
     public Dungeon(string[] info)
     {
@@ -37,12 +34,6 @@ class Dungeon
     public void EnterDungeon(Player player, Func<int, Monster> getMonster)
     {
         Console.WriteLine($"\n[{name}] 던전에 입장했습니다!");
-
-        if (diff == DUNGEON_DIFF.Hell)
-        {
-            isInHellDungeon = true;
-            new Thread(() => HellDamageOverTime(player)).Start();
-        }
 
         int currentFloor = 1;
         int maxFloor = 5;
@@ -132,30 +123,6 @@ class Dungeon
         {
             Console.WriteLine("\n🎉 던전을 모두 클리어했습니다! 🎉");
         }
-
-        isInHellDungeon = false;
-    }
-
-    private void HellDamageOverTime(Player player)
-    {
-        while (isInHellDungeon && player.Hp > 0)
-        {
-            Thread.Sleep(2000);
-
-            double damage = player.Hp * 0.001;
-            int realDamage = Math.Max(1, (int)damage);
-
-            player.Hp -= realDamage;
-            if (player.Hp < 0) player.Hp = 0;
-
-            Console.WriteLine($"\n[헬 던전 효과] 지속 데미지 발생! {realDamage} 데미지 입음 (현재 체력: {player.Hp})");
-
-            if (player.Hp <= 0)
-            {
-                Console.WriteLine("\n[헬 던전 효과] 체력이 0이 되어 사망했습니다!");
-                break;
-            }
-        }
     }
 
     public bool CheckClear(int playerLevel)
@@ -205,4 +172,3 @@ class Dungeon
         Console.WriteLine($"추천 레벨: {defLevel} / 기본 보상: {reward}G / 경험치: {exp}Exp");
     }
 }
-ㅍ

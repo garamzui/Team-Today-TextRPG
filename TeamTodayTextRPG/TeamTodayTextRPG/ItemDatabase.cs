@@ -43,12 +43,12 @@ namespace TeamTodayTextRPG
             }
         }
 
-        private int Code { get; set; }
-        private string Name { get; set; }
-        private int Atk { get; set; }
-        private int Def { get ; set; }
-        private string Text { get; set; }
-        private int Value { get ;set; }
+        public int Code { get; set; }
+        public string Name { get; set; }
+        public int Atk { get; set; }
+        public int Def { get ; set; }
+        public string Text { get; set; }
+        public int Value { get ;set; }
         private ITEMTYPE Type { get ;set; }
     }
 
@@ -57,6 +57,8 @@ namespace TeamTodayTextRPG
         public class ItemDatabase
     {   //Item형식의 값을 저장할 공간
         private List<Item> itemList = new List<Item>();
+        private int Atk;
+        private int Def;
 
         public List<Item> ItemList { get; set; }
 
@@ -81,27 +83,47 @@ namespace TeamTodayTextRPG
 
         public void ShowName(string name)
         {
-
+            foreach (var item in itemList)
+            {
+                Console.WriteLine($"{item.Code}: {item.Name} (Atk: {item.Atk}, Def: {item.Def}) - {item.Text} [가격: {item.Value}]");
+            }
         }
 
         public void ShowAtk(int atk) 
-        { 
-
+        {
+            if (Atk != 0) Console.Write($"Atk {(Atk >= 0 ? " + " : "")}{Atk}");
         }
 
         public void ShowDef(int def) 
-        { 
-
+        {
+            if (Def != 0) Console.Write($"Def {(Def >= 0 ? " + " : "")}{Def}");
         }
 
-        public void ShowInventory(GameManager gameManager , VIEW_TYPE vIEW_TYPE)
+        public void ShowInventory(GameManager gameManager, VIEW_TYPE vIEW_TYPE)
         {
-
+            if (Player.Inventory != null)
+            {
+                foreach (var item in Player.Inventory)
+                {
+                    Console.Write("- ");
+                    if (Player.CheckEquip(item))
+                    {
+                        Console.Write("[E]");
+                    }
+                }
+            }
         }
 
         public void ShowShop(GameManager gameManager, VIEW_TYPE vIEW_TYPE)
         {
+            if (itemList != null)
+            {
+                foreach (var item in itemList)
+                {
 
+                }
+
+            }
         }
 
         public void ShowsShopSale(GameManager gameManager)
