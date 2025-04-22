@@ -32,6 +32,7 @@ namespace TeamTodayTextRPG
 
         // 입력에 따라 다음 화면을 반환하는 추상 메서드
         public abstract VIEW_TYPE NextView(GameManager gameManager, int input);
+
     }
 
     public class MainViewer : Viewer
@@ -50,10 +51,36 @@ namespace TeamTodayTextRPG
 
             int input = gameManager.InputAction(startIndex, endIndex);
 
+
             VIEW_TYPE nextView = NextView(gameManager, input);
             gameManager.SceneManager.SwitchScene(nextView);
         }
+
+        // NextView 메서드 구현
+        public override VIEW_TYPE NextView(GameManager gameManager, int input)
+        {
+            // 입력에 따라 다음 화면을 결정
+            switch (input)
+            {
+                case 1:
+                    return VIEW_TYPE.STATUS;    // 상태 보기 화면으로 이동
+                case 2:
+                    return VIEW_TYPE.INVENTORY; // 인벤토리 화면으로 이동
+                case 3:
+                    return VIEW_TYPE.EQUIP;     // 장비 화면으로 이동
+                case 4:
+                    return VIEW_TYPE.SHOP;      // 상점 화면으로 이동
+                case 5:
+                    return VIEW_TYPE.DUNGEON;   // 던전 화면으로 이동
+                case 6:
+                    Environment.Exit(0);        // 게임 종료
+                    return VIEW_TYPE.MAIN;      // 이 부분은 사실 도달하지 않음
+                default:
+                    return VIEW_TYPE.MAIN;      // 잘못된 입력일 경우 현재 화면 유지
+            }
+        }
     }
+
 
     public class InventoryViewer : Viewer
     {
@@ -81,6 +108,20 @@ namespace TeamTodayTextRPG
             VIEW_TYPE nextView = NextView(gameManager, input);
             gameManager.SceneManager.SwitchScene(nextView);
         }
+
+        public override VIEW_TYPE NextView(GameManager gameManager, int input)
+        {
+            // 입력에 따라 다음 화면을 결정
+            switch (input)
+            {
+                case 1:
+                    return VIEW_TYPE.PURCHASE;  // 예시: 아이템 사용 화면으로 이동
+                case 2:
+                    return VIEW_TYPE.MAIN;      // 메인 화면으로 돌아가기
+                default:
+                    return VIEW_TYPE.INVENTORY; // 잘못된 입력일 경우 현재 화면 유지
+            }
+        }
     }
 
     public class EquipViewer : Viewer
@@ -105,6 +146,26 @@ namespace TeamTodayTextRPG
 
             VIEW_TYPE nextView = NextView(gameManager, input);
             gameManager.SceneManager.SwitchScene(nextView);
+        }
+        // NextView 메서드 구현
+        public override VIEW_TYPE NextView(GameManager gameManager, int input)
+        {
+            if (input == 1)
+            {
+                // 장비 변경 화면으로 이동 (예: EquipChange 화면)
+                return VIEW_TYPE.EQUIP;  // 장비 변경 화면
+            }
+            else if (input == 2)
+            {
+                // 메인 화면으로 돌아가기
+                return VIEW_TYPE.MAIN;
+            }
+            else
+            {
+                // 잘못된 입력 처리
+                Console.WriteLine("잘못된 입력입니다.");
+                return VIEW_TYPE.MAIN;  // 기본적으로 메인 화면으로 돌아가기
+            }
         }
     }
 
@@ -139,7 +200,27 @@ namespace TeamTodayTextRPG
             VIEW_TYPE nextView = NextView(gameManager, input);
             gameManager.SceneManager.SwitchScene(nextView);
         }
+        // NextView 메서드 구현
+        public override VIEW_TYPE NextView(GameManager gameManager, int input)
+        {
+            switch (input)
+            {
+                case 1:
+                    // 아이템 구매 화면으로 이동
+                    return VIEW_TYPE.PURCHASE;
+                case 2:
+                    // 아이템 판매 화면으로 이동
+                    return VIEW_TYPE.SALE;
+                case 3:
+                    // 메인 화면으로 돌아가기
+                    return VIEW_TYPE.MAIN;
+                default:
+                    // 잘못된 입력에 대한 처리 (기본적으로 메인 화면으로)
+                    return VIEW_TYPE.MAIN;
+            }
+        }
     }
+
 
     public class PurchaseViewer : Viewer
     {
@@ -198,6 +279,22 @@ namespace TeamTodayTextRPG
 
             gameManager.SceneManager.SwitchScene(VIEW_TYPE.SHOP);
         }
+        // NextView 메서드 구현
+        public override VIEW_TYPE NextView(GameManager gameManager, int input)
+        {
+            switch (input)
+            {
+                case 0:
+                    // 0: 돌아가기 선택 시 상점 화면으로 돌아가기
+                    return VIEW_TYPE.SHOP;
+                case 9:
+                    // 9: 판매 화면으로 이동
+                    return VIEW_TYPE.SALE;
+                default:
+                    // 구매 후에도 상점 화면으로 돌아가기
+                    return VIEW_TYPE.SHOP;
+            }
+        }
     }
 
 
@@ -248,7 +345,35 @@ namespace TeamTodayTextRPG
 
             gameManager.SceneManager.SwitchScene(VIEW_TYPE.SHOP);
         }
+        // NextView 메서드 구현
+        public override VIEW_TYPE NextView(GameManager gameManager, int input)
+        {
+            switch (input)
+            {
+                case 0:
+                    // 돌아가기: 상점 화면으로
+                    return VIEW_TYPE.SHOP;
+                case 9:
+                    // 구매 화면으로
+                    return VIEW_TYPE.PURCHASE;
+                default:
+                    if (input > 0 && input <= gameManager.Player.GetInventoryItems().Count)
+                    {
+                        // 아이템 판매 처리 후 다시 상점 화면으로
+                        var player = gameManager.Player;
+                        var item = player.GetInventoryItems()[input - 1];
+                        player.Gold += item.Price;
+                        player.RemoveItem(item);
+                        Console.WriteLine($"{item.Name} 아이템을 판매했습니다.");
+                        return VIEW_TYPE.SHOP;
+                    }
+                    // 잘못된 입력에 대한 처리
+                    Console.WriteLine("잘못된 입력입니다.");
+                    return VIEW_TYPE.SHOP;
+            }
+        }
     }
+
 
 
     public class DungeonViewer : Viewer
@@ -268,7 +393,29 @@ namespace TeamTodayTextRPG
             VIEW_TYPE nextView = NextView(gameManager, input);
             gameManager.SceneManager.SwitchScene(nextView);
         }
+        // NextView 메서드 구현
+        public override VIEW_TYPE NextView(GameManager gameManager, int input)
+        {
+            if (input == 1)
+            {
+                // 던전 입장 화면으로 가기
+                return VIEW_TYPE.DUNGEON;  // 던전 화면으로 이동
+            }
+            else if (input == 2)
+            {
+                // 메인 화면으로 돌아가기
+                return VIEW_TYPE.MAIN;
+            }
+            else
+            {
+                // 잘못된 입력 처리
+                Console.WriteLine("잘못된 입력입니다.");
+                return VIEW_TYPE.MAIN;  // 기본적으로 메인 화면으로 돌아가기
+            }
+        }
     }
+
+
 
     public class DungeonClearViewer : Viewer
     {
@@ -286,7 +433,23 @@ namespace TeamTodayTextRPG
             VIEW_TYPE nextView = NextView(gameManager, input);
             gameManager.SceneManager.SwitchScene(nextView);
         }
+        // NextView 메서드 구현
+        public override VIEW_TYPE NextView(GameManager gameManager, int input)
+        {
+            if (input == 1)
+            {
+                // 메인 화면으로 돌아가기
+                return VIEW_TYPE.MAIN;
+            }
+            else
+            {
+                // 잘못된 입력에 대한 처리
+                Console.WriteLine("잘못된 입력입니다.");
+                return VIEW_TYPE.MAIN;  // 기본적으로 메인 화면으로 돌아가기
+            }
+        }
     }
+
 
     public class RestViewer : Viewer
     {
@@ -308,7 +471,24 @@ namespace TeamTodayTextRPG
             VIEW_TYPE nextView = NextView(gameManager, input);
             gameManager.SceneManager.SwitchScene(nextView);
         }
+        // NextView 메서드 구현
+        public override VIEW_TYPE NextView(GameManager gameManager, int input)
+        {
+            switch (input)
+            {
+                case 1:
+                    // 휴식 후 메인 화면으로 돌아가기 (체력 회복 후)
+                    return VIEW_TYPE.MAIN;
+                case 2:
+                    // 메인 화면으로 돌아가기
+                    return VIEW_TYPE.MAIN;
+                default:
+                    // 잘못된 입력에 대한 처리 (기본적으로 메인 화면으로)
+                    return VIEW_TYPE.MAIN;
+            }
+        }
     }
+
 
     public class BattleViewer : Viewer
     {
@@ -333,7 +513,23 @@ namespace TeamTodayTextRPG
             VIEW_TYPE nextView = NextView(gameManager, input);
             gameManager.SceneManager.SwitchScene(nextView);
         }
+        public override VIEW_TYPE NextView(GameManager gameManager, int input)
+        {
+            switch (input)
+            {
+                case 1:
+                    // 공격을 선택한 경우 전투 진행
+                    // 공격 처리 로직을 추가할 수 있음
+                    return VIEW_TYPE.BATTLE; // 전투 계속 진행
+                case 2:
+                    // 도망을 선택한 경우
+                    return VIEW_TYPE.MAIN; // 메인 화면으로 돌아가기
+                default:
+                    return VIEW_TYPE.BATTLE; // 기본적으로 전투 화면 유지
+            }
+        }
     }
+
 
     public class MonsterViewer : Viewer
     {
@@ -372,5 +568,25 @@ namespace TeamTodayTextRPG
             VIEW_TYPE nextView = NextView(gameManager, input);
             gameManager.SceneManager.SwitchScene(nextView);
         }
+        // NextView 메서드 구현
+        public override VIEW_TYPE NextView(GameManager gameManager, int input)
+        {
+            if (input == 1)
+            {
+                // 전투 화면으로 이동
+                return VIEW_TYPE.BATTLE;
+            }
+            else if (input == 2)
+            {
+                // 메인 화면으로 돌아가기
+                return VIEW_TYPE.MAIN;
+            }
+            else
+            {
+                // 잘못된 입력 처리
+                Console.WriteLine("잘못된 입력입니다.");
+                return VIEW_TYPE.MAIN;  // 기본적으로 메인 화면으로 돌아가기
+            }
+        }
     }
-}
+}     
