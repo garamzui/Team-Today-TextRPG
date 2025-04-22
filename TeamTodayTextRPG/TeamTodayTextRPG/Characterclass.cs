@@ -110,7 +110,7 @@ namespace TeamTodayTextRPG
             public override void ActiveSkill(Monster m)
             {
                 mp -= 10;
-                int SkillDamage = (attack * 3) - (m.Def);
+                int SkillDamage = (attack * 3) - m.Def;
                 m.Hp -= SkillDamage;
                 Console.WriteLine($"{actskillName}을 사용하여 {m.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
             }
@@ -141,7 +141,7 @@ namespace TeamTodayTextRPG
             public override void ActiveSkill(Monster m)
             {
                 mp -= 10;
-                int SkillDamage = (attack * 10) - (m.Def);
+                int SkillDamage = (attack * 10) - m.Def;
                 m.Hp -= SkillDamage;
                 Console.WriteLine($"{actskillName}을 사용하여 {m.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
             }
@@ -171,7 +171,7 @@ namespace TeamTodayTextRPG
             public override void ActiveSkill(Monster m)
             {
                 mp -= 10;
-                int SkillDamage = (attack * 3) - (m.Def);
+                int SkillDamage = (attack * 3) - m.Def;
 
 
                
