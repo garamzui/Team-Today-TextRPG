@@ -10,21 +10,37 @@ namespace TeamTodayTextRPG
     class Player
     {
         public Characterclass characterClass { get; set; }
+        public DataManager dataManager { get; set; }
         public List<int> bag { get; set; }
         public List<int> equip { get; set; }
         public int Level { get; set; }
         public int Exp { get; set; }
+        //public int AttackPower { get; set; }
+        //public int DefensePower { get; set; }
+        //public int HP { get; set; }
+        //public int MP { get; set; }
+        public int CharacterCode { get; set; }
+        public int ItemCode { get; set; }
 
-        //private DataManager dataManager;
-        //아이템의 code나 가격, ITEM_TYPE 등
-        //생각보다 ItemDatabase에 접근할 일이 많은 것 같은데
-        //DataManager를 써야 할까요?
 
-        //Characterclass에서 스탯의 정보를 받아온다
+
         public void SetCharacter()
         {
+            //데이터매니저에서 직업별 스탯을 '파싱'해서 가져온다
+            string[][] settingCharacter = dataManager.CharacterDB.Parsing(dataManager.CharacterDB.Data);
+
+            //CharacterCode의 경우의 수에 따라 스탯을 설정한다
+            //CharacterCode = 
+            //switch (CharacterCode)
+            //{
+            //    case0:
+            //break;
+            //    case1:
+            //break;
+
+            //}
             //초기 소지 장비를 bag과 equip 리스트에 저장한다
-            //characterClass.
+            
         }
 
         public void LevelUp()
@@ -32,13 +48,13 @@ namespace TeamTodayTextRPG
             int requiredExp = 100;
 
             //경험치가 요구 경험치보다 크거나 같아진다.
-            if (exp >= requiredExp)
+            if (Exp >= requiredExp)
             {
                 //경험치에서 요구 경험치 만큼 빼고 초과량은 현재 경험치로 남는다.
-                exp = exp - requiredExp;
+                Exp = Exp - requiredExp;
 
                 //레벨 및 요구 경험치가 늘어난다.
-                level++;
+                Level++;
                 requiredExp += 25;
 
                 //Console.WriteLine("축하합니다! 레벨이 올랐습니다.");
