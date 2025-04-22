@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 using System.Xml.Linq;
 using System.Security.Cryptography.X509Certificates;
+using System.Numerics;
 
 namespace TeamTodayTextRPG
 {
@@ -112,6 +113,17 @@ namespace TeamTodayTextRPG
         public void ShowInventory(GameManager gameManager , VIEW_TYPE vIEW_TYPE)
         {
 
+            if (Player.Inventory != null)
+            {
+                foreach (var item in Player.Inventory)
+                {
+                    Console.Write("- ");
+                    if (Player.CheckEquip(item))
+                    {
+                        Console.Write("[E]");
+                    }
+                }
+            }
         }
 
         public void ShowShop(GameManager gameManager, VIEW_TYPE vIEW_TYPE)
