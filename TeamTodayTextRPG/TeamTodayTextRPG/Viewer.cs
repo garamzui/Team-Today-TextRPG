@@ -80,47 +80,6 @@ namespace TeamTodayTextRPG
             }
         }
     }
-    public class StatusViewer : Viewer
-    {
-        public override void ViewAction(GameManager gameManager)
-        {
-            Console.Clear();
-            Console.WriteLine("플레이어 상태 보기");
-            Console.WriteLine("====================");
-
-            var player = gameManager.Player;  // Player 객체 가져오기
-
-            // 플레이어의 상태를 출력
-            Console.WriteLine($"이름: {player.Name}");
-            Console.WriteLine($"체력: {player.Health}/{player.MaxHealth}");
-            Console.WriteLine($"공격력: {player.Attack}");
-            Console.WriteLine($"방어력: {player.Defense}");
-            Console.WriteLine($"금액: {player.Gold}G");
-
-            Console.WriteLine("====================");
-            Console.WriteLine("1. 메인으로 돌아가기");
-
-            int input = gameManager.InputAction(startIndex, endIndex);
-
-            VIEW_TYPE nextView = NextView(gameManager, input);
-            gameManager.SceneManager.SwitchScene(nextView);
-        }
-
-        public override VIEW_TYPE NextView(GameManager gameManager, int input)
-        {
-            if (input == 1)
-            {
-                // 메인 화면으로 돌아가기
-                return VIEW_TYPE.MAIN;
-            }
-            else
-            {
-                // 잘못된 입력 처리
-                return VIEW_TYPE.STATUS;  // 기본적으로 현재 상태 화면 유지
-            }
-        }
-    }
-
 
 
     public class InventoryViewer : Viewer
@@ -576,50 +535,40 @@ namespace TeamTodayTextRPG
     {
         private Monster currentMonster;
 
-        // 생성자에서 몬스터를 받음
         public MonsterViewer(Monster monster)
         {
             this.currentMonster = monster;
         }
 
-        // 뷰어의 행동을 처리하는 메서드
         public override void ViewAction(GameManager gameManager)
         {
             Console.Clear();
             Console.WriteLine("몬스터 정보 화면");
             Console.WriteLine("====================");
 
-            // currentMonster가 null일 경우 예외 처리
+            // currentMonster가 변경될 경우, 이 부분 수정 필요
             if (currentMonster == null)
             {
                 Console.WriteLine("몬스터 객체가 null입니다.");
             }
             else
             {
-                // 몬스터의 정보를 출력
                 Console.WriteLine($"이름: {currentMonster.Name}");
                 Console.WriteLine($"레벨: {currentMonster.Level}");
                 Console.WriteLine($"체력: {currentMonster.Hp}/{currentMonster.MaxHp}");
-                Console.WriteLine($"공격력: {currentMonster.Atk}");
-                Console.WriteLine($"방어력: {currentMonster.Def}");
-                Console.WriteLine($"보상 골드: {currentMonster.rewardGold}");
-                Console.WriteLine($"보상 경험치: {currentMonster.rewardExp}");
-                Console.WriteLine($"설명: {currentMonster.text}");
+                Console.WriteLine($"공격력: {currentMonster.Attack}");
             }
 
             Console.WriteLine("====================");
             Console.WriteLine("1. 전투");
             Console.WriteLine("2. 돌아가기");
 
-            // 사용자의 입력을 받는 코드
-            int input = gameManager.InputAction(1, 2);
+            int input = gameManager.InputAction(startIndex, endIndex);
 
-            // 사용자의 선택에 따른 화면 전환
             VIEW_TYPE nextView = NextView(gameManager, input);
             gameManager.SceneManager.SwitchScene(nextView);
         }
-
-        // 선택한 행동에 따라 전환할 씬을 결정하는 메서드
+        // NextView 메서드 구현
         public override VIEW_TYPE NextView(GameManager gameManager, int input)
         {
             if (input == 1)
@@ -640,4 +589,4 @@ namespace TeamTodayTextRPG
             }
         }
     }
-}
+}     
