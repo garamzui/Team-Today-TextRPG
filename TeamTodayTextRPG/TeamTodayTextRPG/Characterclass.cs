@@ -48,10 +48,19 @@ namespace TeamTodayTextRPG
             public void ViewStatus(GameManager. )
             { }
 
-            public virtual void Skill()
+            public virtual void ActiveSkill()
 
             {
                 Console.WriteLine($"{jobname}의 기술1");
+            }
+
+            public virtual void PassiveSkill()
+            {
+                if (Player.level >= 5)
+                { 
+                
+                }
+                Console.WriteLine(); 
             }
         }
 
@@ -68,9 +77,9 @@ namespace TeamTodayTextRPG
                 w.init("전사,10,3,5,2,100,100,1000");
                 return w;
             }
-            public override void Skill()
+            public override void ActiveSkill()
             {
-                base.Skill();
+                base.ActiveSkill();
             }
 
         }
