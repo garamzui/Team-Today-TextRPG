@@ -9,7 +9,7 @@ namespace TeamTodayTextRPG
 {
     class Player
     {
-        private Characterclass Characterclass;
+        private Characterclass characterclass;
         private List<int> bag;
         private List<int> equip;
         private int level;
@@ -24,7 +24,7 @@ namespace TeamTodayTextRPG
         public void SetCharacter()
         {
             //초기 소지 장비를 bag과 equip 리스트에 저장한다
-
+            //characterclass.
         }
 
         public void LevelUp()
@@ -52,7 +52,6 @@ namespace TeamTodayTextRPG
         //equipItem의 경우는 같은 장비군은 중복장착하면 안되니까 세부내용 조금 다름
 
         //인벤토리에 해당 아이템이 있으면
-        //언제 쓰이나? RemoveBag() 하기전에?
         public bool CheckBag(int code)
         {
             //해당 코드의 아이템이 bag에 있는지
@@ -104,6 +103,7 @@ namespace TeamTodayTextRPG
 
         public void UnEquipItem()
         {
+            
 
         }
     }
