@@ -112,28 +112,55 @@ namespace TeamTodayTextRPG
 
         public void ShowInventory(GameManager gameManager , VIEW_TYPE vIEW_TYPE)
         {
+            var player = gameManager.Player;
 
-            if (Player.Inventory != null)
+            if (player.Inventory != null)
             {
-                foreach (var item in Player.Inventory)
+                foreach (var code in player.Inventory)
                 {
+                    var item = itemList.FirstOrDefault(i => i.Code == code);
+                    if (item == null) continue;
+
                     Console.Write("- ");
-                    if (Player.CheckEquip(item))
+                    if (player.CheckEquip(item.Code))
                     {
+                        Console.ForegroundColor = ConsoleColor.Green;
                         Console.Write("[E]");
+                        Console.ResetColor();
                     }
+
+                    Console.Write($"{item.Name}\t| ");
+                    if (item.Atk != 0) Console.Write($"공격력 {(item.Atk > 0 ? "+" : "")}{item.Atk}\t| ");
+                    if (item.Def != 0) Console.Write($"방어력 {(item.Def > 0 ? "+" : "")}{item.Def}\t| ");
+                    Console.WriteLine($"{item.Text}");
                 }
             }
         }
 
         public void ShowShop(GameManager gameManager, VIEW_TYPE vIEW_TYPE)
         {
-            if (itemList != null)
-            {
-                foreach (var item in itemList)
-                {
+            var player = gameManager.Player;
 
+            foreach (var item in itemList)
+            {
+                if (player.CheckBag(item.Code)) Console.ForegroundColor = ConsoleColor.DarkGray;
+
+                Console.Write($"- {item.Name}\t| ");
+                if (item.Atk != 0) Console.Write($"공격력 {(item.Atk > 0 ? "+" : "")}{item.Atk}\t| ");
+                if (item.Def != 0) Console.Write($"방어력 {(item.Def > 0 ? "+" : "")}{item.Def}\t| ");
+                Console.Write($"{item.Text}\t| ");
+
+                if (player.CheckBag(item.Code))
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("구매 완료");
                 }
+                else
+                {
+                    Console.WriteLine($"{item.Value} G");
+                }
+
+                Console.ResetColor();
             }
         }
 
