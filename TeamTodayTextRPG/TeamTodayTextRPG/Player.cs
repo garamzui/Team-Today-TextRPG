@@ -17,19 +17,25 @@ namespace TeamTodayTextRPG
         public List<int> equip { get; set; }
         public int Level { get; set; }
         public int Exp { get; set; }
-        //public int AttackPower { get; set; }
-        //public int DefensePower { get; set; }
-        //public int HP { get; set; }
-        //public int MP { get; set; }
+
+        public int Attack { get; set; }
+        public int Defense { get; set; }
+        public int MaxHP { get; set; }
+        public int CurHP { get; set; }
+        public int MaxMP { get; set; }
+        public int CurMP { get; set; }
+        public int Dodge { get; set; }
+        public int Gold { get; set; }
+
         public int CharacterCode { get; set; }
         public int ItemCode { get; set; }
-
 
 
         public void SetCharacter()
         {
             //데이터매니저에서 직업별 스탯을 '파싱'해서 가져온다
-            string[][] settingCharacter = dataManager.CharacterDB.Parsing(dataManager.CharacterDB.Data);
+            string[][] settingCharacter = dataManager.CharacterDB.
+                       Parsing(dataManager.CharacterDB.Data);
 
             //CharacterCode의 코드의 경우의 수에 따라 스탯을 설정한다
             //아니지 스탯이 다 데이터베이스에 있잖아
@@ -39,28 +45,59 @@ namespace TeamTodayTextRPG
             //Character에도 있어서 지금 이걸 Character 데이터로
             //처리하면 나중에 수정해야
             //근데 그럼 스탯이 Characterclass에 있을 필요가 있나?
-            for (int i = 0; i < settingCharacter.Length; i++)
+
+            //그러면 입력값 저장하는 변수도 끌어와야 함
+            switch (처음 직업 선택시 입력한 값)
             {
-                CharacterCode = i;
-
-                switch (CharacterCode)
-                {
-                    case 0:
-                        int attack =
-                            break;
-                    case 1:
-                        break;
-
-                }
+                case 0:
+                    CharacterCode = 0;
+                    break;
+                case 1:
+                    CharacterCode = 1;
+                    break;
+                case 2:
+                    CharacterCode = 2;
+                    break;
+                case 3:
+                    CharacterCode = 3;
+                    break;
             }
 
-            //초기 소지 장비를 bag과 equip 리스트에 저장한다
-            //직업별 초기 장비가 다르다면 수정
-            bag.Add(int.Parse((dataManager.ItemDB.Parsing(dataManager.ItemDB.Data)[0][0])));
-            bag.Add(int.Parse((dataManager.ItemDB.Parsing(dataManager.ItemDB.Data)[3][0])));
+                //직업.Default가 Characterclass에서 스탯을 세팅하는 메서드
+            switch (CharacterCode)
+            {
+                case 0: character = Worrior.Default();
+                    SetStat();
+                    break;
+                case 1: character = Megician.Default();
+                    SetStat();
+                    break;
+                case 2: character = Assassin.Default();
+                    SetStat();
+                    break;
+                    //case 3:
+                    //    break;
+            }
 
-            //초기 장비를 가지고 있되 장착은 되어있지 않은 상태로 시작해서
-            //인벤토리를 처음 열면 장착&해제 튜토리얼 구현해 보는 것 괜찮을지도
+            void SetStat()
+            {
+                Attack = character.attack;
+                Defense = character.def;
+                CurHP = character.hp;
+                MaxHP = character.maxHp;
+                CurMP = character.mp;
+                MaxMP = character.maxMp;
+                Dodge = character.dodge;
+                Gold = character.gold;
+            }
+
+                //초기 소지 장비를 bag과 equip 리스트에 저장한다
+                //직업별 초기 장비가 다르다면 수정
+                bag.Add(int.Parse((dataManager.ItemDB.Parsing(dataManager.ItemDB.Data)[0][0])));
+                bag.Add(int.Parse((dataManager.ItemDB.Parsing(dataManager.ItemDB.Data)[3][0])));
+
+                //초기 장비를 가지고 있되 장착은 되어있지 않은 상태로 시작해서
+                //인벤토리를 처음 열면 장착&해제 튜토리얼 구현해 보는 것 괜찮을지도
         }
 
 
@@ -166,7 +203,7 @@ namespace TeamTodayTextRPG
                 //장착중이라면
                 if(CheckEquip(code) == true)
                 {
-                    Console.WriteLine("장착중인 아이템은 버릴 수 없습니다.")
+                    Console.WriteLine("장착중인 아이템은 버릴 수 없습니다.");
                 }
 
                 //장착중이 아니라면
