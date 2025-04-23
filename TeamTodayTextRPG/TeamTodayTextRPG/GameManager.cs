@@ -28,6 +28,7 @@ namespace TeamTodayTextRPG
 
 
         // 『효빈』GameMananger 클래스의 프로퍼티 입니다.
+        public Random rand { get; set; }
         public Player Player { get; set; }
         public Viewer Viewer { get; set; }
         public ItemDatabase ItemDatabase { get; set; }

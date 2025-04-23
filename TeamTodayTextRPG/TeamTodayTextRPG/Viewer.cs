@@ -4,6 +4,7 @@ using TeamTodayTextRPG;
 namespace TeamTodayTextRPG
 {
     // 뷰어 화면 타입을 정의하는 열거형
+    // 가나다라
     public enum VIEW_TYPE
     {
         MAIN,           // 게임 시작 화면
