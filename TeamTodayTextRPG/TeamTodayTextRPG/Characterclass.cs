@@ -122,7 +122,7 @@ namespace TeamTodayTextRPG
 
             public override void PassiveSkill(Player p)
             {
-                if (p.level >= 5 && passiveSkillLevel < 5)
+                if (p.Level >= 5 && passiveSkillLevel < 5)
                 {
                     def += 2;
                     
@@ -153,7 +153,7 @@ namespace TeamTodayTextRPG
             }
             public override void PassiveSkill(Player p)
             {
-                if (p.level >= 5 && passiveSkillLevel< 5)
+                if (p.Level >= 5 && passiveSkillLevel< 5)
                 {
                     attack += 1;
                     mp += 50;
@@ -187,7 +187,7 @@ namespace TeamTodayTextRPG
             }
             public override void PassiveSkill(Player p)
             {
-                if (p.level >= 5 && passiveSkillLevel < 5)
+                if (p.Level >= 5 && passiveSkillLevel < 5)
                 {
                     dodge += 2;
 
