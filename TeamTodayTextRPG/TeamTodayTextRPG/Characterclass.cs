@@ -100,24 +100,27 @@ namespace TeamTodayTextRPG
             public void TakeDamage(int damage)
             {
 
-                int DodgeHit = Characterclass.rng.Next(1, 51);// 피격 메서드에 회피를 구현 해봤습니다.
-                if (Dodge > DodgeHit)
+                int DodgeHit = Characterclass.rng.Next(1, 76);// 피격 메서드에 회피를 구현 해봤습니다.
+                if (TotalDodge > DodgeHit)
                 {
                     Console.WriteLine("공격을 회피했습니다!");
+                    return;
                 }
                 else
                 { 
                     Hp -= damage;
+                    if (Hp < 0) Hp = 0; 
+                    Console.WriteLine($"{damage}의 피해를 입었습니다! \n현재 Hp : {Hp}/{MaxHp}");
+
                 }
                             
-                if (Hp < 0) Hp = 0; 
-                
                 if (Hp == 0)
                 {
                     Die();
-                }
-                
+                    
+                }    
             }
+            
             public void Die()
             {
                 Console.WriteLine("눈앞이 깜깜해진다..");
@@ -126,6 +129,18 @@ namespace TeamTodayTextRPG
             {
                 Hp += heal;
                 if (Hp > MaxHp) Hp = MaxHp;
+                Console.WriteLine($"{heal}만큼 회복했습니다! 현재 HP: {Hp}/{MaxHp}");
+            }
+            public void UsingMp(int use) //Mp관리용 메서드입니다.
+            { 
+                Mp -= use;
+                if (Mp < 0) Mp = 0;
+            }
+            public void RecoverMp(int Recover)
+            {
+                Mp += Recover;
+                if (Mp > MaxMp) Mp = MaxMp;
+                Console.WriteLine($"{Recover}만큼 MP를 회복했습니다! 현재 MP: {Mp}/{MaxMp}");
             }
         }
 
@@ -153,7 +168,7 @@ namespace TeamTodayTextRPG
             {
                 if (Mp >= 10)
                 {
-                    Mp -= 10;
+                    UsingMp(10);
                     int SkillDamage = (TotalAtk * 3) - m.Def;
                     if (SkillDamage < 0)
                     { SkillDamage = 1; }
@@ -207,7 +222,7 @@ namespace TeamTodayTextRPG
             {
                 if (Mp >= 10)
                 {
-                    Mp -= 10;
+                    UsingMp(10);
                     int SkillDamage = (int)((TotalAtk * 10) - Math.Round(m.Def / 2.0)); //방어무시를 구현하기위해서 방어도를 반으로 나누고 반올림하였습니다.
                     if (SkillDamage < 0)
                     { SkillDamage = 1; }
@@ -260,7 +275,7 @@ namespace TeamTodayTextRPG
             {
                 if (Mp >= 10)
                 {
-                    Mp -= 10;
+                    UsingMp(10);
                     int SkillDamage = (TotalAtk * 2) - m.Def;
                     if (SkillDamage < 0)
                     { SkillDamage = 1; }
