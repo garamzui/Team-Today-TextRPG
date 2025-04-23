@@ -16,18 +16,20 @@ namespace TeamTodayTextRPG
 
             public string jobname { get; set; }
             public int attack { get; set; }
-            public int plusAtk { get; set; }
-            public int totalAtk { get; set; } = attack + plusAtk; //다른 계산에 필요할까 싶어 합산되어 적용될 값을 따로 만들어 보았습니다.
+            public int plusAtk { get; set; } = 0;
+            public int totalAtk { get { return attack + plusAtk; } }  //다른 계산에 필요할까 싶어 합산되어 적용될 값을 따로 만들어 보았습니다.
             public int def { get; set; }
-            public int plusDef { get; set; }
-            public int totalDef { get; set; }
-            public int hp { get; set; }
+            public int plusDef { get; set; } = 0;
+            public int totalDef { get { return def + plusDef; } }
+            private int Hp {  get; set; }
+            public int hp { get { return Hp; } set { if (value < 0) Hp = 0; else if (value > maxHp) Hp = maxHp; else Hp = value; } }
             public int maxHp { get; set; }
-            public int mp { get; set; } // 새로운 스탯 mp추가 했습니다
+            private int Mp { get; set; }// 새로운 스탯 mp추가 했습니다
+            public int mp { get { return Mp; } set { if (value < 0) Mp = 0; else if (value > maxHp) Mp = maxHp; else Mp = value; } } 
             public int maxMp { get; set; }
             public int dodge { get; set; }
-            public int plusDodge { get; set; }
-            public int totalDodge { get; set; }
+            public int plusDodge { get; set; } 
+            public int totalDodge { get { return dodge + plusDodge; } }
             // 직업간 차이를 두어 보고자 dodge 스탯도 추가 해 봤습니다.
             // 전투가 어떻게 이루어질지에 따라 추가해야 할 계산식이 달라질 것 같습니다.
             // 예를 들면 
@@ -50,12 +52,14 @@ namespace TeamTodayTextRPG
                 jobname = initstr[0];
                 attack = int.Parse(initstr[1]);
                 def = int.Parse(initstr[2]);
-                hp = int.Parse(initstr[3]);
-                mp = int.Parse(initstr[4]);
+                maxHp = int.Parse(initstr[3]);
+                hp = maxHp;
+                 maxMp = int.Parse(initstr[4]);
+                mp = maxMp;
                 dodge = int.Parse(initstr[5]);
                 gold = int.Parse(initstr[6]);
-                actskillName = string.Empty;
-                passkillName = string.Empty;
+                actskillName = (initstr[7]);
+                passkillName = (initstr[8]);
 
 
 
@@ -94,6 +98,16 @@ namespace TeamTodayTextRPG
                 
                 Console.WriteLine($"{jobname}의 기술 {passkillName}");
             }
+
+            public void TakeDamage(int damage)
+            { 
+                hp -= damage;
+            }
+
+            public void Heal(int heal)
+            {
+                hp += heal; 
+            }
         }
 
 
@@ -113,14 +127,16 @@ namespace TeamTodayTextRPG
             public override void ActiveSkill(Monster m)
             {
                 mp -= 10;
-                int SkillDamage = (attack * 3) - m.Def;
+                int SkillDamage = (totalAtk * 3) - m.Def;
+                if (SkillDamage < 0)
+                { SkillDamage = 1; }
                 m.Hp -= SkillDamage;
                 Console.WriteLine($"{actskillName}을 사용하여 {m.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
             }
 
             public override void PassiveSkill(Player p)
             {
-                if (p.level >= 5 && passiveSkillLevel < 5)
+                if (p.Level >= 5 && passiveSkillLevel < 5)
                 {
                     def += 2;
                     
@@ -144,13 +160,15 @@ namespace TeamTodayTextRPG
             public override void ActiveSkill(Monster m)
             {
                 mp -= 10;
-                int SkillDamage = (attack * 10) - m.Def;
+                int SkillDamage = (totalAtk * 10) - m.Def;
+                if (SkillDamage < 0)
+                { SkillDamage = 1; }
                 m.Hp -= SkillDamage;
                 Console.WriteLine($"{actskillName}을 사용하여 {m.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
             }
             public override void PassiveSkill(Player p)
             {
-                if (p.level >= 5 && passiveSkillLevel< 5)
+                if (p.Level >= 5 && passiveSkillLevel< 5)
                 {
                     attack += 1;
                     mp += 50;
@@ -174,12 +192,10 @@ namespace TeamTodayTextRPG
             public override void ActiveSkill(Monster m)
             {
                 mp -= 10;
-                int SkillDamage = (attack * 3) - m.Def;
+                int SkillDamage = (totalAtk * 3) - m.Def;
+                if (SkillDamage < 0)
+                { SkillDamage = 1; }
 
-
-               
-               
-                
                 Console.WriteLine($"{actskillName}을 사용하여 {m.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
 
                  m.Hp -= SkillDamage;
@@ -187,7 +203,7 @@ namespace TeamTodayTextRPG
             }
             public override void PassiveSkill(Player p)
             {
-                if (p.level >= 5 && passiveSkillLevel < 5)
+                if (p.Level >= 5 && passiveSkillLevel < 5)
                 {
                     dodge += 2;
 
