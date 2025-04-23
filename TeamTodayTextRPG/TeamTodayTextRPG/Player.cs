@@ -69,7 +69,7 @@ namespace TeamTodayTextRPG
                 case 0: character = Worrior.Default();
                     SetStat();
                     break;
-                case 1: character = Megician.Default();
+                case 1: character = Magician.Default();
                     SetStat();
                     break;
                 case 2: character = Assassin.Default();

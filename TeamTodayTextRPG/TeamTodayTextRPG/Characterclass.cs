@@ -14,7 +14,7 @@ namespace TeamTodayTextRPG
         public abstract class Character
         {
 
-            public string jobname { get; set; }
+            public string Jobname { get; set; }
             public int attack { get; set; }
             public int plusAtk { get; set; } = 0;
             public int totalAtk { get { return attack + plusAtk; } }  //다른 계산에 필요할까 싶어 합산되어 적용될 값을 따로 만들어 보았습니다.
@@ -22,6 +22,7 @@ namespace TeamTodayTextRPG
             public int plusDef { get; set; } = 0;
             public int totalDef { get { return def + plusDef; } }
             private int Hp {  get; set; }
+            //Hp,Mp예외처리 속성쪽으로 옮겼습니다.
             public int hp { get { return Hp; } set { if (value < 0) Hp = 0; else if (value > maxHp) Hp = maxHp; else Hp = value; } }
             public int maxHp { get; set; }
             private int Mp { get; set; }// 새로운 스탯 mp추가 했습니다
@@ -38,19 +39,19 @@ namespace TeamTodayTextRPG
             //{공격을 무효화하기}
             // 이런식으로 설계하면 어떨까 합니다.
             public int gold { get; set; }
-            public string[] initstr { get; set; }
-            public string[] strary { get; set; }
+            public string[] Parameter { get; set; }
+            
             public string actskillName { get; set; }
             public string passkillName { get; set; }
 
             public int passiveSkillLevel = 0;
 
-            public void init(string data) //우선은 임의로 매서드로 초기화할 필드를 변경해 놓았습니다.
+            public void init(string[] data) //우선은 임의로 매서드로 초기화할 필드를 변경해 놓았습니다.
             {
                 //직업이름,공격력,방어력,체력,마력,회피,골드,액티브스킬이름,패시브스킬이름
-                initstr = data.Split(',');
-                jobname = initstr[0];
-                attack = int.Parse(initstr[1]);
+                Parameter = data.Split('/');
+                Jobname = data[0];
+                attack = data[1];
                 def = int.Parse(initstr[2]);
                 maxHp = int.Parse(initstr[3]);
                 hp = maxHp;
@@ -65,9 +66,13 @@ namespace TeamTodayTextRPG
 
             }
 
+            public virtual string jobDescription() //직업 설명
+            {
+                return"";
+            }
             public void ViewStatus()
             {
-                Console.WriteLine($"{jobname} - 공격력 {attack} (+{plusAtk}), 방어력 {def} (+{plusDef}), HP {hp}/{maxHp}, Gold {gold}");
+                Console.WriteLine($"{Jobname} {jobDescription}- 공격력 {attack} (+{plusAtk}), 방어력 {def} (+{plusDef}), HP {hp}/{maxHp}, Gold {gold}");
             }
 
 
@@ -78,7 +83,7 @@ namespace TeamTodayTextRPG
             //Player의 필드들이 private되어있어 접근이 안됩니다. 요 부분은 회의 때 조율 해야 할 것 같아요.
             public virtual void DefaultAttack()
             {
-                Console.WriteLine($"{jobname}의 기본 공격");
+                Console.WriteLine($"{Jobname}의 기본 공격");
             }
 
 
@@ -87,23 +92,26 @@ namespace TeamTodayTextRPG
             public virtual void ActiveSkill(Monster m)
 
             {
-
-
-
-                Console.WriteLine($"{jobname}의 기술 {actskillName}");
+                Console.WriteLine($"{Jobname}의 기술 {actskillName}");
             }
 
             public virtual void PassiveSkill(Player p)
             {
-                
-                Console.WriteLine($"{jobname}의 기술 {passkillName}");
+                 Console.WriteLine($"{Jobname}의 기술 {passkillName}");
             }
 
             public void TakeDamage(int damage)
             { 
                 hp -= damage;
+                if (hp <= 0)
+                {
+                    Die();
+                }
             }
-
+            public void Die()
+            {
+                Console.WriteLine("눈앞이 깜깜해진다..");
+            }
             public void Heal(int heal)
             {
                 hp += heal; 
@@ -111,18 +119,27 @@ namespace TeamTodayTextRPG
         }
 
 
-
+        enum CHAR_TYPE
+        { 
+            WARRIOR,
+            MAGICIAN,
+            ASSASSIN
+        }
 
 
 
         public class Worrior : Character
         {
-            public static Worrior Default()
+            public  Worrior ()
             {
-                Worrior w = new Worrior();
+               
                 //직업이름,공격력,방어력,체력,마력,회피,골드,액티브스킬이름,패시브스킬이름
-                w.init("전사,10,5,100,40,1,1000,쾅 내려치기,전사의 피부");
-                return w;
+                init(DataManager.Instance.CharacterDB.List[0]);
+                
+            }
+            public override string jobDescription()
+            {
+               return"";
             }
             public override void ActiveSkill(Monster m)
             {
@@ -130,7 +147,7 @@ namespace TeamTodayTextRPG
                 int SkillDamage = (totalAtk * 3) - m.Def;
                 if (SkillDamage < 0)
                 { SkillDamage = 1; }
-                m.Hp -= SkillDamage;
+                m.TakeDamage(SkillDamage);
                 Console.WriteLine($"{actskillName}을 사용하여 {m.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
             }
 
@@ -148,11 +165,11 @@ namespace TeamTodayTextRPG
             }
 
         }
-        public class Megician : Character
+        public class Magician : Character
         {
-            public static Megician Default()
+            public static Magician Default()
             {
-                Megician m = new Megician();
+                Magician m = new Magician();
                 //직업이름,공격력,방어력,체력,마력,회피,골드,액티브스킬이름,패시브스킬이름
                 m.init("마법사,3,3,50,100,3,1000,썬더볼트,마력개방");
                 return m;
@@ -160,10 +177,10 @@ namespace TeamTodayTextRPG
             public override void ActiveSkill(Monster m)
             {
                 mp -= 10;
-                int SkillDamage = (totalAtk * 10) - m.Def;
+                int SkillDamage = (int)((totalAtk * 10) - Math.Round(m.Def / 2.0));
                 if (SkillDamage < 0)
                 { SkillDamage = 1; }
-                m.Hp -= SkillDamage;
+                m.TakeDamage(SkillDamage);
                 Console.WriteLine($"{actskillName}을 사용하여 {m.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
             }
             public override void PassiveSkill(Player p)
@@ -182,23 +199,38 @@ namespace TeamTodayTextRPG
         }
         public class Assassin : Character
         {
-            public static Assassin Default()
+            public Assassin Default()
             {
                 Assassin a = new Assassin();
                 //직업이름,공격력,방어력,체력,마력,회피,골드,액티브스킬이름,패시브스킬이름
-                a.init("암살자,8,1,75,75,10,1000,비열한습격,날쌘 몸놀림");
+                a.init("암살자,7,1,75,75,10,1000,연격,날쌘 몸놀림");
                 return a;
             }
             public override void ActiveSkill(Monster m)
             {
                 mp -= 10;
-                int SkillDamage = (totalAtk * 3) - m.Def;
+                int SkillDamage = (totalAtk * 2) - m.Def;
+                
+                Random critical = new Random();
+                int criticalHit =critical.Next(0,10);
+                
+                if (criticalHit <= 2)
+                {
+                    SkillDamage *= 2;
+                    Console.WriteLine("치명타!");
+                }
+
                 if (SkillDamage < 0)
                 { SkillDamage = 1; }
+               
+                for (int i = 0; i < 2; i++)
+                { 
+                    m.TakeDamage(SkillDamage); 
+                    Console.WriteLine($"{actskillName}을 사용하여 {m.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
+                }
+                
 
-                Console.WriteLine($"{actskillName}을 사용하여 {m.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
-
-                 m.Hp -= SkillDamage;
+                
 
             }
             public override void PassiveSkill(Player p)

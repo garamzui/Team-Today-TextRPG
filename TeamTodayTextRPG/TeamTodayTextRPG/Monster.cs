@@ -55,6 +55,25 @@ namespace TeamTodayTextRPG
             RewardExp = int.Parse(Parameter[7]);
             Text = Parameter[8];
         }
+        public void TakeDamage(int damage)
+        {
+            Hp -= damage;
+            if (Hp <= 0)
+            {
+                Hp = 0;
+                Die();
+            }
+        }
+        public void Die()
+        {
+            Console.WriteLine($"{Name}은 쓰러졌다!");
+        }
+        public void Heal(int heal)
+        {
+            Hp += heal;
+        }
+
+
 
         class Monster_1 : Monster
         {
