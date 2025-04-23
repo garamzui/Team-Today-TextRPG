@@ -1,49 +1,43 @@
+namespace TeamTodayTextRPG
+{
 using System;
+using System.Numerics;
+using System.Threading;
+using System.Collections.Generic;
+namespace TeamTodayTextRPG
+{
 
 enum DUNGEON_DIFF
 {
-    Easy = 0
+    Easy = 0,
     Normal = 1,
     Hard = 2,
-    Hell = 3
+    Hell = 3,
 }
 
 class Dungeon
 {
     private Random rand = new Random();
-    private int code;
-    private string name;
-    private int reward;
-    private int exp;
-    private int defLevel;
-    private DUNGEON_DIFF diff;
 
-    public Dungeon(string[] info)
-    {
-        if (info.Length >= 6)
-        {
-            code = int.Parse(info[0]);
-            name = info[1];
-            reward = int.Parse(info[2]);
-            exp = int.Parse(info[3]);
-            defLevel = int.Parse(info[4]);
-            diff = (DUNGEON_DIFF)Enum.Parse(typeof(DUNGEON_DIFF), info[5]);
-        }
-    }
+    public int Code { get; set; }
+    public string Name { get; set; }
+    public int Reward { get; set; }
+    public int Exp { get; set; }
+    public int DefLevel { get; set; }
+    public DUNGEON_DIFF Diff { get; set; }
 
-    public void EnterDungeon(Player player, Func<int, Monster> getMonster)
+    public void EnterDungeon(Player player, List<Monster> monsters)
     {
-        Console.WriteLine($"\n[{name}] 던전에 입장했습니다!");
+        Console.WriteLine($"\n[{Name}] 던전에 입장했습니다!");
 
         int currentFloor = 1;
-        int maxFloor = 5;
+        int maxFloor = monsters.Count; // 층수 = 넘겨준 몬스터 수
 
         while (currentFloor <= maxFloor && player.Hp > 0)
         {
             Console.WriteLine($"\n현재 {currentFloor}층입니다.");
 
-            // 외부에서 몬스터를 받아옴
-            Monster monster = getMonster(currentFloor);
+            Monster monster = monsters[currentFloor - 1];
 
             Console.WriteLine($"\n{monster.Name}이(가) 등장했습니다! {(monster.IsBoss ? "[보스 몬스터]" : "")}");
 
@@ -121,30 +115,30 @@ class Dungeon
 
         if (player.Hp > 0 && currentFloor > maxFloor)
         {
-            Console.WriteLine("\n🎉 던전을 모두 클리어했습니다! 🎉");
+            Console.WriteLine("\n 던전을 모두 클리어했습니다! ");
         }
     }
 
     public bool CheckClear(int playerLevel)
     {
-        return playerLevel >= defLevel;
+        return playerLevel >= DefLevel;
     }
 
     public int CalcReward(int playerLevel)
     {
         int bonus = 0;
-        if (playerLevel > defLevel + 2)
+        if (playerLevel > DefLevel + 2)
         {
             bonus = rand.Next(50, 101);
         }
-        return reward + bonus;
+        return Reward + bonus;
     }
 
     public int CalcMinusHP(int playerDefense)
     {
         int baseDamage = 10;
 
-        switch (diff)
+        switch (Diff)
         {
             case DUNGEON_DIFF.Easy:
                 baseDamage = 10;
@@ -168,7 +162,8 @@ class Dungeon
 
     public void PrintDungeonInfo()
     {
-        Console.WriteLine($"[{code}] {name} - {diff} 난이도");
-        Console.WriteLine($"추천 레벨: {defLevel} / 기본 보상: {reward}G / 경험치: {exp}Exp");
+        Console.WriteLine($"[{Code}] {Name} - {Diff} 난이도");
+        Console.WriteLine($"추천 레벨: {DefLevel} / 기본 보상: {Reward}G / 경험치: {Exp}Exp");
     }
+}
 }
