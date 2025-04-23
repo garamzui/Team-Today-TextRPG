@@ -10,9 +10,9 @@ namespace TeamTodayTextRPG
 {
     class Player
     {
-        public Characterclass characterClass { get; set; }
         public Character character { get; set; }
         public DataManager dataManager { get; set; }
+        public GameManager gameManager { get; set; }
         public List<int> bag { get; set; }
         public List<int> equip { get; set; }
         public int Level { get; set; }
@@ -37,16 +37,8 @@ namespace TeamTodayTextRPG
             string[][] settingCharacter = dataManager.CharacterDB.
                        Parsing(dataManager.CharacterDB.Data);
 
-            //CharacterCode의 코드의 경우의 수에 따라 스탯을 설정한다
-            //아니지 스탯이 다 데이터베이스에 있잖아
-            //그건 맞는데 말 그대로 데이터니까 어떤 직업할지 모르니
-            //코드에 따라 스탯 해주는게 맞지
-            //근데 지금 데이터가 데이터매니저에도 있고
-            //Character에도 있어서 지금 이걸 Character 데이터로
-            //처리하면 나중에 수정해야
-            //근데 그럼 스탯이 Characterclass에 있을 필요가 있나?
-
             //그러면 입력값 저장하는 변수도 끌어와야 함
+            //
             switch (처음 직업 선택시 입력한 값)
             {
                 case 0:
@@ -115,8 +107,11 @@ namespace TeamTodayTextRPG
                 Level++;
                 requiredExp += 25;
 
-                //Console.WriteLine("축하합니다! 레벨이 올랐습니다.");
+                Console.WriteLine("축하합니다! 레벨이 올랐습니다.");
                 //스탯 증가량 화면에 표시
+                character.attack += 1;
+                character.def += 2;
+                Console.WriteLine("공격력 +1, 방어력 +2");
             }
 
         }
@@ -132,6 +127,8 @@ namespace TeamTodayTextRPG
         //인벤토리에 아이템이 들어오는 경우
         public void InputBag()
         {
+            gameManager shopView = new ShopViewer();
+
             //임시로 선언&초기화
             int code = 0;
             int gold = 0;
