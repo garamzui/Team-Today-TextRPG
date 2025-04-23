@@ -40,10 +40,10 @@ namespace TeamTodayTextRPG
             public int gold { get; set; }
             public string[] Parameter { get; set; }
             
-            public string actskillName { get; set; }
-            public string passkillName { get; set; }
+            public string ActskillName { get; set; }
+            public string PasskillName { get; set; }
 
-            public int passiveSkillLevel = 0;
+            public int PassiveSkillLevel = 0;
 
             public void init(string[] data) //우선은 임의로 매서드로 초기화할 필드를 변경해 놓았습니다.
             {
@@ -58,20 +58,20 @@ namespace TeamTodayTextRPG
                 MaxMp = Mp;
                 Dodge = int.Parse(data[5]);
                 gold = int.Parse(data[6]);
-                actskillName = (data[7]);
-                passkillName = (data[8]);
+                ActskillName = (data[7]);
+                PasskillName = (data[8]);
 
 
 
             }
 
-            public virtual string jobDescription() //직업 설명
+            public virtual string JobDescription() //직업 설명
             {
                 return"";
             }
             public void ViewStatus()
             {
-                Console.WriteLine($"{Jobname} {jobDescription}\n- 공격력 {Attack} (+{PlusAtk}), 방어력 {Def} (+{PlusDef}), HP {Hp}/{MaxHp}, Gold {gold}");
+                Console.WriteLine($"{Jobname} {JobDescription}\n- 공격력 {Attack} (+{PlusAtk}), 방어력 {Def} (+{PlusDef}), HP {Hp}/{MaxHp}, Gold {gold}");
             }
 
 
@@ -91,12 +91,12 @@ namespace TeamTodayTextRPG
             public virtual void ActiveSkill(Monster m)
 
             {
-                Console.WriteLine($"{Jobname}의 기술 {actskillName}");
+                Console.WriteLine($"{Jobname}의 기술 {ActskillName}");
             }
 
             public virtual void PassiveSkill(Player p)
             {
-                 Console.WriteLine($"{Jobname}의 기술 {passkillName}");
+                 Console.WriteLine($"{Jobname}의 기술 {PasskillName}");
             }
 
             public void TakeDamage(int damage)
@@ -140,7 +140,7 @@ namespace TeamTodayTextRPG
             {
                 init(DataManager.Instance.CharacterDB.List[(int)CHAR_TYPE.WARRIOR]);
             }
-            public override string jobDescription()
+            public override string JobDescription()
             {
                return"높은 방어력,기본 공격력,체력";
             }
@@ -151,17 +151,17 @@ namespace TeamTodayTextRPG
                 if (SkillDamage < 0)
                 { SkillDamage = 1; }
                 m.TakeDamage(SkillDamage);
-                Console.WriteLine($"{actskillName}을 사용하여 {m.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
+                Console.WriteLine($"{ActskillName}을 사용하여 {m.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
             }
 
             public override void PassiveSkill(Player p)
             {
-                if (p.Level >= 5 && passiveSkillLevel < 5)
+                if (p.Level >= 5 && PassiveSkillLevel < 5)
                 {
                     Def += 2;
                     
-                    passiveSkillLevel += 1;
-                    if (passiveSkillLevel >= 5)
+                    PassiveSkillLevel += 1;
+                    if (PassiveSkillLevel >= 5)
                     { Def = 20; }
                 }
 
@@ -174,7 +174,7 @@ namespace TeamTodayTextRPG
             {
                 init(DataManager.Instance.CharacterDB.List[(int)CHAR_TYPE.MAGICIAN]);
             }
-            public override string jobDescription()
+            public override string JobDescription()
             {
                 return "방어 무시, 높은 마나, 스킬의존성";
             } 
@@ -186,17 +186,17 @@ namespace TeamTodayTextRPG
                 if (SkillDamage < 0)
                 { SkillDamage = 1; }
                 m.TakeDamage(SkillDamage);
-                Console.WriteLine($"{actskillName}을 사용하여 {m.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
+                Console.WriteLine($"{ActskillName}을 사용하여 {m.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
             }
             public override void PassiveSkill(Player p)
             {
-                if (p.Level >= 5 && passiveSkillLevel< 5)
+                if (p.Level >= 5 && PassiveSkillLevel< 5)
                 {
                     Attack += 1;
                     Mp += 50;
 
-                    passiveSkillLevel += 1;
-                    if (passiveSkillLevel >= 5)
+                    PassiveSkillLevel += 1;
+                    if (PassiveSkillLevel >= 5)
                     { Mp = 500; }
                 }
 
@@ -208,7 +208,7 @@ namespace TeamTodayTextRPG
             {
             init(DataManager.Instance.CharacterDB.List[(int)CHAR_TYPE.ASSASSIN]);
             }
-            public override string jobDescription()
+            public override string JobDescription()
             {
                 return "높은 회피, 크리티컬 히트";
             }
@@ -232,7 +232,7 @@ namespace TeamTodayTextRPG
                 for (int i = 0; i < 2; i++)
                 { 
                     m.TakeDamage(SkillDamage); 
-                    Console.WriteLine($"{actskillName}을 사용하여 {m.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
+                    Console.WriteLine($"{ActskillName}을 사용하여 {m.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
                 }
                 
 
@@ -241,12 +241,12 @@ namespace TeamTodayTextRPG
             }
             public override void PassiveSkill(Player p)
             {
-                if (p.Level >= 5 && passiveSkillLevel < 5)
+                if (p.Level >= 5 && PassiveSkillLevel < 5)
                 {
                     Dodge += 2;
 
-                    passiveSkillLevel += 1;
-                    if (passiveSkillLevel >= 5)
+                    PassiveSkillLevel += 1;
+                    if (PassiveSkillLevel >= 5)
                     { Dodge = 25; }
                 }
 
