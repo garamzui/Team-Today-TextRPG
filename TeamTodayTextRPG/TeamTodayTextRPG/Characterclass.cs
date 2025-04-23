@@ -28,8 +28,8 @@ namespace TeamTodayTextRPG
             public int mp { get { return Mp; } set { if (value < 0) Mp = 0; else if (value > maxHp) Mp = maxHp; else Mp = value; } } 
             public int maxMp { get; set; }
             public int dodge { get; set; }
-            public int plusDodge { get { return dodge  + plusDodge; } } 
-            public int totalDodge { get; set; }
+            public int plusDodge { get; set; } 
+            public int totalDodge { get { return dodge + plusDodge; } }
             // 직업간 차이를 두어 보고자 dodge 스탯도 추가 해 봤습니다.
             // 전투가 어떻게 이루어질지에 따라 추가해야 할 계산식이 달라질 것 같습니다.
             // 예를 들면 
@@ -58,8 +58,8 @@ namespace TeamTodayTextRPG
                 mp = maxMp;
                 dodge = int.Parse(initstr[5]);
                 gold = int.Parse(initstr[6]);
-                actskillName = string.Empty;
-                passkillName = string.Empty;
+                actskillName = (initstr[7]);
+                passkillName = (initstr[8]);
 
 
 
@@ -97,6 +97,16 @@ namespace TeamTodayTextRPG
             {
                 
                 Console.WriteLine($"{jobname}의 기술 {passkillName}");
+            }
+
+            public void TakeDamage(int damage)
+            { 
+                hp -= damage;
+            }
+
+            public void Heal(int heal)
+            {
+                hp += heal; 
             }
         }
 
@@ -151,6 +161,7 @@ namespace TeamTodayTextRPG
             {
                 mp -= 10;
                 int SkillDamage = (totalAtk * 10) - m.Def;
+                if (SkillDamage < 0)
                 { SkillDamage = 1; }
                 m.Hp -= SkillDamage;
                 Console.WriteLine($"{actskillName}을 사용하여 {m.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
@@ -182,6 +193,7 @@ namespace TeamTodayTextRPG
             {
                 mp -= 10;
                 int SkillDamage = (totalAtk * 3) - m.Def;
+                if (SkillDamage < 0)
                 { SkillDamage = 1; }
 
                 Console.WriteLine($"{actskillName}을 사용하여 {m.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
