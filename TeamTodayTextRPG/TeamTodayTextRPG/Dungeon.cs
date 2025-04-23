@@ -6,9 +6,9 @@ using System.Collections.Generic;
 enum DUNGEON_DIFF
 {
     Easy = 0,
-    Norma = 1,
+    Normal = 1,
     Hard = 2,
-    Hell = 3
+    Hell = 3,
 }
 
 class Dungeon
@@ -39,13 +39,26 @@ class Dungeon
         Console.WriteLine($"\n[{name}] 던전에 입장했습니다!");
 
         int currentFloor = 1;
-        int maxFloor = monsters.Count; // 층수는 넘겨준 몬스터 수에 따라 결정
+        int maxFloor = 5;  // 5층 고정
 
         while (currentFloor <= maxFloor && player.Hp > 0)
         {
             Console.WriteLine($"\n현재 {currentFloor}층입니다.");
 
-            Monster monster = monsters[currentFloor - 1]; // 0번 인덱스 = 1층 몬스터
+            Monster monster;
+
+            if (currentFloor == 5)
+            {
+                // 5층은 Zakum 보스 고정
+                monster = monsters.Find(m => m.IsBoss); // 보스 몬스터 찾기
+            }
+            else
+            {
+                // 1~4층은 랜덤 몬스터
+                List<Monster> normalMonsters = monsters.FindAll(m => !m.IsBoss);
+                int randomIndex = rand.Next(normalMonsters.Count);
+                monster = normalMonsters[randomIndex];
+            }
 
             Console.WriteLine($"\n{monster.Name}이(가) 등장했습니다! {(monster.IsBoss ? "[보스 몬스터]" : "")}");
 
@@ -123,7 +136,7 @@ class Dungeon
 
         if (player.Hp > 0 && currentFloor > maxFloor)
         {
-            Console.WriteLine("\n🎉 던전을 모두 클리어했습니다! 🎉");
+            Console.WriteLine("\n 던전을 모두 클리어했습니다! ");
         }
     }
 
