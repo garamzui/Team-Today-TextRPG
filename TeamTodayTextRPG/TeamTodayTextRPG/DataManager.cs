@@ -7,6 +7,46 @@
         ITEM,
         DUNGEON
     }
+    /*『효빈』
+        데이터 매니저입니다.
+        모든 데이터를 이곳에서 관리하고 접근합니다. (추후 set함수는 전부 private로 변경할 예정이에요~)
+
+        ============================================================================================
+        List<string[]>
+        캐릭터 데이터베이스 접근       DataManager.Instance.CharacterDB.List[캐릭터 코드]
+
+        List<string[]>
+        몬스터 데이터베이스 접근       DataManager.Instance.MonsterDB.List[몬스터 코드]
+
+        * 아이템과 던전 데이터 베이스도 추후 string[] 리스트로 변경 될 가능성이 높습니다..!*
+        List<Item>
+        아이템 데이터베이스 접근       DataManager.Instance.ItemDB.List[아이템 코드]
+
+        List<Dungeon>
+        던전   데이터베이스 접근       DataManager.Instance.DungeonDB.List[던전 코드]
+        ============================================================================================
+
+        아이템 코드는 각 데이터들의 enum으로 관리합니다.
+        제가 담당한 Monster로 예를 들자면....
+
+            enum MONSTER_CODE           <= enumerator 는 보통 전부 대문자로 씁니다..! 소문자도 상관은 없어요:)
+            {
+                트랄랄랄로_트랄랄라 = 0,
+                퉁x9_사후르,
+                리릴리_라릴라,
+                카푸치노_어쌔시노,
+                ...
+            }
+            
+            Q1) 위의 enum을 활용하여 리릴리 라릴라의 데이터를 받아와 리릴리 라릴라의 데이터를 얻고 싶다면?
+            A1) DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.리릴리_라릴라]           <- string[]형 데이터입니다.
+                                        0.코드 / 1.레벨 / 2.이름 / 3.공격력 / 4.방어력 / 5.체력 / 6.보상골드 / 7.보상경험치 / 8.텍스트  => 이 값들이 들어있습니다
+
+            Q2) 가져온 데이터에서 공격력 값만 얻고 싶다면?
+            A2) DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.리릴리_라릴라][3]           <- 공격력은 3번 인덱스에 있습니다!
+    */
+
+
     class DataManager
     {
         private static readonly Lazy<DataManager> lazyInstance = new Lazy<DataManager>(() => new DataManager());
@@ -21,11 +61,10 @@
             DungeonDB = new DungeonDatabase();
         }
 
-        public CharacterDatabase CharacterDB { get; set; }
-        public MonsterDatabase MonsterDB { get; set; }
-        public ItemDatabase ItemDB { get; set; }
-        public DungeonDatabase DungeonDB { get; set; }
-
+        public CharacterDatabase CharacterDB { get; private set; }
+        public MonsterDatabase MonsterDB { get; private set; }
+        public ItemDatabase ItemDB { get; private set; }
+        public DungeonDatabase DungeonDB { get; private set; }
     }
 
     abstract class Database<T>
@@ -79,7 +118,7 @@
 
     class MonsterDatabase : Database<string[]>
     {
-        // 0.몬스터코드 / 1.이름 / 2.레벨 / 3.공격력 / 4.방어력 / 5.체력 / 6.보상골드 / 7.보상경험치 / 8.텍스트
+        // 0.코드 / 1.레벨 / 2.이름 / 3.공격력 / 4.방어력 / 5.체력 / 6.보상골드 / 7.보상경험치 / 8.텍스트
         public string Data { get; private set; } =
             "0/1/매우약한 몬스터/3/0/8/50/10/매우 약한 적입니다.#" +
             "1/2/약한 몬스터/5/1/15/100/25/적당히 약한 적입니다.#" +
@@ -93,15 +132,13 @@
         }
         protected override void SetData(string[] parameter)
         {
-            List.Add(parameter);
+            List.Add(new parameter);
         }
     }
 
 
     class ItemDatabase : Database<Item>
     {
-        public List<Item> ItemList { get; set; } = new List<Item>();
-
         // 0.코드 / 1.이름 / 2.ATK / 3.DEF / 4.설명 / 5.가격 / 6.타입
         public string Data { get; private set; } =
             "0/수련자 갑옷/0/5/수련에 도움을 주는 갑옷입니다./1000/1#" +
@@ -119,18 +156,19 @@
         {
             List.Add(new Item(parameter));
         }
-        public ITEM_TYPE GetTypetoCode(int code) { return ItemList[code].Type; }
+        public ITEM_TYPE GetTypetoCode(int code) { return List[code].Type; }
 
     }
 
 
     class DungeonDatabase : Database<Dungeon>
     {
-        // 0.던전 코드 / 1.던전 이름 / 2.골드 보상 / 3.경험치 보상 / 4.몬스터 하한 레벨 / 5.몬스터 상한 레벨 / 6.난이도
+        // 0.코드 / 1.던전 이름 / 2.골드 보상 / 3.경험치 보상 / 4.몬스터 하한 레벨 / 5.몬스터 상한 레벨 / 6.난이도
         public string Data { get; private set; } =
             "0/쉬움 던전/1000/500/1/2/0#" +
             "1/일반 던전/1700/800/2/4/1#" +
-            "2/어려움 던전/2500/1500/4/5/2";
+            "2/어려움 던전/2500/1500/4/5/2#" +
+            "3/헬 던전/10000/3000/5/5/3";
 
         public DungeonDatabase()
         {
