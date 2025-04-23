@@ -87,7 +87,8 @@ namespace TeamTodayTextRPG
             Console.WriteLine("3. 장비 보기");
             Console.WriteLine("4. 상점");
             Console.WriteLine("5. 던전");
-            Console.WriteLine("6. 게임 종료");
+            Console.WriteLine("6. 휴식");
+            Console.WriteLine("7. 게임 종료");
 
             int input = gameManager.InputAction(startIndex, endIndex);
 
