@@ -169,7 +169,7 @@ namespace TeamTodayTextRPG
 
             public override void PassiveSkill(Player p)
             {
-                if (p.Level >= 3 && PassiveSkillLevel <= MaxPassiveSkillLevel)
+                if (p.Level >= 3 && PassiveSkillLevel < MaxPassiveSkillLevel)
                 {
                    PassiveSkillLevel += 1;
 
@@ -222,7 +222,7 @@ namespace TeamTodayTextRPG
             }
             public override void PassiveSkill(Player p)
             {
-                if (p.Level >= 3 && PassiveSkillLevel <= MaxPassiveSkillLevel)
+                if (p.Level >= 3 && PassiveSkillLevel < MaxPassiveSkillLevel)
                 {
                     PassiveSkillLevel += 1;
 
@@ -293,7 +293,7 @@ namespace TeamTodayTextRPG
             }
             public override void PassiveSkill(Player p) //추후에 Player의 Level UP 메서드에서 호출 해주어야 함
             {
-                if (p.Level >= 3 && PassiveSkillLevel <= MaxPassiveSkillLevel)
+                if (p.Level >= 3 && PassiveSkillLevel < MaxPassiveSkillLevel)
                 {
                     PassiveSkillLevel += 1;
 
