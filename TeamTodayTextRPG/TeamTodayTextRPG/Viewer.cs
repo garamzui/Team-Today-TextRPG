@@ -592,29 +592,33 @@ namespace TeamTodayTextRPG
             Console.WriteLine("몬스터 정보 화면");
             Console.WriteLine("====================");
 
-            // currentMonster가 변경될 경우, 이 부분 수정 필요
+            // currentMonster가 null일 때의 처리
             if (currentMonster == null)
             {
                 Console.WriteLine("몬스터 객체가 null입니다.");
             }
             else
             {
+                // 몬스터의 속성 출력
                 Console.WriteLine($"이름: {currentMonster.Name}");
                 Console.WriteLine($"레벨: {currentMonster.Level}");
                 Console.WriteLine($"체력: {currentMonster.Hp}/{currentMonster.MaxHp}");
-                Console.WriteLine($"공격력: {currentMonster.Attack}");
+                Console.WriteLine($"공격력: {currentMonster.Atk}");
             }
 
             Console.WriteLine("====================");
             Console.WriteLine("1. 전투");
             Console.WriteLine("2. 돌아가기");
 
+            // 사용자 입력 받기
             int input = gameManager.InputAction(startIndex, endIndex);
 
+            // 다음 화면 결정
             VIEW_TYPE nextView = NextView(gameManager, input);
             gameManager.SceneManager.SwitchScene(nextView);
         }
-        // NextView 메서드 구현
+
+        // 다음 화면을 결정하는 메서드
         public override VIEW_TYPE NextView(GameManager gameManager, int input)
         {
             switch (input)
@@ -623,7 +627,7 @@ namespace TeamTodayTextRPG
                     // 전투 화면으로 이동
                     return VIEW_TYPE.BATTLE;
                 case 2:
-                    // 이전 화면으로 돌아가기 (메인 화면으로 돌아갈 수 있음)
+                    // 이전 화면으로 돌아가기
                     return VIEW_TYPE.MAIN;  // 또는 다른 화면으로 돌아갈 수 있음
                 default:
                     // 잘못된 입력 처리
