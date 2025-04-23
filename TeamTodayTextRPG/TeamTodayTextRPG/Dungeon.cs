@@ -1,9 +1,11 @@
+namespace TeamTodayTextRPG
+{
 using System;
 using System.Numerics;
 using System.Threading;
 using System.Collections.Generic;
 namespace TeamTodayTextRPG
-{ 
+{
 
 enum DUNGEON_DIFF
 {
