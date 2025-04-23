@@ -14,11 +14,11 @@ namespace TeamTodayTextRPG
     enum MONSTER_CODE
     {
         // 추후에 몬스터 이름으로 변경 될 예정입니다. 
-        M1 = 0,
-        M2,
-        M3,
-        M4,
-        M5
+        M1 = 0,      //m1 =  Slime
+        M2,          //M2 =  Goblin
+        M3,          //M3 =  Wolf
+        M4,          //M4 =  Ork
+        M5           //M5 = Zakum
     }
 
     abstract class Monster
