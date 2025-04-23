@@ -15,27 +15,26 @@ namespace TeamTodayTextRPG
         {
 
             public string Jobname { get; set; }
-            public int attack { get; set; }
-            public int plusAtk { get; set; } = 0;
-            public int totalAtk { get { return attack + plusAtk; } }  //다른 계산에 필요할까 싶어 합산되어 적용될 값을 따로 만들어 보았습니다.
-            public int def { get; set; }
-            public int plusDef { get; set; } = 0;
-            public int totalDef { get { return def + plusDef; } }
-            private int Hp {  get; set; }
-            //Hp,Mp예외처리 속성쪽으로 옮겼습니다.
-            public int hp { get { return Hp; } set { if (value < 0) Hp = 0; else if (value > maxHp) Hp = maxHp; else Hp = value; } }
-            public int maxHp { get; set; }
-            private int Mp { get; set; }// 새로운 스탯 mp추가 했습니다
-            public int mp { get { return Mp; } set { if (value < 0) Mp = 0; else if (value > maxHp) Mp = maxHp; else Mp = value; } } 
-            public int maxMp { get; set; }
-            public int dodge { get; set; }
-            public int plusDodge { get; set; } 
-            public int totalDodge { get { return dodge + plusDodge; } }
-            // 직업간 차이를 두어 보고자 dodge 스탯도 추가 해 봤습니다.
+            public int Attack { get; set; }
+            public int PlusAtk { get; set; } = 0;
+            public int TotalAtk { get { return Attack + PlusAtk; } }  //다른 계산에 필요할까 싶어 합산되어 적용될 값을 따로 만들어 보았습니다.
+            public int Def { get; set; }
+            public int PlusDef { get; set; } = 0;
+            public int TotalDef { get { return Def + PlusDef; } }
+            
+            public int Hp { get; set; }
+            public int MaxHp { get; set; }
+            
+            public int Mp { get;set; }
+            public int MaxMp { get; set; }
+            public int Dodge { get; set; }
+            public int PlusDodge { get; set; } 
+            public int TotalDodge { get { return Dodge + PlusDodge; } }
+            // 직업간 차이를 두어 보고자 Dodge 스탯도 추가 해 봤습니다.
             // 전투가 어떻게 이루어질지에 따라 추가해야 할 계산식이 달라질 것 같습니다.
             // 예를 들면 
             //int num = new Random().Next(0, 26); 또는 GameManager에 static Random하나 만들어두고 돌려쓰기
-            //if ((num += Charater.dodge > 20)
+            //if ((num += Charater.Dodge > 20)
             //{공격을 무효화하기}
             // 이런식으로 설계하면 어떨까 합니다.
             public int gold { get; set; }
@@ -49,18 +48,18 @@ namespace TeamTodayTextRPG
             public void init(string[] data) //우선은 임의로 매서드로 초기화할 필드를 변경해 놓았습니다.
             {
                 //직업이름,공격력,방어력,체력,마력,회피,골드,액티브스킬이름,패시브스킬이름
-                Parameter = data.Split('/');
+                Parameter = data;
                 Jobname = data[0];
-                attack = data[1];
-                def = int.Parse(initstr[2]);
-                maxHp = int.Parse(initstr[3]);
-                hp = maxHp;
-                 maxMp = int.Parse(initstr[4]);
-                mp = maxMp;
-                dodge = int.Parse(initstr[5]);
-                gold = int.Parse(initstr[6]);
-                actskillName = (initstr[7]);
-                passkillName = (initstr[8]);
+                Attack = int.Parse(data[1]);
+                Def = int.Parse(data[2]);
+                Hp = int.Parse(data[3]);
+                MaxHp = Hp;
+                Mp = int.Parse(data[4]);
+                MaxMp = Mp;
+                Dodge = int.Parse(data[5]);
+                gold = int.Parse(data[6]);
+                actskillName = (data[7]);
+                passkillName = (data[8]);
 
 
 
@@ -72,7 +71,7 @@ namespace TeamTodayTextRPG
             }
             public void ViewStatus()
             {
-                Console.WriteLine($"{Jobname} {jobDescription}- 공격력 {attack} (+{plusAtk}), 방어력 {def} (+{plusDef}), HP {hp}/{maxHp}, Gold {gold}");
+                Console.WriteLine($"{Jobname} {jobDescription}\n- 공격력 {Attack} (+{PlusAtk}), 방어력 {Def} (+{PlusDef}), HP {Hp}/{MaxHp}, Gold {gold}");
             }
 
 
@@ -102,11 +101,17 @@ namespace TeamTodayTextRPG
 
             public void TakeDamage(int damage)
             { 
-                hp -= damage;
-                if (hp <= 0)
+                Hp -= damage;
+                
+                if (Hp < 0) Hp = 0; 
+                
+                
+                
+                if (Hp == 0)
                 {
                     Die();
                 }
+                
             }
             public void Die()
             {
@@ -114,7 +119,8 @@ namespace TeamTodayTextRPG
             }
             public void Heal(int heal)
             {
-                hp += heal; 
+                Hp += heal;
+                if (Hp > MaxHp) Hp = MaxHp;
             }
         }
 
@@ -132,19 +138,16 @@ namespace TeamTodayTextRPG
         {
             public  Worrior ()
             {
-               
-                //직업이름,공격력,방어력,체력,마력,회피,골드,액티브스킬이름,패시브스킬이름
-                init(DataManager.Instance.CharacterDB.List[0]);
-                
+                init(DataManager.Instance.CharacterDB.List[(int)CHAR_TYPE.WARRIOR]);
             }
             public override string jobDescription()
             {
-               return"";
+               return"높은 방어력,기본 공격력,체력";
             }
             public override void ActiveSkill(Monster m)
             {
-                mp -= 10;
-                int SkillDamage = (totalAtk * 3) - m.Def;
+                Mp -= 10;
+                int SkillDamage = (TotalAtk * 3) - m.Def;
                 if (SkillDamage < 0)
                 { SkillDamage = 1; }
                 m.TakeDamage(SkillDamage);
@@ -155,11 +158,11 @@ namespace TeamTodayTextRPG
             {
                 if (p.Level >= 5 && passiveSkillLevel < 5)
                 {
-                    def += 2;
+                    Def += 2;
                     
                     passiveSkillLevel += 1;
                     if (passiveSkillLevel >= 5)
-                    { def = 20; }
+                    { Def = 20; }
                 }
 
             }
@@ -167,17 +170,19 @@ namespace TeamTodayTextRPG
         }
         public class Magician : Character
         {
-            public static Magician Default()
+            public  Magician()
             {
-                Magician m = new Magician();
-                //직업이름,공격력,방어력,체력,마력,회피,골드,액티브스킬이름,패시브스킬이름
-                m.init("마법사,3,3,50,100,3,1000,썬더볼트,마력개방");
-                return m;
+                init(DataManager.Instance.CharacterDB.List[(int)CHAR_TYPE.MAGICIAN]);
             }
-            public override void ActiveSkill(Monster m)
+            public override string jobDescription()
             {
-                mp -= 10;
-                int SkillDamage = (int)((totalAtk * 10) - Math.Round(m.Def / 2.0));
+                return "방어 무시, 높은 마나, 스킬의존성";
+            } 
+           
+        public override void ActiveSkill(Monster m)
+            {
+                Mp -= 10;
+                int SkillDamage = (int)((TotalAtk * 10) - Math.Round(m.Def / 2.0));
                 if (SkillDamage < 0)
                 { SkillDamage = 1; }
                 m.TakeDamage(SkillDamage);
@@ -187,29 +192,30 @@ namespace TeamTodayTextRPG
             {
                 if (p.Level >= 5 && passiveSkillLevel< 5)
                 {
-                    attack += 1;
-                    mp += 50;
+                    Attack += 1;
+                    Mp += 50;
 
                     passiveSkillLevel += 1;
                     if (passiveSkillLevel >= 5)
-                    { mp = 500; }
+                    { Mp = 500; }
                 }
 
             }
         }
         public class Assassin : Character
         {
-            public Assassin Default()
+            public Assassin ()
             {
-                Assassin a = new Assassin();
-                //직업이름,공격력,방어력,체력,마력,회피,골드,액티브스킬이름,패시브스킬이름
-                a.init("암살자,7,1,75,75,10,1000,연격,날쌘 몸놀림");
-                return a;
+            init(DataManager.Instance.CharacterDB.List[(int)CHAR_TYPE.ASSASSIN]);
+            }
+            public override string jobDescription()
+            {
+                return "높은 회피, 크리티컬 히트";
             }
             public override void ActiveSkill(Monster m)
             {
-                mp -= 10;
-                int SkillDamage = (totalAtk * 2) - m.Def;
+                Mp -= 10;
+                int SkillDamage = (TotalAtk * 2) - m.Def;
                 
                 Random critical = new Random();
                 int criticalHit =critical.Next(0,10);
@@ -237,11 +243,11 @@ namespace TeamTodayTextRPG
             {
                 if (p.Level >= 5 && passiveSkillLevel < 5)
                 {
-                    dodge += 2;
+                    Dodge += 2;
 
                     passiveSkillLevel += 1;
                     if (passiveSkillLevel >= 5)
-                    { dodge = 25; }
+                    { Dodge = 25; }
                 }
 
             }

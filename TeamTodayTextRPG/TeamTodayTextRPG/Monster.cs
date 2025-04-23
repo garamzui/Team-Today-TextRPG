@@ -55,6 +55,7 @@ namespace TeamTodayTextRPG
             RewardExp = int.Parse(Parameter[7]);
             Text = Parameter[8];
         }
+
         public void TakeDamage(int damage)
         {
             Hp -= damage;
