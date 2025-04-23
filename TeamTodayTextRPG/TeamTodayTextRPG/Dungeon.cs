@@ -2,6 +2,8 @@ using System;
 using System.Numerics;
 using System.Threading;
 using System.Collections.Generic;
+namespace TeamTodayTextRPG
+{ 
 
 enum DUNGEON_DIFF
 {
@@ -24,7 +26,7 @@ class Dungeon
 
     public void EnterDungeon(Player player, List<Monster> monsters)
     {
-        Console.WriteLine($"\n[{Name}] 던전에 입장했습니다!"); 
+        Console.WriteLine($"\n[{Name}] 던전에 입장했습니다!");
 
         int currentFloor = 1;
         int maxFloor = monsters.Count; // 층수 = 넘겨준 몬스터 수
@@ -117,7 +119,7 @@ class Dungeon
 
     public bool CheckClear(int playerLevel)
     {
-        return playerLevel >= DefLevel; 
+        return playerLevel >= DefLevel;
     }
 
     public int CalcReward(int playerLevel)
@@ -158,7 +160,8 @@ class Dungeon
 
     public void PrintDungeonInfo()
     {
-        Console.WriteLine($"[{Code}] {Name} - {Diff} 난이도"); 
+        Console.WriteLine($"[{Code}] {Name} - {Diff} 난이도");
         Console.WriteLine($"추천 레벨: {DefLevel} / 기본 보상: {Reward}G / 경험치: {Exp}Exp");
     }
+}
 }
