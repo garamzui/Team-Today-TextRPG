@@ -14,51 +14,26 @@ enum DUNGEON_DIFF
 class Dungeon
 {
     private Random rand = new Random();
-    private int code;
-    private string name;
-    private int reward;
-    private int exp;
-    private int defLevel;
-    private DUNGEON_DIFF diff;
 
-    public Dungeon(string[] info)
-    {
-        if (info.Length >= 6)
-        {
-            code = int.Parse(info[0]);
-            name = info[1];
-            reward = int.Parse(info[2]);
-            exp = int.Parse(info[3]);
-            defLevel = int.Parse(info[4]);
-            diff = (DUNGEON_DIFF)Enum.Parse(typeof(DUNGEON_DIFF), info[5]);
-        }
-    }
+    public int Code { get; set; }
+    public string Name { get; set; }
+    public int Reward { get; set; }
+    public int Exp { get; set; }
+    public int DefLevel { get; set; }
+    public DUNGEON_DIFF Diff { get; set; }
 
     public void EnterDungeon(Player player, List<Monster> monsters)
     {
-        Console.WriteLine($"\n[{name}] 던전에 입장했습니다!");
+        Console.WriteLine($"\n[{Name}] 던전에 입장했습니다!"); 
 
         int currentFloor = 1;
-        int maxFloor = 5;  // 5층 고정
+        int maxFloor = monsters.Count; // 층수 = 넘겨준 몬스터 수
 
         while (currentFloor <= maxFloor && player.Hp > 0)
         {
             Console.WriteLine($"\n현재 {currentFloor}층입니다.");
 
-            Monster monster;
-
-            if (currentFloor == 5)
-            {
-                // 5층은 Zakum 보스 고정
-                monster = monsters.Find(m => m.IsBoss); // 보스 몬스터 찾기
-            }
-            else
-            {
-                // 1~4층은 랜덤 몬스터
-                List<Monster> normalMonsters = monsters.FindAll(m => !m.IsBoss);
-                int randomIndex = rand.Next(normalMonsters.Count);
-                monster = normalMonsters[randomIndex];
-            }
+            Monster monster = monsters[currentFloor - 1];
 
             Console.WriteLine($"\n{monster.Name}이(가) 등장했습니다! {(monster.IsBoss ? "[보스 몬스터]" : "")}");
 
@@ -142,24 +117,24 @@ class Dungeon
 
     public bool CheckClear(int playerLevel)
     {
-        return playerLevel >= defLevel;
+        return playerLevel >= DefLevel; 
     }
 
     public int CalcReward(int playerLevel)
     {
         int bonus = 0;
-        if (playerLevel > defLevel + 2)
+        if (playerLevel > DefLevel + 2)
         {
             bonus = rand.Next(50, 101);
         }
-        return reward + bonus;
+        return Reward + bonus;
     }
 
     public int CalcMinusHP(int playerDefense)
     {
         int baseDamage = 10;
 
-        switch (diff)
+        switch (Diff)
         {
             case DUNGEON_DIFF.Easy:
                 baseDamage = 10;
@@ -183,7 +158,7 @@ class Dungeon
 
     public void PrintDungeonInfo()
     {
-        Console.WriteLine($"[{code}] {name} - {diff} 난이도");
-        Console.WriteLine($"추천 레벨: {defLevel} / 기본 보상: {reward}G / 경험치: {exp}Exp");
+        Console.WriteLine($"[{Code}] {Name} - {Diff} 난이도"); 
+        Console.WriteLine($"추천 레벨: {DefLevel} / 기본 보상: {Reward}G / 경험치: {Exp}Exp");
     }
 }
