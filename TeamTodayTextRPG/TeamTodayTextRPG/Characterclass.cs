@@ -22,6 +22,7 @@ namespace TeamTodayTextRPG
             public int plusDef { get; set; } = 0;
             public int totalDef { get { return def + plusDef; } }
             private int Hp {  get; set; }
+            //Hp,Mp예외처리 속성쪽으로 옮겼습니다.
             public int hp { get { return Hp; } set { if (value < 0) Hp = 0; else if (value > maxHp) Hp = maxHp; else Hp = value; } }
             public int maxHp { get; set; }
             private int Mp { get; set; }// 새로운 스탯 mp추가 했습니다
@@ -87,23 +88,26 @@ namespace TeamTodayTextRPG
             public virtual void ActiveSkill(Monster m)
 
             {
-
-
-
                 Console.WriteLine($"{jobname}의 기술 {actskillName}");
             }
 
             public virtual void PassiveSkill(Player p)
             {
-                
-                Console.WriteLine($"{jobname}의 기술 {passkillName}");
+                 Console.WriteLine($"{jobname}의 기술 {passkillName}");
             }
 
             public void TakeDamage(int damage)
             { 
                 hp -= damage;
+                if (hp <= 0)
+                {
+                    Die();
+                }
             }
-
+            public void Die()
+            {
+                Console.WriteLine("눈앞이 깜깜해진다..");
+            }
             public void Heal(int heal)
             {
                 hp += heal; 
@@ -130,7 +134,7 @@ namespace TeamTodayTextRPG
                 int SkillDamage = (totalAtk * 3) - m.Def;
                 if (SkillDamage < 0)
                 { SkillDamage = 1; }
-                m.Hp -= SkillDamage;
+                m.TakeDamage(SkillDamage);
                 Console.WriteLine($"{actskillName}을 사용하여 {m.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
             }
 
@@ -160,10 +164,10 @@ namespace TeamTodayTextRPG
             public override void ActiveSkill(Monster m)
             {
                 mp -= 10;
-                int SkillDamage = (totalAtk * 10) - m.Def;
+                int SkillDamage = (int)((totalAtk * 10) - Math.Round(m.Def / 2.0));
                 if (SkillDamage < 0)
                 { SkillDamage = 1; }
-                m.Hp -= SkillDamage;
+                m.TakeDamage(SkillDamage);
                 Console.WriteLine($"{actskillName}을 사용하여 {m.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
             }
             public override void PassiveSkill(Player p)
@@ -186,19 +190,34 @@ namespace TeamTodayTextRPG
             {
                 Assassin a = new Assassin();
                 //직업이름,공격력,방어력,체력,마력,회피,골드,액티브스킬이름,패시브스킬이름
-                a.init("암살자,8,1,75,75,10,1000,비열한습격,날쌘 몸놀림");
+                a.init("암살자,7,1,75,75,10,1000,연격,날쌘 몸놀림");
                 return a;
             }
             public override void ActiveSkill(Monster m)
             {
                 mp -= 10;
-                int SkillDamage = (totalAtk * 3) - m.Def;
+                int SkillDamage = (totalAtk * 2) - m.Def;
+                
+                Random critical = new Random();
+                int criticalHit =critical.Next(0,10);
+                
+                if (criticalHit <= 2)
+                {
+                    SkillDamage *= 2;
+                    Console.WriteLine("치명타!");
+                }
+
                 if (SkillDamage < 0)
                 { SkillDamage = 1; }
+               
+                for (int i = 0; i < 2; i++)
+                { 
+                    m.TakeDamage(SkillDamage); 
+                    Console.WriteLine($"{actskillName}을 사용하여 {m.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
+                }
+                
 
-                Console.WriteLine($"{actskillName}을 사용하여 {m.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
-
-                 m.Hp -= SkillDamage;
+                
 
             }
             public override void PassiveSkill(Player p)
