@@ -69,7 +69,7 @@ namespace TeamTodayTextRPG
                 case 0: character = Worrior.Default();
                     SetStat();
                     break;
-                case 1: character = Megician.Default();
+                case 1: character = Magician.Default();
                     SetStat();
                     break;
                 case 2: character = Assassin.Default();
@@ -81,13 +81,13 @@ namespace TeamTodayTextRPG
 
             void SetStat()
             {
-                Attack = character.attack;
-                Defense = character.def;
-                CurHP = character.hp;
-                MaxHP = character.maxHp;
-                CurMP = character.mp;
-                MaxMP = character.maxMp;
-                Dodge = character.dodge;
+                Attack = character.Attack;
+                Defense = character.Def;
+                CurHP = character.Hp;
+                MaxHP = character.MaxHp;
+                CurMP = character.Mp;
+                MaxMP = character.MaxMp;
+                Dodge = character.Dodge;
                 Gold = character.gold;
             }
 
@@ -271,7 +271,7 @@ namespace TeamTodayTextRPG
         //휴식 기능
         public void Rest()
         {
-            character.hp += 50;
+            character.Hp += 50;
             character.gold -= 500;
             Console.WriteLine("휴식을 취했다!");
             Console.WriteLine("체력 + 50");

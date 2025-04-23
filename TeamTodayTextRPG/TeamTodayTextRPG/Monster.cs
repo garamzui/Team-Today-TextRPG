@@ -14,11 +14,11 @@ namespace TeamTodayTextRPG
     enum MONSTER_CODE
     {
         // 추후에 몬스터 이름으로 변경 될 예정입니다. 
-        M1 = 0,
-        M2,
-        M3,
-        M4,
-        M5
+        M1 = 0,      //m1 =  Slime
+        M2,          //M2 =  Goblin
+        M3,          //M3 =  Wolf
+        M4,          //M4 =  Ork
+        M5           //M5 = Zakum
     }
 
     abstract class Monster
@@ -55,6 +55,26 @@ namespace TeamTodayTextRPG
             RewardExp = int.Parse(Parameter[7]);
             Text = Parameter[8];
         }
+
+        public void TakeDamage(int damage)
+        {
+            Hp -= damage;
+            if (Hp <= 0)
+            {
+                Hp = 0;
+                Die();
+            }
+        }
+        public void Die()
+        {
+            Console.WriteLine($"{Name}은 쓰러졌다!");
+        }
+        public void Heal(int heal)
+        {
+            Hp += heal;
+        }
+
+
 
         class Monster_1 : Monster
         {
