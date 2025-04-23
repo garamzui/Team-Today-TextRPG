@@ -39,19 +39,19 @@ namespace TeamTodayTextRPG
             //{공격을 무효화하기}
             // 이런식으로 설계하면 어떨까 합니다.
             public int gold { get; set; }
-            public string[] initstr { get; set; }
-            public string[] strary { get; set; }
+            public string[] Parameter { get; set; }
+            
             public string actskillName { get; set; }
             public string passkillName { get; set; }
 
             public int passiveSkillLevel = 0;
 
-            public void init(string data) //우선은 임의로 매서드로 초기화할 필드를 변경해 놓았습니다.
+            public void init(string[] data) //우선은 임의로 매서드로 초기화할 필드를 변경해 놓았습니다.
             {
                 //직업이름,공격력,방어력,체력,마력,회피,골드,액티브스킬이름,패시브스킬이름
-                initstr = data.Split(',');
-                jobname = initstr[0];
-                attack = int.Parse(initstr[1]);
+                Parameter = data.Split('/');
+                Jobname = data[0];
+                attack = data[1];
                 def = int.Parse(initstr[2]);
                 maxHp = int.Parse(initstr[3]);
                 hp = maxHp;
@@ -72,7 +72,7 @@ namespace TeamTodayTextRPG
             }
             public void ViewStatus()
             {
-                Console.WriteLine($"{jobname} {jobDescription}- 공격력 {attack} (+{plusAtk}), 방어력 {def} (+{plusDef}), HP {hp}/{maxHp}, Gold {gold}");
+                Console.WriteLine($"{Jobname} {jobDescription}- 공격력 {attack} (+{plusAtk}), 방어력 {def} (+{plusDef}), HP {hp}/{maxHp}, Gold {gold}");
             }
 
 
@@ -83,7 +83,7 @@ namespace TeamTodayTextRPG
             //Player의 필드들이 private되어있어 접근이 안됩니다. 요 부분은 회의 때 조율 해야 할 것 같아요.
             public virtual void DefaultAttack()
             {
-                Console.WriteLine($"{jobname}의 기본 공격");
+                Console.WriteLine($"{Jobname}의 기본 공격");
             }
 
 
@@ -92,12 +92,12 @@ namespace TeamTodayTextRPG
             public virtual void ActiveSkill(Monster m)
 
             {
-                Console.WriteLine($"{jobname}의 기술 {actskillName}");
+                Console.WriteLine($"{Jobname}의 기술 {actskillName}");
             }
 
             public virtual void PassiveSkill(Player p)
             {
-                 Console.WriteLine($"{jobname}의 기술 {passkillName}");
+                 Console.WriteLine($"{Jobname}의 기술 {passkillName}");
             }
 
             public void TakeDamage(int damage)
@@ -119,18 +119,23 @@ namespace TeamTodayTextRPG
         }
 
 
-
+        enum CHAR_TYPE
+        { 
+            WARRIOR,
+            MAGICIAN,
+            ASSASSIN
+        }
 
 
 
         public class Worrior : Character
         {
-            public static Worrior Default()
+            public  Worrior ()
             {
-                Worrior w = new Worrior();
+               
                 //직업이름,공격력,방어력,체력,마력,회피,골드,액티브스킬이름,패시브스킬이름
-                w.init("전사,10,5,100,40,1,1000,쾅 내려치기,전사의 피부");
-                return w;
+                init(DataManager.Instance.CharacterDB.List[0]);
+                
             }
             public override string jobDescription()
             {
@@ -160,11 +165,11 @@ namespace TeamTodayTextRPG
             }
 
         }
-        public class Megician : Character
+        public class Magician : Character
         {
-            public static Megician Default()
+            public static Magician Default()
             {
-                Megician m = new Megician();
+                Magician m = new Magician();
                 //직업이름,공격력,방어력,체력,마력,회피,골드,액티브스킬이름,패시브스킬이름
                 m.init("마법사,3,3,50,100,3,1000,썬더볼트,마력개방");
                 return m;
@@ -194,7 +199,7 @@ namespace TeamTodayTextRPG
         }
         public class Assassin : Character
         {
-            public static Assassin Default()
+            public Assassin Default()
             {
                 Assassin a = new Assassin();
                 //직업이름,공격력,방어력,체력,마력,회피,골드,액티브스킬이름,패시브스킬이름
