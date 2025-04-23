@@ -267,5 +267,15 @@ namespace TeamTodayTextRPG
                 Console.WriteLine("장착중인 아이템이 아닙니다!");
             }
         }
+
+        //휴식 기능
+        public void Rest()
+        {
+            character.hp += 50;
+            character.gold -= 500;
+            Console.WriteLine("휴식을 취했다!");
+            Console.WriteLine("체력 + 50");
+            Console.WriteLine("골드 -500");
+        }
     }
 }
