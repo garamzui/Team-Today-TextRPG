@@ -3,6 +3,7 @@ using TeamTodayTextRPG;
 
 namespace TeamTodayTextRPG
 {
+    //**객체 받고/ 속성 받기** To.재우
     // SceneManager 클래스: 씬 전환을 관리
     public class SceneManager
     {
