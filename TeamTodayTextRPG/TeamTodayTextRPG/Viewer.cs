@@ -182,9 +182,8 @@ namespace TeamTodayTextRPG
             var player = gameManager.Player;
             Console.WriteLine($"무기: {player.Weapon.Name}");
             Console.WriteLine($"방어구: {player.Armor.Name}");
-            Console.WriteLine($"액세서리: {player.Accessory.Name}");
 
-            // Player 클래스의 Weapon, Armor, Accessory가 변경될 경우, 이 부분 수정 필요
+            // Player 클래스의 Weapon, Armor,가 변경될 경우, 이 부분 수정 필요
             Console.WriteLine("====================");
             Console.WriteLine("1. 장비 변경");
             Console.WriteLine("2. 메인으로 돌아가기");
