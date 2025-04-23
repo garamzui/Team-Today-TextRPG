@@ -21,10 +21,8 @@ namespace TeamTodayTextRPG
             public int Def { get; set; }
             public int PlusDef { get; set; } = 0;
             public int TotalDef { get { return Def + PlusDef; } }
-            
             public int Hp { get; set; }
             public int MaxHp { get; set; }
-            
             public int Mp { get;set; }
             public int MaxMp { get; set; }
             public int Dodge { get; set; }
