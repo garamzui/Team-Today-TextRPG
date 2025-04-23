@@ -9,11 +9,11 @@ namespace TeamTodayTextRPG
 {
     class Player
     {
-        private Characterclass characterClass;
-        private List<int> bag;
-        private List<int> equip;
-        private int level;
-        private int exp;
+        public Characterclass characterClass { get; set; }
+        public List<int> bag { get; set; }
+        public List<int> equip { get; set; }
+        public int Level { get; set; }
+        public int Exp { get; set; }
 
         //private DataManager dataManager;
         //아이템의 code나 가격, ITEM_TYPE 등

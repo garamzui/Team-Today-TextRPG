@@ -11,10 +11,19 @@ namespace TeamTodayTextRPG
         IDLE,
         DEAD
     }
-
-    abstract class Monster()
+    enum MONSTER_CODE
     {
-        public int Code { get; set; }
+        // 추후에 몬스터 이름으로 변경 될 예정입니다. 
+        M1 = 0,
+        M2,
+        M3,
+        M4,
+        M5
+    }
+
+    abstract class Monster
+    {
+        public MONSTER_CODE Code { get; set; }
         public string Name { get; set; }
         public int Level { get; set; }
         public int Atk { get; set; }
@@ -23,67 +32,66 @@ namespace TeamTodayTextRPG
         public int PlusDef { get; set; }
         public int Hp { get; set; }
         public int MaxHp { get; set; }
-        public int rewardGold { get; set; }
-        public int rewardExp { get; set; }
-        public string text { get; set; }
-        public string[] Strary { get; set; }
+        public int RewardGold { get; set; }
+        public int RewardExp { get; set; }
+        public string Text { get; set; }
+        public string[] Parameter { get; set; }
 
         public void Init(string[] parameter)
         {
             // 0.몬스터코드 / 1.이름 / 2.레벨 / 3.공격력 / 4.방어력 / 5.체력 / 6.보상골드 / 7.보상경험치 / 8.텍스트
-            Strary = parameter;
-            Name = Strary[1];
-            Level = int.Parse(Strary[2]);
-            Atk = int.Parse(Strary[3]);
-            Def = int.Parse(Strary[4]);
-            Hp = int.Parse(Strary[5]);
+            Parameter = parameter;
+
+            if (!Enum.TryParse(parameter[0], out MONSTER_CODE code))
+                throw new ArgumentException("Invalid MONSTER code.");
+            Code = code;
+            Name = Parameter[1];
+            Level = int.Parse(Parameter[2]);
+            Atk = int.Parse(Parameter[3]);
+            Def = int.Parse(Parameter[4]);
+            Hp = int.Parse(Parameter[5]);
             MaxHp = Hp;
-            rewardGold = int.Parse(Strary[6]);
-            rewardExp = int.Parse(Strary[7]);
-            text = Strary[8];
+            RewardGold = int.Parse(Parameter[6]);
+            RewardExp = int.Parse(Parameter[7]);
+            Text = Parameter[8];
         }
-    }
 
-    class Monster_1 : Monster
-    {
-        public Monster_1(string name)
+        class Monster_1 : Monster
         {
-            Code = 0;
-            Init(DataManager.Instance.MonsterDB.List[Code]);
+            public Monster_1()
+            {
+                Init(DataManager.Instance.MonsterDB.List[(int)Code]);
+            }
         }
-    }
 
-    class Monster_2 : Monster
-    {
-        public Monster_2(string name)
+        class Monster_2 : Monster
         {
-            Code = 1;
-            Init(DataManager.Instance.MonsterDB.List[Code]);
+            public Monster_2()
+            {
+                Init(DataManager.Instance.MonsterDB.List[(int)Code]);
+            }
         }
-    }
 
-    class Monster_3 : Monster
-    {
-        public Monster_3(string name)
+        class Monster_3 : Monster
         {
-            Code = 2;
-            Init(DataManager.Instance.MonsterDB.List[Code]);
+            public Monster_3()
+            {
+                Init(DataManager.Instance.MonsterDB.List[(int)Code]);
+            }
         }
-    }
-    class Monster_4 : Monster
-    {
-        public Monster_4(string name)
+        class Monster_4 : Monster
         {
-            Code = 3;
-            Init(DataManager.Instance.MonsterDB.List[Code]);
+            public Monster_4()
+            {
+                Init(DataManager.Instance.MonsterDB.List[(int)Code]);
+            }
         }
-    }
-    class Monster_5 : Monster
-    {
-        public Monster_5(string name)
+        class Monster_5 : Monster
         {
-            Code = 4;
-            Init(DataManager.Instance.MonsterDB.List[Code]);
+            public Monster_5()
+            {
+                Init(DataManager.Instance.MonsterDB.List[(int)Code]);
+            }
         }
     }
 }
