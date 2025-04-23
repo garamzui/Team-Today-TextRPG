@@ -31,15 +31,15 @@ namespace TeamTodayTextRPG
         public int ItemCode { get; set; }
 
 
-        public void SetCharacter()
+        public void SetCharacter(int classNum, string name)
         {
             //데이터매니저에서 직업별 스탯을 '파싱'해서 가져온다
+            //ㄴ 이제 데이터매니저에서 잘 되어있어서 이렇게 안해도 됨
             string[][] settingCharacter = dataManager.CharacterDB.
                        Parsing(dataManager.CharacterDB.Data);
 
             //그러면 입력값 저장하는 변수도 끌어와야 함
-            //
-            switch (처음 직업 선택시 입력한 값)
+            switch (classNum)
             {
                 case 0:
                     CharacterCode = 0;
@@ -55,16 +55,20 @@ namespace TeamTodayTextRPG
                     break;
             }
 
-                //직업.Default가 Characterclass에서 스탯을 세팅하는 메서드
-            switch (CharacterCode)
+            //직업.Default가 Characterclass에서 스탯을 세팅하는 메서드
+            // enum이 public이 아니라...
+            switch ()
             {
-                case 0: character = Worrior.Default();
+                case 0: character = DataManager.Instance.
+                        CharacterDB.List[(int)CHAR_TYPE.WARRIOR];
                     SetStat();
                     break;
-                case 1: character = Magician.Default();
+                case 1: character = DataManager.Instance.
+                        CharacterDB.List[(int)CHAR_TYPE.MAGICIAN];
                     SetStat();
                     break;
-                case 2: character = Assassin.Default();
+                case 2: character = DataManager.Instance.
+                        CharacterDB.List[(int)CHAR_TYPE.ASSASSIN];
                     SetStat();
                     break;
                     //case 3:
@@ -83,13 +87,14 @@ namespace TeamTodayTextRPG
                 Gold = character.gold;
             }
 
-                //초기 소지 장비를 bag과 equip 리스트에 저장한다
-                //직업별 초기 장비가 다르다면 수정
-                bag.Add(int.Parse((dataManager.ItemDB.Parsing(dataManager.ItemDB.Data)[0][0])));
-                bag.Add(int.Parse((dataManager.ItemDB.Parsing(dataManager.ItemDB.Data)[3][0])));
+            //초기 소지 장비를 bag과 equip 리스트에 저장한다
+            //직업별 초기 장비가 다르다면 수정
+            //이것도 마찬가지로 쉽게 접근 가능
+            bag.Add(int.Parse((dataManager.ItemDB.Parsing(dataManager.ItemDB.Data)[0][0])));
+            bag.Add(int.Parse((dataManager.ItemDB.Parsing(dataManager.ItemDB.Data)[3][0])));
 
-                //초기 장비를 가지고 있되 장착은 되어있지 않은 상태로 시작해서
-                //인벤토리를 처음 열면 장착&해제 튜토리얼 구현해 보는 것 괜찮을지도
+            //초기 장비를 가지고 있되 장착은 되어있지 않은 상태로 시작해서
+            //인벤토리를 처음 열면 장착&해제 튜토리얼 구현해 보는 것 괜찮을지도
         }
 
 
@@ -107,11 +112,13 @@ namespace TeamTodayTextRPG
                 Level++;
                 requiredExp += 25;
 
-                Console.WriteLine("축하합니다! 레벨이 올랐습니다.");
                 //스탯 증가량 화면에 표시
-                character.attack += 1;
-                character.def += 2;
-                Console.WriteLine("공격력 +1, 방어력 +2");
+                character.Attack += 1;
+                character.Def += 2;
+
+                //Console.WriteLine("축하합니다! 레벨이 올랐습니다.");
+                //Console.WriteLine("공격력 +1, 방어력 +2");
+                //Viewer로
             }
 
         }
@@ -127,7 +134,8 @@ namespace TeamTodayTextRPG
         //인벤토리에 아이템이 들어오는 경우
         public void InputBag()
         {
-            gameManager shopView = new ShopViewer();
+            //ShopViewer 인스턴스 생성
+            GameManager.Instance.Viewer shopViewer = new ShopViewer();
 
             //임시로 선언&초기화
             int code = 0;
@@ -135,7 +143,7 @@ namespace TeamTodayTextRPG
             int prise = 0;
 
             //상점에서 아이템 구매
-            if(상점에서 아이템을 구매하려할 때)
+            if(shopViewer)
             {
                 if(gold >= prise)
                 {
