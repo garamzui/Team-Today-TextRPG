@@ -1,9 +1,12 @@
 using System;
+using System.Numerics;
+using System.Threading;
+using System.Collections.Generic;
 
 enum DUNGEON_DIFF
 {
-    Easy = 0
-    Normal = 1,
+    Easy = 0,
+    Norma = 1,
     Hard = 2,
     Hell = 3
 }
@@ -31,19 +34,18 @@ class Dungeon
         }
     }
 
-    public void EnterDungeon(Player player, Func<int, Monster> getMonster)
+    public void EnterDungeon(Player player, List<Monster> monsters)
     {
         Console.WriteLine($"\n[{name}] 던전에 입장했습니다!");
 
         int currentFloor = 1;
-        int maxFloor = 5;
+        int maxFloor = monsters.Count; // 층수는 넘겨준 몬스터 수에 따라 결정
 
         while (currentFloor <= maxFloor && player.Hp > 0)
         {
             Console.WriteLine($"\n현재 {currentFloor}층입니다.");
 
-            // 외부에서 몬스터를 받아옴
-            Monster monster = getMonster(currentFloor);
+            Monster monster = monsters[currentFloor - 1]; // 0번 인덱스 = 1층 몬스터
 
             Console.WriteLine($"\n{monster.Name}이(가) 등장했습니다! {(monster.IsBoss ? "[보스 몬스터]" : "")}");
 

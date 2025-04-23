@@ -11,7 +11,7 @@ using System.Numerics;
 
 namespace TeamTodayTextRPG
 {
-    enum ITEMTYPE
+    enum ITEM_TYPE
     {
         WEAPON = 0,
         ARMOR = 1
@@ -25,7 +25,7 @@ namespace TeamTodayTextRPG
         private int def;
         private string text;
         private int value;
-        private ITEMTYPE type;
+        private ITEM_TYPE type;
 
         public Item(string[] str) //Parse로 데이터 변환
         {
@@ -35,17 +35,16 @@ namespace TeamTodayTextRPG
             def = int.Parse(str[3]);
             text = str[4];
             value = int.Parse(str[5]);
-            if (int.Parse(str[6]) == (int)ITEMTYPE.WEAPON)
+            if (int.Parse(str[6]) == (int)ITEM_TYPE.WEAPON)
             {
-                type = ITEMTYPE.WEAPON;
+                type = ITEM_TYPE.WEAPON;
             }
-            else if (int.Parse(str[6]) == (int)ITEMTYPE.ARMOR)
+            else if (int.Parse(str[6]) == (int)ITEM_TYPE.ARMOR)
             {
-                type = ITEMTYPE.ARMOR;
+                type = ITEM_TYPE.ARMOR;
             }
         }
 
- kimheejoo(Item)
         public int Code { get; private set; }
         public string Name { get; private set; }
         public int Atk { get; private set; }
@@ -53,7 +52,7 @@ namespace TeamTodayTextRPG
         public string Text { get; private set; }
         public int Value { get ; private set; }
 
-        private ITEMTYPE Type { get ;set; }
+        private ITEM_TYPE Type { get ;set; }
     }
 
 
@@ -61,7 +60,6 @@ namespace TeamTodayTextRPG
         public class ItemDatabase
     {   //Item형식의 값을 저장할 공간
         private List<Item> itemList = new List<Item>();
- kimheejoo(Item)
         public List<Item> ItemList => itemList;
         private int Atk;
         private int Def;
@@ -103,7 +101,6 @@ namespace TeamTodayTextRPG
         {
             foreach (var item in itemList)
             {
- kimheejoo(Item)
                 Console.WriteLine($"{item.Code}: {item.Name} (공격력: {item.Atk}, 방어력: {item.Def}) - {item.Text} [가격: {item.Value} G]");
 
             }
@@ -119,40 +116,97 @@ namespace TeamTodayTextRPG
             if (Def != 0) Console.Write($"Def {(Def >= 0 ? " + " : "")}{Def}");
         }
 
- kimheejoo(Item)
-        public void ShowInventory(GameManager gameManager , VIEW_TYPE vIEW_TYPE)
+        public void ShowInventory(GameManager gameManager, VIEW_TYPE vIEW_TYPE)
         {
 
-            if (Player.Inventory != null)
+            var player = gameManager.Player;
+
+            if (player.Inventory != null)
             {
-                foreach (var item in Player.Inventory)
+                foreach (var code in player.Inventory)
                 {
+                    var item = itemList.FirstOrDefault(i => i.Code == code);
+                    if (item == null) continue;
+
                     Console.Write("- ");
-                    if (Player.CheckEquip(item))
+                    if (player.CheckEquip(item.Code))
                     {
+                        Console.ForegroundColor = ConsoleColor.Green;
                         Console.Write("[E]");
+                        Console.ResetColor();
                     }
+
+                    Console.Write($"{item.Name}\t| ");
+                    if (item.Atk != 0) Console.Write($"공격력 {(item.Atk > 0 ? "+" : "")}{item.Atk}\t| ");
+                    if (item.Def != 0) Console.Write($"방어력 {(item.Def > 0 ? "+" : "")}{item.Def}\t| ");
+                    Console.WriteLine($"{item.Text}");
                 }
             }
         }
 
         public void ShowShop(GameManager gameManager, VIEW_TYPE vIEW_TYPE)
         {
-            if (itemList != null)
+            var player = gameManager.Player;
+
+            foreach (var item in itemList)
             {
-                foreach (var item in itemList)
+                if (player.CheckBag(item.Code)) Console.ForegroundColor = ConsoleColor.DarkGray;
+
+                Console.Write($"- {item.Name}\t| ");
+                if (item.Atk != 0) Console.Write($"공격력 {(item.Atk > 0 ? "+" : "")}{item.Atk}\t| ");
+                if (item.Def != 0) Console.Write($"방어력 {(item.Def > 0 ? "+" : "")}{item.Def}\t| ");
+                Console.Write($"{item.Text}\t| ");
+
+                if (player.CheckBag(item.Code))
                 {
-
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("구매 완료");
                 }
- kimheejoo(Item)
 
+                else
+                {
+                    Console.WriteLine($"{item.Value} G");
+                }
 
+                Console.ResetColor();
             }
         }
 
         public void ShowsShopSale(GameManager gameManager)
         {
+            var player = gameManager.Player;
 
+            if (player.Inventory != null)
+            {
+                Console.WriteLine("[판매 목록]");
+
+                foreach (var code in player.Inventory)
+                {
+                    var item = itemList.FirstOrDefault(i => i.Code == code);
+                    if (item == null) continue;
+
+                    Console.Write("- ");
+                    if (player.CheckEquip(item.Code))
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.Write("[E]");
+                        Console.ResetColor();
+                    }
+
+                    Console.Write($"{item.Name}\t| ");
+                    if (item.Atk != 0) Console.Write($"공격력 {(item.Atk > 0 ? "+" : "")}{item.Atk}\t| ");
+                    if (item.Def != 0) Console.Write($"방어력 {(item.Def > 0 ? "+" : "")}{item.Def}\t| ");
+                    Console.Write($"{item.Text}\t| ");
+
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine($"판매가 {item.Value / 2} G");
+                    Console.ResetColor();
+                }
+            }
+            else
+            {
+                Console.WriteLine("판매할 아이템이 없습니다.");
+            }
         }
             
     }

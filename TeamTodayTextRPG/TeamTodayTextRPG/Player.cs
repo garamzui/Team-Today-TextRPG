@@ -4,41 +4,115 @@ using System.Linq;
 using System.Security.Authentication.ExtendedProtection;
 using System.Text;
 using System.Threading.Tasks;
+using static TeamTodayTextRPG.Characterclass;
 
 namespace TeamTodayTextRPG
 {
     class Player
     {
         public Characterclass characterClass { get; set; }
+        public Character character { get; set; }
+        public DataManager dataManager { get; set; }
         public List<int> bag { get; set; }
         public List<int> equip { get; set; }
         public int Level { get; set; }
         public int Exp { get; set; }
 
-        //private DataManager dataManager;
-        //아이템의 code나 가격, ITEM_TYPE 등
-        //생각보다 ItemDatabase에 접근할 일이 많은 것 같은데
-        //DataManager를 써야 할까요?
+        public int Attack { get; set; }
+        public int Defense { get; set; }
+        public int MaxHP { get; set; }
+        public int CurHP { get; set; }
+        public int MaxMP { get; set; }
+        public int CurMP { get; set; }
+        public int Dodge { get; set; }
+        public int Gold { get; set; }
 
-        //Characterclass에서 스탯의 정보를 받아온다
+        public int CharacterCode { get; set; }
+        public int ItemCode { get; set; }
+
+
         public void SetCharacter()
         {
-            //초기 소지 장비를 bag과 equip 리스트에 저장한다
-            //characterClass.
+            //데이터매니저에서 직업별 스탯을 '파싱'해서 가져온다
+            string[][] settingCharacter = dataManager.CharacterDB.
+                       Parsing(dataManager.CharacterDB.Data);
+
+            //CharacterCode의 코드의 경우의 수에 따라 스탯을 설정한다
+            //아니지 스탯이 다 데이터베이스에 있잖아
+            //그건 맞는데 말 그대로 데이터니까 어떤 직업할지 모르니
+            //코드에 따라 스탯 해주는게 맞지
+            //근데 지금 데이터가 데이터매니저에도 있고
+            //Character에도 있어서 지금 이걸 Character 데이터로
+            //처리하면 나중에 수정해야
+            //근데 그럼 스탯이 Characterclass에 있을 필요가 있나?
+
+            //그러면 입력값 저장하는 변수도 끌어와야 함
+            switch (처음 직업 선택시 입력한 값)
+            {
+                case 0:
+                    CharacterCode = 0;
+                    break;
+                case 1:
+                    CharacterCode = 1;
+                    break;
+                case 2:
+                    CharacterCode = 2;
+                    break;
+                case 3:
+                    CharacterCode = 3;
+                    break;
+            }
+
+                //직업.Default가 Characterclass에서 스탯을 세팅하는 메서드
+            switch (CharacterCode)
+            {
+                case 0: character = Worrior.Default();
+                    SetStat();
+                    break;
+                case 1: character = Megician.Default();
+                    SetStat();
+                    break;
+                case 2: character = Assassin.Default();
+                    SetStat();
+                    break;
+                    //case 3:
+                    //    break;
+            }
+
+            void SetStat()
+            {
+                Attack = character.attack;
+                Defense = character.def;
+                CurHP = character.hp;
+                MaxHP = character.maxHp;
+                CurMP = character.mp;
+                MaxMP = character.maxMp;
+                Dodge = character.dodge;
+                Gold = character.gold;
+            }
+
+                //초기 소지 장비를 bag과 equip 리스트에 저장한다
+                //직업별 초기 장비가 다르다면 수정
+                bag.Add(int.Parse((dataManager.ItemDB.Parsing(dataManager.ItemDB.Data)[0][0])));
+                bag.Add(int.Parse((dataManager.ItemDB.Parsing(dataManager.ItemDB.Data)[3][0])));
+
+                //초기 장비를 가지고 있되 장착은 되어있지 않은 상태로 시작해서
+                //인벤토리를 처음 열면 장착&해제 튜토리얼 구현해 보는 것 괜찮을지도
         }
+
 
         public void LevelUp()
         {
             int requiredExp = 100;
 
             //경험치가 요구 경험치보다 크거나 같아진다.
-            if (exp >= requiredExp)
+            if (Exp >= requiredExp)
             {
                 //경험치에서 요구 경험치 만큼 빼고 초과량은 현재 경험치로 남는다.
-                exp = exp - requiredExp;
+                Exp = Exp - requiredExp;
 
                 //레벨 및 요구 경험치가 늘어난다.
-                level++;
+                Level++;
                 requiredExp += 25;
 
                 //Console.WriteLine("축하합니다! 레벨이 올랐습니다.");
@@ -84,16 +158,17 @@ namespace TeamTodayTextRPG
 
             if(전투가 끝났을 때)
             {
-                //n% 확률로 랜덤 아이템 드롭
-                //근데 여기서 처리하는게 맞나?
                 Random random = new Random();
                 int ItemDrop = random.Next(0, 101);
-                if(ItemDrop >= 85)
+                //n% 확률로
+                if(ItemDrop >= 90 || ItemDrop <= 10)
                 {
+                    //랜덤 아이템 드롭
                     Random dropItemCode = new Random();
                     code = dropItemCode.Next(0, 15);
                     bag.Add(code);
                 }
+                //근데 여기서 처리하는게 맞나?
             }
         }
 
@@ -128,7 +203,7 @@ namespace TeamTodayTextRPG
                 //장착중이라면
                 if(CheckEquip(code) == true)
                 {
-                    Console.WriteLine("장착중인 아이템은 버릴 수 없습니다.")
+                    Console.WriteLine("장착중인 아이템은 버릴 수 없습니다.");
                 }
 
                 //장착중이 아니라면
@@ -191,6 +266,16 @@ namespace TeamTodayTextRPG
             {
                 Console.WriteLine("장착중인 아이템이 아닙니다!");
             }
+        }
+
+        //휴식 기능
+        public void Rest()
+        {
+            character.hp += 50;
+            character.gold -= 500;
+            Console.WriteLine("휴식을 취했다!");
+            Console.WriteLine("체력 + 50");
+            Console.WriteLine("골드 -500");
         }
     }
 }

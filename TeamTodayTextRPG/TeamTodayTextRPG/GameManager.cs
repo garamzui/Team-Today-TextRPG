@@ -19,16 +19,11 @@ namespace TeamTodayTextRPG
         public static GameManager Instance => lazyInstance.Value;
 
 
-
-
         // 『효빈』GameManager 생성자 입니다.
         private GameManager()
         {
             Player = new Player();
             Viewer = new Main();
-
-            ItemDatabase = new ItemDatabase();
-            DungeonDatabase = new DungeonDatabase();
         }
 
 
