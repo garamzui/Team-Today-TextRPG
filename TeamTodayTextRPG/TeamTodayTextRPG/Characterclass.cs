@@ -42,7 +42,7 @@ namespace TeamTodayTextRPG
             public string PasskillName { get; set; }
 
             public int PassiveSkillLevel = 0;
-
+            protected const int MaxPassiveSkillLevel = 5;
             public void init(string[] data) //우선은 임의로 매서드로 초기화할 필드를 변경해 놓았습니다.
             {
                 //직업이름,공격력,방어력,체력,마력,회피,골드,액티브스킬이름,패시브스킬이름
@@ -98,12 +98,19 @@ namespace TeamTodayTextRPG
             }
 
             public void TakeDamage(int damage)
-            { 
-                Hp -= damage;
-                
+            {
+
+                int DodgeHit = Characterclass.rng.Next(1, 51);// 피격 메서드에 회피를 구현 해봤습니다.
+                if (Dodge > DodgeHit)
+                {
+                    Console.WriteLine("공격을 회피했습니다!");
+                }
+                else
+                { 
+                    Hp -= damage;
+                }
+                            
                 if (Hp < 0) Hp = 0; 
-                
-                
                 
                 if (Hp == 0)
                 {
@@ -144,25 +151,44 @@ namespace TeamTodayTextRPG
             }
             public override void ActiveSkill(Monster m)
             {
-                Mp -= 10;
-                int SkillDamage = (TotalAtk * 3) - m.Def;
-                if (SkillDamage < 0)
-                { SkillDamage = 1; }
-                m.TakeDamage(SkillDamage);
-                Console.WriteLine($"{ActskillName}을 사용하여 {m.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
+                if (Mp >= 10)
+                {
+                    Mp -= 10;
+                    int SkillDamage = (TotalAtk * 3) - m.Def;
+                    if (SkillDamage < 0)
+                    { SkillDamage = 1; }
+                    m.TakeDamage(SkillDamage);
+                    Console.WriteLine($"{ActskillName}을 사용하여 {m.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
+                }
+                else
+                {
+                    Console.WriteLine("MP가 모자랍니다.");
+
+                }
             }
 
             public override void PassiveSkill(Player p)
             {
-                if (p.Level >= 5 && PassiveSkillLevel < 5)
+                if (p.Level >= 3 && PassiveSkillLevel <= MaxPassiveSkillLevel)
                 {
-                    Def += 2;
-                    
-                    PassiveSkillLevel += 1;
-                    if (PassiveSkillLevel >= 5)
-                    { Def = 20; }
-                }
+                   PassiveSkillLevel += 1;
 
+                    if (PassiveSkillLevel == MaxPassiveSkillLevel)
+                    {
+                        Console.WriteLine($"{PasskillName}의 Lv이 최대가 되었습니다. 최대 래벨 보상으로 방어도가 20이 됩니다.");
+                        Def = 20;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"{PasskillName}의 Lv이 1증가하였습니다. 방어도 +2");
+                        Def += 2;
+                    }
+                }
+                else if (PassiveSkillLevel > MaxPassiveSkillLevel)
+                { 
+                 //아무 동작도 안하려고 비워뒀습니다. 
+                }
+               
             }
 
         }
@@ -179,23 +205,43 @@ namespace TeamTodayTextRPG
            
         public override void ActiveSkill(Monster m)
             {
-                Mp -= 10;
-                int SkillDamage = (int)((TotalAtk * 10) - Math.Round(m.Def / 2.0));
-                if (SkillDamage < 0)
-                { SkillDamage = 1; }
-                m.TakeDamage(SkillDamage);
-                Console.WriteLine($"{ActskillName}을 사용하여 {m.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
+                if (Mp >= 10)
+                {
+                    Mp -= 10;
+                    int SkillDamage = (int)((TotalAtk * 10) - Math.Round(m.Def / 2.0)); //방어무시를 구현하기위해서 방어도를 반으로 나누고 반올림하였습니다.
+                    if (SkillDamage < 0)
+                    { SkillDamage = 1; }
+                    m.TakeDamage(SkillDamage);
+                    Console.WriteLine($"{ActskillName}을 사용하여 {m.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
+                }
+                else 
+                {
+                    Console.WriteLine("MP가 모자랍니다.");
+
+                }
             }
             public override void PassiveSkill(Player p)
             {
-                if (p.Level >= 5 && PassiveSkillLevel< 5)
+                if (p.Level >= 3 && PassiveSkillLevel <= MaxPassiveSkillLevel)
                 {
-                    Attack += 1;
-                    Mp += 50;
-
                     PassiveSkillLevel += 1;
-                    if (PassiveSkillLevel >= 5)
-                    { Mp = 500; }
+
+                    if (PassiveSkillLevel == MaxPassiveSkillLevel)
+                    {
+                        Console.WriteLine($"{PasskillName}의 Lv이 최대가 되었습니다. 최대 래벨 보상으로 최대마나가 500이 됩니다.");
+                        MaxMp = 500;
+                        Mp += 500;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"{PasskillName}의 Lv이 1증가하였습니다. 최대 마나 + 50");
+                        MaxMp += 50;
+                        Mp += 50;
+                    }
+                }
+                else if (PassiveSkillLevel > MaxPassiveSkillLevel)
+                {
+                    //아무 동작도 안하려고 비워뒀습니다. 
                 }
 
             }
@@ -212,66 +258,66 @@ namespace TeamTodayTextRPG
             }
             public override void ActiveSkill(Monster m)
             {
-                Mp -= 10;
-                int SkillDamage = (TotalAtk * 2) - m.Def;
-                
-                
-                int criticalHit =Characterclass.rng.Next(0,10);
-                
-                if (criticalHit <= 2)
+                if (Mp >= 10)
                 {
-                    SkillDamage *= 2;
-                    Console.WriteLine("치명타!");
+                    Mp -= 10;
+                    int SkillDamage = (TotalAtk * 2) - m.Def;
+                    if (SkillDamage < 0)
+                    { SkillDamage = 1; }
+
+                    int criticalHit = Characterclass.rng.Next(0, 10); // 추후 게임매니저 공용 랜덤으로 전환
+
+
+                    if (criticalHit <= 2) //크리티컬 확률 계산
+                    {
+                        SkillDamage *= 2;
+                        Console.WriteLine("치명타!");
+                    }
+
+
+                    for (int i = 0; i < 2; i++) //2연격 구현
+                    {
+                        m.TakeDamage(SkillDamage);
+                        Console.WriteLine($"{ActskillName}을 사용하여 {m.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("MP가 모자랍니다.");
+
                 }
 
-                if (SkillDamage < 0)
-                { SkillDamage = 1; }
-               
-                for (int i = 0; i < 2; i++)
-                { 
-                    m.TakeDamage(SkillDamage); 
-                    Console.WriteLine($"{ActskillName}을 사용하여 {m.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
-                }
-                
 
-                
+
 
             }
-            public override void PassiveSkill(Player p)
+            public override void PassiveSkill(Player p) //추후에 Player의 Level UP 메서드에서 호출 해주어야 함
             {
-                if (p.Level >= 5 && PassiveSkillLevel < 5)
+                if (p.Level >= 3 && PassiveSkillLevel <= MaxPassiveSkillLevel)
                 {
-                    Dodge += 2;
-
                     PassiveSkillLevel += 1;
-                    if (PassiveSkillLevel >= 5)
-                    { Dodge = 25; }
+
+                    if (PassiveSkillLevel == MaxPassiveSkillLevel)
+                    {
+                        Console.WriteLine($"{PasskillName}의 Lv이 최대가 되었습니다. 최대 래벨 보상으로 회피가 25가 됩니다.");
+                        Dodge = 25;
+                        
+                    }
+                    else
+                    {
+                        Console.WriteLine($"{PasskillName}의 Lv이 1증가하였습니다. 회피 +2 공격력+1");
+                        Dodge += 2;
+                        Attack += 1;
+                        
+                    }
+                }
+                else if (PassiveSkillLevel > MaxPassiveSkillLevel)
+                {
+                    //아무 동작도 안하려고 비워뒀습니다. 
                 }
 
             }
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
