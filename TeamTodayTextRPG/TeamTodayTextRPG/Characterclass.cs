@@ -46,7 +46,7 @@ namespace TeamTodayTextRPG
             public void init(string[] data) //우선은 임의로 매서드로 초기화할 필드를 변경해 놓았습니다.
             {
                 //직업이름,공격력,방어력,체력,마력,회피,골드,액티브스킬이름,패시브스킬이름
-                Parameter = data;
+               
                 Jobname = data[0];
                 Attack = int.Parse(data[1]);
                 Def = int.Parse(data[2]);
