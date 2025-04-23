@@ -4,12 +4,14 @@ using System.Linq;
 using System.Security.Authentication.ExtendedProtection;
 using System.Text;
 using System.Threading.Tasks;
+using static TeamTodayTextRPG.Characterclass;
 
 namespace TeamTodayTextRPG
 {
     class Player
     {
         public Characterclass characterClass { get; set; }
+        public Character character { get; set; }
         public DataManager dataManager { get; set; }
         public List<int> bag { get; set; }
         public List<int> equip { get; set; }
@@ -29,19 +31,38 @@ namespace TeamTodayTextRPG
             //데이터매니저에서 직업별 스탯을 '파싱'해서 가져온다
             string[][] settingCharacter = dataManager.CharacterDB.Parsing(dataManager.CharacterDB.Data);
 
-            //CharacterCode의 경우의 수에 따라 스탯을 설정한다
-            //CharacterCode = 
-            //switch (CharacterCode)
-            //{
-            //    case0:
-            //break;
-            //    case1:
-            //break;
+            //CharacterCode의 코드의 경우의 수에 따라 스탯을 설정한다
+            //아니지 스탯이 다 데이터베이스에 있잖아
+            //그건 맞는데 말 그대로 데이터니까 어떤 직업할지 모르니
+            //코드에 따라 스탯 해주는게 맞지
+            //근데 지금 데이터가 데이터매니저에도 있고
+            //Character에도 있어서 지금 이걸 Character 데이터로
+            //처리하면 나중에 수정해야
+            //근데 그럼 스탯이 Characterclass에 있을 필요가 있나?
+            for (int i = 0; i < settingCharacter.Length; i++)
+            {
+                CharacterCode = i;
 
-            //}
+                switch (CharacterCode)
+                {
+                    case 0:
+                        int attack =
+                            break;
+                    case 1:
+                        break;
+
+                }
+            }
+
             //초기 소지 장비를 bag과 equip 리스트에 저장한다
-            
+            //직업별 초기 장비가 다르다면 수정
+            bag.Add(int.Parse((dataManager.ItemDB.Parsing(dataManager.ItemDB.Data)[0][0])));
+            bag.Add(int.Parse((dataManager.ItemDB.Parsing(dataManager.ItemDB.Data)[3][0])));
+
+            //초기 장비를 가지고 있되 장착은 되어있지 않은 상태로 시작해서
+            //인벤토리를 처음 열면 장착&해제 튜토리얼 구현해 보는 것 괜찮을지도
         }
+
 
         public void LevelUp()
         {
@@ -100,16 +121,17 @@ namespace TeamTodayTextRPG
 
             if(전투가 끝났을 때)
             {
-                //n% 확률로 랜덤 아이템 드롭
-                //근데 여기서 처리하는게 맞나?
                 Random random = new Random();
                 int ItemDrop = random.Next(0, 101);
-                if(ItemDrop >= 85)
+                //n% 확률로
+                if(ItemDrop >= 90 || ItemDrop <= 10)
                 {
+                    //랜덤 아이템 드롭
                     Random dropItemCode = new Random();
                     code = dropItemCode.Next(0, 15);
                     bag.Add(code);
                 }
+                //근데 여기서 처리하는게 맞나?
             }
         }
 
