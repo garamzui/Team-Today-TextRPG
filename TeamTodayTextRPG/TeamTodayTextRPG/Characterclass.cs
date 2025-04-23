@@ -14,7 +14,7 @@ namespace TeamTodayTextRPG
         public abstract class Character
         {
 
-            public string jobname { get; set; }
+            public string Jobname { get; set; }
             public int attack { get; set; }
             public int plusAtk { get; set; } = 0;
             public int totalAtk { get { return attack + plusAtk; } }  //다른 계산에 필요할까 싶어 합산되어 적용될 값을 따로 만들어 보았습니다.
@@ -66,9 +66,13 @@ namespace TeamTodayTextRPG
 
             }
 
+            public virtual string jobDescription() //직업 설명
+            {
+                return"";
+            }
             public void ViewStatus()
             {
-                Console.WriteLine($"{jobname} - 공격력 {attack} (+{plusAtk}), 방어력 {def} (+{plusDef}), HP {hp}/{maxHp}, Gold {gold}");
+                Console.WriteLine($"{jobname} {jobDescription}- 공격력 {attack} (+{plusAtk}), 방어력 {def} (+{plusDef}), HP {hp}/{maxHp}, Gold {gold}");
             }
 
 
@@ -127,6 +131,10 @@ namespace TeamTodayTextRPG
                 //직업이름,공격력,방어력,체력,마력,회피,골드,액티브스킬이름,패시브스킬이름
                 w.init("전사,10,5,100,40,1,1000,쾅 내려치기,전사의 피부");
                 return w;
+            }
+            public override string jobDescription()
+            {
+               return"";
             }
             public override void ActiveSkill(Monster m)
             {
