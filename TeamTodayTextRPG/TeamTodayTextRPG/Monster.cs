@@ -13,18 +13,24 @@ namespace TeamTodayTextRPG
     }
     enum MONSTER_CODE
     {
-        // 추후에 몬스터 이름으로 변경 될 예정입니다. 
-        M1 = 0,      //m1 =  Slime
-        M2,          //M2 =  Goblin
-        M3,          //M3 =  Wolf
-        M4,          //M4 =  Ork
-        M5           //M5 = Zakum
+        Slime = 0,   
+        Goblin,    
+        Wolf,        
+        Ork,         
+        Zakum        
+    }
+    enum MONSTER_GRADE
+    {
+        NORMAL =0,
+        BOSS
     }
 
     abstract class Monster
     {
         public MONSTER_CODE Code { get; set; }
-        public string Name { get; set; }
+        public MONSTER_STATE State { get; set; } = MONSTER_STATE.IDLE;
+        public MONSTER_GRADE Grade { get; set; }
+        public string? Name { get; set; }
         public int Level { get; set; }
         public int Atk { get; set; }
         public int PlusAtk { get; set; }
@@ -34,8 +40,8 @@ namespace TeamTodayTextRPG
         public int MaxHp { get; set; }
         public int RewardGold { get; set; }
         public int RewardExp { get; set; }
-        public string Text { get; set; }
-        public string[] Parameter { get; set; }
+        public string? Text { get; set; }
+        public string[]? Parameter { get; set; }
 
         public void Init(string[] parameter)
         {
@@ -56,7 +62,8 @@ namespace TeamTodayTextRPG
             Text = Parameter[8];
         }
 
-        public void TakeDamage(int damage)
+        //『효빈』 TakeDamage와 Heal 비슷한 역할을 하는 메소드 이기 때문에 ChangeHp로 합쳐서 관리하면 더 편할 것 같아요! 
+       /* public void TakeDamage(int damage)
         {
             Hp -= damage;
             if (Hp <= 0)
@@ -65,50 +72,69 @@ namespace TeamTodayTextRPG
                 Die();
             }
         }
-        public void Die()
-        {
-            Console.WriteLine($"{Name}은 쓰러졌다!");
-        }
         public void Heal(int heal)
         {
             Hp += heal;
+        }*/
+
+
+        public void ChangeHp(int value)
+        {
+            Hp += value;
+
+            if (Hp <= 0)
+            {
+                Hp = 0;
+                Die();
+            }
+            else if (Hp > MaxHp) // 힐량이 최대 hp를 넘어가지 않게하는 조건도 추가하겠습니다
+            {
+                Hp = MaxHp;
+            }
+        } 
+
+
+        public void Die()
+        {
+            State = MONSTER_STATE.DEAD;
+            // Console.WriteLine($"{Name}은 쓰러졌다!");    『효빈』이 부분은 SceneManager에서 관리해주면 좋을거 같아요! 대신에 몬스터의 상태를 관리하는 state 변수를 변경시키겠습니다. 
+            //                                                       SceneManager 에서 각 몬스터의 State를 체크! if (monster.State == MONSTER_STATE.DEAD) { ... } 
         }
 
 
-
-        class Monster_1 : Monster
+        class Slime : Monster
         {
-            public Monster_1()
+            public Slime()
             {
                 Init(DataManager.Instance.MonsterDB.List[(int)Code]);
             }
         }
 
-        class Monster_2 : Monster
+        class Goblin : Monster
         {
-            public Monster_2()
+            public Goblin()
             {
                 Init(DataManager.Instance.MonsterDB.List[(int)Code]);
             }
         }
 
-        class Monster_3 : Monster
+        class Wolf : Monster
         {
-            public Monster_3()
+            public Wolf()
             {
                 Init(DataManager.Instance.MonsterDB.List[(int)Code]);
             }
         }
-        class Monster_4 : Monster
+        class Ork : Monster
         {
-            public Monster_4()
+            public Ork()
             {
                 Init(DataManager.Instance.MonsterDB.List[(int)Code]);
             }
         }
-        class Monster_5 : Monster
+        class Zakum : Monster
         {
-            public Monster_5()
+            public Zakum()
             {
                 Init(DataManager.Instance.MonsterDB.List[(int)Code]);
             }
