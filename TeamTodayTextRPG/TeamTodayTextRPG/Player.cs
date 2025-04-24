@@ -8,11 +8,13 @@ using static TeamTodayTextRPG.Characterclass;
 
 namespace TeamTodayTextRPG
 {
-    class Player
+    //프로퍼티 관련 스크립트
+    partial class Player
     {
-        public Character character { get; set; }
-        public DataManager dataManager { get; set; }
-        public GameManager gameManager { get; set; }
+        public Character Character { get; set; }
+        public DataManager DataManager { get; set; }
+        public GameManager GameManager { get; set; }
+        public SceneManager SceneManager { get; set; } 
         public List<int> bag { get; set; }
         public List<int> equip { get; set; }
         public int Level { get; set; }
@@ -29,14 +31,17 @@ namespace TeamTodayTextRPG
 
         public int CharacterCode { get; set; }
         public int ItemCode { get; set; }
+    }
 
-
+    //스탯 관련 스크립트
+    partial class Player
+    {
         public void SetCharacter(int classNum, string name)
         {
             //데이터매니저에서 직업별 스탯을 '파싱'해서 가져온다
             //ㄴ 이제 데이터매니저에서 잘 되어있어서 이렇게 안해도 됨
-            string[][] settingCharacter = dataManager.CharacterDB.
-                       Parsing(dataManager.CharacterDB.Data);
+            string[][] settingCharacter = DataManager.CharacterDB.
+                        Parsing(DataManager.CharacterDB.Data);
 
             //그러면 입력값 저장하는 변수도 끌어와야 함
             switch (classNum)
@@ -56,18 +61,18 @@ namespace TeamTodayTextRPG
             }
 
             //직업.Default가 Characterclass에서 스탯을 세팅하는 메서드
-            // enum이 public이 아니라...
-            switch ()
+//CHAR_TYPE public 선언 부탁
+            switch (CharacterCode)
             {
-                case 0: character = DataManager.Instance.
+                case 0: Character = DataManager.Instance.
                         CharacterDB.List[(int)CHAR_TYPE.WARRIOR];
                     SetStat();
                     break;
-                case 1: character = DataManager.Instance.
+                case 1: Character = DataManager.Instance.
                         CharacterDB.List[(int)CHAR_TYPE.MAGICIAN];
                     SetStat();
                     break;
-                case 2: character = DataManager.Instance.
+                case 2: Character = DataManager.Instance.
                         CharacterDB.List[(int)CHAR_TYPE.ASSASSIN];
                     SetStat();
                     break;
@@ -77,26 +82,25 @@ namespace TeamTodayTextRPG
 
             void SetStat()
             {
-                Attack = character.Attack;
-                Defense = character.Def;
-                CurHP = character.Hp;
-                MaxHP = character.MaxHp;
-                CurMP = character.Mp;
-                MaxMP = character.MaxMp;
-                Dodge = character.Dodge;
-                Gold = character.gold;
+                Attack = Character.Attack;
+                Defense = Character.Def;
+                CurHP = Character.Hp;
+                MaxHP = Character.MaxHp;
+                CurMP = Character.Mp;
+                MaxMP = Character.MaxMp;
+                Dodge = Character.Dodge;
+                Gold = Character.gold;
             }
 
             //초기 소지 장비를 bag과 equip 리스트에 저장한다
             //직업별 초기 장비가 다르다면 수정
             //이것도 마찬가지로 쉽게 접근 가능
-            bag.Add(int.Parse((dataManager.ItemDB.Parsing(dataManager.ItemDB.Data)[0][0])));
-            bag.Add(int.Parse((dataManager.ItemDB.Parsing(dataManager.ItemDB.Data)[3][0])));
+            bag.Add(int.Parse((DataManager.ItemDB.Parsing(DataManager.ItemDB.Data)[0][0])));
+            bag.Add(int.Parse((DataManager.ItemDB.Parsing(DataManager.ItemDB.Data)[3][0])));
 
             //초기 장비를 가지고 있되 장착은 되어있지 않은 상태로 시작해서
             //인벤토리를 처음 열면 장착&해제 튜토리얼 구현해 보는 것 괜찮을지도
         }
-
 
         public void LevelUp()
         {
@@ -113,15 +117,43 @@ namespace TeamTodayTextRPG
                 requiredExp += 25;
 
                 //스탯 증가량 화면에 표시
-                character.Attack += 1;
-                character.Def += 2;
+                Character.Attack += 1;
+                Character.Def += 2;
 
                 //Console.WriteLine("축하합니다! 레벨이 올랐습니다.");
                 //Console.WriteLine("공격력 +1, 방어력 +2");
                 //Viewer로
             }
-
         }
+
+        //특정 레벨에 스킬이 해금되는 구조
+        public void UnLockSkill()
+        {
+            //데이터베이스에는 이미 스킬을 가지고 있으니까
+            //스킬 정보를 확인할 수 있는 
+            if (Level == 5)
+            {
+
+            }
+        }
+
+        //휴식 기능
+        public void Rest()
+        {
+            Character.Hp += 50;
+            Character.gold -= 500;
+
+            //Console.WriteLine("휴식을 취했다!");
+            //Console.WriteLine("체력 + 50");
+            //Console.WriteLine("골드 -500");
+            //Viewer로
+        }
+    }
+
+    //장비 관련 스크립트
+    partial class Player
+    {
+//SceneManager의 currentViewer 프로퍼티로 설정 부탁
 
         //인벤토리에 해당 아이템이 있으면
         public bool CheckBag(int code)
@@ -134,8 +166,6 @@ namespace TeamTodayTextRPG
         //인벤토리에 아이템이 들어오는 경우
         public void InputBag()
         {
-            //ShopViewer 인스턴스 생성
-            GameManager.Instance.Viewer shopViewer = new ShopViewer();
 
             //임시로 선언&초기화
             int code = 0;
@@ -143,7 +173,7 @@ namespace TeamTodayTextRPG
             int prise = 0;
 
             //상점에서 아이템 구매
-            if(shopViewer)
+            if(currentViewer == VIEW_TYPE.SHOP)
             {
                 if(gold >= prise)
                 {
@@ -157,11 +187,12 @@ namespace TeamTodayTextRPG
 
                 else
                 {
-                    Console.WriteLine("소지금이 부족합니다!");
+                    //Console.WriteLine("소지금이 부족합니다!");
+                    //Viewer로
                 }
             }
 
-            if(전투가 끝났을 때)
+            if(currentViewer == VIEW_TYPE.DUNGEONCLEAR)
             {
                 Random random = new Random();
                 int ItemDrop = random.Next(0, 101);
@@ -186,35 +217,37 @@ namespace TeamTodayTextRPG
             int prise = 0;
 
             //상점에서 아이템 판매
-            if (CheckBag(code) == true && 상점에서 판매할 때)
+            if (CheckBag(code) == true && currentViewer == VIEW_TYPE.SALE)
             {
-                //장착중이라면
-                if (CheckEquip(code) == true)
-                {
-                    Console.WriteLine("장착중인 아이템은 판매할 수 없습니다.");
-                }
-
                 //장착중이 아니라면
-                else
+                if (CheckEquip(code) == false)
                 {
                     gold += (int)(prise * 0.85f);
                     bag.Remove(code);
                 }
+
+                //장착중이라면
+                else
+                {
+                    //Console.WriteLine("장착중인 아이템은 판매할 수 없습니다.");
+                    //Viewer로
+                }
             }
 
             //버리기
-            if(CheckBag(code) == true && 인벤토리에서 버릴 때)
+            if(CheckBag(code) == true && currentViewer == VIEW_TYPE.INVENTORY)
             {
-                //장착중이라면
-                if(CheckEquip(code) == true)
-                {
-                    Console.WriteLine("장착중인 아이템은 버릴 수 없습니다.");
-                }
-
                 //장착중이 아니라면
-                else
+                if(CheckEquip(code) == false)
                 {
                     bag.Remove(code);
+                }
+
+                //장착중이라면
+                else
+                {
+                    //Console.WriteLine("장착중인 아이템은 버릴 수 없습니다.");
+                    //Viewer로
                 }
             }
 
@@ -228,6 +261,7 @@ namespace TeamTodayTextRPG
             return equipItem;
         }
 
+        //장비 착용
         public void EquipItem()
         {
             //임시로 선언&초기화
@@ -238,7 +272,8 @@ namespace TeamTodayTextRPG
             if(CheckBag(code) == true && CheckEquip(code) == false)
             {
                 //같은 타입 아이템 미장착
-                if(해당 ITEM_TYPE을 장착하지 않았을 때)
+//ITEM_TYPE public 선언 부탁
+                if()
                 {
                     equip.Add(code);
                 }
@@ -255,6 +290,7 @@ namespace TeamTodayTextRPG
             }
         }
 
+        //장비 해제
         public void UnEquipItem()
         {
             //임시로 선언&초기화
@@ -269,18 +305,9 @@ namespace TeamTodayTextRPG
 
             else
             {
-                Console.WriteLine("장착중인 아이템이 아닙니다!");
+                //Console.WriteLine("장착중인 아이템이 아닙니다!");
+                //Viewer로
             }
-        }
-
-        //휴식 기능
-        public void Rest()
-        {
-            character.Hp += 50;
-            character.gold -= 500;
-            Console.WriteLine("휴식을 취했다!");
-            Console.WriteLine("체력 + 50");
-            Console.WriteLine("골드 -500");
         }
     }
 }
