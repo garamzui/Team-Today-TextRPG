@@ -28,6 +28,7 @@ namespace TeamTodayTextRPG
         public int CurMP { get; set; }
         public int Dodge { get; set; }
         public int Gold { get; set; }
+        public string Name { get; set; }
 
         public int CharacterCode { get; set; }
         public int ItemCode { get; set; }
@@ -38,6 +39,9 @@ namespace TeamTodayTextRPG
     {
         public void SetCharacter(int classNum, string name)
         {
+            //이렇게 하면 될까요?
+            Name = name;
+
             //데이터매니저에서 직업별 스탯을 '파싱'해서 가져온다
             //ㄴ 이제 데이터매니저에서 잘 되어있어서 이렇게 안해도 됨
             string[][] settingCharacter = DataManager.CharacterDB.
@@ -61,7 +65,7 @@ namespace TeamTodayTextRPG
             }
 
             //직업.Default가 Characterclass에서 스탯을 세팅하는 메서드
-//CHAR_TYPE public 선언 부탁
+//Characterclass의 CHAR_TYPE public 선언, '= 0' 부탁
             switch (CharacterCode)
             {
                 case 0: Character = DataManager.Instance.
@@ -76,8 +80,8 @@ namespace TeamTodayTextRPG
                         CharacterDB.List[(int)CHAR_TYPE.ASSASSIN];
                     SetStat();
                     break;
-                    //case 3:
-                    //    break;
+                //case 3:
+                //    break;
             }
 
             void SetStat()
@@ -168,16 +172,16 @@ namespace TeamTodayTextRPG
         {
 
             //임시로 선언&초기화
-            int code = 0;
-            int gold = 0;
+            ItemCode = DataManager.Instance.ItemDB.List[()]
+            int code = ItemCode;
             int prise = 0;
 
             //상점에서 아이템 구매
             if(currentViewer == VIEW_TYPE.SHOP)
             {
-                if(gold >= prise)
+                if(Character.gold >= (int)DataManager.Instance.ItemDB.List[])
                 {
-                    gold -= prise;
+                    Character.gold -= prise;
 
                     //해당 아이템의 코드를 bag에 저장
                     //code = 해당 아이템 코드;
@@ -213,7 +217,6 @@ namespace TeamTodayTextRPG
         {
             //임시로 선언&초기화
             int code = 0;
-            int gold = 0;
             int prise = 0;
 
             //상점에서 아이템 판매
@@ -222,7 +225,7 @@ namespace TeamTodayTextRPG
                 //장착중이 아니라면
                 if (CheckEquip(code) == false)
                 {
-                    gold += (int)(prise * 0.85f);
+                    Character.gold += (int)(prise * 0.85f);
                     bag.Remove(code);
                 }
 
@@ -272,7 +275,7 @@ namespace TeamTodayTextRPG
             if(CheckBag(code) == true && CheckEquip(code) == false)
             {
                 //같은 타입 아이템 미장착
-//ITEM_TYPE public 선언 부탁
+//Item의 ITEM_TYPE public 선언 부탁
                 if()
                 {
                     equip.Add(code);
