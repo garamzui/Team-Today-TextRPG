@@ -8,8 +8,6 @@ namespace TeamTodayTextRPG
 {
     class TRPG()
     {
-        static Random rand = new Random();
-
         static void Main(string[] args)
         {
             // 『효빈』VIEW_TYPE의 변수생성
