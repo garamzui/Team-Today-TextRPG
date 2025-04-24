@@ -11,7 +11,7 @@ using System.Diagnostics;
 
 namespace TeamTodayTextRPG
 {
-    enum ITEM_TYPE
+    public enum ITEM_TYPE
     {
         WEAPON = 0,        //무기
         ARMOR = 1,         //방어구

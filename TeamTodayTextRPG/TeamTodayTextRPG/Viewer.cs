@@ -30,7 +30,7 @@ namespace TeamTodayTextRPG
         public int EndIndex { get; set; }  // 화면에서 입력 가능한 끝 값
         public int DungeonCode { get; set; }// 던전 코드 (사용할 경우)
 
-        protected Player Player => GameManager.Instance.Player;
+        public Player Player => GameManager.Instance.Player;
         protected Character Character => Player.Character;
 
         // 각 화면에서의 구체적인 액션을 구현하는 추상 메서드

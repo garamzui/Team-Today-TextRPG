@@ -18,7 +18,7 @@ namespace TeamTodayTextRPG
         ASSASSIN
     }
 
-    internal class Characterclass
+    public class Characterclass
     {
         public abstract class Character
         {
@@ -53,16 +53,16 @@ namespace TeamTodayTextRPG
             {
                 //직업이름,공격력,방어력,체력,마력,회피,액티브스킬이름,패시브스킬이름
                
-                Jobname = data[0];
-                Attack = int.Parse(data[1]);
-                Defence = int.Parse(data[2]);
-                Hp = int.Parse(data[3]);
+                Jobname = data[1];
+                Attack = int.Parse(data[2]);
+                Defence = int.Parse(data[3]);
+                Hp = int.Parse(data[4]);
                 MaxHp = Hp;
-                Mp = int.Parse(data[4]);
+                Mp = int.Parse(data[5]);
                 MaxMp = Mp;
-                Dodge = int.Parse(data[5]);
-                ActskillName = (data[6]);
-                PasskillName = (data[7]);
+                Dodge = int.Parse(data[6]);
+                ActskillName = (data[7]);
+                PasskillName = (data[8]);
             }
 
             public virtual string JobDescription() //직업 설명
