@@ -23,6 +23,17 @@ namespace TeamTodayTextRPG
 
     public class Item
     {
+        public int Code { get; private set; }
+        public string Name { get; private set; }
+        public int Atk { get; private set; }
+        public int Def { get; private set; }
+        public int Hp { get; private set; }
+        public int Mp { get; private set; }
+        public string Text { get; private set; }
+        public int Value { get; private set; }
+
+        private ITEM_TYPE Type { get; set; }
+
         public Item(string[] str) //Parse로 데이터 변환
         {
             Code = int.Parse(str[0]);
@@ -45,33 +56,27 @@ namespace TeamTodayTextRPG
             {
                 Type = ITEM_TYPE.CONSUMABLE;
             }
-            // 직업 제한 파싱
-            List<JobType> allowedJobs = new List<JobType> { JobType.None };
 
-            if (Text.Contains("전사")) allowedJobs = new List<JobType> { JobType.Warrior };
-            else if (Text.Contains("도적")) allowedJobs = new List<JobType> { JobType.Thief };
-            else if (Text.Contains("마법사") && Text.Contains("사제"))
-                allowedJobs = new List<JobType> { JobType.Mage, JobType.Priest };
-            else if (Text.Contains("마법사")) allowedJobs = new List<JobType> { JobType.Mage };
-            else if (Text.Contains("사제")) allowedJobs = new List<JobType> { JobType.Priest };
+
+            // 직업 제한 파싱
+            List<CHAR TYPE> allowedJobs = new List<CHAR TYPE>();
+
+            if (Text.Contains("전사"))
+            {
+                allowedJobs.Add(CHAR TYPE.WARRIOR);
+            }
+            else if (Text.Contains("도적"))
+            {
+                allowedJobs.Add(CHAR TYPE.ASSASSIN);
+            }
+            else if (Text.Contains("마법사"))
+            {
+                allowedJobs.Add(CHAR TYPE.MAGICIAN);
+            }
 
             items.Add(new Item(Code, Name, Atk, Def, Hp, Mp, Text, Value, Type, allowedJobs));
+
         }
-
-            return items;
-
-        
-
-        public int Code { get; private set; }
-        public string Name { get; private set; }
-        public int Atk { get; private set; }
-        public int Def { get; private set; }
-        public int Hp { get; private set; }
-        public int Mp { get; private set; }
-        public string Text { get; private set; }
-        public int Value { get; private set; }
-
-        private ITEM_TYPE Type { get; set; }
 
     }
     public class HpPotion : Item
