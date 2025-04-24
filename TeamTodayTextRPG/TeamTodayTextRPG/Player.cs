@@ -15,8 +15,8 @@ namespace TeamTodayTextRPG
         public DataManager DataManager { get; set; }
         public GameManager GameManager { get; set; }
         public SceneManager SceneManager { get; set; } 
-        public List<int> bag { get; set; }
-        public List<int> equip { get; set; }
+        public List<int> Bag { get; set; }
+        public List<int> Equip { get; set; }
         public int Level { get; set; }
         public int Exp { get; set; }
 
@@ -87,7 +87,7 @@ namespace TeamTodayTextRPG
             void SetStat()
             {
                 Attack = Character.Attack;
-                Defense = Character.Def;
+                Defense = Character.Defence;
                 CurHP = Character.Hp;
                 MaxHP = Character.MaxHp;
                 CurMP = Character.Mp;
@@ -96,11 +96,11 @@ namespace TeamTodayTextRPG
                 Gold = Character.gold;
             }
 
-            //초기 소지 장비를 bag과 equip 리스트에 저장한다
+            //초기 소지 장비를 bag과 Equip 리스트에 저장한다
             //직업별 초기 장비가 다르다면 수정
             //이것도 마찬가지로 쉽게 접근 가능
-            bag.Add(int.Parse((DataManager.ItemDB.Parsing(DataManager.ItemDB.Data)[0][0])));
-            bag.Add(int.Parse((DataManager.ItemDB.Parsing(DataManager.ItemDB.Data)[3][0])));
+            Bag.Add(int.Parse((DataManager.ItemDB.Parsing(DataManager.ItemDB.Data)[0][0])));
+            Bag.Add(int.Parse((DataManager.ItemDB.Parsing(DataManager.ItemDB.Data)[3][0])));
 
             //초기 장비를 가지고 있되 장착은 되어있지 않은 상태로 시작해서
             //인벤토리를 처음 열면 장착&해제 튜토리얼 구현해 보는 것 괜찮을지도
@@ -122,7 +122,7 @@ namespace TeamTodayTextRPG
 
                 //스탯 증가량 화면에 표시
                 Character.Attack += 1;
-                Character.Def += 2;
+                Character.Defence += 2;
 
                 //Console.WriteLine("축하합니다! 레벨이 올랐습니다.");
                 //Console.WriteLine("공격력 +1, 방어력 +2");
@@ -145,7 +145,8 @@ namespace TeamTodayTextRPG
         public void Rest()
         {
             Character.Hp += 50;
-            Character.gold -= 500;
+            Character.Gold -= 500;
+//Characterclass에서 gold -> Gold로
 
             //Console.WriteLine("휴식을 취했다!");
             //Console.WriteLine("체력 + 50");
@@ -158,35 +159,32 @@ namespace TeamTodayTextRPG
     partial class Player
     {
 //SceneManager의 currentViewer 프로퍼티로 설정 부탁
-
-        //인벤토리에 해당 아이템이 있으면
-        public bool CheckBag(int code)
+        
+        public bool CheckBag(int inputItemNum)
         {
             //해당 코드의 아이템이 bag에 있는지
-            bool hasItem = bag.Contains(code);
+            ItemCode = inputItemNum - 1;
+            bool hasItem = Bag.Contains(ItemCode);
             return hasItem;
         }
 
-        //인벤토리에 아이템이 들어오는 경우
-        public void InputBag()
+        //인벤토리에 아이템이 들어오는 경우 1 - 상점 구매
+        public void ShopToBag(int inputItemNum)
         {
+            ItemCode = inputItemNum - 1;
 
-            //임시로 선언&초기화
-            ItemCode = DataManager.Instance.ItemDB.List[()]
-            int code = ItemCode;
-            int prise = 0;
+            //아이템도 리스트로 변경된다면 이 조건식이 될 가능성이 높다는 거겠죠?
+            int prise = (int)DataManager.Instance.ItemDB.List[ItemCode][5];
 
             //상점에서 아이템 구매
-            if(currentViewer == VIEW_TYPE.SHOP)
+            if (currentViewer == VIEW_TYPE.SHOP)
             {
-                if(Character.gold >= (int)DataManager.Instance.ItemDB.List[])
+                if (Character.Gold >= prise)
                 {
-                    Character.gold -= prise;
+                    Character.Gold -= prise;
 
                     //해당 아이템의 코드를 bag에 저장
-                    //code = 해당 아이템 코드;
-                    //이렇게 거쳐서 저장하는게 괜찮나?
-                    bag.Add(code);
+                    Bag.Add(ItemCode);
                 }
 
                 else
@@ -195,38 +193,42 @@ namespace TeamTodayTextRPG
                     //Viewer로
                 }
             }
+        }
 
+        //인벤토리에 아이템이 들어오는 경우 2 - 던전 클리어
+        public void DungeonToBag()
+        { 
+            //던전 클리어 시 랜덤(20%) 확률로 아이템 드롭
             if(currentViewer == VIEW_TYPE.DUNGEONCLEAR)
             {
-                Random random = new Random();
-                int ItemDrop = random.Next(0, 101);
+
+                int ItemDrop = GameManager.Instance.rand.Next(0, 101);
                 //n% 확률로
                 if(ItemDrop >= 90 || ItemDrop <= 10)
                 {
                     //랜덤 아이템 드롭
-                    Random dropItemCode = new Random();
-                    code = dropItemCode.Next(0, 15);
-                    bag.Add(code);
+                    int dropItemCode = GameManager.Instance.rand.Next(0, 아이템리스트.Length);
+                    ItemCode = dropItemCode;
+                    Bag.Add(ItemCode);
                 }
                 //근데 여기서 처리하는게 맞나?
             }
         }
 
-        //인벤토리에 아이템이 나가는 경우
-        public void RemoveBag()
+        //인벤토리에 아이템이 나가는 경우 1 - 상점 판매
+        public void RemoveBag(int inputItemNum)
         {
-            //임시로 선언&초기화
-            int code = 0;
-            int prise = 0;
+            ItemCode = inputItemNum - 1;
+            int prise = (int)(DataManager.Instance.ItemDB.List[ItemCode][5]);
 
             //상점에서 아이템 판매
-            if (CheckBag(code) == true && currentViewer == VIEW_TYPE.SALE)
+            if (CheckBag(ItemCode) == true && currentViewer == VIEW_TYPE.SALE)
             {
                 //장착중이 아니라면
-                if (CheckEquip(code) == false)
+                if (CheckEquip(ItemCode) == false)
                 {
                     Character.gold += (int)(prise * 0.85f);
-                    bag.Remove(code);
+                    Bag.Remove(ItemCode);
                 }
 
                 //장착중이라면
@@ -238,12 +240,12 @@ namespace TeamTodayTextRPG
             }
 
             //버리기
-            if(CheckBag(code) == true && currentViewer == VIEW_TYPE.INVENTORY)
+            if(CheckBag(inputItemNum) == true && currentViewer == VIEW_TYPE.INVENTORY)
             {
                 //장착중이 아니라면
-                if(CheckEquip(code) == false)
+                if(CheckEquip(ItemCode) == false)
                 {
-                    bag.Remove(code);
+                    Bag.Remove(ItemCode);
                 }
 
                 //장착중이라면
@@ -257,10 +259,11 @@ namespace TeamTodayTextRPG
         }
 
         //인벤토리에 해당 아이템이 있으면
-        public bool CheckEquip(int code)
+        public bool CheckEquip(int equipItemNum)
         {
+            ItemCode = equipItemNum - 1;
             //해당 코드의 아이템을 장착하고 있는지
-            bool equipItem = equip.Contains(code);
+            bool equipItem = Equip.Contains(ItemCode);
             return equipItem;
         }
 
@@ -278,17 +281,17 @@ namespace TeamTodayTextRPG
 //Item의 ITEM_TYPE public 선언 부탁
                 if()
                 {
-                    equip.Add(code);
+                    Equip.Add(code);
                 }
 
                 //같은 타입 아이템 장착중
                 else
                 {
                     //장착중이던 아이템 해제
-                    equip.Remove(equiped);
+                    Equip.Remove(equiped);
 
                     //장착하려는 아이템 착용
-                    equip.Add(code);
+                    Equip.Add(code);
                 }
             }
         }
@@ -302,8 +305,8 @@ namespace TeamTodayTextRPG
             //장착중 이라면
             if(CheckEquip(code) == true)
             {
-                //equip List에서 삭제
-                equip.Remove(code);
+                //Equip List에서 삭제
+                Equip.Remove(code);
             }
 
             else
