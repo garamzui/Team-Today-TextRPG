@@ -29,12 +29,9 @@ namespace TeamTodayTextRPG
     //스탯 관련 스크립트
     partial class Player
     {
+        //SceneManager에서 사용할 메서드
         public void SetCharacter(int classCode, string name)
         {
-            //string[][] settingCharacter = DataManager.CharacterDB.
-            //Parsing(DataManager.CharacterDB.Data);
-
-
             //classCode별로 직업별 스탯 설정
             switch (classCode)
             {
@@ -63,10 +60,13 @@ namespace TeamTodayTextRPG
         //초기 소지 장비를 bag과 Equip 리스트에 저장한다
         //직업별 초기 장비가 다르다면 수정
         //이것도 마찬가지로 쉽게 접근 가능
-        Bag.Add(int.Parse((DataManager.ItemDB.Parsing(DataManager.ItemDB.Data)[0][0])));
-        Bag.Add(int.Parse((DataManager.ItemDB.Parsing(DataManager.ItemDB.Data)[3][0])));
+        //접근 예시 DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.리릴리_라릴라][3]
+        //기존 코드
+        //Bag.Add(int.Parse((DataManager.ItemDB.Parsing(DataManager.ItemDB.Data)[0][0])));
+        //Bag.Add(int.Parse((DataManager.ItemDB.Parsing(DataManager.ItemDB.Data)[3][0])));
 
-        Bag.Add(DataManager.Instance.ItemDB.List[(int)])
+        //새로 시도
+        //Bag.Add(DataManager.Instance.ItemDB.List[(int)])
 
             //초기 장비를 가지고 있되 장착은 되어있지 않은 상태로 시작해서
             //인벤토리를 처음 열면 장착&해제 튜토리얼 구현해 보는 것 괜찮을지도
@@ -77,20 +77,20 @@ namespace TeamTodayTextRPG
         {
             int requiredExp = 100;
 
+    //던전 클리어시 처치한 몬스터에 따라 경험치를 얻는 구조 필요
             //경험치가 요구 경험치보다 크거나 같아진다.
             if (Exp >= requiredExp)
             {
                 //경험치에서 요구 경험치 만큼 빼고 초과량은 현재 경험치로 남는다.
-                Exp = Exp - requiredExp;
+                Exp -= requiredExp;
 
-                //레벨 및 요구 경험치가 늘어난다.
+                //레벨 및 요구 경험치 스탯이 늘어난다.
                 Level++;
                 requiredExp += 25;
-
-                //스탯 증가량 화면에 표시
                 Character.Attack += 1;
                 Character.Defence += 2;
 
+                //스탯 증가량 화면에 표시
                 //Console.WriteLine("축하합니다! 레벨이 올랐습니다.");
                 //Console.WriteLine("공격력 +1, 방어력 +2");
                 //Viewer로
@@ -112,8 +112,7 @@ namespace TeamTodayTextRPG
         public void Rest()
         {
             Character.Hp += 50;
-            Character.Gold -= 500;
-//Characterclass에서 gold -> Gold로
+            Gold -= 500;
 
             //Console.WriteLine("휴식을 취했다!");
             //Console.WriteLine("체력 + 50");
@@ -125,7 +124,6 @@ namespace TeamTodayTextRPG
     //장비 관련 스크립트
     partial class Player
     {
-//SceneManager의 currentViewer 프로퍼티로 설정 부탁
         
         public bool CheckBag(int inputItemNum)
         {
@@ -136,9 +134,10 @@ namespace TeamTodayTextRPG
         }
 
         //인벤토리에 아이템이 들어오는 경우 1 - 상점 구매
-        public void ShopToBag(int inputItemNum)
+        //다시 합쳐
+        public void InputBag(int inputItemNum, VIEW_TYPE type)
         {
-            ItemCode = inputItemNum - 1;
+            ItemCode = inputItemNum;
 
             //아이템도 리스트로 변경된다면 이 조건식이 될 가능성이 높다는 거겠죠?
             int prise = (int)DataManager.Instance.ItemDB.List[ItemCode][5];
@@ -146,9 +145,9 @@ namespace TeamTodayTextRPG
             //상점에서 아이템 구매
             if (currentViewer == VIEW_TYPE.SHOP)
             {
-                if (Character.Gold >= prise)
+                if (Gold >= prise)
                 {
-                    Character.Gold -= prise;
+                    Gold -= prise;
 
                     //해당 아이템의 코드를 bag에 저장
                     Bag.Add(ItemCode);
@@ -194,7 +193,7 @@ namespace TeamTodayTextRPG
                 //장착중이 아니라면
                 if (CheckEquip(ItemCode) == false)
                 {
-                    Character.gold += (int)(prise * 0.85f);
+                    Gold += (int)(prise * 0.85f);
                     Bag.Remove(ItemCode);
                 }
 
