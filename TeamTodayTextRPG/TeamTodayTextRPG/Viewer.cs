@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Numerics;
 using TeamTodayTextRPG;
+using TeamTodayTextRPG.TeamTodayTextRPG;
 
 namespace TeamTodayTextRPG
 {
     // 뷰어 화면 타입을 정의하는 열거형
+    // 가나다라
     public enum VIEW_TYPE
     {
         MAIN,           // 게임 시작 화면
@@ -23,33 +26,33 @@ namespace TeamTodayTextRPG
     // 모든 뷰어 클래스의 부모가 되는 추상 클래스
     public abstract class Viewer
     {
-        protected int startIndex;  // 화면에서 입력 가능한 시작 값
-        protected int endIndex;    // 화면에서 입력 가능한 끝 값
-        protected int dungeonCode; // 던전 코드 (사용할 경우)
+        public int StartIndex { get; set; }  // 화면에서 입력 가능한 시작 값
+        public int EndIndex { get; set; }  // 화면에서 입력 가능한 끝 값
+        public int DungeonCode { get; set; }// 던전 코드 (사용할 경우)
 
         // 각 화면에서의 구체적인 액션을 구현하는 추상 메서드
-        public abstract void ViewAction(GameManager gameManager);
+        public abstract void ViewAction();
 
         // 입력에 따라 다음 화면을 반환하는 추상 메서드
-        public abstract VIEW_TYPE NextView(GameManager gameManager, int input);
+        public abstract VIEW_TYPE NextView(int choiceNum);
     }
 
     public class StatusViewer : Viewer
     {
-        public override void ViewAction(GameManager gameManager)
+        public override void ViewAction()
         {
             Console.Clear();
             Console.WriteLine("플레이어 상태 보기");
             Console.WriteLine("====================");
 
-            var player = gameManager.Player;  // Player 객체 가져오기
+ // Player 객체 가져오기
 
             // 플레이어의 상태를 출력
             Console.WriteLine($"이름: {player.Name}");
-            Console.WriteLine($"체력: {player.Health}/{player.MaxHealth}");
-            Console.WriteLine($"공격력: {player.Attack}");
-            Console.WriteLine($"방어력: {player.Defense}");
-            Console.WriteLine($"금액: {player.Gold}G");
+            Console.WriteLine($"체력: {GameManager.Instance.Player.Character.Hp}/{GameManager.Instance.Player.Character.MaxHp}");
+            Console.WriteLine($"공격력: {GameManager.Instance.Player.Character.Attack}");
+            Console.WriteLine($"방어력: {GameManager.Instance.Player.Character.Def}");
+            Console.WriteLine($"금액: {GameManager.Instance.Player.Character.Gold}G");
 
             Console.WriteLine("====================");
             Console.WriteLine("1. 메인으로 돌아가기");
@@ -96,7 +99,7 @@ namespace TeamTodayTextRPG
             gameManager.SceneManager.SwitchScene(nextView);
         }
         // NextView 메서드 구현
-        public override VIEW_TYPE NextView(GameManager gameManager, int input)
+        public override VIEW_TYPE NextView(int input)
         {
             switch (input)
             {
@@ -426,11 +429,40 @@ namespace TeamTodayTextRPG
 
     public class DungeonViewer : Viewer
     {
+        protected Dungeon dungeon; // Dungeon 클래스의 인스턴스를 받을 변수
+        protected Monster monster;  // Monster 클래스의 인스턴스를 받을 변수 (던전 입장시 보스 몬스터관련)
+
+        public DungeonViewer(Dungeon dungeon, Monster monster)
+        {
+            this.dungeon = dungeon;
+            this.monster = monster;
+        }
+
         public override void ViewAction(GameManager gameManager)
         {
             Console.Clear();
             Console.WriteLine("던전");
             Console.WriteLine("====================");
+
+            Console.WriteLine($"던전 이름: {dungeon.Name}");
+            Console.WriteLine($"던전 코드: {dungeon.Code}");
+            Console.WriteLine($"난이도: {dungeon.Diff}");
+            Console.WriteLine($"추천 레벨: {dungeon.DefLevel}");
+            Console.WriteLine($"기본 보상: {dungeon.Reward}G");
+            Console.WriteLine($"경험치: {dungeon.Exp}Exp");
+
+            // 몬스터가 등장할 때 출력
+            Console.WriteLine($"몬스터가 등장했습니다! 몬스터 이름: {monster.Name}");
+
+            // 보스 몬스터 여부 체크
+            if (monster.IsBoss)
+            {
+                Console.WriteLine("\n[보스 효과] 플레이어의 능력치가 10% 감소합니다!");
+                // 플레이어 능력치 감소 (예시 > BaseAttack, BaseDefense 감소)
+                // 능력치를 변경하려면 플레이어 객체를 반영
+                player.BaseAttack = (int)(player.BaseAttack * 0.9);
+                player.BaseDefense = (int)(player.BaseDefense * 0.9);
+            }
 
             Console.WriteLine("던전으로 들어가시겠습니까?");
             Console.WriteLine("1. 던전 입장");
@@ -441,34 +473,58 @@ namespace TeamTodayTextRPG
             VIEW_TYPE nextView = NextView(gameManager, input);
             gameManager.SceneManager.SwitchScene(nextView);
         }
-        // NextView 메서드 구현
+
         public override VIEW_TYPE NextView(GameManager gameManager, int input)
         {
             switch (input)
             {
                 case 1:
-                    // 던전 입장 화면으로 이동
                     return VIEW_TYPE.DUNGEON;  // 던전으로 입장
                 case 2:
-                    // 메인 화면으로 돌아가기
-                    return VIEW_TYPE.MAIN;  // 메인 화면으로 전환
+                    return VIEW_TYPE.MAIN;  // 메인 화면으로 돌아가기
                 default:
-                    // 잘못된 입력 처리
                     Console.WriteLine("잘못된 입력입니다.");
-                    return VIEW_TYPE.DUNGEON;  // 잘못된 입력시 던전 화면을 다시 표시
+                    return VIEW_TYPE.DUNGEON;
             }
         }
     }
 
+
     public class DungeonClearViewer : Viewer
     {
+        protected Player player;  // Player 클래스의 인스턴스를 받을 변수
+        protected Dungeon dungeon; // Dungeon 클래스의 인스턴스를 받을 변수
+
+        public DungeonClearViewer(Player player, Dungeon dungeon)
+        {
+            this.player = player;
+            this.dungeon = dungeon;
+        }
+
         public override void ViewAction(GameManager gameManager)
         {
             Console.Clear();
             Console.WriteLine("던전 클리어");
             Console.WriteLine("====================");
 
-            Console.WriteLine("축하합니다! 던전을 클리어했습니다.");
+            if (player.IsDead)  // 플레이어가 죽었을 때 처리
+            {
+                // 플레이어가 죽었을 때 실패 메시지 출력
+                Console.WriteLine("플레이어가 쓰러졌습니다! 던전 클리어 실패!");
+            }
+            else
+            {
+                // 던전 클리어 성공 시
+                Console.WriteLine($"축하합니다! 던전을 클리어했습니다!");
+                Console.WriteLine($"보상: {dungeon.Reward}G");
+                Console.WriteLine($"경험치: {dungeon.Exp}Exp");
+
+                // 보스 효과 복구 (능력치 초기화)
+                player.BaseAttack = (int)(player.BaseAttack / 0.9);  // 보스 효과로 감소한 능력치를 복구
+                player.BaseDefense = (int)(player.BaseDefense / 0.9);
+                Console.WriteLine("\n[보스 효과] 플레이어 능력치 감소 효과가 복구되었습니다!");
+            }
+
             Console.WriteLine("1. 메인으로 돌아가기");
 
             int input = gameManager.InputAction(startIndex, endIndex);
@@ -476,21 +532,20 @@ namespace TeamTodayTextRPG
             VIEW_TYPE nextView = NextView(gameManager, input);
             gameManager.SceneManager.SwitchScene(nextView);
         }
-        // NextView 메서드 구현
+
         public override VIEW_TYPE NextView(GameManager gameManager, int input)
         {
             switch (input)
             {
                 case 1:
-                    // 메인 화면으로 돌아가기
-                    return VIEW_TYPE.MAIN;  // 던전 클리어 후 메인 화면으로 전환
+                    return VIEW_TYPE.MAIN;
                 default:
-                    // 잘못된 입력 처리
                     Console.WriteLine("잘못된 입력입니다.");
-                    return VIEW_TYPE.DUNGEONCLEAR;  // 잘못된 입력시 던전 클리어 화면을 다시 보여줌
+                    return VIEW_TYPE.DUNGEONCLEAR;
             }
         }
     }
+
 
     public class RestViewer : Viewer
     {

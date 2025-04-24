@@ -26,77 +26,11 @@ namespace TeamTodayTextRPG
 
 
         // 『효빈』GameMananger 클래스의 프로퍼티 입니다.
+        public Random rand { get; set; }
         public Player Player { get; set; }
-        public Viewer Viewer { get; set; }
-        public ItemDatabase ItemDatabase { get; set; }
-        public DungeonDatabase DungeonDatabase { get; set; }
 
 
-        // 『효빈』초기 캐릭터 설정 (플레이어 이름, 플레이어할 캐릭터의 직업)을 도와주는 함수 입니다.
-        public void Intro()
-        {
-            string? name = string.Empty;
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("스파르타 마을에 오신 여러분 환영합니다.");
-            Console.ResetColor();
-
-            while (name == string.Empty)
-            {
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("원하시는 이름을 설정해주세요.");
-                Console.ResetColor();
-                Console.Write("\n입력 >> ");
-                name = Console.ReadLine();
-                if (name == string.Empty)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("이름을 제대로 입력해주세요.\n");
-                    Console.ResetColor();
-                }
-                else
-                {
-                    bool check = true;
-
-                    while (check)
-                    {
-                        int num = 0;
-                        Console.Write("입력하신 이름은 『 ");
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.Write(name);
-                        Console.ResetColor();
-                        Console.WriteLine(" 』입니다.\n");
-                        Console.ForegroundColor = ConsoleColor.Cyan;
-                        Console.WriteLine("1. 저장");
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("2. 취소\n");
-                        Console.ResetColor();
-
-                        num = InputAction(1, 2);
-
-                        if (num == 1) check = false;
-                        else if (num == 2)
-                        {
-                            check = false;
-                            name = string.Empty;
-                        }
-                    }
-                }
-            }
-            Console.Clear();
-
-            int classNum = 0;
-            while (classNum == 0)
-            {
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("원하시는 직업을 설정해주세요.\n");
-                Console.ResetColor();
-                Console.WriteLine("1. 전사\n2. 마법사\n3. 도적\n");
-
-                classNum = InputAction(1, 3);
-                Player.SetCharacter(classNum, name);
-            }
-            Console.Clear();
-        }
+       
 
 
         /* 『효빈』
@@ -106,42 +40,6 @@ namespace TeamTodayTextRPG
                 ...이라면 startIndex = 0, endIndex = 2
             리턴 값으로는 "고른 선택지의 번호"를 반환합니다.
         */
-        public int InputAction(int startIndex, int endIndex)
-        {
-            string rtnStr = string.Empty;
-            int num = -1;
-            bool check = false;
-            while (!check)
-            {
-                Console.Write("원하시는 행동을 입력해주세요.\n>>");
-                rtnStr = Console.ReadLine();
-                if (rtnStr == string.Empty)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("아무 행동도 입력하지 않으셨습니다.\n");
-                    Console.ResetColor();
-                }
-                else
-                {
-                    if (int.TryParse(rtnStr, out num))
-                    {
-                        if (num < startIndex && num > endIndex)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("선택지 내에서 입력해주세요.\n");
-                            Console.ResetColor();
-                        }
-                        else check = true;
-                    }
-                    else
-                    {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("숫자만 입력해주세요.\n");
-                        Console.ResetColor();
-                    }
-                }
-            }
-            return num;
-        }
+        
     }
 }

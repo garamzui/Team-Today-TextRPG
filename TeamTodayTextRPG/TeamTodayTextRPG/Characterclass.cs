@@ -19,9 +19,9 @@ namespace TeamTodayTextRPG
             public int Attack { get; set; }
             public int PlusAtk { get; set; } = 0;
             public int TotalAtk { get { return Attack + PlusAtk; } }  //다른 계산에 필요할까 싶어 합산되어 적용될 값을 따로 만들어 보았습니다.
-            public int Def { get; set; }
+            public int Defence { get; set; }
             public int PlusDef { get; set; } = 0;
-            public int TotalDef { get { return Def + PlusDef; } }
+            public int TotalDef { get { return Defence + PlusDef; } }
             public int Hp { get; set; }
             public int MaxHp { get; set; }
             public int Mp { get;set; }
@@ -50,7 +50,7 @@ namespace TeamTodayTextRPG
                
                 Jobname = data[0];
                 Attack = int.Parse(data[1]);
-                Def = int.Parse(data[2]);
+                Defence = int.Parse(data[2]);
                 Hp = int.Parse(data[3]);
                 MaxHp = Hp;
                 Mp = int.Parse(data[4]);
@@ -203,12 +203,12 @@ namespace TeamTodayTextRPG
                     if (PassiveSkillLevel == MaxPassiveSkillLevel)
                     {
                         Console.WriteLine($"{PasskillName}의 Lv이 최대가 되었습니다. 최대 래벨 보상으로 방어도가 20이 됩니다.");
-                        Def = 20;
+                        Defence = 20;
                     }
                     else
                     {
                         Console.WriteLine($"{PasskillName}의 Lv이 1증가하였습니다. 방어도 +2");
-                        Def += 2;
+                        Defence += 2;
                     }
                 }
                 else if (PassiveSkillLevel > MaxPassiveSkillLevel)
