@@ -63,19 +63,31 @@ namespace TeamTodayTextRPG
         }
 
         //『효빈』 TakeDamage와 Heal 비슷한 역할을 하는 메소드 이기 때문에 ChangeHp로 합쳐서 관리하면 더 편할 것 같아요! 
-       /* public void TakeDamage(int damage)
+      public void ManageHp(int HpChange)
         {
-            Hp -= damage;
-            if (Hp <= 0)
+            if (HpChange < 0)
             {
-                Hp = 0;
-                Die();
+                Hp += HpChange;
+
+                Console.WriteLine($"{Name}이(가){HpChange}의 데미지를 입었습니다. 현재 HP: {Hp}/{MaxHp}");
+                if (Hp <= 0)
+                {
+                    Hp = 0;
+                    Die();
+                }
             }
+            else if (HpChange > 0)
+            {
+                Hp += HpChange;
+                if (Hp > MaxHp) Hp = MaxHp;
+                Console.WriteLine($"{Name}이(가){HpChange}만큼 회복했습니다! 현재 HP: {Hp}/{MaxHp}");
+            }
+            else { Console.WriteLine("아무 일도 일어나지 않았습니다."); }
         }
         public void Heal(int heal)
         {
-            Hp += heal;
-        }*/
+            
+        }
 
 
         public void ChangeHp(int value)

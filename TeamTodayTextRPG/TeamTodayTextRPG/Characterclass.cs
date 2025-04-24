@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,12 +30,7 @@ namespace TeamTodayTextRPG
             public int PlusDodge { get; set; } 
             public int TotalDodge { get { return Dodge + PlusDodge; } }
             // 직업간 차이를 두어 보고자 Dodge 스탯도 추가 해 봤습니다.
-            // 전투가 어떻게 이루어질지에 따라 추가해야 할 계산식이 달라질 것 같습니다.
-            // 예를 들면 
-            //int num = new Random().Next(0, 26); 또는 GameManager에 static Random하나 만들어두고 돌려쓰기
-            //if ((num += Charater.Dodge > 20)
-            //{공격을 무효화하기}
-            // 이런식으로 설계하면 어떨까 합니다.
+            
             public int gold { get; set; }
             public string[] Parameter { get; set; }
             
@@ -46,7 +42,7 @@ namespace TeamTodayTextRPG
             public void init(string[] data) //우선은 임의로 매서드로 초기화할 필드를 변경해 놓았습니다.
             {
                 //직업이름,공격력,방어력,체력,마력,회피,골드,액티브스킬이름,패시브스킬이름
-                Parameter = data;
+               
                 Jobname = data[0];
                 Attack = int.Parse(data[1]);
                 Defence = int.Parse(data[2]);
@@ -58,9 +54,6 @@ namespace TeamTodayTextRPG
                 gold = int.Parse(data[6]);
                 ActskillName = (data[7]);
                 PasskillName = (data[8]);
-
-
-
             }
 
             public virtual string JobDescription() //직업 설명
@@ -69,7 +62,7 @@ namespace TeamTodayTextRPG
             }
             public void ViewStatus()
             {
-                Console.WriteLine($"{Jobname} {JobDescription()}\n- 공격력 {Attack} (+{PlusAtk}), 방어력 {Def} (+{PlusDef}), HP {Hp}/{MaxHp}, Gold {gold}");
+                Console.WriteLine($"{Jobname} {JobDescription()}\n- 공격력 {Attack} (+{PlusAtk}), 방어력 {Defence} (+{PlusDef}), HP {Hp}/{MaxHp}, Gold {gold}");
             }
 
 
@@ -97,52 +90,63 @@ namespace TeamTodayTextRPG
                  Console.WriteLine($"{Jobname}의 기술 {PasskillName}");
             }
 
-            public void TakeDamage(int damage)
+            public void ManageHp(int HpChange)//Hp관리용 매서드 입니다. 공격 연출시 매개변수를 음수로 입력하여야합니다
             {
-
-                int DodgeHit = Characterclass.rng.Next(1, 76);// 피격 메서드에 회피를 구현 해봤습니다.
-                if (TotalDodge > DodgeHit)
+                if (HpChange < 0)
                 {
-                    Console.WriteLine("공격을 회피했습니다!");
-                    return;
-                }
-                else
-                { 
-                    Hp -= damage;
-                    if (Hp < 0) Hp = 0; 
-                    Console.WriteLine($"{damage}의 피해를 입었습니다! \n현재 Hp : {Hp}/{MaxHp}");
+                    int DodgeHit = GameManager.Instance.rand.Next(1, 76);// 피격 메서드에 회피를 구현 해봤습니다.
+                    if (TotalDodge > DodgeHit)
+                    {
+                        Console.WriteLine("공격을 회피했습니다!");
+                        return;
+                    }
+                    else
+                    {
+                        Hp += HpChange;
+                        if (Hp < 0) Hp = 0;
+                        Console.WriteLine($"{HpChange}의 피해를 입었습니다! \n현재 Hp : {Hp}/{MaxHp}");
 
+                    }
+
+                    if (Hp == 0)
+                    {
+                        Die();
+
+                    }
                 }
-                            
-                if (Hp == 0)
+                else if (HpChange > 0)
                 {
-                    Die();
-                    
-                }    
+                    Hp += HpChange;
+                    if (Hp > MaxHp) Hp = MaxHp;
+                    Console.WriteLine($"{HpChange}만큼 회복했습니다! 현재 HP: {Hp}/{MaxHp}");
+                }
+                else { Console.WriteLine("아무 일도 일어나지 않았습니다."); }// 우선 예외처리 때문에 작성해 두었습니다.
             }
-            
             public void Die()
             {
                 Console.WriteLine("눈앞이 깜깜해진다..");
             }
-            public void Heal(int heal)
+
+            public void ManageMp(int ChangeMp) //Mp관리용 메서드입니다. Mp소모 매서드 이용시 매개변수를 음수로 입력하여야합니다
             {
-                Hp += heal;
-                if (Hp > MaxHp) Hp = MaxHp;
-                Console.WriteLine($"{heal}만큼 회복했습니다! 현재 HP: {Hp}/{MaxHp}");
-            }
-            public void UsingMp(int use) //Mp관리용 메서드입니다.
-            { 
-                Mp -= use;
-                if (Mp < 0) Mp = 0;
-            }
-            public void RecoverMp(int Recover)
-            {
-                Mp += Recover;
-                if (Mp > MaxMp) Mp = MaxMp;
-                Console.WriteLine($"{Recover}만큼 MP를 회복했습니다! 현재 MP: {Mp}/{MaxMp}");
+                if (ChangeMp < 0)
+                {
+                    Mp += ChangeMp;
+                    Console.WriteLine($" Mp {ChangeMp}소모 현재 Mp {Mp}/{MaxMp}");
+                    if (Mp < 0) Mp = 0;
+                }
+
+                else if (ChangeMp > 0)
+                {
+                    Mp += ChangeMp;
+                    if (Mp > MaxMp) Mp = MaxMp;
+                    Console.WriteLine($"{ChangeMp}만큼 MP를 회복했습니다! 현재 MP: {Mp}/{MaxMp}");
+                }
+                else { }
+               
             }
         }
+            
 
 
         enum CHAR_TYPE
@@ -152,11 +156,11 @@ namespace TeamTodayTextRPG
             ASSASSIN
         }
 
-        public static Random rng = new Random();
+        
 
-        public class Worrior : Character
+        public class Warrior : Character
         {
-            public  Worrior ()
+            public  Warrior ()
             {
                 init(DataManager.Instance.CharacterDB.List[(int)CHAR_TYPE.WARRIOR]);
             }
@@ -168,11 +172,13 @@ namespace TeamTodayTextRPG
             {
                 if (Mp >= 10)
                 {
-                    UsingMp(10);
+                    ManageMp(-10);
                     int SkillDamage = (TotalAtk * 3) - m.Def;
                     if (SkillDamage < 0)
                     { SkillDamage = 1; }
-                    m.TakeDamage(SkillDamage);
+
+                    m.ManageHp(-SkillDamage);
+
                     Console.WriteLine($"{ActskillName}을 사용하여 {m.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
                 }
                 else
@@ -222,11 +228,12 @@ namespace TeamTodayTextRPG
             {
                 if (Mp >= 10)
                 {
-                    UsingMp(10);
+                    ManageMp(-10);
                     int SkillDamage = (int)((TotalAtk * 10) - Math.Round(m.Def / 2.0)); //방어무시를 구현하기위해서 방어도를 반으로 나누고 반올림하였습니다.
                     if (SkillDamage < 0)
                     { SkillDamage = 1; }
-                    m.TakeDamage(SkillDamage);
+
+                    m.ManageHp(-SkillDamage);
                     Console.WriteLine($"{ActskillName}을 사용하여 {m.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
                 }
                 else 
@@ -275,12 +282,12 @@ namespace TeamTodayTextRPG
             {
                 if (Mp >= 10)
                 {
-                    UsingMp(10);
+                    ManageMp(-10);
                     int SkillDamage = (TotalAtk * 2) - m.Def;
                     if (SkillDamage < 0)
                     { SkillDamage = 1; }
 
-                    int criticalHit = Characterclass.rng.Next(0, 10); // 추후 게임매니저 공용 랜덤으로 전환
+                    int criticalHit = GameManager.Instance.rand.Next(0, 10); 
 
 
                     if (criticalHit <= 2) //크리티컬 확률 계산
@@ -292,7 +299,8 @@ namespace TeamTodayTextRPG
 
                     for (int i = 0; i < 2; i++) //2연격 구현
                     {
-                        m.TakeDamage(SkillDamage);
+
+                        m.ManageHp(-SkillDamage);
                         Console.WriteLine($"{ActskillName}을 사용하여 {m.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
                     }
                 }
@@ -335,6 +343,7 @@ namespace TeamTodayTextRPG
         }
 
 
+        //머지 테스트용 문구입니다
 
 
     }
