@@ -258,7 +258,7 @@ namespace TeamTodayTextRPG
 
         }
 
-        //인벤토리에 해당 아이템이 있으면
+        //해당 아이템을 장착중이면
         public bool CheckEquip(int equipItemNum)
         {
             ItemCode = equipItemNum - 1;
@@ -268,7 +268,7 @@ namespace TeamTodayTextRPG
         }
 
         //장비 착용
-        public void EquipItem()
+        public void EquipItem(Equip)
         {
             //임시로 선언&초기화
             int code = 0;
