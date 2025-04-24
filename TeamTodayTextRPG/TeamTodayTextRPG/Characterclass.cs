@@ -30,12 +30,7 @@ namespace TeamTodayTextRPG
             public int PlusDodge { get; set; } 
             public int TotalDodge { get { return Dodge + PlusDodge; } }
             // 직업간 차이를 두어 보고자 Dodge 스탯도 추가 해 봤습니다.
-            // 전투가 어떻게 이루어질지에 따라 추가해야 할 계산식이 달라질 것 같습니다.
-            // 예를 들면 
-            //int num = new Random().Next(0, 26); 또는 GameManager에 static Random하나 만들어두고 돌려쓰기
-            //if ((num += Charater.Dodge > 20)
-            //{공격을 무효화하기}
-            // 이런식으로 설계하면 어떨까 합니다.
+            
             public int gold { get; set; }
             public string[] Parameter { get; set; }
             
@@ -102,7 +97,7 @@ namespace TeamTodayTextRPG
             {
                 if (HpChange < 0)
                 {
-                    int DodgeHit = Characterclass.rng.Next(1, 76);// 피격 메서드에 회피를 구현 해봤습니다.
+                    int DodgeHit = GameManager.Instance.rand.Next(1, 76);// 피격 메서드에 회피를 구현 해봤습니다.
                     if (TotalDodge > DodgeHit)
                     {
                         Console.WriteLine("공격을 회피했습니다!");
@@ -164,7 +159,7 @@ namespace TeamTodayTextRPG
             ASSASSIN
         }
 
-        public static Random rng = new Random();
+        
 
         public class Worrior : Character
         {
@@ -292,7 +287,7 @@ namespace TeamTodayTextRPG
                     if (SkillDamage < 0)
                     { SkillDamage = 1; }
 
-                    int criticalHit = Characterclass.rng.Next(0, 10); // 추후 게임매니저 공용 랜덤으로 전환
+                    int criticalHit = GameManager.Instance.rand.Next(0, 10); 
 
 
                     if (criticalHit <= 2) //크리티컬 확률 계산
