@@ -10,6 +10,14 @@ using static TeamTodayTextRPG.Characterclass;
 
 namespace TeamTodayTextRPG
 {
+
+    enum CHAR_TYPE
+    {
+        WARRIOR,
+        MAGICIAN,
+        ASSASSIN
+    }
+
     internal class Characterclass
     {
         public abstract class Character
@@ -148,15 +156,7 @@ namespace TeamTodayTextRPG
         }
             
 
-
-        enum CHAR_TYPE
-        { 
-            WARRIOR,
-            MAGICIAN,
-            ASSASSIN
-        }
-
-        
+        public static Random rng = new Random();
 
         public class Warrior : Character
         {
