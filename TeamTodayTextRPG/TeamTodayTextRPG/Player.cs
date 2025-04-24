@@ -32,10 +32,8 @@ namespace TeamTodayTextRPG
             //이렇게 하면 될까요?
             Name = name;
 
-            //데이터매니저에서 직업별 스탯을 '파싱'해서 가져온다
-            //ㄴ 이제 데이터매니저에서 잘 되어있어서 이렇게 안해도 됨
-            string[][] settingCharacter = DataManager.CharacterDB.
-                        Parsing(DataManager.CharacterDB.Data);
+            //string[][] settingCharacter = DataManager.CharacterDB.
+            //Parsing(DataManager.CharacterDB.Data);
 
             //그러면 입력값 저장하는 변수도 끌어와야 함
             switch (classNum)
@@ -54,7 +52,6 @@ namespace TeamTodayTextRPG
                     break;
             }
 
-            //직업.Default가 Characterclass에서 스탯을 세팅하는 메서드
 //Characterclass의 CHAR_TYPE public 선언, '= 0' 부탁
             switch (CharacterCode)
             {
