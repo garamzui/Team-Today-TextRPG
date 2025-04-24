@@ -1,3 +1,5 @@
+namespace TeamTodayTextRPG
+{
 using System;
 using System.Numerics;
 using System.Threading;
