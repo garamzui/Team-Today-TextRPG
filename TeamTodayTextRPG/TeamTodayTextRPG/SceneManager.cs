@@ -214,5 +214,88 @@ namespace TeamTodayTextRPG
             return num;
         }
 
+
+        public void ShowName(string name)
+        {
+            Console.Write(name + "\t| ");
+        }
+        public void ShowAtk(int atk)
+        {
+            if (atk > 0) Console.Write("공격력 +" + atk + "\t| ");
+            else Console.Write("공격력 -" + atk + "\t| ");
+        }
+        public void ShowDef(int def)
+        {
+            if (def > 0) Console.Write("방어력 +" + def + "\t| ");
+            else Console.Write("방어력 -" + def + "\t| ");
+        }
+
+        public void ShowInventory(VIEW_TYPE view)
+        {
+            if (GameManager.Instance.Player.Bag != null)
+            {
+                int count = 0;
+                foreach (var item in GameManager.Instance.Player.Bag)
+                {
+                    if (view == VIEW_TYPE.EQUIP) Console.Write($"- {++count} ");
+                    else Console.Write("- ");
+
+                    if (gm.Player.CheckEquip(item))
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.Write("[E]");
+                        Console.ResetColor();
+                    }
+
+                    ShowName(DataManager.Instance.ItemDB.List[item].Name);
+                    if (DataManager.Instance.ItemDB.List[item].Atk != 0) ShowAtk(DataManager.Instance.ItemDB.List[item].Atk);
+                    if (DataManager.Instance.ItemDB.List[item].Def != 0) ShowDef(DataManager.Instance.ItemDB.List[item].Def);
+                    Console.WriteLine(DataManager.Instance.ItemDB.List[item].Text);
+                }
+
+            }
+        }
+
+        public void ShowShop(VIEW_TYPE view)
+        {
+            if (DataManager.Instance.ItemDB.List != null)
+            {
+                foreach (var item in DataManager.Instance.ItemDB.List)
+                {
+                    if (GameManager.Instance.Player.CheckBag(item.Code)) Console.ForegroundColor = ConsoleColor.DarkGray;
+
+                    if (view == VIEW_TYPE.PURCHASE) Console.Write("- " + (item.Code + 1) + " " + item.Name + "\t| ");
+                    else Console.Write("- " + item.Name + "\t| ");
+
+                    if (item.Atk != 0) ShowAtk(item.Atk);
+                    if (item.Def != 0) ShowDef(item.Def);
+                    Console.Write(item.Text + "\t| ");
+
+                    if (GameManager.Instance.Player.CheckBag(item.Code))
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("구매 완료");
+                        Console.ResetColor();
+                    }
+                    else Console.WriteLine(item.Value + " G");
+                }
+            }
+        }
+
+        public void ShowShopSale()
+        {
+            int count = 0;
+            if (GameManager.Instance.Player.Bag != null)
+            {
+                foreach (var item in GameManager.Instance.Player.Bag)
+                {
+                    Console.Write("- " + (++count) + " " + DataManager.Instance.ItemDB.List[item].Name + "\t| ");
+                    if (DataManager.Instance.ItemDB.List[item].Atk != 0) ShowAtk(DataManager.Instance.ItemDB.List[item].Atk);
+                    if (DataManager.Instance.ItemDB.List[item].Def != 0) ShowDef(DataManager.Instance.ItemDB.List[item].Def);
+                    Console.Write(DataManager.Instance.ItemDB.List[item].Text + "\t| ");
+                    Console.WriteLine((int)(DataManager.Instance.ItemDB.List[item].Value * 0.85) + " G");
+                }
+            }
+        }
     }
 }
