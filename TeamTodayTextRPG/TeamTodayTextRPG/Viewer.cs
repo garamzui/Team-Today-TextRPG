@@ -37,6 +37,12 @@ namespace TeamTodayTextRPG
 
     public class StatusViewer : Viewer
     {
+        public StatusViewer()
+        {
+            StartIndex = 1;
+            EndIndex = 1;
+        }
+        
         public override void ViewAction()
         {
             Console.Clear();
@@ -46,22 +52,20 @@ namespace TeamTodayTextRPG
  // Player 객체 가져오기
 
             // 플레이어의 상태를 출력
-            Console.WriteLine($"이름: {player.Name}");
+            Console.WriteLine($"이름: {GameManager.Instance.Player.Name}");
             Console.WriteLine($"체력: {GameManager.Instance.Player.Character.Hp}/{GameManager.Instance.Player.Character.MaxHp}");
             Console.WriteLine($"공격력: {GameManager.Instance.Player.Character.Attack}");
-            Console.WriteLine($"방어력: {GameManager.Instance.Player.Character.Def}");
-            Console.WriteLine($"금액: {GameManager.Instance.Player.Character.Gold}G");
+            Console.WriteLine($"방어력: {GameManager.Instance.Player.Character.Defence}");
+            Console.WriteLine($"금액: {GameManager.Instance.Player.Gold}G");
 
             Console.WriteLine("====================");
             Console.WriteLine("1. 메인으로 돌아가기");
 
-            int input = gameManager.InputAction(startIndex, endIndex);
-
-            VIEW_TYPE nextView = NextView(gameManager, input);
-            gameManager.SceneManager.SwitchScene(nextView);
+            VIEW_TYPE nextView = NextView(SceneManager.Instance.InputAction(StartIndex, EndIndex));
+            SceneManager.Instance.SwitchScene(nextView);
         }
 
-        public override VIEW_TYPE NextView(GameManager gameManager, int input)
+        public override VIEW_TYPE NextView(int input)
         {
             if (input == 1)
             {
@@ -78,7 +82,12 @@ namespace TeamTodayTextRPG
 
     public class MainViewer : Viewer
     {
-        public override void ViewAction(GameManager gameManager)
+        public MainViewer()
+        {
+            StartIndex = 1;
+            EndIndex = 7;
+        }
+        public override void ViewAction()
         {
             Console.Clear();
             Console.WriteLine("메인 화면");
@@ -91,10 +100,8 @@ namespace TeamTodayTextRPG
             Console.WriteLine("6. 휴식");
             Console.WriteLine("7. 게임 종료");
 
-            int input = gameManager.InputAction(startIndex, endIndex);
-
-            VIEW_TYPE nextView = NextView(gameManager, input);
-            gameManager.SceneManager.SwitchScene(nextView);
+            VIEW_TYPE nextView = NextView(SceneManager.Instance.InputAction(StartIndex, EndIndex));
+            SceneManager.Instance.SwitchScene(nextView);
         }
         // NextView 메서드 구현
         public override VIEW_TYPE NextView(int input)
@@ -130,32 +137,28 @@ namespace TeamTodayTextRPG
 
     public class InventoryViewer : Viewer
     {
-        public override void ViewAction(GameManager gameManager)
+        public override void ViewAction()
         {
             Console.Clear();
             Console.WriteLine("인벤토리");
             Console.WriteLine("====================");
 
-            var player = gameManager.Player;
-            var inventory = player.GetInventoryItems();
-
             // InventoryItems 목록이나 Item 클래스가 변경될 경우 수정 필요
-            for (int i = 0; i < inventory.Count; i++)
+            for (int i = 0; i < GameManager.Instance.Player.Bag.Count; i++)
             {
-                Console.WriteLine($"{i + 1}. {inventory[i].Name} - 공격력: {inventory[i].Atk} / 방어력: {inventory[i].Def}");
+                Console.WriteLine($"{i + 1}. {GameManager.Instance.Player.Bag[i].Name} - 공격력: {GameManager.Instance.Player.Bag[i].Atk} / 방어력: {GameManager.Instance.Player.Bag[i].Def}");
             }
 
             Console.WriteLine("====================");
             Console.WriteLine("1. 아이템 사용");
             Console.WriteLine("2. 메인으로 돌아가기");
 
-            int input = gameManager.InputAction(startIndex, endIndex);
-
-            VIEW_TYPE nextView = NextView(gameManager, input);
-            gameManager.SceneManager.SwitchScene(nextView);
+            VIEW_TYPE nextView = NextView(SceneManager.Instance.InputAction(StartIndex, EndIndex));
+            SceneManager.Instance.SwitchScene(nextView);
         }
         // NextView 메서드 구현
-        public override VIEW_TYPE NextView(GameManager gameManager, int input)
+        public override VIEW_TYPE NextView(
+            int input)
         {
             switch (input)
             {
@@ -175,7 +178,7 @@ namespace TeamTodayTextRPG
 
     public class EquipViewer : Viewer
     {
-        public override void ViewAction(GameManager gameManager)
+        public override void ViewAction()
         {
             Console.Clear();
             Console.WriteLine("장비");
