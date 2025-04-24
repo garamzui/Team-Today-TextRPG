@@ -13,6 +13,9 @@ namespace TeamTodayTextRPG
     //프로퍼티 관련 스크립트
     partial class Player
     {
+        //모호성 오류 뜨는게 Dungeon에서 class Player를 선언하셨더라고요
+        //그리고 아이템에서도 Name을 똑같이 선언해서 그렇습니다
+        //이름 조율 필요
         public Character Character { get; set; }
         public List<int> Bag { get; set; }
         public List<int> Equip { get; set; }
@@ -143,7 +146,7 @@ namespace TeamTodayTextRPG
             int prise = (int)DataManager.Instance.ItemDB.List[ItemCode][5];
 
             //상점에서 아이템 구매
-            if (currentViewer == VIEW_TYPE.SHOP)
+            if (type == VIEW_TYPE.PURCHASE)
             {
                 if (Gold >= prise)
                 {
@@ -152,24 +155,14 @@ namespace TeamTodayTextRPG
                     //해당 아이템의 코드를 bag에 저장
                     Bag.Add(ItemCode);
                 }
-
-                else
-                {
-                    //Console.WriteLine("소지금이 부족합니다!");
-                    //Viewer로
-                }
             }
-        }
 
-        //인벤토리에 아이템이 들어오는 경우 2 - 던전 클리어
-        public void DungeonToBag()
-        { 
+            //인벤토리에 아이템이 들어오는 경우 2 - 던전 클리어
             //던전 클리어 시 랜덤(20%) 확률로 아이템 드롭
-            if(currentViewer == VIEW_TYPE.DUNGEONCLEAR)
+            if(type == VIEW_TYPE.DUNGEONCLEAR)
             {
-
                 int ItemDrop = GameManager.Instance.rand.Next(0, 101);
-                //n% 확률로
+                //20% 확률로
                 if(ItemDrop >= 90 || ItemDrop <= 10)
                 {
                     //랜덤 아이템 드롭
@@ -177,77 +170,52 @@ namespace TeamTodayTextRPG
                     ItemCode = dropItemCode;
                     Bag.Add(ItemCode);
                 }
-                //근데 여기서 처리하는게 맞나?
             }
         }
 
         //인벤토리에 아이템이 나가는 경우 1 - 상점 판매
-        public void RemoveBag(int inputItemNum)
+        public void RemoveBag(int inputItemNum, VIEW_TYPE type)
         {
-            ItemCode = inputItemNum - 1;
+            ItemCode = inputItemNum;
             int prise = (int)(DataManager.Instance.ItemDB.List[ItemCode][5]);
 
-            //상점에서 아이템 판매
-            if (CheckBag(ItemCode) == true && currentViewer == VIEW_TYPE.SALE)
+            //상점에서 아이템 판매와 버리기
+            //Bag에 있고 장착중이 아니라면
+            if (CheckBag(ItemCode) == true && CheckEquip(ItemCode) == false)
             {
-                //장착중이 아니라면
-                if (CheckEquip(ItemCode) == false)
+                //판매하기 화면이라면
+                if (type == VIEW_TYPE.SALE)
                 {
                     Gold += (int)(prise * 0.85f);
-                    Bag.Remove(ItemCode);
                 }
-
-                //장착중이라면
-                else
-                {
-                    //Console.WriteLine("장착중인 아이템은 판매할 수 없습니다.");
-                    //Viewer로
-                }
+                Bag.Remove(ItemCode);
             }
-
-            //버리기
-            if(CheckBag(inputItemNum) == true && currentViewer == VIEW_TYPE.INVENTORY)
-            {
-                //장착중이 아니라면
-                if(CheckEquip(ItemCode) == false)
-                {
-                    Bag.Remove(ItemCode);
-                }
-
-                //장착중이라면
-                else
-                {
-                    //Console.WriteLine("장착중인 아이템은 버릴 수 없습니다.");
-                    //Viewer로
-                }
-            }
-
         }
 
         //해당 아이템을 장착중이면
         public bool CheckEquip(int equipItemNum)
         {
-            ItemCode = equipItemNum - 1;
+            ItemCode = equipItemNum;
             //해당 코드의 아이템을 장착하고 있는지
             bool equipItem = Equip.Contains(ItemCode);
             return equipItem;
         }
 
         //장비 착용
-        public void EquipItem(Equip)
+        public void EquipItem(int equipItemNum, ITEM_TYPE type)
         {
-            //임시로 선언&초기화
-            int code = 0;
+            ItemCode = equipItemNum;
             int equiped = 0;
 
             //아이템 소지 && 미장착
-            if(CheckBag(code) == true && CheckEquip(code) == false)
+            if(CheckBag(ItemCode) == true && CheckEquip(ItemCode) == false)
             {
                 //같은 타입 아이템 미장착
-//Item의 ITEM_TYPE public 선언 부탁
+                //이미 장착한 아이템의 타입 != 장착하려는 아이템의 타입
+                //equiped(장착한 아이템 타입 저장) !=
                 if()
                 {
-                    Equip.Add(code);
+                    Equip.Add(ItemCode);
                 }
 
                 //같은 타입 아이템 장착중
@@ -257,28 +225,22 @@ namespace TeamTodayTextRPG
                     Equip.Remove(equiped);
 
                     //장착하려는 아이템 착용
-                    Equip.Add(code);
+                    Equip.Add(ItemCode);
                 }
             }
         }
 
         //장비 해제
-        public void UnEquipItem()
+        public void UnEquipItem(int equipItemNum)
         {
             //임시로 선언&초기화
-            int code = 0;
+            ItemCode = equipItemNum;
 
             //장착중 이라면
-            if(CheckEquip(code) == true)
+            if(CheckEquip(ItemCode) == true)
             {
                 //Equip List에서 삭제
-                Equip.Remove(code);
-            }
-
-            else
-            {
-                //Console.WriteLine("장착중인 아이템이 아닙니다!");
-                //Viewer로
+                Equip.Remove(ItemCode);
             }
         }
     }
