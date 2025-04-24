@@ -16,6 +16,8 @@ namespace TeamTodayTextRPG
         //모호성 오류 뜨는게 Dungeon에서 class Player를 선언하셨더라고요
         //그리고 아이템에서도 Name을 똑같이 선언해서 그렇습니다
         //이름 조율 필요
+        //생각해보니 회의중에 바꿨던 내용을 메인에 안올려주셔서
+        //충돌이 있을지 모릅니다
         public Character Character { get; set; }
         public List<int> Bag { get; set; }
         public List<int> Equip { get; set; }
@@ -59,17 +61,10 @@ namespace TeamTodayTextRPG
                 Name = name;
             }
 
-
-        //초기 소지 장비를 bag과 Equip 리스트에 저장한다
-        //직업별 초기 장비가 다르다면 수정
-        //이것도 마찬가지로 쉽게 접근 가능
-        //접근 예시 DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.리릴리_라릴라][3]
-        //기존 코드
-        //Bag.Add(int.Parse((DataManager.ItemDB.Parsing(DataManager.ItemDB.Data)[0][0])));
-        //Bag.Add(int.Parse((DataManager.ItemDB.Parsing(DataManager.ItemDB.Data)[3][0])));
-
-        //새로 시도
-        //Bag.Add(DataManager.Instance.ItemDB.List[(int)])
+            //천 옷과 목검 Bag 리스트에 저장한다
+            //직업별 초기 장비가 다르다면 수정
+            Bag.Add(DataManager.Instance.ItemDB.List[0].Code);
+            Bag.Add(DataManager.Instance.ItemDB.List[4].Code);
 
             //초기 장비를 가지고 있되 장착은 되어있지 않은 상태로 시작해서
             //인벤토리를 처음 열면 장착&해제 튜토리얼 구현해 보는 것 괜찮을지도
@@ -92,22 +87,11 @@ namespace TeamTodayTextRPG
                 requiredExp += 25;
                 Character.Attack += 1;
                 Character.Defence += 2;
-
+                Character.PassiveSkill();
                 //스탯 증가량 화면에 표시
                 //Console.WriteLine("축하합니다! 레벨이 올랐습니다.");
                 //Console.WriteLine("공격력 +1, 방어력 +2");
                 //Viewer로
-            }
-        }
-
-        //특정 레벨에 스킬이 해금되는 구조
-        public void UnLockSkill()
-        {
-            //데이터베이스에는 이미 스킬을 가지고 있으니까
-            //스킬 정보를 확인할 수 있는 
-            if (Level == 5)
-            {
-
             }
         }
 
@@ -116,11 +100,6 @@ namespace TeamTodayTextRPG
         {
             Character.Hp += 50;
             Gold -= 500;
-
-            //Console.WriteLine("휴식을 취했다!");
-            //Console.WriteLine("체력 + 50");
-            //Console.WriteLine("골드 -500");
-            //Viewer로
         }
     }
 
@@ -141,9 +120,7 @@ namespace TeamTodayTextRPG
         public void InputBag(int inputItemNum, VIEW_TYPE type)
         {
             ItemCode = inputItemNum;
-
-            //아이템도 리스트로 변경된다면 이 조건식이 될 가능성이 높다는 거겠죠?
-            int prise = (int)DataManager.Instance.ItemDB.List[ItemCode][5];
+            int prise = DataManager.Instance.ItemDB.List[inputItemNum].Value;
 
             //상점에서 아이템 구매
             if (type == VIEW_TYPE.PURCHASE)
@@ -177,7 +154,7 @@ namespace TeamTodayTextRPG
         public void RemoveBag(int inputItemNum, VIEW_TYPE type)
         {
             ItemCode = inputItemNum;
-            int prise = (int)(DataManager.Instance.ItemDB.List[ItemCode][5]);
+            int prise = DataManager.Instance.ItemDB.List[inputItemNum].Value;
 
             //상점에서 아이템 판매와 버리기
             //Bag에 있고 장착중이 아니라면
@@ -205,17 +182,19 @@ namespace TeamTodayTextRPG
         public void EquipItem(int equipItemNum, ITEM_TYPE type)
         {
             ItemCode = equipItemNum;
-            int equiped = 0;
-
+            //private라 보호수준 오류
+            int equiped = -1;
+                
             //아이템 소지 && 미장착
-            if(CheckBag(ItemCode) == true && CheckEquip(ItemCode) == false)
+            if (CheckBag(ItemCode) == true && CheckEquip(ItemCode) == false)
             {
                 //같은 타입 아이템 미장착
                 //이미 장착한 아이템의 타입 != 장착하려는 아이템의 타입
                 //equiped(장착한 아이템 타입 저장) !=
-                if()
+                if(equiped != )
                 {
                     Equip.Add(ItemCode);
+                    equiped = DataManager.Instance.ItemDB.List[equipItemNum].Type;
                 }
 
                 //같은 타입 아이템 장착중
@@ -233,7 +212,6 @@ namespace TeamTodayTextRPG
         //장비 해제
         public void UnEquipItem(int equipItemNum)
         {
-            //임시로 선언&초기화
             ItemCode = equipItemNum;
 
             //장착중 이라면
