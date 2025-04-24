@@ -63,8 +63,8 @@ namespace TeamTodayTextRPG
 
             //천 옷과 목검 Bag 리스트에 저장한다
             //직업별 초기 장비가 다르다면 수정
-            Bag.Add(DataManager.Instance.ItemDB.List[0].Code);
-            Bag.Add(DataManager.Instance.ItemDB.List[4].Code);
+            Bag.Add(int.Parse(DataManager.Instance.ItemDB.List[0][0])); // 첫옷 기본제공
+            Bag.Add(int.Parse(DataManager.Instance.ItemDB.List[4][0])); // 목검 기본제공
 
             //초기 장비를 가지고 있되 장착은 되어있지 않은 상태로 시작해서
             //인벤토리를 처음 열면 장착&해제 튜토리얼 구현해 보는 것 괜찮을지도
@@ -110,9 +110,7 @@ namespace TeamTodayTextRPG
         public bool CheckBag(int inputItemNum)
         {
             //해당 코드의 아이템이 bag에 있는지
-            ItemCode = inputItemNum - 1;
-            bool hasItem = Bag.Contains(ItemCode);
-            return hasItem;
+            return Bag.Contains(inputItemNum);
         }
 
         //인벤토리에 아이템이 들어오는 경우 1 - 상점 구매
@@ -120,7 +118,8 @@ namespace TeamTodayTextRPG
         public void InputBag(int inputItemNum, VIEW_TYPE type)
         {
             ItemCode = inputItemNum;
-            int prise = DataManager.Instance.ItemDB.List[inputItemNum].Value;
+            // 7번은 가격!
+            int prise = int.Parse(DataManager.Instance.ItemDB.List[inputItemNum][7]);
 
             //상점에서 아이템 구매
             if (type == VIEW_TYPE.PURCHASE)
@@ -143,7 +142,7 @@ namespace TeamTodayTextRPG
                 if(ItemDrop >= 90 || ItemDrop <= 10)
                 {
                     //랜덤 아이템 드롭
-                    int dropItemCode = GameManager.Instance.rand.Next(0, 아이템리스트.Length);
+                    int dropItemCode = GameManager.Instance.rand.Next(0, DataManager.Instance.ItemDB.List.Count);
                     ItemCode = dropItemCode;
                     Bag.Add(ItemCode);
                 }
@@ -154,7 +153,7 @@ namespace TeamTodayTextRPG
         public void RemoveBag(int inputItemNum, VIEW_TYPE type)
         {
             ItemCode = inputItemNum;
-            int prise = DataManager.Instance.ItemDB.List[inputItemNum].Value;
+            int prise = int.Parse(DataManager.Instance.ItemDB.List[inputItemNum][7]);
 
             //상점에서 아이템 판매와 버리기
             //Bag에 있고 장착중이 아니라면
@@ -172,40 +171,43 @@ namespace TeamTodayTextRPG
         //해당 아이템을 장착중이면
         public bool CheckEquip(int equipItemNum)
         {
-            ItemCode = equipItemNum;
             //해당 코드의 아이템을 장착하고 있는지
-            bool equipItem = Equip.Contains(ItemCode);
-            return equipItem;
+            return Equip.Contains(equipItemNum);
         }
 
         //장비 착용
-        public void EquipItem(int equipItemNum, ITEM_TYPE type)
+        public void EquipItem(int equipItemCode)
         {
-            ItemCode = equipItemNum;
-            //private라 보호수준 오류
-            int equiped = -1;
-                
-            //아이템 소지 && 미장착
-            if (CheckBag(ItemCode) == true && CheckEquip(ItemCode) == false)
+            ItemCode = equipItemCode;
+
+            // 가방에 아이템이 있고 && 장착중이 아니면
+            if (CheckBag(ItemCode))
             {
-                //같은 타입 아이템 미장착
-                //이미 장착한 아이템의 타입 != 장착하려는 아이템의 타입
-                //equiped(장착한 아이템 타입 저장) !=
-                if(equiped != )
+                // 동일 타입 장비일 경우 해체
+                foreach (var code in GameManager.Instance.Player.Equip)
                 {
+                    // 기존조건 :
+                    if ( DataManager.Instance.ItemDB.List[code][8] == DataManager.Instance.ItemDB.List[GameManager.Instance.Player.Bag[equipItemCode - 1]][8])
+                    {
+                        UnEquipItem(code);
+                        break;
+                    }
                     Equip.Add(ItemCode);
-                    equiped = DataManager.Instance.ItemDB.List[equipItemNum].Type;
-                }
 
-                //같은 타입 아이템 장착중
-                else
-                {
-                    //장착중이던 아이템 해제
-                    Equip.Remove(equiped);
-
-                    //장착하려는 아이템 착용
-                    Equip.Add(ItemCode);
+                    Console.Write($">> {DataManager.Instance.ItemDB.List[Bag[equipItemCode - 1]][1]}");
+                    Console.ForegroundColor = ConsoleColor.DarkCyan;
+                    Console.WriteLine("을(를) 장착 하였습니다.\n");
+                    Console.ResetColor();
                 }
+            }
+            // 장착중
+            else
+            {
+                UnEquipItem(equipItemCode - 1);
+                Console.Write($">> {DataManager.Instance.ItemDB.List[Bag[equipItemCode - 1]][1]}");
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
+                Console.WriteLine("을(를) 장착 해제하였습니다.\n");
+                Console.ResetColor();
             }
         }
 

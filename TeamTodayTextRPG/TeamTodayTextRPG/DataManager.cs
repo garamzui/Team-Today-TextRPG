@@ -138,8 +138,7 @@
         }
     }
 
-
-    class ItemDatabase : Database<Item>
+    class ItemDatabase : Database<string[]>
     {
         //0.코드 /1.이름 /2. ATK /3.DEF /4.HP /5.MP /6.설명 /7.가격 /8.타입
         public string Data { get; private set; } =
@@ -160,14 +159,16 @@
         }
         protected override void SetData(string[] parameter)
         {
-            List.Add(new Item(parameter));
+            List.Add(parameter);
         }
-
-        public ITEM_TYPE GetTypetoCode(int code) { return List[code].Type; }
+        /*
+        public ITEM_TYPE GetTypetoCode(int code) {
+                //return List[code][8]; 
+        }*/
     }
 
 
-    class DungeonDatabase : Database<Dungeon>
+    class DungeonDatabase : Database<string[]>
     {
         // 0.코드 / 1.던전 이름 / 2.골드 보상 / 3.경험치 보상 / 4.몬스터 하한 레벨 / 5.몬스터 상한 레벨 / 6.난이도
         public string Data { get; private set; } =
@@ -182,7 +183,7 @@
         }
         protected override void SetData(string[] parameter)
         {
-            List.Add(new Dungeon(parameter));
+            List.Add(parameter);
         }
     }
 }

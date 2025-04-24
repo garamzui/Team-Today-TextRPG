@@ -44,6 +44,7 @@ namespace TeamTodayTextRPG
 
         public void Enter(Player player, Monster monster)
         {
+            /*
             Console.WriteLine($"\n[{Name}] 던전에 입장했습니다!");
             BattleLog log = new BattleLog();
 
@@ -118,11 +119,11 @@ namespace TeamTodayTextRPG
             if (player.Hp > 0 && !fled && monster.Hp <= 0)
             {
                 Console.WriteLine("\n 던전을 클리어했습니다!");
-            }
+            }*/
         }
     }
 
-
+    /*
     class Program
     {
         static void Main()
@@ -151,5 +152,5 @@ namespace TeamTodayTextRPG
             Dungeon dungeon = new Dungeon(1, "불의 신전", 1000, 500, 3, DUNGEON_DIFF.Hard);
             dungeon.Enter(player, boss);
         }
-    }
+    }*/
 }

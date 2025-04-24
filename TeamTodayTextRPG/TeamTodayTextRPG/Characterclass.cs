@@ -46,7 +46,9 @@ namespace TeamTodayTextRPG
             public string PasskillName { get; set; }
 
             public int PassiveSkillLevel = 0;
-            protected const int MaxPassiveSkillLevel = 5;
+            public int MaxPassiveSkillLevel { get; set; } = 5;  // <= 수정 생각해보기 위치...static
+
+
             public void Init(string[] data) //우선은 임의로 매서드로 초기화할 필드를 변경해 놓았습니다.
             {
                 //직업이름,공격력,방어력,체력,마력,회피,액티브스킬이름,패시브스킬이름
@@ -69,7 +71,7 @@ namespace TeamTodayTextRPG
             }
             public void ViewStatus()
             {
-                Console.WriteLine($"{Jobname} {JobDescription()}\n- 공격력 {Attack} (+{PlusAtk}), 방어력 {Defence} (+{PlusDef}), HP {Hp}/{MaxHp}, Gold {Gold}");
+                Console.WriteLine($"{Jobname} {JobDescription()}\n- 공격력 {Attack} (+{PlusAtk}), 방어력 {Defence} (+{PlusDef}), HP {Hp}/{MaxHp}");
             }
 
 
@@ -87,14 +89,14 @@ namespace TeamTodayTextRPG
             //active 스킬은 몬스터 체력을 -= 하는 방식으로 
             //passive 스킬은 각각 직업 특성에 맞는 스탯값을 += 하는 방식으로 만들어 보려 합니다.
             public virtual void ActiveSkill(Monster m)
-
             {
                 Console.WriteLine($"{Jobname}의 기술 {ActskillName}");
             }
 
-            public virtual void PassiveSkill(Player p)
+            public virtual void PassiveSkill()
             {
-                 Console.WriteLine($"{Jobname}의 기술 {PasskillName}");
+                //int exp = GameManager.Instance.Player.Exp;
+                Console.WriteLine($"{Jobname}의 기술 {PasskillName}");
             }
 
             public void ManageHp(int HpChange)//Hp관리용 매서드 입니다. 공격 연출시 최종 계산 자료를 음수로 입력하여야합니다
@@ -188,9 +190,9 @@ namespace TeamTodayTextRPG
                 }
             }
 
-            public override void PassiveSkill(Player p)
+            public override void PassiveSkill()
             {
-                if (p.Level >= 3 && PassiveSkillLevel < MaxPassiveSkillLevel)
+                if (GameManager.Instance.Player.Level >= 3 && PassiveSkillLevel < MaxPassiveSkillLevel)
                 {
                    PassiveSkillLevel += 1;
 
@@ -242,9 +244,9 @@ namespace TeamTodayTextRPG
 
                 }
             }
-            public override void PassiveSkill(Player p)
+            public override void PassiveSkill()
             {
-                if (p.Level >= 3 && PassiveSkillLevel < MaxPassiveSkillLevel)
+                if (GameManager.Instance.Player.Level >= 3 && PassiveSkillLevel < MaxPassiveSkillLevel)
                 {
                     PassiveSkillLevel += 1;
 
@@ -314,9 +316,9 @@ namespace TeamTodayTextRPG
 
 
             }
-            public override void PassiveSkill(Player p) //추후에 Player의 Level UP 메서드에서 호출 해주어야 함
+            public override void PassiveSkill() //추후에 Player의 Level UP 메서드에서 호출 해주어야 함
             {
-                if (p.Level >= 3 && PassiveSkillLevel < MaxPassiveSkillLevel)
+                if (GameManager.Instance.Player.Level >= 3 && PassiveSkillLevel < MaxPassiveSkillLevel)
                 {
                     PassiveSkillLevel += 1;
 

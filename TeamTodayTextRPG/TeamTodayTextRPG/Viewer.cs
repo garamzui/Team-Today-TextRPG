@@ -39,56 +39,14 @@ namespace TeamTodayTextRPG
         // 입력에 따라 다음 화면을 반환하는 추상 메서드
         public abstract VIEW_TYPE NextView(int choiceNum);
     }
-
-    public class StatusViewer : Viewer
-    {
-        public override void ViewAction()
-        {
-            Console.Clear();
-            Console.WriteLine("플레이어 상태 보기");
-            Console.WriteLine("====================");
-
-            //var player = GameManager.Instance.Player;
-            //var character = player.Character;
-
-            // 플레이어의 상태를 출력
-            Console.WriteLine($"직업: {Character.Jobname}");
-            Console.WriteLine($"체력: {Character.Hp}/{Character.MaxHp}");
-            Console.WriteLine($"마나: {Character.Mp}/{Character.MaxMp}");
-            Console.WriteLine($"공격력: {Character.Attack} (+{Character.PlusAtk}) = {Character.TotalAtk}");
-            Console.WriteLine($"방어력: {Character.Defence} (+{Character.PlusDef}) = {Character.TotalDef}");
-            Console.WriteLine($"회피율: {Character.Dodge} (+{Character.PlusDodge}) = {Character.TotalDodge}");
-            Console.WriteLine($"소지금: {Player.Gold}G");
-            Console.WriteLine($"액티브 스킬: {Character.ActskillName}");
-            Console.WriteLine($"패시브 스킬: {Character.PasskillName} (레벨 {Character.PassiveSkillLevel}/{MaxPassiveSkillLevel})");
-
-            Console.WriteLine("====================");
-            Console.WriteLine("1. 메인으로 돌아가기");
-
-            int input = GameManager.Instance.InputAction(StartIndex, EndIndex);
-
-            VIEW_TYPE nextView = NextView(input);
-            GameManager.Instance.SceneManager.SwitchScene(nextView);
-        }
-
-        public override VIEW_TYPE NextView(int input)
-        {
-            if (input == 1)
-            {
-                // 메인 화면으로 돌아가기
-                return VIEW_TYPE.MAIN;
-            }
-            else
-            {
-                // 잘못된 입력 처리
-                return VIEW_TYPE.STATUS; // 기본적으로 현재 상태 화면 유지
-            }
-        }
-    }
-
     public class MainViewer : Viewer
     {
-        public override void ViewAction(GameManager gameManager)
+        public MainViewer()
+        {
+            StartIndex = 1;
+            EndIndex = 7;
+        }
+        public override void ViewAction()
         {
             Console.Clear();
             Console.WriteLine("메인 화면");
@@ -101,10 +59,7 @@ namespace TeamTodayTextRPG
             Console.WriteLine("6. 휴식");
             Console.WriteLine("7. 게임 종료");
 
-            int input = gameManager.InputAction(startIndex, endIndex);
-
-            VIEW_TYPE nextView = NextView(gameManager, input);
-            gameManager.SceneManager.SwitchScene(nextView);
+            SceneManager.Instance.InputAction(StartIndex, EndIndex);
         }
         // NextView 메서드 구현
         public override VIEW_TYPE NextView(int input)
@@ -138,34 +93,88 @@ namespace TeamTodayTextRPG
         }
     }
 
+
+    public class StatusViewer : Viewer
+    {
+        public StatusViewer()
+        {
+            StartIndex = 1;
+            EndIndex = 1;
+        }
+        public override void ViewAction()
+        {
+            Console.Clear();
+            Console.WriteLine("플레이어 상태 보기");
+            Console.WriteLine("====================");
+
+            //var player = GameManager.Instance.Player;
+            //var character = player.Character;
+
+            // 플레이어의 상태를 출력
+            Console.WriteLine($"직업: {Character.Jobname}");
+            Console.WriteLine($"체력: {Character.Hp}/{Character.MaxHp}");
+            Console.WriteLine($"마나: {Character.Mp}/{Character.MaxMp}");
+            Console.WriteLine($"공격력: {Character.Attack} (+{Character.PlusAtk}) = {Character.TotalAtk}");
+            Console.WriteLine($"방어력: {Character.Defence} (+{Character.PlusDef}) = {Character.TotalDef}");
+            Console.WriteLine($"회피율: {Character.Dodge} (+{Character.PlusDodge}) = {Character.TotalDodge}");
+            Console.WriteLine($"소지금: {Player.Gold}G");
+            Console.WriteLine($"액티브 스킬: {Character.ActskillName}");
+            Console.WriteLine($"패시브 스킬: {Character.PasskillName} (레벨 {Character.PassiveSkillLevel}/{Character.MaxPassiveSkillLevel})");
+
+            Console.WriteLine("====================");
+            Console.WriteLine("1. 메인으로 돌아가기");
+
+            VIEW_TYPE nextView = NextView(SceneManager.Instance.InputAction(StartIndex, EndIndex));
+            SceneManager.Instance.SwitchScene(nextView);
+        }
+
+        public override VIEW_TYPE NextView(int input)
+        {
+            if (input == 1)
+            {
+                // 메인 화면으로 돌아가기
+                return VIEW_TYPE.MAIN;
+            }
+            else
+            {
+                // 잘못된 입력 처리
+                return VIEW_TYPE.STATUS; // 기본적으로 현재 상태 화면 유지
+            }
+        }
+    }
+
+
     public class InventoryViewer : Viewer
     {
-        public override void ViewAction(GameManager gameManager)
+        public InventoryViewer()
+        {
+            StartIndex = 1;
+            EndIndex = 2;
+        }
+        public override void ViewAction()
         {
             Console.Clear();
             Console.WriteLine("인벤토리");
             Console.WriteLine("====================");
 
-            var player = gameManager.Player;
-            var inventory = player.GetInventoryItems();
+            var player = GameManager.Instance.Player;
 
             // InventoryItems 목록이나 Item 클래스가 변경될 경우 수정 필요
-            for (int i = 0; i < inventory.Count; i++)
+            for (int i = 0; i < GameManager.Instance.Player.Bag.Count; i++)
             {
-                Console.WriteLine($"{i + 1}. {inventory[i].Name} - 공격력: {inventory[i].Atk} / 방어력: {inventory[i].Def}");
+               
+                Console.WriteLine($"{i + 1}. {DataManager.Instance.ItemDB.List[GameManager.Instance.Player.Bag[i]][1]} - 공격력: {DataManager.Instance.ItemDB.List[GameManager.Instance.Player.Bag[i]][2]} / 방어력: {DataManager.Instance.ItemDB.List[GameManager.Instance.Player.Bag[i]][3]}");
             }
 
             Console.WriteLine("====================");
             Console.WriteLine("1. 아이템 사용");
             Console.WriteLine("2. 메인으로 돌아가기");
 
-            int input = gameManager.InputAction(startIndex, endIndex);
-
-            VIEW_TYPE nextView = NextView(gameManager, input);
-            gameManager.SceneManager.SwitchScene(nextView);
+            VIEW_TYPE nextView = NextView(SceneManager.Instance.InputAction(StartIndex, EndIndex));
+            SceneManager.Instance.SwitchScene(nextView);
         }
         // NextView 메서드 구현
-        public override VIEW_TYPE NextView(GameManager gameManager, int input)
+        public override VIEW_TYPE NextView(int input)
         {
             switch (input)
             {
@@ -183,8 +192,14 @@ namespace TeamTodayTextRPG
         }
     }
 
+
     public class EquipViewer : Viewer
     {
+        public EquipViewer()
+        {
+            StartIndex = 0;
+            EndIndex = 0;
+        }
         public override void ViewAction()
         {
             Console.Clear();
@@ -200,52 +215,61 @@ namespace TeamTodayTextRPG
             Console.WriteLine($"총 회피율: {character.TotalDodge} (기본: {character.Dodge} + 추가: {character.PlusDodge})");
 
             Console.WriteLine("====================");
-            Console.WriteLine("1. 장비 변경");
-            Console.WriteLine("2. 메인으로 돌아가기");
+            for (int i = 0; i < GameManager.Instance.Player.Bag.Count; i++)
+            {
 
-            int input = GameManager.Instance.InputAction(StartIndex, EndIndex);
+                Console.WriteLine($"{i + 1}. {DataManager.Instance.ItemDB.List[GameManager.Instance.Player.Bag[i]][1]} - 공격력: {DataManager.Instance.ItemDB.List[GameManager.Instance.Player.Bag[i]][2]} / 방어력: {DataManager.Instance.ItemDB.List[GameManager.Instance.Player.Bag[i]][3]}");
+            }
+            Console.WriteLine("====================");
+            Console.WriteLine("1~n. 장비 변경");
+            Console.WriteLine("0. 메인으로 돌아가기");
 
-            VIEW_TYPE nextView = NextView(input);
-            GameManager.Instance.SceneManager.SwitchScene(nextView);
+
+            VIEW_TYPE nextView = NextView(SceneManager.Instance.InputAction(StartIndex, EndIndex));
+            SceneManager.Instance.SwitchScene(nextView);
         }
 
         public override VIEW_TYPE NextView(int input)
         {
-            switch (input)
+            if (input == 0) { return VIEW_TYPE.INVENTORY; }
+            else if (input > 0 && input <= GameManager.Instance.Player.Bag.Count)
             {
-                case 1:
-                    // 장비 변경 화면으로 이동
-                    return VIEW_TYPE.EQUIP;  // 장비 변경 화면
-                case 2:
-                    // 메인 화면으로 돌아가기
-                    return VIEW_TYPE.MAIN;  // 메인 화면으로 전환
-                default:
-                    // 잘못된 입력 처리
-                    Console.WriteLine("잘못된 입력입니다.");
-                    return VIEW_TYPE.EQUIP;  // 잘못된 입력 시 장비 화면을 다시 표시
+                GameManager.Instance.Player.EquipItem(input);
+                return VIEW_TYPE.EQUIP;
+            }
+            else
+            {
+                // 잘못된 입력 처리
+                Console.WriteLine("잘못된 입력입니다.");
+                return VIEW_TYPE.EQUIP;  // 잘못된 입력 시 장비 화면을 다시 표시
             }
         }
     }
 
     public class ShopViewer : Viewer
     {
-        public override void ViewAction(GameManager gameManager)
+        public ShopViewer()
+        {
+            StartIndex = 1;
+            EndIndex = 3;
+        }
+        public override void ViewAction()
         {
             Console.Clear();
             Console.WriteLine("상점");
             Console.WriteLine("====================");
 
-            var player = gameManager.Player;
-            var shopItems = gameManager.ShopItems;
+            //var player = gameManager.Player;
+            //var shopItems = gameManager.ShopItems;
 
             // ShopItems나 아이템 구매/판매 로직이 변경되면 이 부분 수정 필요
-            Console.WriteLine($"플레이어 금액: {player.Gold}G");
+            Console.WriteLine($"플레이어 금액: {GameManager.Instance.Player.Gold}G");
 
             Console.WriteLine("상점에서 판매하는 아이템:");
-            for (int i = 0; i < shopItems.Count; i++)
+            for (int i = 0; i < DataManager.Instance.ItemDB.List.Count; i++)
             {
-                var item = shopItems[i];
-                Console.WriteLine($"{i + 1}. {item.Name} - {item.Price}G");
+                var item = DataManager.Instance.ItemDB.List[i];
+                Console.WriteLine($"{i + 1}. {item[1]} - {item[7]}G");
             }
 
             Console.WriteLine("====================");
@@ -253,13 +277,11 @@ namespace TeamTodayTextRPG
             Console.WriteLine("2. 아이템 판매");
             Console.WriteLine("3. 메인으로 돌아가기");
 
-            int input = gameManager.InputAction(startIndex, endIndex);
-
-            VIEW_TYPE nextView = NextView(gameManager, input);
-            gameManager.SceneManager.SwitchScene(nextView);
+            VIEW_TYPE nextView = NextView(SceneManager.Instance.InputAction(StartIndex, EndIndex));
+            SceneManager.Instance.SwitchScene(nextView);
         }
         // NextView 메서드 구현
-        public override VIEW_TYPE NextView(GameManager gameManager, int input)
+        public override VIEW_TYPE NextView(int input)
         {
             switch (input)
             {
@@ -282,48 +304,54 @@ namespace TeamTodayTextRPG
 
     public class PurchaseViewer : Viewer
     {
-        public override void ViewAction(GameManager gameManager)
+        public PurchaseViewer()
+        {
+            StartIndex = 0;
+            EndIndex = 0;
+        }
+        public override void ViewAction()
         {
             Console.Clear();
             Console.WriteLine("아이템 구매");
             Console.WriteLine("====================");
 
-            var player = gameManager.Player;
-            var shopItems = gameManager.ShopItems;  // 상점 아이템 목록
+            var player = GameManager.Instance.Player;
+            //var shopItems = gameManager.ShopItems;  // 상점 아이템 목록
 
             Console.WriteLine($"플레이어 금액: {player.Gold}G");
 
             // 상점에서 판매하는 아이템 출력
             Console.WriteLine("구매할 아이템을 선택하세요:");
-            for (int i = 0; i < shopItems.Count; i++)
+            for (int i = 0; i < DataManager.Instance.ItemDB.List.Count; i++)
             {
-                var item = shopItems[i];
-                Console.WriteLine($"{i + 1}. {item.Name} - {item.Price}G");
+                var item = DataManager.Instance.ItemDB.List[i];
+                Console.WriteLine($"{i + 1}. {item[1]} - {item[7]}G");
             }
 
             Console.WriteLine("0. 돌아가기");
-            Console.WriteLine("9. 판매 화면으로");
+            //Console.WriteLine("9. 판매 화면으로");
 
-            int input = gameManager.InputAction(startIndex, endIndex);
+            int input = SceneManager.Instance.InputAction(StartIndex, EndIndex);
 
             if (input == 0)
             {
-                NextView(gameManager, input);
+                NextView(input);
             }
+            /*
             else if (input == 9)
             {
                 // 판매 화면으로 이동
-                gameManager.SceneManager.SwitchScene(VIEW_TYPE.SALE);
-            }
-            else if (input > 0 && input <= shopItems.Count)
+                SceneManager.Instance.SwitchScene(VIEW_TYPE.SALE);
+            }*/
+            else if (input > 0 && input <= DataManager.Instance.ItemDB.List.Count)
             {
                 // 아이템 구매 처리
-                var item = shopItems[input - 1];
-                if (player.Gold >= item.Price)
+                var item = DataManager.Instance.ItemDB.List[input - 1];
+                if (player.Gold >= int.Parse(item[7]))
                 {
-                    player.Gold -= item.Price;
-                    player.AddItem(item);
-                    Console.WriteLine($"{item.Name} 아이템을 구매했습니다.");
+                    player.Gold -= int.Parse(item[7]);
+                    player.InputBag(int.Parse(item[0]),VIEW_TYPE.PURCHASE);
+                    Console.WriteLine($"{item[1]} 아이템을 구매했습니다.");
                 }
                 else
                 {
@@ -335,19 +363,20 @@ namespace TeamTodayTextRPG
                 Console.WriteLine("잘못된 입력입니다.");
             }
 
-            gameManager.SceneManager.SwitchScene(VIEW_TYPE.SHOP);
+            SceneManager.Instance.SwitchScene(VIEW_TYPE.SHOP);
         }
         // NextView 메서드 구현
-        public override VIEW_TYPE NextView(GameManager gameManager, int input)
+        public override VIEW_TYPE NextView(int input)
         {
             switch (input)
             {
                 case 0:
                     // 돌아가기: SHOP 화면으로 돌아갑니다.
                     return VIEW_TYPE.SHOP;
+                    /*
                 case 9:
                     // 판매 화면으로 이동
-                    return VIEW_TYPE.SALE;
+                    return VIEW_TYPE.SALE;*/
                 default:
                     // 잘못된 입력: 다시 구매 화면으로 돌아갑니다.
                     return VIEW_TYPE.PURCHASE;
@@ -358,86 +387,76 @@ namespace TeamTodayTextRPG
 
     public class SaleViewer : Viewer
     {
-        public override void ViewAction(GameManager gameManager)
+        public void SaleViewr()
+        {
+            StartIndex = 0;
+            EndIndex = 0;
+        }
+        public override void ViewAction()
         {
             Console.Clear();
             Console.WriteLine("아이템 판매");
             Console.WriteLine("====================");
 
-            var player = gameManager.Player;
-            var playerItems = player.GetInventoryItems();  // 플레이어 인벤토리에서 아이템 목록 가져오기
+            var player = GameManager.Instance.Player;
+            //var playerItems = player.GetInventoryItems();  // 플레이어 인벤토리에서 아이템 목록 가져오기
 
             Console.WriteLine("판매할 아이템을 선택하세요:");
-            for (int i = 0; i < playerItems.Count; i++)
+            for (int i = 0; i < GameManager.Instance.Player.Bag.Count; i++)
             {
-                var item = playerItems[i];
-                Console.WriteLine($"{i + 1}. {item.Name} - {item.Price}G");
+                var item = GameManager.Instance.Player.Bag[i];
+                Console.WriteLine($"{i + 1}. {DataManager.Instance.ItemDB.List[item][1]} - {DataManager.Instance.ItemDB.List[item][7]}G");
             }
 
             Console.WriteLine("0. 돌아가기");
-            Console.WriteLine("9. 구매 화면으로");
+            //Console.WriteLine("9. 구매 화면으로");
 
-            int input = gameManager.InputAction(startIndex, endIndex);
+            int input = SceneManager.Instance.InputAction(StartIndex, EndIndex);
 
             if (input == 0)
             {
-                NextView(gameManager, input);
+                NextView(input);
             }
+            /*
             else if (input == 9)
             {
                 // 구매 화면으로 이동
-                gameManager.SceneManager.SwitchScene(VIEW_TYPE.PURCHASE);
-            }
-            else if (input > 0 && input <= playerItems.Count)
+                SceneManager.Instance.SwitchScene(VIEW_TYPE.PURCHASE);
+            }*/
+            else if (input > 0 && input <= GameManager.Instance.Player.Bag.Count)
             {
                 // 아이템 판매 처리
-                var item = playerItems[input - 1];
-                player.Gold += item.Price;
-                player.RemoveItem(item);
-                Console.WriteLine($"{item.Name} 아이템을 판매했습니다.");
+                var item = GameManager.Instance.Player.Bag[input - 1];
+                player.Gold += int.Parse(DataManager.Instance.ItemDB.List[item][7]);  // 85%로 가격 처리할것 매매가
+                player.RemoveBag(item, VIEW_TYPE.SALE);
+                Console.WriteLine($"{DataManager.Instance.ItemDB.List[item][1]} 아이템을 판매했습니다.");
             }
             else
             {
                 Console.WriteLine("잘못된 입력입니다.");
             }
 
-            gameManager.SceneManager.SwitchScene(VIEW_TYPE.SHOP);
+            SceneManager.Instance.SwitchScene(VIEW_TYPE.SHOP);
         }
         // NextView 메서드 구현
-        public override VIEW_TYPE NextView(GameManager gameManager, int input)
+        public override VIEW_TYPE NextView(int input)
         {
             switch (input)
             {
                 case 0:
                     // 돌아가기: 상점 화면으로 이동
                     return VIEW_TYPE.SHOP;
+                    /*
                 case 9:
                     // 구매 화면으로 이동
-                    return VIEW_TYPE.PURCHASE;
+                    return VIEW_TYPE.PURCHASE;*/
                 default:
-                    var player = gameManager.Player;
-                    var playerItems = player.GetInventoryItems();
-
-                    if (input > 0 && input <= playerItems.Count)
-                    {
-                        // 아이템 판매 처리
-                        var item = playerItems[input - 1];
-                        player.Gold += item.Price;
-                        player.RemoveItem(item);
-                        Console.WriteLine($"{item.Name} 아이템을 판매했습니다.");
-                    }
-                    else
-                    {
-                        Console.WriteLine("잘못된 입력입니다.");
-                    }
-
-                    // 판매 후에는 다시 상점 화면으로 이동
                     return VIEW_TYPE.SHOP;
             }
         }
     }
 
-
+    /*
     public class DungeonViewer : Viewer
     {
         protected Dungeon dungeon; // Dungeon 클래스의 인스턴스를 받을 변수
@@ -553,11 +572,16 @@ namespace TeamTodayTextRPG
                     return VIEW_TYPE.DUNGEONCLEAR;
             }
         }
-    }
+    }*/
 
 
     public class RestViewer : Viewer
     {
+        public RestViewer()
+        {
+            StartIndex = 1;
+            EndIndex = 2;
+        }
         public override void ViewAction()
         {
             Console.Clear();
@@ -571,10 +595,8 @@ namespace TeamTodayTextRPG
             Console.WriteLine("1. 휴식");
             Console.WriteLine("2. 메인으로 돌아가기");
 
-            int input = GameManager.Instance.InputAction(StartIndex, EndIndex);
-
-            VIEW_TYPE nextView = NextView(input);
-            GameManager.Instance.SceneManager.SwitchScene(nextView);
+            VIEW_TYPE nextView = NextView(SceneManager.Instance.InputAction(StartIndex, EndIndex));
+            SceneManager.Instance.SwitchScene(nextView);
         }
 
         public override VIEW_TYPE NextView(int input)
@@ -595,7 +617,7 @@ namespace TeamTodayTextRPG
         }
     }
 
-
+    /*
     public class BattleViewer : Viewer
     {
         public override void ViewAction()
@@ -632,8 +654,8 @@ namespace TeamTodayTextRPG
                     return VIEW_TYPE.BATTLE;
             }
         }
-    }
-
+    }*/
+    /*
     public class MonsterViewer : Viewer
     {
         protected Monster currentMonster;
@@ -693,4 +715,5 @@ namespace TeamTodayTextRPG
             }
         }
     }
+    */
 }

@@ -23,6 +23,7 @@ namespace TeamTodayTextRPG
         {
             Player = new Player();
             rand = new Random();
+            
         }
 
 

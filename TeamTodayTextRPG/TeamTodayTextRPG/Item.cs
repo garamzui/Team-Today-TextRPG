@@ -9,7 +9,6 @@ using System.Security.Cryptography.X509Certificates;
 using System.Numerics;
 using System.Diagnostics;
 
-
 namespace TeamTodayTextRPG
 {
     enum ITEM_TYPE
@@ -18,8 +17,6 @@ namespace TeamTodayTextRPG
         ARMOR = 1,         //방어구
         CONSUMABLE = 2,    //소모품
     }
-
-
 
     public class Item
     {
@@ -31,8 +28,7 @@ namespace TeamTodayTextRPG
         public int Mp { get; private set; }
         public string Text { get; private set; }
         public int Value { get; private set; }
-
-        private ITEM_TYPE Type { get; set; }
+        public ITEM_TYPE Type { get; set; }
 
         public Item(string[] str) //Parse로 데이터 변환
         {
@@ -59,26 +55,27 @@ namespace TeamTodayTextRPG
 
 
             // 직업 제한 파싱
-            List<CHAR TYPE> allowedJobs = new List<CHAR TYPE>();
+            List<CHAR_TYPE> allowedJobs = new List<CHAR_TYPE>();
 
             if (Text.Contains("전사"))
             {
-                allowedJobs.Add(CHAR TYPE.WARRIOR);
+                allowedJobs.Add(CHAR_TYPE.WARRIOR);
             }
             else if (Text.Contains("도적"))
             {
-                allowedJobs.Add(CHAR TYPE.ASSASSIN);
+                allowedJobs.Add(CHAR_TYPE.ASSASSIN);
             }
             else if (Text.Contains("마법사"))
             {
-                allowedJobs.Add(CHAR TYPE.MAGICIAN);
+                allowedJobs.Add(CHAR_TYPE.MAGICIAN);
             }
 
-            items.Add(new Item(Code, Name, Atk, Def, Hp, Mp, Text, Value, Type, allowedJobs));
+            
+            //items.Add(new Item(Code, Name, Atk, Def, Hp, Mp, Text, Value, Type, allowedJobs));
 
         }
-
     }
+    /*
     public class HpPotion : Item
     {
         public int HealAmount { get; private set; } = 20; //항상 20을 회복
@@ -110,5 +107,5 @@ namespace TeamTodayTextRPG
             player.RecoverMana(ManaAmount);
             Console.WriteLine($" MP포션을 사용하여 마나를 {ManaAmount} 회복했습니다.");
         }
-    }
+    }*/
 }

@@ -43,18 +43,20 @@ namespace TeamTodayTextRPG
                 case VIEW_TYPE.SALE:
                     CurrentViewer = new SaleViewer();
                     break;
+                    /*
                 case VIEW_TYPE.DUNGEON:
                     CurrentViewer = new DungeonViewer();
                     break;
                 case VIEW_TYPE.DUNGEONCLEAR:
-                    CurrentViewer = new DungeonClearViewer();
+                    CurrentViewer = new DungeonClearViewer();*/
                     break;
                 case VIEW_TYPE.REST:
                     CurrentViewer = new RestViewer();
                     break;
+                    /*
                 case VIEW_TYPE.BATTLE:
                     CurrentViewer = new BattleViewer();
-                    break;
+                    break;*/
                 //case VIEW_TYPE.MONSTER:
                     // GameManager에서 직접적으로 몬스터 객체를 가져오는 방식으로 수정
                     /* 『효빈』GameManager에서 Dungeon을 관리하게 하고 
@@ -198,7 +200,7 @@ namespace TeamTodayTextRPG
             return num;
         }
 
-
+        /*
         public void ShowName(string name)
         {
             Console.Write(name + "\t| ");
@@ -280,6 +282,6 @@ namespace TeamTodayTextRPG
                     Console.WriteLine((int)(DataManager.Instance.ItemDB.List[item].Value * 0.85) + " G");
                 }
             }
-        }
+        }*/
     }
 }

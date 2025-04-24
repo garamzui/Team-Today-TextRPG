@@ -86,7 +86,6 @@ namespace TeamTodayTextRPG
         }
      
 
-
         public void ChangeHp(int value)
         {
             Hp += value;
@@ -110,6 +109,7 @@ namespace TeamTodayTextRPG
             //                                                       SceneManager 에서 각 몬스터의 State를 체크! if (monster.State == MONSTER_STATE.DEAD) { ... } 
         }
     }
+
     class Slime : Monster
     {
         public Slime()
@@ -133,6 +133,7 @@ namespace TeamTodayTextRPG
             Init(DataManager.Instance.MonsterDB.List[(int)Code]);
         }
     }
+
     class Ork : Monster
     {
         public Ork()
@@ -140,6 +141,7 @@ namespace TeamTodayTextRPG
             Init(DataManager.Instance.MonsterDB.List[(int)Code]);
         }
     }
+
     class Zakum : Monster
     {
         public Zakum()
