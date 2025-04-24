@@ -12,13 +12,11 @@ namespace TeamTodayTextRPG
 {
 
     public enum CHAR_TYPE
-
     {
         WARRIOR,
         MAGICIAN,
         ASSASSIN
     }
-
 
     internal class Characterclass
     {
@@ -71,7 +69,7 @@ namespace TeamTodayTextRPG
             }
             public void ViewStatus()
             {
-                Console.WriteLine($"{Jobname} {JobDescription()}\n- 공격력 {Attack} (+{PlusAtk}), 방어력 {Defence} (+{PlusDef}), HP {Hp}/{MaxHp}, Gold {gold}");
+                Console.WriteLine($"{Jobname} {JobDescription()}\n- 공격력 {Attack} (+{PlusAtk}), 방어력 {Defence} (+{PlusDef}), HP {Hp}/{MaxHp}, Gold {Gold}");
             }
 
 
@@ -155,10 +153,6 @@ namespace TeamTodayTextRPG
                
             }
         }
-            
-
- garam-Character
-
        
 
         

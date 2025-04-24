@@ -63,7 +63,7 @@ namespace TeamTodayTextRPG
         }
 
         //『효빈』 TakeDamage와 Heal 비슷한 역할을 하는 메소드 이기 때문에 ChangeHp로 합쳐서 관리하면 더 편할 것 같아요! 
-      public void ManageHp(int HpChange)
+        public void ManageHp(int HpChange)
         {
             if (HpChange < 0)
             {
@@ -109,44 +109,42 @@ namespace TeamTodayTextRPG
             // Console.WriteLine($"{Name}은 쓰러졌다!");    『효빈』이 부분은 SceneManager에서 관리해주면 좋을거 같아요! 대신에 몬스터의 상태를 관리하는 state 변수를 변경시키겠습니다. 
             //                                                       SceneManager 에서 각 몬스터의 State를 체크! if (monster.State == MONSTER_STATE.DEAD) { ... } 
         }
-
-
-        class Slime : Monster
+    }
+    class Slime : Monster
+    {
+        public Slime()
         {
-            public Slime()
-            {
-                Init(DataManager.Instance.MonsterDB.List[(int)Code]);
-            }
+            Init(DataManager.Instance.MonsterDB.List[(int)Code]);
         }
+    }
 
-        class Goblin : Monster
+    class Goblin : Monster
+    {
+        public Goblin()
         {
-            public Goblin()
-            {
-                Init(DataManager.Instance.MonsterDB.List[(int)Code]);
-            }
+            Init(DataManager.Instance.MonsterDB.List[(int)Code]);
         }
+    }
 
-        class Wolf : Monster
+    class Wolf : Monster
+    {
+        public Wolf()
         {
-            public Wolf()
-            {
-                Init(DataManager.Instance.MonsterDB.List[(int)Code]);
-            }
+            Init(DataManager.Instance.MonsterDB.List[(int)Code]);
         }
-        class Ork : Monster
+    }
+    class Ork : Monster
+    {
+        public Ork()
         {
-            public Ork()
-            {
-                Init(DataManager.Instance.MonsterDB.List[(int)Code]);
-            }
+            Init(DataManager.Instance.MonsterDB.List[(int)Code]);
         }
-        class Zakum : Monster
+    }
+    class Zakum : Monster
+    {
+        public Zakum()
         {
-            public Zakum()
-            {
-                Init(DataManager.Instance.MonsterDB.List[(int)Code]);
-            }
+            Init(DataManager.Instance.MonsterDB.List[(int)Code]);
         }
     }
 }

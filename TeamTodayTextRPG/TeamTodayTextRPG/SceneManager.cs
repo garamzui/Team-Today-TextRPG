@@ -3,26 +3,10 @@ using TeamTodayTextRPG;
 
 namespace TeamTodayTextRPG
 {
-    //**객체 받고/ 속성 받기** To.재우
-    // SceneManager 클래스: 씬 전환을 관리
-    // 『효빈』 씬 매니저는 전역적으로 사용하게 될 매니저 클래스기에 싱글톤으로 생성자를 만들어주겠습니다 :)
     public class SceneManager
     {
         public Viewer CurrentViewer { get; set; }
-       
-        /* 『효빈』이미 GameManager 에서 싱글톤으로 객체를 만들었기 때문에 여기서 다시 만들 필요가 없습니다!.
-                   GameMansger.Instance로 접근하시면 돼요!
-        private GameManager gameManager;  // GameManager 객체를 멤버로 추가
-        */
 
-        /* 『효빈』기존의 생성자에요!
-        public SceneManager(GameManager gameManager) //*GameManager 객체를 생성자에서 받아야함
-        {
-            this.gameManager = gameManager;  // 생성자에서 gameManager 객체 받기
-
-        }*/
-
-        //『효빈』 여기부터가 싱글톤으로 새로 만든 생성자입니다
         private static readonly Lazy<SceneManager> lazyInstance = new Lazy<SceneManager>(() => new SceneManager());
         public static SceneManager Instance => lazyInstance.Value;
 
