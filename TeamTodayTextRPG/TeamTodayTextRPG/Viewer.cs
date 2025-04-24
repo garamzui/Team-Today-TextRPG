@@ -45,25 +45,30 @@ namespace TeamTodayTextRPG
             Console.WriteLine("플레이어 상태 보기");
             Console.WriteLine("====================");
 
- // Player 객체 가져오기
+            var player = GameManager.Instance.Player;
+            var character = player.Character;
 
             // 플레이어의 상태를 출력
-            Console.WriteLine($"이름: {player.Name}");
-            Console.WriteLine($"체력: {GameManager.Instance.Player.Character.Hp}/{GameManager.Instance.Player.Character.MaxHp}");
-            Console.WriteLine($"공격력: {GameManager.Instance.Player.Character.Attack}");
-            Console.WriteLine($"방어력: {GameManager.Instance.Player.Character.Def}");
-            Console.WriteLine($"금액: {GameManager.Instance.Player.Character.Gold}G");
+            Console.WriteLine($"직업: {character.Jobname}");
+            Console.WriteLine($"체력: {character.Hp}/{character.MaxHp}");
+            Console.WriteLine($"마나: {character.Mp}/{character.MaxMp}");
+            Console.WriteLine($"공격력: {character.Attack} (+{character.PlusAtk}) = {character.TotalAtk}");
+            Console.WriteLine($"방어력: {character.Defence} (+{character.PlusDef}) = {character.TotalDef}");
+            Console.WriteLine($"회피율: {character.Dodge} (+{character.PlusDodge}) = {character.TotalDodge}");
+            Console.WriteLine($"소지금: {character.gold}G");
+            Console.WriteLine($"액티브 스킬: {character.ActskillName}");
+            Console.WriteLine($"패시브 스킬: {character.PasskillName} (레벨 {character.PassiveSkillLevel}/{MaxPassiveSkillLevel})");
 
             Console.WriteLine("====================");
             Console.WriteLine("1. 메인으로 돌아가기");
 
-            int input = gameManager.InputAction(startIndex, endIndex);
+            int input = GameManager.Instance.InputAction(StartIndex, EndIndex);
 
-            VIEW_TYPE nextView = NextView(gameManager, input);
-            gameManager.SceneManager.SwitchScene(nextView);
+            VIEW_TYPE nextView = NextView(input);
+            GameManager.Instance.SceneManager.SwitchScene(nextView);
         }
 
-        public override VIEW_TYPE NextView(GameManager gameManager, int input)
+        public override VIEW_TYPE NextView(int input)
         {
             if (input == 1)
             {
@@ -73,7 +78,7 @@ namespace TeamTodayTextRPG
             else
             {
                 // 잘못된 입력 처리
-                return VIEW_TYPE.STATUS;  // 기본적으로 현재 상태 화면 유지
+                return VIEW_TYPE.STATUS; // 기본적으로 현재 상태 화면 유지
             }
         }
     }
@@ -177,28 +182,31 @@ namespace TeamTodayTextRPG
 
     public class EquipViewer : Viewer
     {
-        public override void ViewAction(GameManager gameManager)
+        public override void ViewAction()
         {
             Console.Clear();
             Console.WriteLine("장비");
             Console.WriteLine("====================");
 
-            var player = gameManager.Player;
-            Console.WriteLine($"무기: {player.Weapon.Name}");
-            Console.WriteLine($"방어구: {player.Armor.Name}");
+            var player = GameManager.Instance.Player;
+            var character = player.Character;
 
-            // Player 클래스의 Weapon, Armor,가 변경될 경우, 이 부분 수정 필요
+            Console.WriteLine($"직업: {character.Jobname}");
+            Console.WriteLine($"총 공격력: {character.TotalAtk} (기본: {character.Attack} + 추가: {character.PlusAtk})");
+            Console.WriteLine($"총 방어력: {character.TotalDef} (기본: {character.Defence} + 추가: {character.PlusDef})");
+            Console.WriteLine($"총 회피율: {character.TotalDodge} (기본: {character.Dodge} + 추가: {character.PlusDodge})");
+
             Console.WriteLine("====================");
             Console.WriteLine("1. 장비 변경");
             Console.WriteLine("2. 메인으로 돌아가기");
 
-            int input = gameManager.InputAction(startIndex, endIndex);
+            int input = GameManager.Instance.InputAction(StartIndex, EndIndex);
 
-            VIEW_TYPE nextView = NextView(gameManager, input);
-            gameManager.SceneManager.SwitchScene(nextView);
+            VIEW_TYPE nextView = NextView(input);
+            GameManager.Instance.SceneManager.SwitchScene(nextView);
         }
-        // NextView 메서드 구현
-        public override VIEW_TYPE NextView(GameManager gameManager, int input)
+
+        public override VIEW_TYPE NextView(int input)
         {
             switch (input)
             {
@@ -438,7 +446,7 @@ namespace TeamTodayTextRPG
             this.monster = monster;
         }
 
-        public override void ViewAction(GameManager gameManager)
+        public override void ViewAction()
         {
             Console.Clear();
             Console.WriteLine("던전");
@@ -458,23 +466,22 @@ namespace TeamTodayTextRPG
             if (monster.IsBoss)
             {
                 Console.WriteLine("\n[보스 효과] 플레이어의 능력치가 10% 감소합니다!");
-                // 플레이어 능력치 감소 (예시 > BaseAttack, BaseDefense 감소)
-                // 능력치를 변경하려면 플레이어 객체를 반영
-                player.BaseAttack = (int)(player.BaseAttack * 0.9);
-                player.BaseDefense = (int)(player.BaseDefense * 0.9);
+                var character = GameManager.Instance.Player.Character;
+                character.Attack = (int)(character.Attack * 0.9);
+                character.Defence = (int)(character.Defence * 0.9);
             }
 
             Console.WriteLine("던전으로 들어가시겠습니까?");
             Console.WriteLine("1. 던전 입장");
             Console.WriteLine("2. 메인으로 돌아가기");
 
-            int input = gameManager.InputAction(startIndex, endIndex);
+            int input = GameManager.Instance.InputAction(StartIndex, EndIndex);
 
-            VIEW_TYPE nextView = NextView(gameManager, input);
-            gameManager.SceneManager.SwitchScene(nextView);
+            VIEW_TYPE nextView = NextView(input);
+            GameManager.Instance.SceneManager.SwitchScene(nextView);
         }
 
-        public override VIEW_TYPE NextView(GameManager gameManager, int input)
+        public override VIEW_TYPE NextView(int input)
         {
             switch (input)
             {
@@ -501,39 +508,38 @@ namespace TeamTodayTextRPG
             this.dungeon = dungeon;
         }
 
-        public override void ViewAction(GameManager gameManager)
+        public override void ViewAction()
         {
             Console.Clear();
             Console.WriteLine("던전 클리어");
             Console.WriteLine("====================");
 
-            if (player.IsDead)  // 플레이어가 죽었을 때 처리
+            var character = player.Character;
+
+            if (character.Hp <= 0)
             {
-                // 플레이어가 죽었을 때 실패 메시지 출력
                 Console.WriteLine("플레이어가 쓰러졌습니다! 던전 클리어 실패!");
             }
             else
             {
-                // 던전 클리어 성공 시
                 Console.WriteLine($"축하합니다! 던전을 클리어했습니다!");
                 Console.WriteLine($"보상: {dungeon.Reward}G");
                 Console.WriteLine($"경험치: {dungeon.Exp}Exp");
 
-                // 보스 효과 복구 (능력치 초기화)
-                player.BaseAttack = (int)(player.BaseAttack / 0.9);  // 보스 효과로 감소한 능력치를 복구
-                player.BaseDefense = (int)(player.BaseDefense / 0.9);
+                character.Attack = (int)(character.Attack / 0.9);  // 보스 효과로 감소한 능력치를 복구
+                character.Defence = (int)(character.Defence / 0.9);
                 Console.WriteLine("\n[보스 효과] 플레이어 능력치 감소 효과가 복구되었습니다!");
             }
 
             Console.WriteLine("1. 메인으로 돌아가기");
 
-            int input = gameManager.InputAction(startIndex, endIndex);
+            int input = GameManager.Instance.InputAction(StartIndex, EndIndex);
 
-            VIEW_TYPE nextView = NextView(gameManager, input);
-            gameManager.SceneManager.SwitchScene(nextView);
+            VIEW_TYPE nextView = NextView(input);
+            GameManager.Instance.SceneManager.SwitchScene(nextView);
         }
 
-        public override VIEW_TYPE NextView(GameManager gameManager, int input)
+        public override VIEW_TYPE NextView(int input)
         {
             switch (input)
             {
@@ -549,93 +555,85 @@ namespace TeamTodayTextRPG
 
     public class RestViewer : Viewer
     {
-        public override void ViewAction(GameManager gameManager)
+        public override void ViewAction()
         {
             Console.Clear();
             Console.WriteLine("휴식");
             Console.WriteLine("====================");
 
-            var player = gameManager.Player;
-            Console.WriteLine($"체력 회복: {player.Health}/{player.MaxHealth}");
+            var character = GameManager.Instance.Player.Character;
+            Console.WriteLine($"체력 회복: {character.Hp}/{character.MaxHp}");
 
             Console.WriteLine("휴식을 취하시겠습니까?");
             Console.WriteLine("1. 휴식");
             Console.WriteLine("2. 메인으로 돌아가기");
 
-            int input = gameManager.InputAction(startIndex, endIndex);
+            int input = GameManager.Instance.InputAction(StartIndex, EndIndex);
 
-            VIEW_TYPE nextView = NextView(gameManager, input);
-            gameManager.SceneManager.SwitchScene(nextView);
+            VIEW_TYPE nextView = NextView(input);
+            GameManager.Instance.SceneManager.SwitchScene(nextView);
         }
-        // NextView 메서드 구현
-        public override VIEW_TYPE NextView(GameManager gameManager, int input)
+
+        public override VIEW_TYPE NextView(int input)
         {
             switch (input)
             {
                 case 1:
-                    // 휴식을 취하는 경우: 체력 회복 처리 후 메인 화면으로 이동
-                    var player = gameManager.Player;
-                    player.Rest(); // Rest 메서드를 호출하여 체력 회복 로직을 처리
+                    var character = GameManager.Instance.Player.Character;
+                    character.Hp = character.MaxHp; // 체력 회복 처리
                     Console.WriteLine("휴식을 취했습니다.");
-                    return VIEW_TYPE.MAIN; // 메인 화면으로 이동
+                    return VIEW_TYPE.MAIN;
                 case 2:
-                    // 메인으로 돌아가는 경우
                     return VIEW_TYPE.MAIN;
                 default:
-                    // 잘못된 입력 처리
                     Console.WriteLine("잘못된 입력입니다.");
-                    return VIEW_TYPE.REST; // 다시 휴식 화면으로 돌아감
+                    return VIEW_TYPE.REST;
             }
         }
     }
 
+
     public class BattleViewer : Viewer
     {
-        public override void ViewAction(GameManager gameManager)
+        public override void ViewAction()
         {
             Console.Clear();
             Console.WriteLine("배틀");
             Console.WriteLine("====================");
 
-            var player = gameManager.Player;
-            var enemy = gameManager.BattleEnemy;
+            var character = GameManager.Instance.Player.Character;
+            var enemy = GameManager.Instance.BattleEnemy; //게임매니저 프로퍼티에 BattleEnemy 추가해야할 것 같습니다
 
-            // 플레이어와 적의 체력이 갱신될 때마다 출력
-            Console.WriteLine($"플레이어 체력: {player.Health}/{player.MaxHealth}");
-            Console.WriteLine($"적 몬스터 체력: {enemy.Health}/{enemy.MaxHealth}");
+            Console.WriteLine($"플레이어 체력: {character.Hp}/{character.MaxHp}");
+            Console.WriteLine($"적 몬스터 체력: {enemy.Hp}/{enemy.MaxHp}");
 
             Console.WriteLine("1. 공격");
             Console.WriteLine("2. 도망");
 
-            int input = gameManager.InputAction(startIndex, endIndex);
+            int input = GameManager.Instance.InputAction(StartIndex, EndIndex);
 
-            VIEW_TYPE nextView = NextView(gameManager, input);
-            gameManager.SceneManager.SwitchScene(nextView);
+            VIEW_TYPE nextView = NextView(input);
+            GameManager.Instance.SceneManager.SwitchScene(nextView);
         }
-        // NextView 메서드 구현
-        public override VIEW_TYPE NextView(GameManager gameManager, int input)
+
+        public override VIEW_TYPE NextView(int input)
         {
             switch (input)
             {
                 case 1:
-                    // 공격을 선택한 경우
-                    // 전투 로직을 처리한 후, 다음 화면을 선택
-                    return VIEW_TYPE.BATTLE;  // 계속 전투 화면을 유지하거나, 다른 화면으로 전환할 수 있음
+                    return VIEW_TYPE.BATTLE;
                 case 2:
-                    // 도망을 선택한 경우
-                    // 도망 성공 후 메인 화면 등으로 전환
-                    return VIEW_TYPE.MAIN;  // 예시로 메인 화면으로 전환
+                    return VIEW_TYPE.MAIN;
                 default:
-                    // 잘못된 입력 처리
                     Console.WriteLine("잘못된 입력입니다.");
-                    return VIEW_TYPE.BATTLE;  // 다시 전투 화면으로 돌아갑니다.
+                    return VIEW_TYPE.BATTLE;
             }
         }
     }
 
     public class MonsterViewer : Viewer
     {
-        private Monster currentMonster;
+        protected Monster currentMonster;
 
         public MonsterViewer(Monster monster)
         {
