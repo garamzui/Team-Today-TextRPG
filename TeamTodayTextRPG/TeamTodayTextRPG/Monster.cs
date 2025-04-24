@@ -67,7 +67,7 @@ namespace TeamTodayTextRPG
         {
             if (HpChange < 0)
             {
-                Hp += HpChange;
+                Hp += HpChange; //최종 계산 자료를 음수로 입력해 주어야 합니다.
 
                 Console.WriteLine($"{Name}이(가){HpChange}의 데미지를 입었습니다. 현재 HP: {Hp}/{MaxHp}");
                 if (Hp <= 0)
@@ -84,10 +84,7 @@ namespace TeamTodayTextRPG
             }
             else { Console.WriteLine("아무 일도 일어나지 않았습니다."); }
         }
-        public void Heal(int heal)
-        {
-            
-        }
+     
 
 
         public void ChangeHp(int value)
