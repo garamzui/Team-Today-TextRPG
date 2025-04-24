@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Authentication.ExtendedProtection;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using static TeamTodayTextRPG.Characterclass;
 
 namespace TeamTodayTextRPG
@@ -27,65 +29,49 @@ namespace TeamTodayTextRPG
     //스탯 관련 스크립트
     partial class Player
     {
-        public void SetCharacter(int classNum, string name)
+        public void SetCharacter(int classCode, string name)
         {
-            //이렇게 하면 될까요?
-            Name = name;
-
             //string[][] settingCharacter = DataManager.CharacterDB.
             //Parsing(DataManager.CharacterDB.Data);
 
-            //그러면 입력값 저장하는 변수도 끌어와야 함
-            switch (classNum)
+
+            //classCode별로 직업별 스탯 설정
+            switch (classCode)
             {
                 case 0:
-                    CharacterCode = 0;
+                    Character = new Characterclass.Warrior();
+                    SetStat();
                     break;
                 case 1:
-                    CharacterCode = 1;
+                    Character = new Characterclass.Magician();
+                    SetStat();
                     break;
                 case 2:
-                    CharacterCode = 2;
-                    break;
-                case 3:
-                    CharacterCode = 3;
-                    break;
-            }
-
-//Characterclass의 CHAR_TYPE public 선언, '= 0' 부탁
-            switch (CharacterCode)
-            {
-                case 0: Character = DataManager.Instance.
-                        CharacterDB.List[(int)CHAR_TYPE.WARRIOR];
+                    Character = new Characterclass.Assassin();
                     SetStat();
                     break;
-                case 1: Character = DataManager.Instance.
-                        CharacterDB.List[(int)CHAR_TYPE.MAGICIAN];
-                    SetStat();
-                    break;
-                case 2: Character = DataManager.Instance.
-                        CharacterDB.List[(int)CHAR_TYPE.ASSASSIN];
-                    SetStat();
-                    break;
-                //case 3:
-                //    break;
             }
 
             void SetStat()
             {
                 Level = 1;
-                Gold = Character.gold;
+                Gold = 1500;
+                Name = name;
             }
 
-            //초기 소지 장비를 bag과 Equip 리스트에 저장한다
-            //직업별 초기 장비가 다르다면 수정
-            //이것도 마찬가지로 쉽게 접근 가능
-            Bag.Add(int.Parse((DataManager.ItemDB.Parsing(DataManager.ItemDB.Data)[0][0])));
-            Bag.Add(int.Parse((DataManager.ItemDB.Parsing(DataManager.ItemDB.Data)[3][0])));
+
+        //초기 소지 장비를 bag과 Equip 리스트에 저장한다
+        //직업별 초기 장비가 다르다면 수정
+        //이것도 마찬가지로 쉽게 접근 가능
+        Bag.Add(int.Parse((DataManager.ItemDB.Parsing(DataManager.ItemDB.Data)[0][0])));
+        Bag.Add(int.Parse((DataManager.ItemDB.Parsing(DataManager.ItemDB.Data)[3][0])));
+
+        Bag.Add(DataManager.Instance.ItemDB.List[(int)])
 
             //초기 장비를 가지고 있되 장착은 되어있지 않은 상태로 시작해서
             //인벤토리를 처음 열면 장착&해제 튜토리얼 구현해 보는 것 괜찮을지도
         }
+
 
         public void LevelUp()
         {
