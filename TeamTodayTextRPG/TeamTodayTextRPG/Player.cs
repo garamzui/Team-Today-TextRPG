@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Authentication.ExtendedProtection;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using static TeamTodayTextRPG.Characterclass;
 
 namespace TeamTodayTextRPG
@@ -11,23 +13,19 @@ namespace TeamTodayTextRPG
     //프로퍼티 관련 스크립트
     partial class Player
     {
+        //모호성 오류 뜨는게 Dungeon에서 class Player를 선언하셨더라고요
+        //그리고 아이템에서도 Name을 똑같이 선언해서 그렇습니다
+        //이름 조율 필요
+        //생각해보니 회의중에 바꿨던 내용을 메인에 안올려주셔서
+        //충돌이 있을지 모릅니다
         public Character Character { get; set; }
-        public DataManager DataManager { get; set; }
-        public GameManager GameManager { get; set; }
-        public SceneManager SceneManager { get; set; } 
         public List<int> Bag { get; set; }
         public List<int> Equip { get; set; }
         public int Level { get; set; }
         public int Exp { get; set; }
 
-        public int Attack { get; set; }
-        public int Defense { get; set; }
-        public int MaxHP { get; set; }
-        public int CurHP { get; set; }
-        public int MaxMP { get; set; }
-        public int CurMP { get; set; }
-        public int Dodge { get; set; }
         public int Gold { get; set; }
+        public string Name { get; set; }
 
         public int CharacterCode { get; set; }
         public int ItemCode { get; set; }
@@ -36,104 +34,64 @@ namespace TeamTodayTextRPG
     //스탯 관련 스크립트
     partial class Player
     {
-        public void SetCharacter(int classNum, string name)
+        //SceneManager에서 사용할 메서드
+        public void SetCharacter(int classCode, string name)
         {
-            //데이터매니저에서 직업별 스탯을 '파싱'해서 가져온다
-            //ㄴ 이제 데이터매니저에서 잘 되어있어서 이렇게 안해도 됨
-            string[][] settingCharacter = DataManager.CharacterDB.
-                        Parsing(DataManager.CharacterDB.Data);
-
-            //그러면 입력값 저장하는 변수도 끌어와야 함
-            switch (classNum)
+            //classCode별로 직업별 스탯 설정
+            switch (classCode)
             {
                 case 0:
-                    CharacterCode = 0;
+                    Character = new Characterclass.Warrior();
+                    SetStat();
                     break;
                 case 1:
-                    CharacterCode = 1;
+                    Character = new Characterclass.Magician();
+                    SetStat();
                     break;
                 case 2:
-                    CharacterCode = 2;
-                    break;
-                case 3:
-                    CharacterCode = 3;
-                    break;
-            }
-
-            //직업.Default가 Characterclass에서 스탯을 세팅하는 메서드
-//CHAR_TYPE public 선언 부탁
-            switch (CharacterCode)
-            {
-                case 0: Character = DataManager.Instance.
-                        CharacterDB.List[(int)CHAR_TYPE.WARRIOR];
+                    Character = new Characterclass.Assassin();
                     SetStat();
                     break;
-                case 1: Character = DataManager.Instance.
-                        CharacterDB.List[(int)CHAR_TYPE.MAGICIAN];
-                    SetStat();
-                    break;
-                case 2: Character = DataManager.Instance.
-                        CharacterDB.List[(int)CHAR_TYPE.ASSASSIN];
-                    SetStat();
-                    break;
-                    //case 3:
-                    //    break;
             }
 
             void SetStat()
             {
-                Attack = Character.Attack;
-                Defense = Character.Defence;
-                CurHP = Character.Hp;
-                MaxHP = Character.MaxHp;
-                CurMP = Character.Mp;
-                MaxMP = Character.MaxMp;
-                Dodge = Character.Dodge;
-                Gold = Character.gold;
+                Level = 1;
+                Gold = 1500;
+                Name = name;
             }
 
-            //초기 소지 장비를 bag과 equip 리스트에 저장한다
+            //천 옷과 목검 Bag 리스트에 저장한다
             //직업별 초기 장비가 다르다면 수정
-            //이것도 마찬가지로 쉽게 접근 가능
-            bag.Add(int.Parse((DataManager.ItemDB.Parsing(DataManager.ItemDB.Data)[0][0])));
-            bag.Add(int.Parse((DataManager.ItemDB.Parsing(DataManager.ItemDB.Data)[3][0])));
+            Bag.Add(DataManager.Instance.ItemDB.List[0].Code);
+            Bag.Add(DataManager.Instance.ItemDB.List[4].Code);
 
             //초기 장비를 가지고 있되 장착은 되어있지 않은 상태로 시작해서
             //인벤토리를 처음 열면 장착&해제 튜토리얼 구현해 보는 것 괜찮을지도
         }
 
+
         public void LevelUp()
         {
             int requiredExp = 100;
 
+    //던전 클리어시 처치한 몬스터에 따라 경험치를 얻는 구조 필요
             //경험치가 요구 경험치보다 크거나 같아진다.
             if (Exp >= requiredExp)
             {
                 //경험치에서 요구 경험치 만큼 빼고 초과량은 현재 경험치로 남는다.
-                Exp = Exp - requiredExp;
+                Exp -= requiredExp;
 
-                //레벨 및 요구 경험치가 늘어난다.
+                //레벨 및 요구 경험치 스탯이 늘어난다.
                 Level++;
                 requiredExp += 25;
-
-                //스탯 증가량 화면에 표시
                 Character.Attack += 1;
                 Character.Defence += 2;
-
+                Character.PassiveSkill();
+                //스탯 증가량 화면에 표시
                 //Console.WriteLine("축하합니다! 레벨이 올랐습니다.");
                 //Console.WriteLine("공격력 +1, 방어력 +2");
                 //Viewer로
-            }
-        }
-
-        //특정 레벨에 스킬이 해금되는 구조
-        public void UnLockSkill()
-        {
-            //데이터베이스에는 이미 스킬을 가지고 있으니까
-            //스킬 정보를 확인할 수 있는 
-            if (Level == 5)
-            {
-
             }
         }
 
@@ -141,172 +99,126 @@ namespace TeamTodayTextRPG
         public void Rest()
         {
             Character.Hp += 50;
-            Character.gold -= 500;
-
-            //Console.WriteLine("휴식을 취했다!");
-            //Console.WriteLine("체력 + 50");
-            //Console.WriteLine("골드 -500");
-            //Viewer로
+            Gold -= 500;
         }
     }
 
     //장비 관련 스크립트
     partial class Player
     {
-//SceneManager의 currentViewer 프로퍼티로 설정 부탁
-
-        //인벤토리에 해당 아이템이 있으면
-        public bool CheckBag(int code)
+        
+        public bool CheckBag(int inputItemNum)
         {
             //해당 코드의 아이템이 bag에 있는지
-            bool hasItem = bag.Contains(code);
+            ItemCode = inputItemNum - 1;
+            bool hasItem = Bag.Contains(ItemCode);
             return hasItem;
         }
 
-        //인벤토리에 아이템이 들어오는 경우
-        public void InputBag()
+        //인벤토리에 아이템이 들어오는 경우 1 - 상점 구매
+        //다시 합쳐
+        public void InputBag(int inputItemNum, VIEW_TYPE type)
         {
-
-            //임시로 선언&초기화
-            int code = 0;
-            int gold = 0;
-            int prise = 0;
+            ItemCode = inputItemNum;
+            int prise = DataManager.Instance.ItemDB.List[inputItemNum].Value;
 
             //상점에서 아이템 구매
-            if(currentViewer == VIEW_TYPE.SHOP)
+            if (type == VIEW_TYPE.PURCHASE)
             {
-                if(gold >= prise)
+                if (Gold >= prise)
                 {
-                    gold -= prise;
+                    Gold -= prise;
 
                     //해당 아이템의 코드를 bag에 저장
-                    //code = 해당 아이템 코드;
-                    //이렇게 거쳐서 저장하는게 괜찮나?
-                    bag.Add(code);
-                }
-
-                else
-                {
-                    //Console.WriteLine("소지금이 부족합니다!");
-                    //Viewer로
+                    Bag.Add(ItemCode);
                 }
             }
 
-            if(currentViewer == VIEW_TYPE.DUNGEONCLEAR)
+            //인벤토리에 아이템이 들어오는 경우 2 - 던전 클리어
+            //던전 클리어 시 랜덤(20%) 확률로 아이템 드롭
+            if(type == VIEW_TYPE.DUNGEONCLEAR)
             {
-                Random random = new Random();
-                int ItemDrop = random.Next(0, 101);
-                //n% 확률로
+                int ItemDrop = GameManager.Instance.rand.Next(0, 101);
+                //20% 확률로
                 if(ItemDrop >= 90 || ItemDrop <= 10)
                 {
                     //랜덤 아이템 드롭
-                    Random dropItemCode = new Random();
-                    code = dropItemCode.Next(0, 15);
-                    bag.Add(code);
+                    int dropItemCode = GameManager.Instance.rand.Next(0, 아이템리스트.Length);
+                    ItemCode = dropItemCode;
+                    Bag.Add(ItemCode);
                 }
-                //근데 여기서 처리하는게 맞나?
             }
         }
 
-        //인벤토리에 아이템이 나가는 경우
-        public void RemoveBag()
+        //인벤토리에 아이템이 나가는 경우 1 - 상점 판매
+        public void RemoveBag(int inputItemNum, VIEW_TYPE type)
         {
-            //임시로 선언&초기화
-            int code = 0;
-            int gold = 0;
-            int prise = 0;
+            ItemCode = inputItemNum;
+            int prise = DataManager.Instance.ItemDB.List[inputItemNum].Value;
 
-            //상점에서 아이템 판매
-            if (CheckBag(code) == true && currentViewer == VIEW_TYPE.SALE)
+            //상점에서 아이템 판매와 버리기
+            //Bag에 있고 장착중이 아니라면
+            if (CheckBag(ItemCode) == true && CheckEquip(ItemCode) == false)
             {
-                //장착중이 아니라면
-                if (CheckEquip(code) == false)
+                //판매하기 화면이라면
+                if (type == VIEW_TYPE.SALE)
                 {
-                    gold += (int)(prise * 0.85f);
-                    bag.Remove(code);
+                    Gold += (int)(prise * 0.85f);
                 }
-
-                //장착중이라면
-                else
-                {
-                    //Console.WriteLine("장착중인 아이템은 판매할 수 없습니다.");
-                    //Viewer로
-                }
+                Bag.Remove(ItemCode);
             }
-
-            //버리기
-            if(CheckBag(code) == true && currentViewer == VIEW_TYPE.INVENTORY)
-            {
-                //장착중이 아니라면
-                if(CheckEquip(code) == false)
-                {
-                    bag.Remove(code);
-                }
-
-                //장착중이라면
-                else
-                {
-                    //Console.WriteLine("장착중인 아이템은 버릴 수 없습니다.");
-                    //Viewer로
-                }
-            }
-
         }
 
-        //인벤토리에 해당 아이템이 있으면
-        public bool CheckEquip(int code)
+        //해당 아이템을 장착중이면
+        public bool CheckEquip(int equipItemNum)
         {
+            ItemCode = equipItemNum;
             //해당 코드의 아이템을 장착하고 있는지
-            bool equipItem = equip.Contains(code);
+            bool equipItem = Equip.Contains(ItemCode);
             return equipItem;
         }
 
         //장비 착용
-        public void EquipItem()
+        public void EquipItem(int equipItemNum, ITEM_TYPE type)
         {
-            //임시로 선언&초기화
-            int code = 0;
-            int equiped = 0;
-
+            ItemCode = equipItemNum;
+            //private라 보호수준 오류
+            int equiped = -1;
+                
             //아이템 소지 && 미장착
-            if(CheckBag(code) == true && CheckEquip(code) == false)
+            if (CheckBag(ItemCode) == true && CheckEquip(ItemCode) == false)
             {
                 //같은 타입 아이템 미장착
-//ITEM_TYPE public 선언 부탁
-                if()
+                //이미 장착한 아이템의 타입 != 장착하려는 아이템의 타입
+                //equiped(장착한 아이템 타입 저장) !=
+                if(equiped != )
                 {
-                    equip.Add(code);
+                    Equip.Add(ItemCode);
+                    equiped = DataManager.Instance.ItemDB.List[equipItemNum].Type;
                 }
 
                 //같은 타입 아이템 장착중
                 else
                 {
                     //장착중이던 아이템 해제
-                    equip.Remove(equiped);
+                    Equip.Remove(equiped);
 
                     //장착하려는 아이템 착용
-                    equip.Add(code);
+                    Equip.Add(ItemCode);
                 }
             }
         }
 
         //장비 해제
-        public void UnEquipItem()
+        public void UnEquipItem(int equipItemNum)
         {
-            //임시로 선언&초기화
-            int code = 0;
+            ItemCode = equipItemNum;
 
             //장착중 이라면
-            if(CheckEquip(code) == true)
+            if(CheckEquip(ItemCode) == true)
             {
-                //equip List에서 삭제
-                equip.Remove(code);
-            }
-
-            else
-            {
-                //Console.WriteLine("장착중인 아이템이 아닙니다!");
-                //Viewer로
+                //Equip List에서 삭제
+                Equip.Remove(ItemCode);
             }
         }
     }
