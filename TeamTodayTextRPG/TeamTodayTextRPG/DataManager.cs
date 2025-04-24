@@ -97,12 +97,10 @@
 
     class CharacterDatabase : Database<string[]>
     {
-        //1.직업이름/2.공격력/3.방어력/4.체력/5.마력/6.회피/7.소지금/8.액티브스킬이름/9.패시브스킬이름
+        // 0.코드 / 1.이름 / 2.공격력 / 3.방어력 / 4.체력 / 5.마나 / 6.회피율 / 7.소지금 / 8.액티브스킬 / 9.패시브스킬
         public string Data { get; private set; } =
-            "0/전사/12/5/100/40/1/1500/쾅 내려찍기/강철피부.#" +
-            "1/마법사/3/3/50/100/3/1500/썬더봁/마력증강.#" +
-            "2/도적/7/1/75/75/5/1500/연격/날쌘 움직임.#" +
-            "3/사제/5/5/60/15000/사제입니다.";
+            "0/전사/10/5/100/40/1/1000,쾅 내려치기,전사의 피부#" +
+            "1/마법사/10/5/100/40/1/1000,쾅 내려치기,전사의 피부";
 
         public CharacterDatabase()
         {
@@ -156,8 +154,8 @@
         {
             List.Add(new Item(parameter));
         }
-        public ITEM_TYPE GetTypetoCode(int code) { return List[code].Type; }
 
+        public ITEM_TYPE GetTypetoCode(int code) { return List[code].Type; }
     }
 
 
