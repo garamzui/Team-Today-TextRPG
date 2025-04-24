@@ -11,7 +11,7 @@ using static TeamTodayTextRPG.Characterclass;
 namespace TeamTodayTextRPG
 {
     //프로퍼티 관련 스크립트
-    partial class Player
+    public partial class Player
     {
         //모호성 오류 뜨는게 Dungeon에서 class Player를 선언하셨더라고요
         //그리고 아이템에서도 Name을 똑같이 선언해서 그렇습니다
@@ -32,13 +32,20 @@ namespace TeamTodayTextRPG
     }
 
     //스탯 관련 스크립트
-    partial class Player
+    public partial class Player
     {
+        public Player()
+        {
+            Bag = new List<int>();
+            Equip = new List<int>();
+        }
+
+
         //SceneManager에서 사용할 메서드
         public void SetCharacter(int classCode, string name)
         {
             //classCode별로 직업별 스탯 설정
-            switch (classCode)
+            switch (classCode-1)
             {
                 case 0:
                     Character = new Characterclass.Warrior();
@@ -104,7 +111,7 @@ namespace TeamTodayTextRPG
     }
 
     //장비 관련 스크립트
-    partial class Player
+    public partial class Player
     {
         
         public bool CheckBag(int inputItemNum)

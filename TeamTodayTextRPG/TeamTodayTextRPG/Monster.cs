@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace TeamTodayTextRPG
 {
-    enum MONSTER_STATE
+    public enum MONSTER_STATE
     {
         IDLE,
         DEAD
     }
-    enum MONSTER_CODE
+    public enum MONSTER_CODE
     {
         Slime = 0,   
         Goblin,    
@@ -19,13 +19,13 @@ namespace TeamTodayTextRPG
         Ork,         
         Zakum        
     }
-    enum MONSTER_GRADE
+    public enum MONSTER_GRADE
     {
         NORMAL =0,
         BOSS
     }
 
-    abstract class Monster
+    public abstract class Monster
     {
         public MONSTER_CODE Code { get; set; }
         public MONSTER_STATE State { get; set; } = MONSTER_STATE.IDLE;
