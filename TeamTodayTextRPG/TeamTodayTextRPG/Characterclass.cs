@@ -11,12 +11,14 @@ using static TeamTodayTextRPG.Characterclass;
 namespace TeamTodayTextRPG
 {
 
-    enum CHAR_TYPE
+    public enum CHAR_TYPE
+
     {
         WARRIOR,
         MAGICIAN,
         ASSASSIN
     }
+
 
     internal class Characterclass
     {
@@ -39,7 +41,7 @@ namespace TeamTodayTextRPG
             public int TotalDodge { get { return Dodge + PlusDodge; } }
             // 직업간 차이를 두어 보고자 Dodge 스탯도 추가 해 봤습니다.
             
-            public int gold { get; set; }
+            
             public string[] Parameter { get; set; }
             
             public string ActskillName { get; set; }
@@ -47,9 +49,9 @@ namespace TeamTodayTextRPG
 
             public int PassiveSkillLevel = 0;
             protected const int MaxPassiveSkillLevel = 5;
-            public void init(string[] data) //우선은 임의로 매서드로 초기화할 필드를 변경해 놓았습니다.
+            public void Init(string[] data) //우선은 임의로 매서드로 초기화할 필드를 변경해 놓았습니다.
             {
-                //직업이름,공격력,방어력,체력,마력,회피,골드,액티브스킬이름,패시브스킬이름
+                //직업이름,공격력,방어력,체력,마력,회피,액티브스킬이름,패시브스킬이름
                
                 Jobname = data[0];
                 Attack = int.Parse(data[1]);
@@ -59,9 +61,8 @@ namespace TeamTodayTextRPG
                 Mp = int.Parse(data[4]);
                 MaxMp = Mp;
                 Dodge = int.Parse(data[5]);
-                gold = int.Parse(data[6]);
-                ActskillName = (data[7]);
-                PasskillName = (data[8]);
+                ActskillName = (data[6]);
+                PasskillName = (data[7]);
             }
 
             public virtual string JobDescription() //직업 설명
@@ -98,7 +99,7 @@ namespace TeamTodayTextRPG
                  Console.WriteLine($"{Jobname}의 기술 {PasskillName}");
             }
 
-            public void ManageHp(int HpChange)//Hp관리용 매서드 입니다. 공격 연출시 매개변수를 음수로 입력하여야합니다
+            public void ManageHp(int HpChange)//Hp관리용 매서드 입니다. 공격 연출시 최종 계산 자료를 음수로 입력하여야합니다
             {
                 if (HpChange < 0)
                 {
@@ -135,7 +136,7 @@ namespace TeamTodayTextRPG
                 Console.WriteLine("눈앞이 깜깜해진다..");
             }
 
-            public void ManageMp(int ChangeMp) //Mp관리용 메서드입니다. Mp소모 매서드 이용시 매개변수를 음수로 입력하여야합니다
+            public void ManageMp(int ChangeMp) //Mp관리용 메서드입니다. Mp소모 매서드 이용시 최종 계산 자료를 음수로 입력하여야합니다
             {
                 if (ChangeMp < 0)
                 {
@@ -156,13 +157,18 @@ namespace TeamTodayTextRPG
         }
             
 
-        public static Random rng = new Random();
+ garam-Character
+
+       
+
+        
+
 
         public class Warrior : Character
         {
             public  Warrior ()
             {
-                init(DataManager.Instance.CharacterDB.List[(int)CHAR_TYPE.WARRIOR]);
+                Init(DataManager.Instance.CharacterDB.List[(int)CHAR_TYPE.WARRIOR]);
             }
             public override string JobDescription()
             {
@@ -217,7 +223,7 @@ namespace TeamTodayTextRPG
         {
             public  Magician()
             {
-                init(DataManager.Instance.CharacterDB.List[(int)CHAR_TYPE.MAGICIAN]);
+                Init(DataManager.Instance.CharacterDB.List[(int)CHAR_TYPE.MAGICIAN]);
             }
             public override string JobDescription()
             {
@@ -272,7 +278,7 @@ namespace TeamTodayTextRPG
         {
             public Assassin ()
             {
-            init(DataManager.Instance.CharacterDB.List[(int)CHAR_TYPE.ASSASSIN]);
+            Init(DataManager.Instance.CharacterDB.List[(int)CHAR_TYPE.ASSASSIN]);
             }
             public override string JobDescription()
             {
