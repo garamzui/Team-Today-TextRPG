@@ -34,7 +34,7 @@ namespace TeamTodayTextRPG
 
 
                 //『효빈』선택지 입력 시 다음 화면으로의 전환
-                currentView = sm.currentViewr.NextView(.InputAction(gm.Viewer.StartIndex, gm.Viewer.EndIndex));
+                currentView = sm.CurrentViewer.NextView(sm.InputAction(sm.CurrentViewer.StartIndex, sm.CurrentViewer.EndIndex));
             }
         }
     }

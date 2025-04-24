@@ -15,8 +15,8 @@ namespace TeamTodayTextRPG
         public DataManager DataManager { get; set; }
         public GameManager GameManager { get; set; }
         public SceneManager SceneManager { get; set; } 
-        public List<int> bag { get; set; }
-        public List<int> equip { get; set; }
+        public List<int> Bag { get; set; }
+        public List<int> Equip { get; set; }
         public int Level { get; set; }
         public int Exp { get; set; }
 
@@ -83,7 +83,7 @@ namespace TeamTodayTextRPG
             void SetStat()
             {
                 Attack = Character.Attack;
-                Defense = Character.Def;
+                Defense = Character.Defence;
                 CurHP = Character.Hp;
                 MaxHP = Character.MaxHp;
                 CurMP = Character.Mp;
@@ -118,7 +118,7 @@ namespace TeamTodayTextRPG
 
                 //스탯 증가량 화면에 표시
                 Character.Attack += 1;
-                Character.Def += 2;
+                Character.Defence += 2;
 
                 //Console.WriteLine("축하합니다! 레벨이 올랐습니다.");
                 //Console.WriteLine("공격력 +1, 방어력 +2");

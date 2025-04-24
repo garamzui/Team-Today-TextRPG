@@ -85,11 +85,16 @@ namespace TeamTodayTextRPG
                     //CurrentViewer = new MonsterViewer();
                    // break;
             }
-
-            // 새로운 뷰어의 화면 출력
             ShowCurrentView();
         }
 
+        //『효빈』선택지 입력 시 다음 화면으로의 전환
+        public VIEW_TYPE ChangeNextView()
+        {
+            return CurrentViewer.NextView(InputAction(CurrentViewer.StartIndex, CurrentViewer.EndIndex));
+        }
+
+        // 새로운 뷰어의 화면 출력
         public void ShowCurrentView()
         {
             if (CurrentViewer != null)
@@ -164,7 +169,13 @@ namespace TeamTodayTextRPG
             Console.Clear();
         }
 
-        // 선택지 입력( startIndex= 선택지 첫번째 숫자, endIndex = 선택지 마지막 숫자)
+        /* 『효빈』
+            꾸준히 호출될 선택지 입력합수입니다.
+            매개변수로 선택지의 첫번째 번호와 마지막 번호를 받습니다. 
+            ex) 1.아이템구매 2. 아이템판매 0.나가기 
+                ...이라면 startIndex = 0, endIndex = 2
+            리턴 값으로는 "고른 선택지의 번호"를 반환합니다.
+        */
         public int InputAction(int startIndex, int endIndex)
         {
             string rtnStr = string.Empty;
@@ -203,5 +214,88 @@ namespace TeamTodayTextRPG
             return num;
         }
 
+
+        public void ShowName(string name)
+        {
+            Console.Write(name + "\t| ");
+        }
+        public void ShowAtk(int atk)
+        {
+            if (atk > 0) Console.Write("공격력 +" + atk + "\t| ");
+            else Console.Write("공격력 -" + atk + "\t| ");
+        }
+        public void ShowDef(int def)
+        {
+            if (def > 0) Console.Write("방어력 +" + def + "\t| ");
+            else Console.Write("방어력 -" + def + "\t| ");
+        }
+
+        public void ShowInventory(VIEW_TYPE view)
+        {
+            if (GameManager.Instance.Player.Bag != null)
+            {
+                int count = 0;
+                foreach (var item in GameManager.Instance.Player.Bag)
+                {
+                    if (view == VIEW_TYPE.EQUIP) Console.Write($"- {++count} ");
+                    else Console.Write("- ");
+
+                    if (gm.Player.CheckEquip(item))
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.Write("[E]");
+                        Console.ResetColor();
+                    }
+
+                    ShowName(DataManager.Instance.ItemDB.List[item].Name);
+                    if (DataManager.Instance.ItemDB.List[item].Atk != 0) ShowAtk(DataManager.Instance.ItemDB.List[item].Atk);
+                    if (DataManager.Instance.ItemDB.List[item].Def != 0) ShowDef(DataManager.Instance.ItemDB.List[item].Def);
+                    Console.WriteLine(DataManager.Instance.ItemDB.List[item].Text);
+                }
+
+            }
+        }
+
+        public void ShowShop(VIEW_TYPE view)
+        {
+            if (DataManager.Instance.ItemDB.List != null)
+            {
+                foreach (var item in DataManager.Instance.ItemDB.List)
+                {
+                    if (GameManager.Instance.Player.CheckBag(item.Code)) Console.ForegroundColor = ConsoleColor.DarkGray;
+
+                    if (view == VIEW_TYPE.PURCHASE) Console.Write("- " + (item.Code + 1) + " " + item.Name + "\t| ");
+                    else Console.Write("- " + item.Name + "\t| ");
+
+                    if (item.Atk != 0) ShowAtk(item.Atk);
+                    if (item.Def != 0) ShowDef(item.Def);
+                    Console.Write(item.Text + "\t| ");
+
+                    if (GameManager.Instance.Player.CheckBag(item.Code))
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("구매 완료");
+                        Console.ResetColor();
+                    }
+                    else Console.WriteLine(item.Value + " G");
+                }
+            }
+        }
+
+        public void ShowShopSale()
+        {
+            int count = 0;
+            if (GameManager.Instance.Player.Bag != null)
+            {
+                foreach (var item in GameManager.Instance.Player.Bag)
+                {
+                    Console.Write("- " + (++count) + " " + DataManager.Instance.ItemDB.List[item].Name + "\t| ");
+                    if (DataManager.Instance.ItemDB.List[item].Atk != 0) ShowAtk(DataManager.Instance.ItemDB.List[item].Atk);
+                    if (DataManager.Instance.ItemDB.List[item].Def != 0) ShowDef(DataManager.Instance.ItemDB.List[item].Def);
+                    Console.Write(DataManager.Instance.ItemDB.List[item].Text + "\t| ");
+                    Console.WriteLine((int)(DataManager.Instance.ItemDB.List[item].Value * 0.85) + " G");
+                }
+            }
+        }
     }
 }
