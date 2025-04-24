@@ -7,61 +7,103 @@ using static System.Net.Mime.MediaTypeNames;
 using System.Xml.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Numerics;
+using System.Diagnostics;
 
 
 namespace TeamTodayTextRPG
 {
     enum ITEM_TYPE
     {
-        WEAPON = 0,
-        ARMOR = 1
+        WEAPON = 0,        //무기
+        ARMOR = 1,         //방어구
+        CONSUMABLE = 2,    //소모품
     }
 
-    public abstract class Item
+
+
+    public class Item
     {
-        public void Init(string[] str) //Parse로 데이터 변환
+        public Item(string[] str) //Parse로 데이터 변환
         {
             Code = int.Parse(str[0]);
             Name = str[1];
             Atk = int.Parse(str[2]);
             Def = int.Parse(str[3]);
-            Text = str[4];
-            Value = int.Parse(str[5]);
-            if (int.Parse(str[6]) == (int)ITEM_TYPE.WEAPON)
+            Hp = int.Parse(str[4]);
+            Mp = int.Parse(str[5]);
+            Text = str[6];
+            Value = int.Parse(str[7]);
+            if (int.Parse(str[8]) == (int)ITEM_TYPE.WEAPON)
             {
                 Type = ITEM_TYPE.WEAPON;
             }
-            else if (int.Parse(str[6]) == (int)ITEM_TYPE.ARMOR)
+            else if (int.Parse(str[8]) == (int)ITEM_TYPE.ARMOR)
             {
                 Type = ITEM_TYPE.ARMOR;
             }
+            else if (int.Parse(str[8]) == (int)ITEM_TYPE.CONSUMABLE)
+            {
+                Type = ITEM_TYPE.CONSUMABLE;
+            }
+            // 직업 제한 파싱
+            List<JobType> allowedJobs = new List<JobType> { JobType.None };
+
+            if (Text.Contains("전사")) allowedJobs = new List<JobType> { JobType.Warrior };
+            else if (Text.Contains("도적")) allowedJobs = new List<JobType> { JobType.Thief };
+            else if (Text.Contains("마법사") && Text.Contains("사제"))
+                allowedJobs = new List<JobType> { JobType.Mage, JobType.Priest };
+            else if (Text.Contains("마법사")) allowedJobs = new List<JobType> { JobType.Mage };
+            else if (Text.Contains("사제")) allowedJobs = new List<JobType> { JobType.Priest };
+
+            items.Add(new Item(Code, Name, Atk, Def, Hp, Mp, Text, Value, Type, allowedJobs));
         }
+
+            return items;
+
+        
 
         public int Code { get; private set; }
         public string Name { get; private set; }
         public int Atk { get; private set; }
         public int Def { get; private set; }
+        public int Hp { get; private set; }
+        public int Mp { get; private set; }
         public string Text { get; private set; }
         public int Value { get; private set; }
 
         private ITEM_TYPE Type { get; set; }
+
     }
-
-
-    public class Potion : Item
+    public class HpPotion : Item
     {
-        public Potion()
+        public int HealAmount { get; private set; } = 20; //항상 20을 회복
+
+        public HpPotion(int code, string name, string text, int value, int healAmount)
+            : base(code, name, text, value, ITEM_TYPE.CONSUMABLE)
         {
-            Init(DataManager.Instance.ItemDB.List[])
+            // HealAmount는 이미 20으로 고정됨
         }
 
-        public healHp(int upHp)
+        public override void Use(Player player)
         {
-
+            player.Heal(HealAmount);
+            Console.WriteLine($" HP포션을 사용하여 체력을 {HealAmount} 회복했습니다.");
         }
-
     }
+    public class MpPotion : Item
+    {
+        public int ManaAmount { get; private set; } = 20; // 항상 20을 회복
 
+        public MpPotion(int code, string name, string text, int value, int manaAmount)
+            : base(code, name, text, value, ITEM_TYPE.CONSUMABLE)
+        {
+            // ManaAmount는 20으로 고정
+        }
+
+        public override void Use(Player player)
+        {
+            player.RecoverMana(ManaAmount);
+            Console.WriteLine($" MP포션을 사용하여 마나를 {ManaAmount} 회복했습니다.");
+        }
+    }
 }
-
-   
