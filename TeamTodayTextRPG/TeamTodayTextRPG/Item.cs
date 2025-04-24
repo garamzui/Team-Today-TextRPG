@@ -73,7 +73,6 @@ namespace TeamTodayTextRPG
 
         private ITEM_TYPE Type { get; set; }
 
-    
     }
     public class HpPotion : Item
     {

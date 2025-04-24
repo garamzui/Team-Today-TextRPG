@@ -140,7 +140,7 @@ namespace TeamTodayTextRPG
             }
             return Reward + bonus;
         }
-
+            
         public int CalcMinusHP(int playerDefense)
         {
             int baseDamage = 10;
@@ -166,7 +166,7 @@ namespace TeamTodayTextRPG
 
             return finalDamage;
         }
-
+            
         public void PrintDungeonInfo()
         {
             Console.WriteLine($"[{Code}] {Name} - {Diff} 난이도");

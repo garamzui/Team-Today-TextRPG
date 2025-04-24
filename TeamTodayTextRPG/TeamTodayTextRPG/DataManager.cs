@@ -134,7 +134,7 @@
         }
         protected override void SetData(string[] parameter)
         {
-            List.Add(new parameter);
+            List.Add(parameter);
         }
     }
 

@@ -59,9 +59,6 @@ namespace TeamTodayTextRPG
                 gold = int.Parse(data[6]);
                 ActskillName = (data[7]);
                 PasskillName = (data[8]);
-
-
-
             }
 
             public virtual string JobDescription() //직업 설명
@@ -70,7 +67,7 @@ namespace TeamTodayTextRPG
             }
             public void ViewStatus()
             {
-                Console.WriteLine($"{Jobname} {JobDescription()}\n- 공격력 {Attack} (+{PlusAtk}), 방어력 {Def} (+{PlusDef}), HP {Hp}/{MaxHp}, Gold {gold}");
+                Console.WriteLine($"{Jobname} {JobDescription()}\n- 공격력 {Attack} (+{PlusAtk}), 방어력 {Defence} (+{PlusDef}), HP {Hp}/{MaxHp}, Gold {gold}");
             }
 
 
@@ -166,9 +163,9 @@ namespace TeamTodayTextRPG
 
         public static Random rng = new Random();
 
-        public class Worrior : Character
+        public class Warrior : Character
         {
-            public  Worrior ()
+            public  Warrior ()
             {
                 init(DataManager.Instance.CharacterDB.List[(int)CHAR_TYPE.WARRIOR]);
             }
@@ -184,7 +181,9 @@ namespace TeamTodayTextRPG
                     int SkillDamage = (TotalAtk * 3) - m.Def;
                     if (SkillDamage < 0)
                     { SkillDamage = 1; }
+
                     m.ManageHp(-SkillDamage);
+
                     Console.WriteLine($"{ActskillName}을 사용하여 {m.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
                 }
                 else
@@ -238,6 +237,7 @@ namespace TeamTodayTextRPG
                     int SkillDamage = (int)((TotalAtk * 10) - Math.Round(m.Def / 2.0)); //방어무시를 구현하기위해서 방어도를 반으로 나누고 반올림하였습니다.
                     if (SkillDamage < 0)
                     { SkillDamage = 1; }
+
                     m.ManageHp(-SkillDamage);
                     Console.WriteLine($"{ActskillName}을 사용하여 {m.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
                 }
@@ -304,6 +304,7 @@ namespace TeamTodayTextRPG
 
                     for (int i = 0; i < 2; i++) //2연격 구현
                     {
+
                         m.ManageHp(-SkillDamage);
                         Console.WriteLine($"{ActskillName}을 사용하여 {m.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
                     }
