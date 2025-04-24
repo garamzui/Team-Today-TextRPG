@@ -4,6 +4,7 @@ using TeamTodayTextRPG;
 namespace TeamTodayTextRPG
 {
     // 뷰어 화면 타입을 정의하는 열거형
+    // 가나다라
     public enum VIEW_TYPE
     {
         MAIN,           // 게임 시작 화면
@@ -23,33 +24,33 @@ namespace TeamTodayTextRPG
     // 모든 뷰어 클래스의 부모가 되는 추상 클래스
     public abstract class Viewer
     {
-        protected int startIndex;  // 화면에서 입력 가능한 시작 값
-        protected int endIndex;    // 화면에서 입력 가능한 끝 값
-        protected int dungeonCode; // 던전 코드 (사용할 경우)
+        public int StartIndex { get; set; }  // 화면에서 입력 가능한 시작 값
+        public int EndIndex { get; set; }  // 화면에서 입력 가능한 끝 값
+        public int DungeonCode { get; set; }// 던전 코드 (사용할 경우)
 
         // 각 화면에서의 구체적인 액션을 구현하는 추상 메서드
-        public abstract void ViewAction(GameManager gameManager);
+        public abstract void ViewAction();
 
         // 입력에 따라 다음 화면을 반환하는 추상 메서드
-        public abstract VIEW_TYPE NextView(GameManager gameManager, int input);
+        public abstract VIEW_TYPE NextView(int choiceNum);
     }
 
     public class StatusViewer : Viewer
     {
-        public override void ViewAction(GameManager gameManager)
+        public override void ViewAction()
         {
             Console.Clear();
             Console.WriteLine("플레이어 상태 보기");
             Console.WriteLine("====================");
 
-            var player = gameManager.Player;  // Player 객체 가져오기
+ // Player 객체 가져오기
 
             // 플레이어의 상태를 출력
             Console.WriteLine($"이름: {player.Name}");
-            Console.WriteLine($"체력: {player.Health}/{player.MaxHealth}");
-            Console.WriteLine($"공격력: {player.Attack}");
-            Console.WriteLine($"방어력: {player.Defense}");
-            Console.WriteLine($"금액: {player.Gold}G");
+            Console.WriteLine($"체력: {GameManager.Instance.Player.Character.Hp}/{GameManager.Instance.Player.Character.MaxHp}");
+            Console.WriteLine($"공격력: {GameManager.Instance.Player.Character.Attack}");
+            Console.WriteLine($"방어력: {GameManager.Instance.Player.Character.Def}");
+            Console.WriteLine($"금액: {GameManager.Instance.Player.Character.Gold}G");
 
             Console.WriteLine("====================");
             Console.WriteLine("1. 메인으로 돌아가기");
@@ -96,7 +97,7 @@ namespace TeamTodayTextRPG
             gameManager.SceneManager.SwitchScene(nextView);
         }
         // NextView 메서드 구현
-        public override VIEW_TYPE NextView(GameManager gameManager, int input)
+        public override VIEW_TYPE NextView(int input)
         {
             switch (input)
             {

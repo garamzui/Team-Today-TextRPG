@@ -17,86 +17,55 @@ namespace TeamTodayTextRPG
         ARMOR = 1
     }
 
-    public class Item
+    public abstract class Item
     {
-        private int code;
-        private string name;
-        private int atk;
-        private int def;
-        private string text;
-        private int value;
-        private ITEM_TYPE type;
-
-        public Item(string[] str) //Parse로 데이터 변환
+        public void Init(string[] str) //Parse로 데이터 변환
         {
-            code = int.Parse(str[0]);
-            name = str[1];
-            atk = int.Parse(str[2]);
-            def = int.Parse(str[3]);
-            text = str[4];
-            value = int.Parse(str[5]);
+            Code = int.Parse(str[0]);
+            Name = str[1];
+            Atk = int.Parse(str[2]);
+            Def = int.Parse(str[3]);
+            Text = str[4];
+            Value = int.Parse(str[5]);
             if (int.Parse(str[6]) == (int)ITEM_TYPE.WEAPON)
             {
-                type = ITEM_TYPE.WEAPON;
+                Type = ITEM_TYPE.WEAPON;
             }
             else if (int.Parse(str[6]) == (int)ITEM_TYPE.ARMOR)
             {
-                type = ITEM_TYPE.ARMOR;
+                Type = ITEM_TYPE.ARMOR;
             }
         }
 
         public int Code { get; private set; }
         public string Name { get; private set; }
         public int Atk { get; private set; }
-        public int Def { get ; private set; }
+        public int Def { get; private set; }
         public string Text { get; private set; }
-        public int Value { get ; private set; }
+        public int Value { get; private set; }
 
-        private ITEM_TYPE Type { get ;set; }
+        private ITEM_TYPE Type { get; set; }
     }
 
 
-
-        public class ItemDatabase
-    {   //Item형식의 값을 저장할 공간
-        private List<Item> itemList = new List<Item>();
-        public List<Item> ItemList => itemList;
-        private int Atk;
-        private int Def;
-
-
-        public ItemDatabase() 
+    public class Potion : Item
+    {
+        public Potion()
         {
-            InitItem();
+            Init(DataManager.Instance.ItemDB.List[])
         }
 
-        public void InitItem() 
+        public healHp(int upHp)
         {
-            itemList = new List<Item>();
-            {
 
-                string data =
-               "0/수련자 갑옷/0/5/수련에 도움을 주는 갑옷입니다./1000/0" +
-               "1/무쇠 갑옷/0/9/무쇠로 만들어져 튼튼한 갑옷입니다./2000/0" +
-               "2/스파르타의 갑옷/0/15/스파르타의 전사들이 사용했다는 전설의 갑옷입니다./3500/0" +
-               "3/낡은 검/2/0/쉽게 볼 수 있는 낡은검 입니다./600/1" +
-               "4/청동 도끼/5/0/어디선가 사용됐던거 같은 도끼입니다./1500/1" +
-               "5/스파르타의 창/7/0/스파르타의 전사들이 사용했다는 전설의 창입니다./2500/1";
-                string[] lines = data.Split('\n');
-
-                foreach (string line in lines)
-                {
-                    string[] parts = line.Trim().Split('/');
-                    if (parts.Length == 7)
-                    {
-                        Item item = new Item(parts);
-                        itemList.Add(item);
-                    }
-                }
-
-            }
         }
 
+    }
+
+}
+
+    
+/*
         public void ShowName(string name)
         {
             foreach (var item in itemList)
@@ -209,6 +178,4 @@ namespace TeamTodayTextRPG
             }
         }
             
-    }
-}
-
+    }*/
