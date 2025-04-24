@@ -1,17 +1,82 @@
-namespace TeamTodayTextRPG
-{
 using System;
-using System.Numerics;
-using System.Threading;
 using System.Collections.Generic;
+
 namespace TeamTodayTextRPG
 {
-    enum DUNGEON_DIFF
+    enum DUNGEON_DIFF { Easy, Normal, Hard, Hell }
+
+    class Player
     {
-        Easy = 0,
-        Normal = 1,
-        Hard = 2,
-        Hell = 3,
+        public string Name { get; set; }
+        public int Level { get; set; }
+        public int BaseAttack { get; set; }
+        public int BaseDefense { get; set; }
+        public int MaxHp { get; set; }
+        public int Hp { get; set; }
+        public int Gold { get; set; }
+        public string Title { get; set; } = "";
+        public List<Item> Inventory { get; set; }
+
+        public int TotalAttack => BaseAttack;
+        public int TotalDefense => BaseDefense;
+
+        public Player(string name, int level, int atk, int def, int hp, int gold)
+        {
+            Name = name;
+            Level = level;
+            BaseAttack = atk;
+            BaseDefense = def;
+            MaxHp = hp;
+            Hp = hp;
+            Gold = gold;
+            Inventory = new List<Item>();
+        }
+    }
+
+    class Monster
+    {
+        public string Name { get; set; }
+        public int Hp { get; set; }
+        public int Attack { get; set; }
+        public int Reward { get; set; }
+        public bool IsBoss { get; set; }
+
+        public Monster(string name, int hp, int atk, int reward, bool isBoss = false)
+        {
+            Name = name;
+            Hp = hp;
+            Attack = atk;
+            Reward = reward;
+            IsBoss = isBoss;
+        }
+    }
+
+    class Item
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
+
+        public Item(string name, string desc)
+        {
+            Name = name;
+            Description = desc;
+        }
+    }
+
+    class BattleLog
+    {
+        private List<string> logs = new List<string>();
+
+        public void Add(string message) => logs.Add(message);
+
+        public void Print()
+        {
+            Console.WriteLine("\n 전투 로그 요약:");
+            foreach (var log in logs)
+            {
+                Console.WriteLine("- " + log);
+            }
+        }
     }
 
     class Dungeon
@@ -25,152 +90,124 @@ namespace TeamTodayTextRPG
         public int DefLevel { get; set; }
         public DUNGEON_DIFF Diff { get; set; }
 
-        public void EnterDungeon(Player player, List<Monster> monsters)
+        public Dungeon(int code, string name, int reward, int exp, int defLevel, DUNGEON_DIFF diff)
+        {
+            Code = code;
+            Name = name;
+            Reward = reward;
+            Exp = exp;
+            DefLevel = defLevel;
+            Diff = diff;
+        }
+
+        public void Enter(Player player, Monster monster)
         {
             Console.WriteLine($"\n[{Name}] 던전에 입장했습니다!");
+            BattleLog log = new BattleLog();
 
-            int currentFloor = 1;
-            int maxFloor = monsters.Count; // 층수 = 넘겨준 몬스터 수
+            Console.WriteLine($"\n{monster.Name} 등장! {(monster.IsBoss ? "[보스]" : "")}");
 
-            while (currentFloor <= maxFloor && player.Hp > 0)
+            int originalAtk = player.BaseAttack;
+            int originalDef = player.BaseDefense;
+
+            if (monster.IsBoss)
             {
-                Console.WriteLine($"\n현재 {currentFloor}층입니다.");
+                player.BaseAttack = (int)(player.BaseAttack * 0.9);
+                player.BaseDefense = (int)(player.BaseDefense * 0.9);
+                Console.WriteLine("보스 효과로 능력치 10% 감소!");
+                log.Add("보스 효과로 능력치 10% 감소");
+            }
 
-                Monster monster = monsters[currentFloor - 1];
+            bool fled = false;
 
-                Console.WriteLine($"\n{monster.Name}이(가) 등장했습니다! {(monster.IsBoss ? "[보스 몬스터]" : "")}");
+            while (monster.Hp > 0 && player.Hp > 0)
+            {
+                Console.WriteLine("\n1. 공격하기\n2. 도망가기\n>> ");
+                string input = Console.ReadLine();
 
-                int originalAttack = player.BaseAttack;
-                int originalDefense = player.BaseDefense;
-                
-                List<string> battleLog = new List<string>();  
-                
-                if (monster.IsBoss)
+                if (input == "1")
                 {
-                    Console.WriteLine("\n[보스 효과] 플레이어의 능력치가 10% 감소합니다!");
-                    player.BaseAttack = (int)(player.BaseAttack * 0.9);
-                    player.BaseDefense = (int)(player.BaseDefense * 0.9);
-                }
+                    monster.Hp -= player.TotalAttack;
+                    Console.WriteLine($"{monster.Name}에게 {player.TotalAttack} 데미지!");
+                    log.Add($"{monster.Name}에게 {player.TotalAttack} 데미지");
 
-                bool fled = false;
-                while (monster.Hp > 0 && player.Hp > 0)
-                {
-                    Console.WriteLine("\n1. 공격하기");
-                    Console.WriteLine("2. 도망가기");
-                    Console.Write("\n>> ");
-                    string input = Console.ReadLine();
-
-                    if (input == "1")
+                    if (monster.Hp <= 0)
                     {
-                        monster.Hp -= player.TotalAttack;
-                        Console.WriteLine($"{monster.Name}에게 {player.TotalAttack} 데미지를 입혔습니다.");
+                        Console.WriteLine($"{monster.Name} 처치!");
+                        log.Add($"{monster.Name} 처치!");
+                        player.Gold += monster.Reward;
+                        log.Add($"{monster.Reward}G 획득");
 
-                        if (monster.Hp <= 0)
+                        if (monster.IsBoss && monster.Name == "자쿰")
                         {
-                            Console.WriteLine("\n몬스터를 처치했습니다!");
-                            player.Gold += monster.Reward;
-                            Console.WriteLine($"보상으로 {monster.Reward}G를 얻었습니다!");
-
-                            if (monster.IsBoss && monster.Name == "Zakum")
-                            {
-                                player.Title = "Zakum Slayer";
-                                Console.WriteLine("\n[칭호 획득] 'Zakum Slayer' 칭호를 얻었습니다!");
-                            }
-
-                            break;
+                            player.Title = "Zakum Slayer";
+                            log.Add("칭호 'Zakum Slayer' 획득!");
                         }
 
-                        player.Hp -= monster.Attack;
-                        Console.WriteLine($"{monster.Name}의 반격! {monster.Attack} 데미지 입음. (HP: {player.Hp}/{player.MaxHp})");
-
-                        if (player.Hp <= 0)
-                        {
-                            Console.WriteLine("\n플레이어가 쓰러졌습니다!");
-                            break;
-                        }
-                    }
-                    else if (input == "2")
-                    {
-                        Console.WriteLine("\n도망쳤습니다!");
-                        fled = true;
                         break;
                     }
-                    else
-                    {
-                        Console.WriteLine("잘못된 입력입니다.");
-                    }
-                }
 
-                if (monster.IsBoss)
+                    player.Hp -= monster.Attack;
+                    Console.WriteLine($"{monster.Name}의 반격! {monster.Attack} 데미지");
+                    log.Add($"반격 피해: {monster.Attack}");
+                }
+                else if (input == "2")
                 {
-                    player.BaseAttack = originalAttack;
-                    player.BaseDefense = originalDefense;
-                    Console.WriteLine("\n[보스 효과 종료] 플레이어 능력치가 복구되었습니다.");
+                    Console.WriteLine("도망쳤습니다.");
+                    log.Add("도망 시도 성공");
+                    fled = true;
+                    break;
                 }
-
-                 Console.WriteLine("\n 전투 로그 요약:");   
-                 foreach (string log in battleLog)
-                 {
-                      Console.WriteLine("- " + log);
-                 }
-
-                if (fled || player.Hp <= 0)
-                    break;
-
-                currentFloor++;
+                else
+                {
+                    Console.WriteLine("잘못된 입력입니다.");
+                }
             }
 
-            if (player.Hp > 0 && currentFloor > maxFloor)
+            if (monster.IsBoss)
             {
-                Console.WriteLine("\n 던전을 모두 클리어했습니다! ");
+                player.BaseAttack = originalAtk;
+                player.BaseDefense = originalDef;
+                Console.WriteLine("보스 효과 종료 (능력치 복구)");
             }
-        }
 
-        public bool CheckClear(int playerLevel)
-        {
-            return playerLevel >= DefLevel;
-        }
+            log.Print();
 
-        public int CalcReward(int playerLevel)
-        {
-            int bonus = 0;
-            if (playerLevel > DefLevel + 2)
+            if (player.Hp > 0 && !fled && monster.Hp <= 0)
             {
-                bonus = rand.Next(50, 101);
+                Console.WriteLine("\n 던전을 클리어했습니다!");
             }
-            return Reward + bonus;
         }
-            
-        public int CalcMinusHP(int playerDefense)
+    }
+
+
+    class Program
+    {
+        static void Main()
         {
-            int baseDamage = 10;
+          
+            string[] monsterNames = { "슬라임", "고블린", "늑대", "오크" };
 
-            switch (Diff)
-            {
-                case DUNGEON_DIFF.Easy:
-                    baseDamage = 10;
-                    break;
-                case DUNGEON_DIFF.Normal:
-                    baseDamage = 20;
-                    break;
-                case DUNGEON_DIFF.Hard:
-                    baseDamage = 30;
-                    break;
-                case DUNGEON_DIFF.Hell:
-                    baseDamage = 50;
-                    break;
-            }
-
-            int finalDamage = baseDamage - playerDefense;
-            if (finalDamage < 1) finalDamage = 1;
-
-            return finalDamage;
+            Random rand = new Random();
+          
+            int index = rand.Next(monsterNames.Length);       
+            string selectedMonster = monsterNames[index];         
+            Console.WriteLine($"몬스터 등장! ▶ {selectedMonster}");
         }
-            
-        public void PrintDungeonInfo()
+    }
+
+
+    class Program2
+    {
+        static void Main(string[] args)
         {
-            Console.WriteLine($"[{Code}] {Name} - {Diff} 난이도");
-            Console.WriteLine($"추천 레벨: {DefLevel} / 기본 보상: {Reward}G / 경험치: {Exp}Exp");
+            Player player = new Player(name: "Jaehun", level: 3, atk: 15, def: 8, hp: 100, gold: 1000);
+
+           
+            Monster boss = new Monster("자쿰", 200, 20, 1000, isBoss: true);   
+
+            Dungeon dungeon = new Dungeon(1, "불의 신전", 1000, 500, 3, DUNGEON_DIFF.Hard);
+            dungeon.Enter(player, boss);
         }
     }
 }
