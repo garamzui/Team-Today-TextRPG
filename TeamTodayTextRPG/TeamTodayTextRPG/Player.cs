@@ -12,21 +12,11 @@ namespace TeamTodayTextRPG
     partial class Player
     {
         public Character Character { get; set; }
-        public DataManager DataManager { get; set; }
-        public GameManager GameManager { get; set; }
-        public SceneManager SceneManager { get; set; } 
         public List<int> Bag { get; set; }
         public List<int> Equip { get; set; }
         public int Level { get; set; }
         public int Exp { get; set; }
 
-        public int Attack { get; set; }
-        public int Defense { get; set; }
-        public int MaxHP { get; set; }
-        public int CurHP { get; set; }
-        public int MaxMP { get; set; }
-        public int CurMP { get; set; }
-        public int Dodge { get; set; }
         public int Gold { get; set; }
         public string Name { get; set; }
 
@@ -86,13 +76,7 @@ namespace TeamTodayTextRPG
 
             void SetStat()
             {
-                Attack = Character.Attack;
-                Defense = Character.Defence;
-                CurHP = Character.Hp;
-                MaxHP = Character.MaxHp;
-                CurMP = Character.Mp;
-                MaxMP = Character.MaxMp;
-                Dodge = Character.Dodge;
+                Level = 1;
                 Gold = Character.gold;
             }
 
