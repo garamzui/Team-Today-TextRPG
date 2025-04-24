@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using TeamTodayTextRPG;
-using TeamTodayTextRPG.TeamTodayTextRPG;
+using static TeamTodayTextRPG.Characterclass;
 
 namespace TeamTodayTextRPG
 {
@@ -30,6 +30,9 @@ namespace TeamTodayTextRPG
         public int EndIndex { get; set; }  // 화면에서 입력 가능한 끝 값
         public int DungeonCode { get; set; }// 던전 코드 (사용할 경우)
 
+        protected Player Player => GameManager.Instance.Player;
+        protected Character Character => Player.Character;
+
         // 각 화면에서의 구체적인 액션을 구현하는 추상 메서드
         public abstract void ViewAction();
 
@@ -45,19 +48,19 @@ namespace TeamTodayTextRPG
             Console.WriteLine("플레이어 상태 보기");
             Console.WriteLine("====================");
 
-            var player = GameManager.Instance.Player;
-            var character = player.Character;
+            //var player = GameManager.Instance.Player;
+            //var character = player.Character;
 
             // 플레이어의 상태를 출력
-            Console.WriteLine($"직업: {character.Jobname}");
-            Console.WriteLine($"체력: {character.Hp}/{character.MaxHp}");
-            Console.WriteLine($"마나: {character.Mp}/{character.MaxMp}");
-            Console.WriteLine($"공격력: {character.Attack} (+{character.PlusAtk}) = {character.TotalAtk}");
-            Console.WriteLine($"방어력: {character.Defence} (+{character.PlusDef}) = {character.TotalDef}");
-            Console.WriteLine($"회피율: {character.Dodge} (+{character.PlusDodge}) = {character.TotalDodge}");
-            Console.WriteLine($"소지금: {character.gold}G");
-            Console.WriteLine($"액티브 스킬: {character.ActskillName}");
-            Console.WriteLine($"패시브 스킬: {character.PasskillName} (레벨 {character.PassiveSkillLevel}/{MaxPassiveSkillLevel})");
+            Console.WriteLine($"직업: {Character.Jobname}");
+            Console.WriteLine($"체력: {Character.Hp}/{Character.MaxHp}");
+            Console.WriteLine($"마나: {Character.Mp}/{Character.MaxMp}");
+            Console.WriteLine($"공격력: {Character.Attack} (+{Character.PlusAtk}) = {Character.TotalAtk}");
+            Console.WriteLine($"방어력: {Character.Defence} (+{Character.PlusDef}) = {Character.TotalDef}");
+            Console.WriteLine($"회피율: {Character.Dodge} (+{Character.PlusDodge}) = {Character.TotalDodge}");
+            Console.WriteLine($"소지금: {Player.Gold}G");
+            Console.WriteLine($"액티브 스킬: {Character.ActskillName}");
+            Console.WriteLine($"패시브 스킬: {Character.PasskillName} (레벨 {Character.PassiveSkillLevel}/{MaxPassiveSkillLevel})");
 
             Console.WriteLine("====================");
             Console.WriteLine("1. 메인으로 돌아가기");

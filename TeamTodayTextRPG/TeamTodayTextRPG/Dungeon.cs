@@ -5,64 +5,6 @@ namespace TeamTodayTextRPG
 {
     enum DUNGEON_DIFF { Easy, Normal, Hard, Hell }
 
-    class Player
-    {
-        public string Name { get; set; }
-        public int Level { get; set; }
-        public int BaseAttack { get; set; }
-        public int BaseDefense { get; set; }
-        public int MaxHp { get; set; }
-        public int Hp { get; set; }
-        public int Gold { get; set; }
-        public string Title { get; set; } = "";
-        public List<Item> Inventory { get; set; }
-
-        public int TotalAttack => BaseAttack;
-        public int TotalDefense => BaseDefense;
-
-        public Player(string name, int level, int atk, int def, int hp, int gold)
-        {
-            Name = name;
-            Level = level;
-            BaseAttack = atk;
-            BaseDefense = def;
-            MaxHp = hp;
-            Hp = hp;
-            Gold = gold;
-            Inventory = new List<Item>();
-        }
-    }
-
-    class Monster
-    {
-        public string Name { get; set; }
-        public int Hp { get; set; }
-        public int Attack { get; set; }
-        public int Reward { get; set; }
-        public bool IsBoss { get; set; }
-
-        public Monster(string name, int hp, int atk, int reward, bool isBoss = false)
-        {
-            Name = name;
-            Hp = hp;
-            Attack = atk;
-            Reward = reward;
-            IsBoss = isBoss;
-        }
-    }
-
-    class Item
-    {
-        public string Name { get; set; }
-        public string Description { get; set; }
-
-        public Item(string name, string desc)
-        {
-            Name = name;
-            Description = desc;
-        }
-    }
-
     class BattleLog
     {
         private List<string> logs = new List<string>();
