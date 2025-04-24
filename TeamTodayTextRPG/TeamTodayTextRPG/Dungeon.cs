@@ -42,7 +42,9 @@ namespace TeamTodayTextRPG
 
                 int originalAttack = player.BaseAttack;
                 int originalDefense = player.BaseDefense;
-
+                
+                List<string> battleLog = new List<string>();  
+                
                 if (monster.IsBoss)
                 {
                     Console.WriteLine("\n[보스 효과] 플레이어의 능력치가 10% 감소합니다!");
@@ -105,6 +107,12 @@ namespace TeamTodayTextRPG
                     player.BaseDefense = originalDefense;
                     Console.WriteLine("\n[보스 효과 종료] 플레이어 능력치가 복구되었습니다.");
                 }
+
+                 Console.WriteLine("\n 전투 로그 요약:");   
+                 foreach (string log in battleLog)
+                 {
+                      Console.WriteLine("- " + log);
+                 }
 
                 if (fled || player.Hp <= 0)
                     break;
