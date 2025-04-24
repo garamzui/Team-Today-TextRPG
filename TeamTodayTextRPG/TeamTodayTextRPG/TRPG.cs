@@ -24,7 +24,7 @@ namespace TeamTodayTextRPG
             var dm = DataManager.Instance;
 
 
-            gm.Intro();
+            sm.Intro();
 
 
             // 『효빈』스테이트 머신
@@ -32,11 +32,9 @@ namespace TeamTodayTextRPG
             {
                 sm.SwitchScene(currentView);
 
-                //『효빈』화면 UI 호출
-                sm.ShowCurrentView();
 
                 //『효빈』선택지 입력 시 다음 화면으로의 전환
-                currentView = gm.Viewer.NextView(gm, gm.InputAction(gm.Viewer.StartIndex, gm.Viewer.EndIndex));
+                currentView = sm.currentViewr.NextView(.InputAction(gm.Viewer.StartIndex, gm.Viewer.EndIndex));
             }
         }
     }

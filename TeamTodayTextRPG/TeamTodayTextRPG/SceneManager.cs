@@ -8,7 +8,7 @@ namespace TeamTodayTextRPG
     // 『효빈』 씬 매니저는 전역적으로 사용하게 될 매니저 클래스기에 싱글톤으로 생성자를 만들어주겠습니다 :)
     public class SceneManager
     {
-        private Viewer currentViewer;
+        public Viewer CurrentViewer { get; set; }
        
         /* 『효빈』이미 GameManager 에서 싱글톤으로 객체를 만들었기 때문에 여기서 다시 만들 필요가 없습니다!.
                    GameMansger.Instance로 접근하시면 돼요!
@@ -30,7 +30,7 @@ namespace TeamTodayTextRPG
         {
             //『효빈』 초기 생성시 메인뷰어로 들어가도록 하겠습니다.
             //         추후에 가람님의 '그것'을 초기화면으로 설정하도록 바꿀예정입니다. 예를들어...IntroViewer 처럼요
-            currentViewer = new MainViewer();
+            CurrentViewer = new MainViewer();
         }
 
         public void SwitchScene(VIEW_TYPE viewType)
@@ -39,39 +39,39 @@ namespace TeamTodayTextRPG
             switch (viewType)
             {
                 case VIEW_TYPE.MAIN:
-                    currentViewer = new MainViewer();
+                    CurrentViewer = new MainViewer();
                     break;
                 case VIEW_TYPE.STATUS:
-                    currentViewer = new StatusViewer();
+                    CurrentViewer = new StatusViewer();
                     break;
                 case VIEW_TYPE.INVENTORY:
-                    currentViewer = new InventoryViewer();
+                    CurrentViewer = new InventoryViewer();
                     break;
                 case VIEW_TYPE.EQUIP:
-                    currentViewer = new EquipViewer();
+                    CurrentViewer = new EquipViewer();
                     break;
                 case VIEW_TYPE.SHOP:
-                    currentViewer = new ShopViewer();
+                    CurrentViewer = new ShopViewer();
                     break;
                 case VIEW_TYPE.PURCHASE:
-                    currentViewer = new PurchaseViewer();
+                    CurrentViewer = new PurchaseViewer();
                     break;
                 case VIEW_TYPE.SALE:
-                    currentViewer = new SaleViewer();
+                    CurrentViewer = new SaleViewer();
                     break;
                 case VIEW_TYPE.DUNGEON:
-                    currentViewer = new DungeonViewer();
+                    CurrentViewer = new DungeonViewer();
                     break;
                 case VIEW_TYPE.DUNGEONCLEAR:
-                    currentViewer = new DungeonClearViewer();
+                    CurrentViewer = new DungeonClearViewer();
                     break;
                 case VIEW_TYPE.REST:
-                    currentViewer = new RestViewer();
+                    CurrentViewer = new RestViewer();
                     break;
                 case VIEW_TYPE.BATTLE:
-                    currentViewer = new BattleViewer();
+                    CurrentViewer = new BattleViewer();
                     break;
-                case VIEW_TYPE.MONSTER:
+                //case VIEW_TYPE.MONSTER:
                     // GameManager에서 직접적으로 몬스터 객체를 가져오는 방식으로 수정
                     /* 『효빈』GameManager에서 Dungeon을 관리하게 하고 
                                1) 던전에 입장시에 몬스터들을 관리하는 List<Monster>를 생성  << 데이터 방식은 던전 설계에 따라 바뀔수도 있을 것 같아요
@@ -82,8 +82,8 @@ namespace TeamTodayTextRPG
                     // Monster currentMonster = gameManager.CurrentMonster;//*GameManager에서 속성을 추가 후 받아야함
                     //currentViewer = new MonsterViewer(currentMonster);
 
-                    currentViewer = new MonsterViewer();
-                    break;
+                    //CurrentViewer = new MonsterViewer();
+                   // break;
             }
 
             // 새로운 뷰어의 화면 출력
@@ -92,10 +92,116 @@ namespace TeamTodayTextRPG
 
         public void ShowCurrentView()
         {
-            if (currentViewer != null)
+            if (CurrentViewer != null)
             {
-                currentViewer.ViewAction(gameManager);  // gameManager 객체를 넘기기
+                CurrentViewer.ViewAction();  // gameManager 객체를 넘기기
             }
         }
+
+        // 『효빈』초기 캐릭터 설정 (플레이어 이름, 플레이어할 캐릭터의 직업)을 도와주는 함수 입니다.
+        public void Intro()
+        {
+            string? name = string.Empty;
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("스파르타 마을에 오신 여러분 환영합니다.");
+            Console.ResetColor();
+
+            while (name == string.Empty)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("원하시는 이름을 설정해주세요.");
+                Console.ResetColor();
+                Console.Write("\n입력 >> ");
+                name = Console.ReadLine();
+                if (name == string.Empty)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("이름을 제대로 입력해주세요.\n");
+                    Console.ResetColor();
+                }
+                else
+                {
+                    bool check = true;
+
+                    while (check)
+                    {
+                        int num = 0;
+                        Console.Write("입력하신 이름은 『 ");
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write(name);
+                        Console.ResetColor();
+                        Console.WriteLine(" 』입니다.\n");
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        Console.WriteLine("1. 저장");
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("2. 취소\n");
+                        Console.ResetColor();
+
+                        num = SceneManager.Instance.InputAction(1, 2);
+
+                        if (num == 1) check = false;
+                        else if (num == 2)
+                        {
+                            check = false;
+                            name = string.Empty;
+                        }
+                    }
+                }
+            }
+            Console.Clear();
+
+            int classCode = 0;
+            while (classCode == 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("원하시는 직업을 설정해주세요.\n");
+                Console.ResetColor();
+                Console.WriteLine("1. 전사\n2. 마법사\n3. 도적\n");
+
+                classCode = SceneManager.Instance.InputAction(1, 3);
+                GameManager.Instance.Player.SetCharacter(classCode, name);
+            }
+            Console.Clear();
+        }
+
+        // 선택지 입력( startIndex= 선택지 첫번째 숫자, endIndex = 선택지 마지막 숫자)
+        public int InputAction(int startIndex, int endIndex)
+        {
+            string rtnStr = string.Empty;
+            int num = -1;
+            bool check = false;
+            while (!check)
+            {
+                Console.Write("원하시는 행동을 입력해주세요.\n>>");
+                rtnStr = Console.ReadLine();
+                if (rtnStr == string.Empty)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("아무 행동도 입력하지 않으셨습니다.\n");
+                    Console.ResetColor();
+                }
+                else
+                {
+                    if (int.TryParse(rtnStr, out num))
+                    {
+                        if (num < startIndex && num > endIndex)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("선택지 내에서 입력해주세요.\n");
+                            Console.ResetColor();
+                        }
+                        else check = true;
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("숫자만 입력해주세요.\n");
+                        Console.ResetColor();
+                    }
+                }
+            }
+            return num;
+        }
+
     }
 }

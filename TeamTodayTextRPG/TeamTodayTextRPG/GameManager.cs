@@ -30,71 +30,7 @@ namespace TeamTodayTextRPG
         public Player Player { get; set; }
 
 
-        // 『효빈』초기 캐릭터 설정 (플레이어 이름, 플레이어할 캐릭터의 직업)을 도와주는 함수 입니다.
-        public void Intro()
-        {
-            string? name = string.Empty;
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("스파르타 마을에 오신 여러분 환영합니다.");
-            Console.ResetColor();
-
-            while (name == string.Empty)
-            {
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("원하시는 이름을 설정해주세요.");
-                Console.ResetColor();
-                Console.Write("\n입력 >> ");
-                name = Console.ReadLine();
-                if (name == string.Empty)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("이름을 제대로 입력해주세요.\n");
-                    Console.ResetColor();
-                }
-                else
-                {
-                    bool check = true;
-
-                    while (check)
-                    {
-                        int num = 0;
-                        Console.Write("입력하신 이름은 『 ");
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.Write(name);
-                        Console.ResetColor();
-                        Console.WriteLine(" 』입니다.\n");
-                        Console.ForegroundColor = ConsoleColor.Cyan;
-                        Console.WriteLine("1. 저장");
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("2. 취소\n");
-                        Console.ResetColor();
-
-                        num = SceneManager.Instance.InputAction(1, 2);
-
-                        if (num == 1) check = false;
-                        else if (num == 2)
-                        {
-                            check = false;
-                            name = string.Empty;
-                        }
-                    }
-                }
-            }
-            Console.Clear();
-
-            int classCode = 0;
-            while (classCode == 0)
-            {
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("원하시는 직업을 설정해주세요.\n");
-                Console.ResetColor();
-                Console.WriteLine("1. 전사\n2. 마법사\n3. 도적\n");
-
-                classCode = SceneManager.Instance.InputAction(1, 3);
-                Player.SetCharacter(classCode, name);
-            }
-            Console.Clear();
-        }
+       
 
 
         /* 『효빈』
