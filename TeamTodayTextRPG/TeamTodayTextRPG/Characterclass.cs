@@ -10,12 +10,16 @@ using static TeamTodayTextRPG.Characterclass;
 
 namespace TeamTodayTextRPG
 {
+
     public enum CHAR_TYPE
+
     {
         WARRIOR,
         MAGICIAN,
         ASSASSIN
     }
+
+
     internal class Characterclass
     {
         public abstract class Character
@@ -153,10 +157,12 @@ namespace TeamTodayTextRPG
         }
             
 
+ garam-Character
 
        
 
         
+
 
         public class Warrior : Character
         {
