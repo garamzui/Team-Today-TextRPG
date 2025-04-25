@@ -162,48 +162,54 @@ namespace TeamTodayTextRPG
         }
 
         //장비 착용
-        public void EquipItem(int equipItemCode)
+        public void EquipItem(Type? equipedItemType, int equipItemCode)
         {
-            // 가방에 아이템이 있고 && 장착중이 아니면
-            if (CheckBag(equipItemCode))
+            // 가방에 아이템이 있고
+            if (CheckBag(equipItemCode)) 
             {
-                // 동일 타입 장비일 경우 해체
-                foreach (var code in GameManager.Instance.Player.Equip)
+                if (equipedItemType != null)
                 {
-                    // 기존조건 :
-                    if ( DataManager.Instance.ItemDB.List[code][8] == DataManager.Instance.ItemDB.List[GameManager.Instance.Player.Bag[equipItemCode - 1]][8])
+                    // 동일 타입 장비일 경우 해체
+                    foreach (var code in GameManager.Instance.Player.Equip)
                     {
-                        UnEquipItem(code);
+                        // 기존조건 :
+                        if ( DataManager.Instance.ItemDB.List[code][8] == DataManager.Instance.ItemDB.List[GameManager.Instance.Player.Bag[equipItemCode - 1]][8])
+                        {
+                            UnEquipItem(code);
 
-                        //해제하는 아이템의 보유 스탯만큼 PlusAtk 과 PlusDef 감소
-                        StatChange(code);
+                            //해제하는 아이템의 보유 스탯만큼 PlusAtk 과 PlusDef 감소
+                            StatChange(code);
 
-                        break;
+                            break;
+                        }
+                        Equip.Add(equipItemCode);
+
+                        //장착한 아이템의 보유 스탯만큼 PlusAtk 과 PlusDef 상승
+                        StatChange(equipItemCode - 1);
+
+                        Console.Write($">> {DataManager.Instance.ItemDB.List[Bag[equipItemCode - 1]][1]}");
+                        Console.ForegroundColor = ConsoleColor.DarkCyan;
+                        Console.WriteLine("을(를) 장착 하였습니다.\n");
+                        Console.ResetColor();
+
                     }
-                    Equip.Add(equipItemCode);
+                }
 
-                    //장착한 아이템의 보유 스탯만큼 PlusAtk 과 PlusDef 상승
-                    StatChange(equipItemCode - 1);
+                else if(equipedItemType == null)
+                {
+                    //UnEquipItem(equipItemCode - 1);
+                    //Console.Write($">> {DataManager.Instance.ItemDB.List[Bag[equipItemCode - 1]][1]}");
+                    //Console.ForegroundColor = ConsoleColor.DarkCyan;
+                    //Console.WriteLine("을(를) 장착 해제하였습니다.\n");
+                    //Console.ResetColor();
+                }
 
-                    Console.Write($">> {DataManager.Instance.ItemDB.List[Bag[equipItemCode - 1]][1]}");
-                    Console.ForegroundColor = ConsoleColor.DarkCyan;
-                    Console.WriteLine("을(를) 장착 하였습니다.\n");
-                    Console.ResetColor();
+                else if ()
+                {
+                    Console.WriteLine("해당 아이템을 이미 착용중입니다.\n");
                 }
             }
 
-            // 장착중
-            // 영훈) 위 if가 CheckBag()이라서 else면 가방에 없는 것이니
-            // 아래가 작동할 수 없습니다 우선 주석처리 후 확인 부탁드려요
-            else
-            {
-                //UnEquipItem(equipItemCode - 1);
-                //Console.Write($">> {DataManager.Instance.ItemDB.List[Bag[equipItemCode - 1]][1]}");
-                //Console.ForegroundColor = ConsoleColor.DarkCyan;
-                //Console.WriteLine("을(를) 장착 해제하였습니다.\n");
-                //Console.ResetColor();
-                Console.WriteLine("해당 아이템을 이미 착용중입니다.\n");
-            }
         }
 
         //장비 해제
