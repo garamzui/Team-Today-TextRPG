@@ -70,7 +70,7 @@ namespace TeamTodayTextRPG
         {
             int requiredExp = 100;
 
-    //던전 클리어시 처치한 몬스터에 따라 경험치를 얻는 구조 필요
+            //던전 클리어시 처치한 몬스터에 따라 경험치를 얻는 구조 필요
             //경험치가 요구 경험치보다 크거나 같아진다.
             if (Exp >= requiredExp)
             {
@@ -123,11 +123,11 @@ namespace TeamTodayTextRPG
 
             //인벤토리에 아이템이 들어오는 경우 2 - 던전 클리어
             //던전 클리어 시 랜덤(20%) 확률로 아이템 드롭
-            if(type == VIEW_TYPE.DUNGEON_CLEAR)
+            if (type == VIEW_TYPE.DUNGEON_CLEAR)
             {
                 int ItemDrop = GameManager.Instance.Rand.Next(0, 101);
                 //20% 확률로
-                if(ItemDrop >= 90 || ItemDrop <= 10)
+                if (ItemDrop >= 90 || ItemDrop <= 10)
                 {
                     //랜덤 아이템 드롭
                     int dropItemCode = GameManager.Instance.Rand.Next(0, DataManager.Instance.ItemDB.List.Count);
@@ -162,61 +162,60 @@ namespace TeamTodayTextRPG
         }
 
         //장비 착용
-        public void EquipItem(Type? equipedItemType, int equipItemCode)
+        public void EquipItem(int equipItemCode, int? equipedItemCode)
         {
-            // 가방에 아이템이 있고
-            if (CheckBag(equipItemCode)) 
+            //동일 코드 아이템을 장착하려 하면
+            if(equipItemCode == equipedItemCode)
             {
-                if (equipedItemType != null)
+                Console.WriteLine("해당 아이템은 착용중입니다.");
+                return;
+            }
+
+            //착용중인 아이템이 있다면
+            if (equipedItemCode != null)
+            {
+                //같은 타입 아이템 착용중이라면
+                if ((DataManager.Instance.ItemDB.List[Equip[equipedItemCode.Value - 1]][8]) ==
+                    (DataManager.Instance.ItemDB.List[Equip[equipItemCode - 1]][8]))
                 {
                     // 동일 타입 장비일 경우 해체
                     foreach (var code in GameManager.Instance.Player.Equip)
                     {
-                        // 기존조건 :
-                        if ( DataManager.Instance.ItemDB.List[code][8] == DataManager.Instance.ItemDB.List[GameManager.Instance.Player.Bag[equipItemCode - 1]][8])
+                        if (DataManager.Instance.ItemDB.List[code][8] == DataManager.Instance.ItemDB.List[GameManager.Instance.Player.Bag[equipItemCode - 1]][8])
                         {
                             UnEquipItem(code);
-
-                            //해제하는 아이템의 보유 스탯만큼 PlusAtk 과 PlusDef 감소
                             StatChange(code);
-
                             break;
                         }
                         Equip.Add(equipItemCode);
-
-                        //장착한 아이템의 보유 스탯만큼 PlusAtk 과 PlusDef 상승
-                        StatChange(equipItemCode - 1);
+                        StatChange(equipItemCode);
+                        equipedItemCode = equipItemCode;
 
                         Console.Write($">> {DataManager.Instance.ItemDB.List[Bag[equipItemCode - 1]][1]}");
                         Console.ForegroundColor = ConsoleColor.DarkCyan;
                         Console.WriteLine("을(를) 장착 하였습니다.\n");
                         Console.ResetColor();
-
                     }
-                }
-
-                else if(equipedItemType == null)
-                {
-                    //UnEquipItem(equipItemCode - 1);
-                    //Console.Write($">> {DataManager.Instance.ItemDB.List[Bag[equipItemCode - 1]][1]}");
-                    //Console.ForegroundColor = ConsoleColor.DarkCyan;
-                    //Console.WriteLine("을(를) 장착 해제하였습니다.\n");
-                    //Console.ResetColor();
-                }
-
-                else if ()
-                {
-                    Console.WriteLine("해당 아이템을 이미 착용중입니다.\n");
                 }
             }
 
+            //착용중인 아이템이 없다면
+            else if (equipedItemCode == null)
+            {
+                Equip.Add(equipItemCode);
+                equipedItemCode = int.Parse(DataManager.Instance.ItemDB.List[Bag[equipItemCode - 1]][0]);
+                StatChange(equipItemCode);
+                equipedItemCode = equipItemCode;
+            }
         }
+
+        
 
         //장비 해제
         public void UnEquipItem(int equipItemCode)
         {
             //장착중 이라면
-            if(CheckEquip(equipItemCode) == true)
+            if (CheckEquip(equipItemCode) == true)
             {
                 //Equip List에서 삭제
                 Equip.Remove(equipItemCode);
