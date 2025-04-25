@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using TeamTodayTextRPG;
-//Console.OutputEncoding = System.Text.Encoding.UTF8;
+using static TeamTodayTextRPG.Character;
 
 namespace TeamTodayTextRPG
 {
