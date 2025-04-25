@@ -16,7 +16,7 @@ namespace TeamTodayTextRPG
             var sm = SceneManager.Instance;
             var dm = DataManager.Instance;
 
-
+            
             sm.Intro();
 
 

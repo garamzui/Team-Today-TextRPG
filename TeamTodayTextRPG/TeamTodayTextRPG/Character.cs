@@ -22,6 +22,7 @@ namespace TeamTodayTextRPG
     public abstract class Character
     {
         public Monster Monster { get; set; }
+        public CHAR_TYPE Code { get; set; }
         public string Jobname { get; set; }
         public int Attack { get; set; }
         public int PlusAtk { get; set; } = 0;
@@ -51,7 +52,7 @@ namespace TeamTodayTextRPG
         public void Init(string[] data) //우선은 임의로 매서드로 초기화할 필드를 변경해 놓았습니다.
         {
             //직업이름,공격력,방어력,체력,마력,회피,액티브스킬이름,패시브스킬이름
-
+            Code = (CHAR_TYPE)int.Parse(data[0]);
             Jobname = data[1];
             Attack = int.Parse(data[2]);
             Defence = int.Parse(data[3]);
@@ -80,7 +81,25 @@ namespace TeamTodayTextRPG
         // 스킬 이름은 스탯과 함께 초기화해서 저장해두게 해놨습니다.
 
         public virtual void DefaultAttack()
-        {  
+        {
+            switch (GameManager.Instance.Player.Character.Code)
+            {
+                case CHAR_TYPE.WARRIOR:
+                    GameManager.Instance.Animation.WarriorAnimation();
+                    break;
+                case CHAR_TYPE.MAGICIAN:
+                    GameManager.Instance.Animation.MagicianAnimation();
+                    break;
+                case CHAR_TYPE.ASSASSIN:
+                    GameManager.Instance.Animation.AssassinAnimation();
+                    break;
+                
+                    
+                default:
+                    break;
+
+            }
+
             int AttackDamage = TotalAtk - GameManager.Instance.Dungeon.TargetMonster.Def;
             if (AttackDamage <= 0)
             { AttackDamage = 1; }
@@ -177,13 +196,14 @@ namespace TeamTodayTextRPG
             if (Mp >= 10)
             {
                 ManageMp(-10);
+                GameManager.Instance.Animation.WarriorAnimation();
                 int SkillDamage = (TotalAtk * 3) - GameManager.Instance.Dungeon.TargetMonster.Def;
                 if (SkillDamage <= 0)
                 { SkillDamage = 1; }
 
                 GameManager.Instance.Dungeon.TargetMonster.ManageHp(-SkillDamage);
 
-                Console.WriteLine($"{ActskillName}을 사용하여 {GameManager.Instance.Dungeon.TargetMonster.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
+                Console.WriteLine($"{GameManager.Instance.Player.Name}의{ActskillName}!!! {GameManager.Instance.Dungeon.TargetMonster.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
             }
             else
             {
@@ -233,12 +253,13 @@ namespace TeamTodayTextRPG
             if (Mp >= 10)
             {
                 ManageMp(-10);
+                GameManager.Instance.Animation.MagicianAnimation();
                 int SkillDamage = (int)((TotalAtk * 10) - Math.Round(GameManager.Instance.Dungeon.TargetMonster.Def / 2.0)); //방어무시를 구현하기위해서 방어도를 반으로 나누고 반올림하였습니다.
                 if (SkillDamage <= 0)
                 { SkillDamage = 1; }
 
                 GameManager.Instance.Dungeon.TargetMonster.ManageHp(-SkillDamage);
-                Console.WriteLine($"{ActskillName}을 사용하여 {GameManager.Instance.Dungeon.TargetMonster.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
+                Console.WriteLine($"{GameManager.Instance.Player.Name}의{ActskillName}!!! {GameManager.Instance.Dungeon.TargetMonster.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
             }
             else
             {
@@ -287,6 +308,7 @@ namespace TeamTodayTextRPG
             if (Mp >= 10)
             {
                 ManageMp(-10);
+                GameManager.Instance.Animation.AssassinAnimation();
                 int SkillDamage = (TotalAtk * 2) - GameManager.Instance.Dungeon.TargetMonster.Def;
                 if (SkillDamage <= 0)
                 { SkillDamage = 1; }
@@ -305,7 +327,7 @@ namespace TeamTodayTextRPG
                 {
 
                     GameManager.Instance.Dungeon.TargetMonster.ManageHp(-SkillDamage);
-                    Console.WriteLine($"{ActskillName}을 사용하여 {GameManager.Instance.Dungeon.TargetMonster.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
+                    Console.WriteLine($"{GameManager.Instance.Player.Name} 의 {ActskillName} !!! {GameManager.Instance.Dungeon.TargetMonster.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
                 }
             }
             else
@@ -347,17 +369,15 @@ namespace TeamTodayTextRPG
     }
 
 
-    public abstract class Animation 
+  
+
+    public class Animation 
     {
-        public void NextCut(int mS)
+         void NextCut(int mS)
         {
             Thread.Sleep(mS);
             Console.Clear();
         }
-    }
-
-    public class CharaterAnimation : Animation 
-    {
         public void WarriorAnimation()
         {
             Console.WriteLine(@"
@@ -1670,13 +1690,7 @@ namespace TeamTodayTextRPG
 ");
             NextCut(3000);
         }
-
-
-
-    }
-    public class MonsterAnimation : Animation
-    {
-        public void SlimeAnimation()
+            public void SlimeAnimation()
         {
             Console.WriteLine(@"
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -1798,7 +1812,7 @@ namespace TeamTodayTextRPG
             NextCut(150);
         }
 
-        void GoblinAnimation()
+        public void GoblinAnimation()
         {
             Console.WriteLine(@"
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -1879,7 +1893,7 @@ namespace TeamTodayTextRPG
 
         }
 
-        void WolfAnimation()
+        public void WolfAnimation()
         {
             Console.WriteLine(@"
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣶⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣤⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -2014,7 +2028,7 @@ namespace TeamTodayTextRPG
 
         }
 
-        void OrkAnimation()
+        public void OrkAnimation()
         {
             Console.WriteLine(@"
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -2138,7 +2152,7 @@ namespace TeamTodayTextRPG
 
         }
 
-        void ZakumAnimation()
+        public void ZakumAnimation()
         {
             Console.WriteLine(@"
 ⠀⠀⠀⠀⠀⠀⠠⠐⡈⣕⡪⠛⠊⠀⠠⠊⠀⣔⠏⣈⠏⠂⢈⠸⣢⠧⡀⠀⠀⠀⠀⠘⠢⡳⣅⠀⡀⠀⠀⠁⠈⠡⢁⣚⣶⠆⣰⢤⣔⣶⠶⠤⢄⡀⠀⢀⡠⡴⢯⠁⠀⠀⠄⠀⠀⣀⣠⣦⠜⠢⠐⠁⠀⠀⠀⠀⠀⠀⠀⡜⢇⠠⡄⢤⠌⠉⠤⣄⣀⠀
@@ -2221,7 +2235,7 @@ namespace TeamTodayTextRPG
 
         }
 
-        void BoarAnimation()
+        public void BoarAnimation()
         {
             Console.WriteLine(@"
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -2305,9 +2319,12 @@ namespace TeamTodayTextRPG
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ");
             NextCut(250);
-
         }
+
+
+
     }
+    
 }
 
 

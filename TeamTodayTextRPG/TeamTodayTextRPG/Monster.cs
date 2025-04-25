@@ -89,8 +89,30 @@ namespace TeamTodayTextRPG
 
         public virtual void DefaultAttack()
         {
-            MonsterAnimation anim = new MonsterAnimation();
-            anim.SlimeAnimation();
+            
+            switch (GameManager.Instance.Dungeon.Dungeon_Monster[GameManager.Instance.Dungeon.MonsterAtkCounter].Code)
+            {
+                case MONSTER_CODE.Slime :
+                    GameManager.Instance.Animation.SlimeAnimation();
+                    break;
+                case MONSTER_CODE.Goblin :
+                    GameManager.Instance.Animation.GoblinAnimation();
+                    break;
+                case MONSTER_CODE.Wolf:
+                    GameManager.Instance.Animation.WolfAnimation();
+                    break;
+                case MONSTER_CODE.Ork:
+                    GameManager.Instance.Animation.OrkAnimation();
+                    break;
+                case MONSTER_CODE.Zakum:
+                    GameManager.Instance.Animation.ZakumAnimation();
+                    break;
+                default:
+                    break;
+
+            }
+                       
+            
             int AttackDamage = Atk - GameManager.Instance.Player.Character.TotalDef;
             if (AttackDamage <= 0)
             { AttackDamage = 1; }

@@ -645,8 +645,7 @@ namespace TeamTodayTextRPG
                 else
                 {
                     //GameManager.Instance.Animation = new CharaterAnimation();
-                    CharaterAnimation anim = new CharaterAnimation();
-                    anim.MagicianAnimation();
+                  
                     GameManager.Instance.Dungeon.TargetMonster = GameManager.Instance.Dungeon.Dungeon_Monster[input - 1];
                     return VIEW_TYPE.BATTLE_PLAYER_LOG; 
                 }
