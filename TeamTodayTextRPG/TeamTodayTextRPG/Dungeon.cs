@@ -69,26 +69,30 @@ namespace TeamTodayTextRPG
                 int randNum = GameManager.Instance.Rand.Next(1, MonsterCount + 1);
                 for (int i = 0; i < randNum; i++)
                 {
+                    int weakMon = 0;
+                    int strongMon = 0;
                     Random randCode = new Random();
                     // 던전 난이도 별로 switch case 문 혹은 if문
                     if (Diff == DUNGEON_DIFF.Easy)
                     {
-                        
-                        Dungeon_Monster.Add(GameManager.Instance.MonsterFactory(randCode.
-                            Next(int.Parse(DataManager.Instance.MonsterDB.List[0][0]), int.Parse(DataManager.Instance.MonsterDB.List[2][0]))));
+                        weakMon = (int)MONSTER_CODE.Slime;
+                        strongMon = (int)MONSTER_CODE.Wolf;
                     }
 
                     else if (Diff == DUNGEON_DIFF.Normal)
                     {
-                        Dungeon_Monster.Add(GameManager.Instance.MonsterFactory(randCode.
-                            Next(int.Parse(DataManager.Instance.MonsterDB.List[0][0]), int.Parse(DataManager.Instance.MonsterDB.List[3][0]))));
+                        weakMon = (int)MONSTER_CODE.Slime;
+                        strongMon = (int)MONSTER_CODE.Ork;
                     }
 
                     else if (Diff == DUNGEON_DIFF.Hard)
                     {
-                        Dungeon_Monster.Add(GameManager.Instance.MonsterFactory(randCode.
-                            Next(int.Parse(DataManager.Instance.MonsterDB.List[1][0]), int.Parse(DataManager.Instance.MonsterDB.List[4][0]))));
+                        weakMon = (int)MONSTER_CODE.Goblin;
+                        strongMon = (int)MONSTER_CODE.Zakum;
                     }
+
+                    Dungeon_Monster.Add(GameManager.Instance.MonsterFactory
+                        (randCode.Next(weakMon, strongMon)));
                 }
             }
         }
