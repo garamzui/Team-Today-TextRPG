@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using TeamTodayTextRPG;
-using static TeamTodayTextRPG.Characterclass;
+using static TeamTodayTextRPG.Character;
 
 namespace TeamTodayTextRPG
 {
