@@ -73,17 +73,21 @@ namespace TeamTodayTextRPG
                     // 던전 난이도 별로 switch case 문 혹은 if문
                     if (Diff == DUNGEON_DIFF.Easy)
                     {
-                        Dungeon_Monster.Add(GameManager.Instance.MonsterFactory(randCode.Next(0, 2)));
+                        
+                        Dungeon_Monster.Add(GameManager.Instance.MonsterFactory(randCode.
+                            Next(int.Parse(DataManager.Instance.MonsterDB.List[0][0]), int.Parse(DataManager.Instance.MonsterDB.List[2][0]))));
                     }
 
                     else if (Diff == DUNGEON_DIFF.Normal)
                     {
-                        Dungeon_Monster.Add(GameManager.Instance.MonsterFactory(randCode.Next(0, 3)));
+                        Dungeon_Monster.Add(GameManager.Instance.MonsterFactory(randCode.
+                            Next(int.Parse(DataManager.Instance.MonsterDB.List[0][0]), int.Parse(DataManager.Instance.MonsterDB.List[3][0]))));
                     }
 
                     else if (Diff == DUNGEON_DIFF.Hard)
                     {
-                        Dungeon_Monster.Add(GameManager.Instance.MonsterFactory(randCode.Next(1, 4)));
+                        Dungeon_Monster.Add(GameManager.Instance.MonsterFactory(randCode.
+                            Next(int.Parse(DataManager.Instance.MonsterDB.List[1][0]), int.Parse(DataManager.Instance.MonsterDB.List[4][0]))));
                     }
                 }
             }
