@@ -30,6 +30,9 @@ namespace TeamTodayTextRPG
         public Random Rand { get; set; }
         public Dungeon Dungeon { get; set; }
 
+        // 테스트용 애니매이션
+        public Animation Animation { get; set; }
+
         public Monster BattleEnemy { get; set; }
 
         public SceneManager SceneManager => SceneManager.Instance;
