@@ -30,6 +30,7 @@ namespace TeamTodayTextRPG
         public MONSTER_CODE Code { get; set; }
         public MONSTER_STATE State { get; set; } = MONSTER_STATE.IDLE;
         public MONSTER_GRADE Grade { get; set; }
+        public Character Character { get; set; }    
         public string? Name { get; set; }
         public int Level { get; set; }
         public int Atk { get; set; }
@@ -84,6 +85,17 @@ namespace TeamTodayTextRPG
             }
             else { Console.WriteLine("아무 일도 일어나지 않았습니다."); }
         }
+
+
+        public virtual void DefaultAttack()
+        {
+            int AttackDamage = Atk - GameManager.Instance.Player.Character.TotalDef;
+            if (AttackDamage <= 0)
+            { AttackDamage = 1; }
+            GameManager.Instance.Player.Character.ManageHp(-AttackDamage);
+            Console.WriteLine($"{GameManager.Instance.Player.Name}에게 {AttackDamage}의 피해");
+        }
+
 
         public void Die()
         {

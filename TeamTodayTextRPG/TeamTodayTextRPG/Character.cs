@@ -84,8 +84,8 @@ namespace TeamTodayTextRPG
             int AttackDamage = TotalAtk - GameManager.Instance.Dungeon.TargetMonster.Def;
             if (AttackDamage <= 0)
             { AttackDamage = 1; }
-            Monster.ManageHp(-AttackDamage);
-            Console.WriteLine($"{Monster.Name}에게 {AttackDamage}의 피해");
+            GameManager.Instance.Dungeon.TargetMonster.ManageHp(-AttackDamage);
+            Console.WriteLine($"{GameManager.Instance.Dungeon.TargetMonster.Name}에게 {AttackDamage}의 피해");
         }
 
 
@@ -181,9 +181,9 @@ namespace TeamTodayTextRPG
                 if (SkillDamage <= 0)
                 { SkillDamage = 1; }
 
-                Monster.ManageHp(-SkillDamage);
+                GameManager.Instance.Dungeon.TargetMonster.ManageHp(-SkillDamage);
 
-                Console.WriteLine($"{ActskillName}을 사용하여 {Monster.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
+                Console.WriteLine($"{ActskillName}을 사용하여 {GameManager.Instance.Dungeon.TargetMonster.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
             }
             else
             {
@@ -237,8 +237,8 @@ namespace TeamTodayTextRPG
                 if (SkillDamage <= 0)
                 { SkillDamage = 1; }
 
-                Monster.ManageHp(-SkillDamage);
-                Console.WriteLine($"{ActskillName}을 사용하여 {Monster.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
+                GameManager.Instance.Dungeon.TargetMonster.ManageHp(-SkillDamage);
+                Console.WriteLine($"{ActskillName}을 사용하여 {GameManager.Instance.Dungeon.TargetMonster.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
             }
             else
             {
@@ -304,8 +304,8 @@ namespace TeamTodayTextRPG
                 for (int i = 0; i < 2; i++) //2연격 구현
                 {
 
-                    Monster.ManageHp(-SkillDamage);
-                    Console.WriteLine($"{ActskillName}을 사용하여 {Monster.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
+                    GameManager.Instance.Dungeon.TargetMonster.ManageHp(-SkillDamage);
+                    Console.WriteLine($"{ActskillName}을 사용하여 {GameManager.Instance.Dungeon.TargetMonster.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
                 }
             }
             else
