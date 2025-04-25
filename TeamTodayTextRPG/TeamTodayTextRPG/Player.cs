@@ -69,7 +69,6 @@ namespace TeamTodayTextRPG
             //인벤토리를 처음 열면 장착&해제 튜토리얼 구현해 보는 것 괜찮을지도
         }
 
-
         public void LevelUp()
         {
             int requiredExp = 100;
@@ -101,7 +100,6 @@ namespace TeamTodayTextRPG
     //장비 관련 스크립트
     public partial class Player
     {
-        
         public bool CheckBag(int inputItemCode)
         {
             //해당 코드의 아이템이 bag에 있는지
@@ -189,7 +187,6 @@ namespace TeamTodayTextRPG
 
                     //장착한 아이템의 보유 스탯만큼 PlusAtk 과 PlusDef 상승
                     StatChange(equipItemCode - 1);
-
 
                     Console.Write($">> {DataManager.Instance.ItemDB.List[Bag[equipItemCode - 1]][1]}");
                     Console.ForegroundColor = ConsoleColor.DarkCyan;
