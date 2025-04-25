@@ -181,7 +181,7 @@ namespace TeamTodayTextRPG
                 if (SkillDamage <= 0)
                 { SkillDamage = 1; }
 
-                GameManager.Instance.Dungeon.Target     .ManageHp(-SkillDamage);
+                GameManager.Instance.Dungeon.TargetMonster.ManageHp(-SkillDamage);
 
                 Console.WriteLine($"{ActskillName}을 사용하여 {GameManager.Instance.Dungeon.TargetMonster.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
             }

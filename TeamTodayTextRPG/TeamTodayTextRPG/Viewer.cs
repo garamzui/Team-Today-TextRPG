@@ -696,7 +696,7 @@ namespace TeamTodayTextRPG
             Console.WriteLine($"Lv.{GameManager.Instance.Dungeon.TargetMonster.Level} {GameManager.Instance.Dungeon.TargetMonster.Name}");
             Console.Write($"HP {GameManager.Instance.Dungeon.TargetMonster.Hp} -> ");
 
-            GameManager.Instance.Dungeon.TargetMonster.ChangeHp(-GameManager.Instance.Player.Character.Attack);
+            GameManager.Instance.Dungeon.TargetMonster.ManageHp(-GameManager.Instance.Player.Character.Attack);
 
             if (GameManager.Instance.Dungeon.TargetMonster.State == MONSTER_STATE.DEAD)
             {
