@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using TeamTodayTextRPG;
 using static TeamTodayTextRPG.Characterclass;
-Console.OutputEncoding = System.Text.Encoding.UTF8;
 
 namespace TeamTodayTextRPG
 {
