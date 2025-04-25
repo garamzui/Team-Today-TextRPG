@@ -83,8 +83,12 @@ namespace TeamTodayTextRPG
         // 스킬 이름은 스탯과 함께 초기화해서 저장해두게 해놨습니다.
 
         public virtual void DefaultAttack()
-        {
-            Console.WriteLine($"{Jobname}의 기본 공격");
+        {  
+            int AttackDamage = TotalAtk - GameManager.Instance.Dungeon.TargetMonster.Def;
+            if (AttackDamage <= 0)
+            { AttackDamage = 1; }
+            Monster.ChangeHp(-AttackDamage);
+            Console.WriteLine($"{Monster.Name}에게 {AttackDamage}의 피해");
         }
 
 
@@ -176,8 +180,8 @@ namespace TeamTodayTextRPG
             if (Mp >= 10)
             {
                 ManageMp(-10);
-                int SkillDamage = (TotalAtk * 3) - Monster.Def;
-                if (SkillDamage < 0)
+                int SkillDamage = (TotalAtk * 3) - GameManager.Instance.Dungeon.TargetMonster.Def;
+                if (SkillDamage <= 0)
                 { SkillDamage = 1; }
 
                 Monster.ManageHp(-SkillDamage);
@@ -232,8 +236,8 @@ namespace TeamTodayTextRPG
             if (Mp >= 10)
             {
                 ManageMp(-10);
-                int SkillDamage = (int)((TotalAtk * 10) - Math.Round(Monster.Def / 2.0)); //방어무시를 구현하기위해서 방어도를 반으로 나누고 반올림하였습니다.
-                if (SkillDamage < 0)
+                int SkillDamage = (int)((TotalAtk * 10) - Math.Round(GameManager.Instance.Dungeon.TargetMonster.Def / 2.0)); //방어무시를 구현하기위해서 방어도를 반으로 나누고 반올림하였습니다.
+                if (SkillDamage <= 0)
                 { SkillDamage = 1; }
 
                 Monster.ManageHp(-SkillDamage);
@@ -286,8 +290,8 @@ namespace TeamTodayTextRPG
             if (Mp >= 10)
             {
                 ManageMp(-10);
-                int SkillDamage = (TotalAtk * 2) - Monster.Def;
-                if (SkillDamage < 0)
+                int SkillDamage = (TotalAtk * 2) - GameManager.Instance.Dungeon.TargetMonster.Def;
+                if (SkillDamage <= 0)
                 { SkillDamage = 1; }
 
                 int criticalHit = GameManager.Instance.Rand.Next(0, 10);
