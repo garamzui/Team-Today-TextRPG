@@ -22,8 +22,8 @@ namespace TeamTodayTextRPG
     public class Characterclass
     {
         public abstract class Character
-        {
-
+        {           
+            public Monster M { get; set; }
             public string Jobname { get; set; }
             public int Attack { get; set; }
             public int PlusAtk { get; set; } = 0;
@@ -53,7 +53,7 @@ namespace TeamTodayTextRPG
             public void Init(string[] data) //우선은 임의로 매서드로 초기화할 필드를 변경해 놓았습니다.
             {
                 //직업이름,공격력,방어력,체력,마력,회피,액티브스킬이름,패시브스킬이름
-
+               
                 Jobname = data[1];
                 Attack = int.Parse(data[2]);
                 Defence = int.Parse(data[3]);
@@ -89,7 +89,7 @@ namespace TeamTodayTextRPG
 
             //active 스킬은 몬스터 체력을 -= 하는 방식으로 
             //passive 스킬은 각각 직업 특성에 맞는 스탯값을 += 하는 방식으로 만들어 보려 합니다.
-            public virtual void ActiveSkill(Monster m)
+            public virtual void ActiveSkill()
             {
                 Console.WriteLine($"{Jobname}의 기술 {ActskillName}");
             }
@@ -171,18 +171,18 @@ namespace TeamTodayTextRPG
         {
             return "높은 방어력,기본 공격력,체력";
         }
-        public override void ActiveSkill(Monster m)
+        public override void ActiveSkill()
         {
             if (Mp >= 10)
             {
                 ManageMp(-10);
-                int SkillDamage = (TotalAtk * 3) - m.Def;
+                int SkillDamage = (TotalAtk * 3) - M.Def;
                 if (SkillDamage < 0)
                 { SkillDamage = 1; }
 
-                m.ManageHp(-SkillDamage);
+                M.ManageHp(-SkillDamage);
 
-                Console.WriteLine($"{ActskillName}을 사용하여 {m.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
+                Console.WriteLine($"{ActskillName}을 사용하여 {M.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
             }
             else
             {
@@ -227,17 +227,17 @@ namespace TeamTodayTextRPG
             return "방어 무시, 높은 마나, 스킬의존성";
         }
 
-        public override void ActiveSkill(Monster m)
+        public override void ActiveSkill()
         {
             if (Mp >= 10)
             {
                 ManageMp(-10);
-                int SkillDamage = (int)((TotalAtk * 10) - Math.Round(m.Def / 2.0)); //방어무시를 구현하기위해서 방어도를 반으로 나누고 반올림하였습니다.
+                int SkillDamage = (int)((TotalAtk * 10) - Math.Round(M.Def / 2.0)); //방어무시를 구현하기위해서 방어도를 반으로 나누고 반올림하였습니다.
                 if (SkillDamage < 0)
                 { SkillDamage = 1; }
 
-                m.ManageHp(-SkillDamage);
-                Console.WriteLine($"{ActskillName}을 사용하여 {m.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
+                M.ManageHp(-SkillDamage);
+                Console.WriteLine($"{ActskillName}을 사용하여 {M.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
             }
             else
             {
@@ -281,12 +281,12 @@ namespace TeamTodayTextRPG
         {
             return "높은 회피, 크리티컬 히트";
         }
-        public override void ActiveSkill(Monster m)
+        public override void ActiveSkill()
         {
             if (Mp >= 10)
             {
                 ManageMp(-10);
-                int SkillDamage = (TotalAtk * 2) - m.Def;
+                int SkillDamage = (TotalAtk * 2) - M.Def;
                 if (SkillDamage < 0)
                 { SkillDamage = 1; }
 
@@ -303,8 +303,8 @@ namespace TeamTodayTextRPG
                 for (int i = 0; i < 2; i++) //2연격 구현
                 {
 
-                    m.ManageHp(-SkillDamage);
-                    Console.WriteLine($"{ActskillName}을 사용하여 {m.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
+                    M.ManageHp(-SkillDamage);
+                    Console.WriteLine($"{ActskillName}을 사용하여 {M.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
                 }
             }
             else
@@ -350,7 +350,7 @@ namespace TeamTodayTextRPG
 
     public class Animation
     {
-        void WAnimation()
+        void WarriorAnimation()
         {
             Console.WriteLine(@"
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -654,7 +654,7 @@ namespace TeamTodayTextRPG
             NextCut(300);
         }
 
-        void MAnimation()
+        void MagicianAnimation()
         {
             Console.WriteLine(@"
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -1012,7 +1012,7 @@ namespace TeamTodayTextRPG
         }
 
 
-        void AAnimation()
+        void AssassinAnimation()
         {
             Console.WriteLine(@"
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
