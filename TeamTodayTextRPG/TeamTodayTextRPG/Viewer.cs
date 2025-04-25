@@ -616,7 +616,7 @@ namespace TeamTodayTextRPG
             {
                 return VIEW_TYPE.MAIN;
             }
-            else if (input > 0 && input <= GameManager.Instance.Dungeon.MonsterCount)
+            else if (input > 0 && input <= GameManager.Instance.Dungeon.Dungeon_Monster.Count)
             {
                 // 해당 몬스터가 죽은 상태라면
                 if (GameManager.Instance.Dungeon.Dungeon_Monster[input-1].State == MONSTER_STATE.DEAD)
@@ -627,6 +627,9 @@ namespace TeamTodayTextRPG
                 // 해당 몬스터가 죽지 않았다면 대미지 처리 화면으로 이동
                 else
                 {
+                    //GameManager.Instance.Animation = new CharaterAnimation();
+                    CharaterAnimation anim = new CharaterAnimation();
+                    anim.MagicianAnimation();
                     GameManager.Instance.Dungeon.TargetMonster = GameManager.Instance.Dungeon.Dungeon_Monster[input - 1];
                     return VIEW_TYPE.BATTLE_PLAYER_LOG; 
                 }
