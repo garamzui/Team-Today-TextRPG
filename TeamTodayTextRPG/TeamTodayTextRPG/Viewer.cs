@@ -458,7 +458,7 @@ namespace TeamTodayTextRPG
     {
         public DungeonSelectViewer()
         {
-            StartIndex = 1;
+            StartIndex = 0;
             EndIndex = 4;
         }
         public override void ViewAction()
