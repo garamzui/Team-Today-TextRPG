@@ -115,7 +115,7 @@ namespace TeamTodayTextRPG
             {
                 Console.WriteLine($"Lv. {Level}\t{Name}\tDead");
             }
-            Console.WriteLine($"Lv. {Level}\t{Name}\tHP {Hp}/{MaxHp}");
+            else Console.WriteLine($"Lv. {Level}\t{Name}\tHP {Hp}/{MaxHp}");
         }
 
     }

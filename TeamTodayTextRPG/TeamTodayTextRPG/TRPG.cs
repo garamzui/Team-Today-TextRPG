@@ -10,7 +10,7 @@ namespace TeamTodayTextRPG
     {
         static void Main(string[] args)
         {
-
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
             VIEW_TYPE currentView = VIEW_TYPE.MAIN;
             var gm = GameManager.Instance;
             var sm = SceneManager.Instance;
