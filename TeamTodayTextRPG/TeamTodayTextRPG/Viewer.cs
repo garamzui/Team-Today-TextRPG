@@ -45,7 +45,7 @@ namespace TeamTodayTextRPG
 
         protected int GetInput()
         {
-            return SceneManager.Instance.InputAction(StartIndex, EndIndex);
+            return SceneManager.Instance.InputAction(StartIndex, EndIndex,Console.CursorTop);
         }
 
 
@@ -64,12 +64,10 @@ namespace TeamTodayTextRPG
         }
         public override void ViewAction()
         {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("스파르타 마을에 오신 여러분 환영합니다.");
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("『마을』");
-            Console.ResetColor();
-            Console.WriteLine("     - 이곳에서 던전으로 들어가기전 활동을 할 수 있습니다.\n");
+            SceneManager.Instance.ColText("스파르타 마을에 오신 여러분 환영합니다.", 0, -1, ConsoleColor.Yellow, ConsoleColor.Black,true);
+            SceneManager.Instance.ColText("『마을』", 8, -1, ConsoleColor.Cyan, ConsoleColor.Black, false);
+
+            Console.WriteLine("\n\t\t- 이곳에서 던전으로 들어가기전 활동을 할 수 있습니다.\n");
             Console.WriteLine("\t========= 목록 ===========");
             Console.WriteLine("\t=   1. 플레이어 상태\t =\n\t=   2. 인벤토리\t\t =\n\t=   3. 장비\t\t =\n\t=   4. 던전\t\t =\n\t=   5. 상점\t\t =\n\t=   6. 여관\t\t =");
             Console.WriteLine("\t==========================");
@@ -139,6 +137,7 @@ namespace TeamTodayTextRPG
 
         public override VIEW_TYPE NextView(int input)
         {
+            Console.Clear();
             if (input == 1)
             {
                 // 메인 화면으로 돌아가기
@@ -644,8 +643,7 @@ namespace TeamTodayTextRPG
                 else
                 {
                     //GameManager.Instance.Animation = new CharaterAnimation();
-                    CharaterAnimation anim = new CharaterAnimation();
-                    anim.MagicianAnimation();
+                  
                     GameManager.Instance.Dungeon.TargetMonster = GameManager.Instance.Dungeon.Dungeon_Monster[input - 1];
                     return VIEW_TYPE.BATTLE_PLAYER_LOG; 
                 }
@@ -729,7 +727,7 @@ namespace TeamTodayTextRPG
                 Console.WriteLine("\n0. 다음");
 
                 GameManager.Instance.Dungeon.MonsterAtkCounter += 1;
-                VIEW_TYPE nextView = NextView(SceneManager.Instance.InputAction(StartIndex, EndIndex));
+                VIEW_TYPE nextView = NextView(SceneManager.Instance.InputAction(StartIndex, EndIndex, Console.CursorTop));
                 SceneManager.Instance.SwitchScene(nextView);
             }
             // 공격 할 수 없는 상태라면 바로 다음 화면으로 전환
@@ -857,7 +855,7 @@ namespace TeamTodayTextRPG
             Console.WriteLine("1. 휴식");
             Console.WriteLine("2. 메인으로 돌아가기");
 
-            VIEW_TYPE nextView = NextView(SceneManager.Instance.InputAction(StartIndex, EndIndex));
+            VIEW_TYPE nextView = NextView(SceneManager.Instance.InputAction(StartIndex, EndIndex, Console.CursorTop));
             SceneManager.Instance.SwitchScene(nextView);
         }
 

@@ -21,6 +21,7 @@ namespace TeamTodayTextRPG
         {
             Player = new Player();
             Rand = new Random();
+            Animation = new Animation();
 
         }
 
@@ -32,6 +33,8 @@ namespace TeamTodayTextRPG
 
         // 테스트용 애니매이션
         public Animation Animation { get; set; }
+        
+
 
         public Monster BattleEnemy { get; set; }
 

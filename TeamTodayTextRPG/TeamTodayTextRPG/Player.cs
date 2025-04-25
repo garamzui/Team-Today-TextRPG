@@ -173,7 +173,7 @@ namespace TeamTodayTextRPG
                     foreach (var code in GameManager.Instance.Player.Equip)
                     {
                         // 기존조건 :
-                        if ( DataManager.Instance.ItemDB.List[code][8] == DataManager.Instance.ItemDB.List[GameManager.Instance.Player.Bag[equipItemCode - 1]][8])
+                        if (DataManager.Instance.ItemDB.List[code][8] == DataManager.Instance.ItemDB.List[GameManager.Instance.Player.Bag[equipItemCode - 1]][8])
                         {
                             UnEquipItem(code);
 
@@ -195,7 +195,7 @@ namespace TeamTodayTextRPG
                     }
                 }
 
-                else if(equipedItemType == null)
+                else if (equipedItemType == null)
                 {
                     //UnEquipItem(equipItemCode - 1);
                     //Console.Write($">> {DataManager.Instance.ItemDB.List[Bag[equipItemCode - 1]][1]}");
@@ -204,10 +204,10 @@ namespace TeamTodayTextRPG
                     //Console.ResetColor();
                 }
 
-                /*else if ()
-                {
-                    Console.WriteLine("해당 아이템을 이미 착용중입니다.\n");
-                }*/
+                //else if ()
+                //{
+                //    Console.WriteLine("해당 아이템을 이미 착용중입니다.\n");
+                //}
             }
 
         }
