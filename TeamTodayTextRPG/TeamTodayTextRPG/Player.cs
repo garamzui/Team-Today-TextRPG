@@ -194,17 +194,22 @@ namespace TeamTodayTextRPG
 
                     }
                 }
+
+                else if(equipedItemType == null)
+                {
+                    //UnEquipItem(equipItemCode - 1);
+                    //Console.Write($">> {DataManager.Instance.ItemDB.List[Bag[equipItemCode - 1]][1]}");
+                    //Console.ForegroundColor = ConsoleColor.DarkCyan;
+                    //Console.WriteLine("을(를) 장착 해제하였습니다.\n");
+                    //Console.ResetColor();
+                }
+
+                else if ()
+                {
+                    Console.WriteLine("해당 아이템을 이미 착용중입니다.\n");
+                }
             }
 
-            else if(CheckBag(equipItemCode) && equipedItemType == null)
-            {
-                //UnEquipItem(equipItemCode - 1);
-                //Console.Write($">> {DataManager.Instance.ItemDB.List[Bag[equipItemCode - 1]][1]}");
-                //Console.ForegroundColor = ConsoleColor.DarkCyan;
-                //Console.WriteLine("을(를) 장착 해제하였습니다.\n");
-                //Console.ResetColor();
-                Console.WriteLine("해당 아이템을 이미 착용중입니다.\n");
-            }
         }
 
         //장비 해제
