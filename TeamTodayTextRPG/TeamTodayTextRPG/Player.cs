@@ -204,10 +204,10 @@ namespace TeamTodayTextRPG
                     //Console.ResetColor();
                 }
 
-                else if ()
+                /*else if ()
                 {
                     Console.WriteLine("해당 아이템을 이미 착용중입니다.\n");
-                }
+                }*/
             }
 
         }

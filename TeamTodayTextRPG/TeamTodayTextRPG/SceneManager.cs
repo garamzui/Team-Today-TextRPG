@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Security.Cryptography;
 using TeamTodayTextRPG;
 
 namespace TeamTodayTextRPG
@@ -16,6 +17,34 @@ namespace TeamTodayTextRPG
             //『효빈』 초기 생성시 메인뷰어로 들어가도록 하겠습니다.
             //         추후에 가람님의 '그것'을 초기화면으로 설정하도록 바꿀예정입니다. 예를들어...IntroViewer 처럼요
             CurrentViewer = new MainViewer();
+        }
+
+        //PrintCentered = Pc
+        public void Pc(string text)
+        {
+            int consoleWidth = Console.WindowWidth;
+            int padding = (consoleWidth - text.Length) / 2;
+            padding = Math.Max(0, padding-7);
+            Console.WriteLine(new string(' ', padding) + text);
+        }
+
+        public void SysText(string message, int x = 0, int y = -1, ConsoleColor textColor = ConsoleColor.White, ConsoleColor backColor = ConsoleColor.Black, bool system = false)
+        {
+            ConsoleColor prevColor = Console.ForegroundColor;
+
+            if(y >= 0)
+                Console.SetCursorPosition(x, y);
+            else
+                Console.SetCursorPosition(x, Console.CursorTop);
+
+            Console.ForegroundColor = textColor;
+
+            if (system) 
+                Console.WriteLine($"[SYSTEM] {message}");
+            else 
+                Console.Write($"{message}");
+
+            Console.ForegroundColor = prevColor;
         }
 
         public void SwitchScene(VIEW_TYPE viewType)
@@ -113,21 +142,18 @@ namespace TeamTodayTextRPG
         public void Intro()
         {
             string? name = string.Empty;
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("스파르타 마을에 오신 여러분 환영합니다.");
-            Console.ResetColor();
-
+   
+            SysText("『스파르타 마을에 오신 여러분 환영합니다.』\n\n\n", 38, 2, ConsoleColor.Yellow, ConsoleColor.Black, false);
             while (name == string.Empty)
             {
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("원하시는 이름을 설정해주세요.");
-                Console.ResetColor();
-                Console.Write("\n입력 >> ");
+                SysText("원하시는 이름을 설정해주세요.\n", 38, 3, ConsoleColor.Yellow, ConsoleColor.Black, true);
+                SysText("입력 >> ", 38, 4, ConsoleColor.White, ConsoleColor.Black, false);
+
                 name = Console.ReadLine();
                 if (name == string.Empty)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("이름을 제대로 입력해주세요.\n");
+                    Console.WriteLine("※※ 이름을 제대로 입력해주세요 ※※\n");
                     Console.ResetColor();
                 }
                 else
@@ -137,15 +163,15 @@ namespace TeamTodayTextRPG
                     while (check)
                     {
                         int num = 0;
-                        Console.Write("입력하신 이름은 『 ");
+                        Console.Write("\t입력하신 이름은 『 ");
                         Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.Write(name);
                         Console.ResetColor();
                         Console.WriteLine(" 』입니다.\n");
                         Console.ForegroundColor = ConsoleColor.Cyan;
-                        Console.WriteLine("1. 저장");
+                        Console.WriteLine("\t1. 저장");
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("2. 취소\n");
+                        Console.WriteLine("\t2. 취소\n");
                         Console.ResetColor();
 
                         num = SceneManager.Instance.InputAction(1, 2);
@@ -165,9 +191,9 @@ namespace TeamTodayTextRPG
             while (classCode == 0)
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("원하시는 직업을 설정해주세요.\n");
+                Console.WriteLine("\t원하시는 직업을 설정해주세요.\n");
                 Console.ResetColor();
-                Console.WriteLine("1. 전사\n2. 마법사\n3. 도적\n");
+                Console.WriteLine("\t1. 전사\n\t2. 마법사\n\t3. 도적\n");
 
                 classCode = SceneManager.Instance.InputAction(1, 3);
                 GameManager.Instance.Player.SetCharacter(classCode, name);
@@ -189,12 +215,12 @@ namespace TeamTodayTextRPG
             bool check = false;
             while (!check)
             {
-                Console.Write("원하시는 행동을 입력해주세요.\n>>");
+                Console.Write("\t원하시는 행동을 입력해주세요.\n\t>>");
                 rtnStr = Console.ReadLine();
                 if (rtnStr == string.Empty)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("아무 행동도 입력하지 않으셨습니다.\n");
+                    Console.WriteLine("\t※※ 아무 행동도 입력하지 않으셨습니다 ※※\n");
                     Console.ResetColor();
                 }
                 else
@@ -204,7 +230,7 @@ namespace TeamTodayTextRPG
                         if (num < startIndex || num > endIndex)
                         {
                             Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("선택지 내에서 입력해주세요.\n");
+                            Console.WriteLine("\t※※ 선택지 내에서 입력해주세요 ※※\n");
                             Console.ResetColor();
                         }
                         else check = true;
@@ -212,7 +238,7 @@ namespace TeamTodayTextRPG
                     else
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("숫자만 입력해주세요.\n");
+                        Console.WriteLine("\t※※ 숫자만 입력해주세요 ※※\n");
                         Console.ResetColor();
                     }
                 }

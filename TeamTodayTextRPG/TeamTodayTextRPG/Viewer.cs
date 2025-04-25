@@ -59,25 +59,21 @@ namespace TeamTodayTextRPG
     {
         public MainViewer()
         {
-            StartIndex = 1;
-            EndIndex = 7;
+            StartIndex = 0;
+            EndIndex = 6;
         }
         public override void ViewAction()
         {
-            Console.Clear();
-            Console.WriteLine("메인 화면");
-            Console.WriteLine("====================");
-            Console.WriteLine("1. 플레이어 상태 보기");
-            Console.WriteLine("2. 인벤토리 보기");
-            Console.WriteLine("3. 장비 보기");
-            Console.WriteLine("4. 상점");
-            Console.WriteLine("5. 던전");
-            Console.WriteLine("6. 휴식");
-            Console.WriteLine("7. 게임 종료");
-
-            int input = GetInput();
-            VIEW_TYPE nextView = NextView(input);
-            SceneManager.Instance.SwitchScene(nextView);
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("스파르타 마을에 오신 여러분 환영합니다.");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("『마을』");
+            Console.ResetColor();
+            Console.WriteLine("     - 이곳에서 던전으로 들어가기전 활동을 할 수 있습니다.\n");
+            Console.WriteLine("\t========= 목록 ===========");
+            Console.WriteLine("\t=   1. 플레이어 상태\t =\n\t=   2. 인벤토리\t\t =\n\t=   3. 장비\t\t =\n\t=   4. 던전\t\t =\n\t=   5. 상점\t\t =\n\t=   6. 여관\t\t =");
+            Console.WriteLine("\t==========================");
+            Console.WriteLine("\n\t>> 0. 게임 종료\n");
         }
         // NextView 메서드 구현
         public override VIEW_TYPE NextView(int input)
@@ -288,8 +284,8 @@ namespace TeamTodayTextRPG
     {
         public ShopViewer()
         {
-            StartIndex = 1;
-            EndIndex = 3;
+            StartIndex = 0;
+            EndIndex = 2;
         }
         public override void ViewAction()
         {
@@ -305,7 +301,7 @@ namespace TeamTodayTextRPG
             Console.WriteLine("====================");
             Console.WriteLine("1. 아이템 구매");
             Console.WriteLine("2. 아이템 판매");
-            Console.WriteLine("3. 메인으로 돌아가기");
+            Console.WriteLine("0. 마을로 돌아가기");
         }
 
         // NextView 메서드 구현
@@ -320,7 +316,7 @@ namespace TeamTodayTextRPG
                 case 2:
                     // 아이템 판매 화면으로 이동
                     return VIEW_TYPE.SALE;
-                case 3:
+                case 0:
                     // 메인 화면으로 돌아가기
                     return VIEW_TYPE.MAIN;
                 default:
@@ -330,6 +326,7 @@ namespace TeamTodayTextRPG
             }
         }
     }
+
 
     public class PurchaseViewer : Viewer
     {
@@ -468,6 +465,8 @@ namespace TeamTodayTextRPG
         }
         }
     }
+
+
     public class DungeonSelectViewer : Viewer
     {
         public DungeonSelectViewer()
@@ -714,7 +713,6 @@ namespace TeamTodayTextRPG
         }
         public override void ViewAction()
         {
-            
             // 몬스터가 공격할 수 있는 상태라면 공격 출력
             if (GameManager.Instance.Dungeon.Dungeon_Monster[GameManager.Instance.Dungeon.MonsterAtkCounter].State == MONSTER_STATE.IDLE)
             {
