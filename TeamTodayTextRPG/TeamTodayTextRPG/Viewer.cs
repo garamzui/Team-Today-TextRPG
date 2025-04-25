@@ -204,7 +204,7 @@ namespace TeamTodayTextRPG
         public EquipViewer()
         {
             StartIndex = 0;
-            EndIndex = 0;
+            EndIndex = 0; // Bag이 생기면 EndIndex = Bag.Count;로 변경
         }
         public override void ViewAction()
         {
@@ -393,10 +393,10 @@ namespace TeamTodayTextRPG
 
     public class SaleViewer : Viewer
     {
-        public void SaleViewr()
+        public SaleViewer()
         {
             StartIndex = 0;
-            EndIndex = 0;
+            EndIndex = 0; //Bag이 생기면 EndIndex = Bag.Count;
         }
         public override void ViewAction()
         {
@@ -462,11 +462,20 @@ namespace TeamTodayTextRPG
         }
     }
 
-    /*
+    
     public class DungeonViewer : Viewer
     {
-        protected Dungeon dungeon; // Dungeon 클래스의 인스턴스를 받을 변수
-        protected Monster monster;  // Monster 클래스의 인스턴스를 받을 변수 (던전 입장시 보스 몬스터관련)
+        protected Dungeon? dungeon; // Dungeon 클래스의 인스턴스를 받을 변수
+        protected Monster? monster;  // Monster 클래스의 인스턴스를 받을 변수 (던전 입장시 보스 몬스터관련)
+      
+        public DungeonViewer()
+        {
+            dungeon = new Dungeon(0, "기본던전", 0, 0, 1, DUNGEON_DIFF.Easy);
+            monster = new Slime();
+
+            StartIndex = 1;
+            EndIndex = 2;
+        }
 
         public DungeonViewer(Dungeon dungeon, Monster monster)
         {
@@ -480,7 +489,7 @@ namespace TeamTodayTextRPG
             Console.WriteLine("던전");
             Console.WriteLine("====================");
 
-            Console.WriteLine($"던전 이름: {dungeon.Name}");
+            Console.WriteLine($"던전 이름: {dungeon!.Name}");
             Console.WriteLine($"던전 코드: {dungeon.Code}");
             Console.WriteLine($"난이도: {dungeon.Diff}");
             Console.WriteLine($"추천 레벨: {dungeon.DefLevel}");
@@ -488,7 +497,7 @@ namespace TeamTodayTextRPG
             Console.WriteLine($"경험치: {dungeon.Exp}Exp");
 
             // 몬스터가 등장할 때 출력
-            Console.WriteLine($"몬스터가 등장했습니다! 몬스터 이름: {monster.Name}");
+            Console.WriteLine($"몬스터가 등장했습니다! 몬스터 이름: {monster!.Name}");
 
             // 보스 몬스터 여부 체크
             if (monster.IsBoss)
@@ -503,10 +512,10 @@ namespace TeamTodayTextRPG
             Console.WriteLine("1. 던전 입장");
             Console.WriteLine("2. 메인으로 돌아가기");
 
-            int input = GameManager.Instance.InputAction(StartIndex, EndIndex);
-
+            int input = GetInput(); 
             VIEW_TYPE nextView = NextView(input);
-            GameManager.Instance.SceneManager.SwitchScene(nextView);
+            SceneManager.Instance.SwitchScene(nextView);
+
         }
 
         public override VIEW_TYPE NextView(int input)
@@ -527,13 +536,23 @@ namespace TeamTodayTextRPG
 
     public class DungeonClearViewer : Viewer
     {
-        protected Player player;  // Player 클래스의 인스턴스를 받을 변수
-        protected Dungeon dungeon; // Dungeon 클래스의 인스턴스를 받을 변수
+        protected Player? player;
+        protected Monster? monster;
+        protected Dungeon dungeon;
+
+        public DungeonClearViewer()
+        {
+            player = GameManager.Instance.Player; // 기본 플레이어 할당
+            dungeon = new Dungeon(0, "기본던전", 0, 0, 1, DUNGEON_DIFF.Easy);
+
+            StartIndex = 1;
+            EndIndex = 1;
+        }
 
         public DungeonClearViewer(Player player, Dungeon dungeon)
         {
             this.player = player;
-            this.dungeon = dungeon;
+            this.dungeon = dungeon;          
         }
 
         public override void ViewAction()
@@ -542,7 +561,7 @@ namespace TeamTodayTextRPG
             Console.WriteLine("던전 클리어");
             Console.WriteLine("====================");
 
-            var character = player.Character;
+            var character = player!.Character;
 
             if (character.Hp <= 0)
             {
@@ -561,10 +580,10 @@ namespace TeamTodayTextRPG
 
             Console.WriteLine("1. 메인으로 돌아가기");
 
-            int input = GameManager.Instance.InputAction(StartIndex, EndIndex);
-
+            int input = GetInput();
             VIEW_TYPE nextView = NextView(input);
-            GameManager.Instance.SceneManager.SwitchScene(nextView);
+            SceneManager.Instance.SwitchScene(nextView);
+
         }
 
         public override VIEW_TYPE NextView(int input)
@@ -578,7 +597,7 @@ namespace TeamTodayTextRPG
                     return VIEW_TYPE.DUNGEONCLEAR;
             }
         }
-    }*/
+    }
 
 
     public class RestViewer : Viewer
@@ -623,7 +642,7 @@ namespace TeamTodayTextRPG
         }
     }
 
-    /*
+    
     public class BattleViewer : Viewer
     {
         public override void ViewAction()
@@ -660,7 +679,7 @@ namespace TeamTodayTextRPG
                     return VIEW_TYPE.BATTLE;
             }
         }
-    }*/
+    }
     /*
     public class MonsterViewer : Viewer
     {
