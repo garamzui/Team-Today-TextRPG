@@ -47,7 +47,7 @@ namespace TeamTodayTextRPG
                 case VIEW_TYPE.DUNGEON:
                     CurrentViewer = new DungeonViewer();
                     break;
-                case VIEW_TYPE.DUNGEONCLEAR:
+                case VIEW_TYPE.DUNGEON_CLEAR:
                     CurrentViewer = new DungeonClearViewer();
                     break;
                 case VIEW_TYPE.REST:
@@ -57,7 +57,17 @@ namespace TeamTodayTextRPG
                 case VIEW_TYPE.BATTLE:
                     CurrentViewer = new BattleViewer();
                     break;
-                //case VIEW_TYPE.MONSTER:
+                case VIEW_TYPE.BATTLE_PLAYER:
+                    CurrentViewer = new BattlePlayerViewer();
+                    break;
+                case VIEW_TYPE.BATTLE_PLAYER_LOG:
+                    CurrentViewer = new BattlePlayerLogViewer();
+                    break;
+                case VIEW_TYPE.BATTLE_ENEMY:
+                    CurrentViewer = new BattleEnemyViewer();
+                    break;
+
+                    //case VIEW_TYPE.MONSTER:
                     // GameManager에서 직접적으로 몬스터 객체를 가져오는 방식으로 수정
                     /* 『효빈』GameManager에서 Dungeon을 관리하게 하고 
                                1) 던전에 입장시에 몬스터들을 관리하는 List<Monster>를 생성  << 데이터 방식은 던전 설계에 따라 바뀔수도 있을 것 같아요
@@ -69,7 +79,7 @@ namespace TeamTodayTextRPG
                     //currentViewer = new MonsterViewer(currentMonster);
 
                     //CurrentViewer = new MonsterViewer();
-                   // break;
+                    // break;
             }
             ShowCurrentView();
         }

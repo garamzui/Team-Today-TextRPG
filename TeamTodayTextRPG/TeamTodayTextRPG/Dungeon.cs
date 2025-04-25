@@ -34,6 +34,9 @@ namespace TeamTodayTextRPG
         public int HighLevel { get; set; }
         public int MonsterCount { get; set; }
 
+        public Monster? TargetMonster { get; set; }
+        public int MonsterAtkCounter { get; set; } 
+
         public DUNGEON_DIFF Diff { get; set; }
 
         // 던전 진입시 등장할 몬스터 리스트
@@ -55,18 +58,36 @@ namespace TeamTodayTextRPG
 
         public void Enter()
         {
-            int randNum = GameManager.Instance.Rand.Next(1, MonsterCount+1);
-            for (int i = 0; i < randNum; i++)
+            if(Diff == DUNGEON_DIFF.Hell)
             {
-                Random randCode = new Random();
-                
-                Dungeon_Monster.Add(GameManager.Instance.MonsterFactory(randCode.Next(1, 4)));
+                Dungeon_Monster.Add(GameManager.Instance.MonsterFactory(4));
             }
+            {
+                int randNum = GameManager.Instance.Rand.Next(1, MonsterCount + 1);
+                for (int i = 0; i < randNum; i++)
+                {
+                    Random randCode = new Random();
 
+                    Dungeon_Monster.Add(GameManager.Instance.MonsterFactory(randCode.Next(0, 4)));
+                }
+            }
         }
+        
+        public bool CheckClear()
+        {
+            bool retBool = true;
 
- 
-
+            foreach(var monster in Dungeon_Monster)
+            {
+                if (monster.State == MONSTER_STATE.IDLE)
+                {
+                    retBool = false;
+                    break;
+                }
+            }
+            return retBool;
+        }
+        /*
         public void Enter(Player player, Monster monster)
         {
             
@@ -145,7 +166,7 @@ namespace TeamTodayTextRPG
             {
                 Console.WriteLine("\n 던전을 클리어했습니다!");
             }
-        }
+        }*/
     }
 
 
