@@ -23,8 +23,7 @@ namespace TeamTodayTextRPG
         {
             Player = new Player();
             Rand = new Random();
-            Dungeon = new Dungeon();
-            
+
         }
 
 
@@ -33,5 +32,44 @@ namespace TeamTodayTextRPG
         public Random Rand { get; set; }
         public Dungeon Dungeon { get; set; }
 
+        public Monster BattleEnemy { get; set; }
+
+        public SceneManager SceneManager => SceneManager.Instance;
+
+        // 팩토리 메서드 위치 
+        public Dungeon DungeonFactroy(int code)
+        {
+            switch (code)
+            {
+                case (int)DUNGEON_DIFF.Easy:
+                    return new Dungeon_Easy();
+                case (int)DUNGEON_DIFF.Normal:
+                    return new Dungeon_Normal();
+                case (int)DUNGEON_DIFF.Hard:
+                    return new Dungeon_Hard();
+                case (int)DUNGEON_DIFF.Hell:
+                    return new Dungeon_Hell();
+                default: 
+                    throw new ArgumentException("잘못된 던전 코드입니다.");
+            }
+        }
+        public Monster MonsterFactory(int code)
+        {
+            switch (code) {
+
+                case (int)MONSTER_CODE.Slime:
+                    return new Slime();
+                case (int)MONSTER_CODE.Goblin:
+                    return new Goblin();
+                case (int)MONSTER_CODE.Wolf:
+                    return new Wolf();
+                case (int)MONSTER_CODE.Ork:
+                    return new Ork();
+                case (int)MONSTER_CODE.Zakum:
+                    return new Zakum();
+                default: 
+                    throw new ArgumentException("잘못된 몬스터 코드입니다.");
+            }
+        }
     }
 }

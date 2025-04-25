@@ -25,8 +25,6 @@ namespace TeamTodayTextRPG
 
     public abstract class Dungeon
     {
-        private Random rand = new Random();
-
         public int Code { get; set; }
         public string Name { get; set; }
         public int Reward { get; set; }
@@ -34,8 +32,12 @@ namespace TeamTodayTextRPG
 
         public int LowLevel { get; set; }
         public int HighLevel { get; set; }
+        public int MonsterCount { get; set; }
 
         public DUNGEON_DIFF Diff { get; set; }
+
+        // 던전 진입시 등장할 몬스터 리스트
+        public List<Monster> Dungeon_Monster { get; set; } = new List<Monster>();
 
         //public Dungeon(int code, string name, int reward, int exp, int defLevel, DUNGEON_DIFF diff)
 
@@ -47,13 +49,28 @@ namespace TeamTodayTextRPG
             Exp = int.Parse(parameter[3]);
             LowLevel = int.Parse(parameter[4]);
             HighLevel = int.Parse(parameter[5]);
-            Diff = (DUNGEON_DIFF)(int.Parse(parameter[6]));
+            MonsterCount = int.Parse(parameter[6]);
+            Diff = (DUNGEON_DIFF)(int.Parse(parameter[7]));
         }
+
+        public void Enter()
+        {
+            int randNum = GameManager.Instance.Rand.Next(1, MonsterCount+1);
+            for (int i = 0; i < randNum; i++)
+            {
+                Random randCode = new Random();
+                
+                Dungeon_Monster.Add(GameManager.Instance.MonsterFactory(randCode.Next(1, 4)));
+            }
+
+        }
+
+ 
 
         public void Enter(Player player, Monster monster)
         {
+            
 
-            Console.WriteLine($"\n[{Name}] 던전에 입장했습니다!");
             BattleLog log = new BattleLog();
 
             Console.WriteLine($"\n{monster.Name} 등장! {(monster.IsBoss ? "[보스]" : "")}");
@@ -136,21 +153,30 @@ namespace TeamTodayTextRPG
     {
         public Dungeon_Easy()
         {
-
+            Init(DataManager.Instance.DungeonDB.List[0]);
         }
     }
 
-    public class Dungeon_Noramal : Dungeon
+    public class Dungeon_Normal : Dungeon
     {
-
+        public Dungeon_Normal()
+        {
+            Init(DataManager.Instance.DungeonDB.List[1]);
+        }
     }
     public class Dungeon_Hard : Dungeon
     {
-
+        public Dungeon_Hard()
+        {
+            Init(DataManager.Instance.DungeonDB.List[2]);
+        }
     }
     public class Dungeon_Hell : Dungeon
     {
-
+        public Dungeon_Hell()
+        {
+            Init(DataManager.Instance.DungeonDB.List[3]);
+        }
     }
     /* 
        능력치 감소

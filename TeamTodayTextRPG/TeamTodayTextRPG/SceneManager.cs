@@ -10,7 +10,7 @@ namespace TeamTodayTextRPG
         private static readonly Lazy<SceneManager> lazyInstance = new Lazy<SceneManager>(() => new SceneManager());
         public static SceneManager Instance => lazyInstance.Value;
 
-        private SceneManager() 
+        public SceneManager() 
         {
             //『효빈』 초기 생성시 메인뷰어로 들어가도록 하겠습니다.
             //         추후에 가람님의 '그것'을 초기화면으로 설정하도록 바꿀예정입니다. 예를들어...IntroViewer 처럼요
@@ -43,20 +43,20 @@ namespace TeamTodayTextRPG
                 case VIEW_TYPE.SALE:
                     CurrentViewer = new SaleViewer();
                     break;
-                    /*
+                    
                 case VIEW_TYPE.DUNGEON:
                     CurrentViewer = new DungeonViewer();
                     break;
                 case VIEW_TYPE.DUNGEONCLEAR:
-                    CurrentViewer = new DungeonClearViewer();*/
+                    CurrentViewer = new DungeonClearViewer();
                     break;
                 case VIEW_TYPE.REST:
                     CurrentViewer = new RestViewer();
                     break;
-                    /*
+                    
                 case VIEW_TYPE.BATTLE:
                     CurrentViewer = new BattleViewer();
-                    break;*/
+                    break;
                 //case VIEW_TYPE.MONSTER:
                     // GameManager에서 직접적으로 몬스터 객체를 가져오는 방식으로 수정
                     /* 『효빈』GameManager에서 Dungeon을 관리하게 하고 

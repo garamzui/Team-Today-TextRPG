@@ -108,6 +108,16 @@ namespace TeamTodayTextRPG
             // Console.WriteLine($"{Name}은 쓰러졌다!");    『효빈』이 부분은 SceneManager에서 관리해주면 좋을거 같아요! 대신에 몬스터의 상태를 관리하는 state 변수를 변경시키겠습니다. 
             //                                                       SceneManager 에서 각 몬스터의 State를 체크! if (monster.State == MONSTER_STATE.DEAD) { ... } 
         }
+
+        public void View_Monster_Status()
+        {
+            if (State == MONSTER_STATE.DEAD)
+            {
+                Console.WriteLine($"Lv. {Level}\t{Name}\tDead");
+            }
+            Console.WriteLine($"Lv. {Level}\t{Name}\tHP {Hp}/{MaxHp}");
+        }
+
     }
 
     class Slime : Monster
