@@ -71,6 +71,9 @@ namespace TeamTodayTextRPG
             {
                 return "";
             }
+        //영훈) ↓보시면 참조 0개라고 쓰여있어요 그러면 이 메서드는 호출이 안되었다는 뜻이죠
+        //Viewer 스크립트의 109번 줄부터 보면 거기에서 이미 비슷한 동작을 하고 있어서
+        //ViewStatus() 메서드는 지우셔도 될거같아요!
             public void ViewStatus()
             {
                 Console.WriteLine($"{Jobname} {JobDescription()}\n- 공격력 {Attack} (+{PlusAtk}), 방어력 {Defence} (+{PlusDef}), HP {Hp}/{MaxHp}");

@@ -40,15 +40,15 @@ namespace TeamTodayTextRPG
             switch (classCode - 1)
             {
                 case 0:
-                    Character = new Characterclass.Warrior();
+                    Character = new Warrior();
                     SetStat();
                     break;
                 case 1:
-                    Character = new Characterclass.Magician();
+                    Character = new Magician();
                     SetStat();
                     break;
                 case 2:
-                    Character = new Characterclass.Assassin();
+                    Character = new Assassin();
                     SetStat();
                     break;
             }
@@ -87,10 +87,6 @@ namespace TeamTodayTextRPG
                 Character.Attack += 1;
                 Character.Defence += 2;
                 Character.PassiveSkill();
-                //스탯 증가량 화면에 표시
-                //Console.WriteLine("축하합니다! 레벨이 올랐습니다.");
-                //Console.WriteLine("공격력 +1, 방어력 +2");
-                //Viewer로
             }
         }
 
@@ -113,10 +109,8 @@ namespace TeamTodayTextRPG
         }
 
         //인벤토리에 아이템이 들어오는 경우 1 - 상점 구매
-        //다시 합쳐
         public void InputBag(int inputItemCode, VIEW_TYPE type)
         {
-            //ItemCode = inputItemCode;
             // 7번은 가격!
             int prise = int.Parse(DataManager.Instance.ItemDB.List[inputItemCode][7]);
 
@@ -142,7 +136,6 @@ namespace TeamTodayTextRPG
                 {
                     //랜덤 아이템 드롭
                     int dropItemCode = GameManager.Instance.rand.Next(0, DataManager.Instance.ItemDB.List.Count);
-                    //ItemCode = dropItemCode;
                     Bag.Add(dropItemCode);
                 }
             }
@@ -176,8 +169,6 @@ namespace TeamTodayTextRPG
         //장비 착용
         public void EquipItem(int equipItemCode)
         {
-            //ItemCode = equipItemCode;
-
             // 가방에 아이템이 있고 && 장착중이 아니면
             if (CheckBag(equipItemCode))
             {
@@ -188,9 +179,17 @@ namespace TeamTodayTextRPG
                     if ( DataManager.Instance.ItemDB.List[code][8] == DataManager.Instance.ItemDB.List[GameManager.Instance.Player.Bag[equipItemCode - 1]][8])
                     {
                         UnEquipItem(code);
+
+                        //해제하는 아이템의 보유 스탯만큼 PlusAtk 과 PlusDef 감소
+                        StatChange(code);
+
                         break;
                     }
                     Equip.Add(equipItemCode);
+
+                    //장착한 아이템의 보유 스탯만큼 PlusAtk 과 PlusDef 상승
+                    StatChange(equipItemCode - 1);
+
 
                     Console.Write($">> {DataManager.Instance.ItemDB.List[Bag[equipItemCode - 1]][1]}");
                     Console.ForegroundColor = ConsoleColor.DarkCyan;
@@ -198,14 +197,18 @@ namespace TeamTodayTextRPG
                     Console.ResetColor();
                 }
             }
+
             // 장착중
+            // 영훈) 위 if가 CheckBag()이라서 else면 가방에 없는 것이니
+            // 아래가 작동할 수 없습니다 우선 주석처리 후 확인 부탁드려요
             else
             {
-                UnEquipItem(equipItemCode - 1);
-                Console.Write($">> {DataManager.Instance.ItemDB.List[Bag[equipItemCode - 1]][1]}");
-                Console.ForegroundColor = ConsoleColor.DarkCyan;
-                Console.WriteLine("을(를) 장착 해제하였습니다.\n");
-                Console.ResetColor();
+                //UnEquipItem(equipItemCode - 1);
+                //Console.Write($">> {DataManager.Instance.ItemDB.List[Bag[equipItemCode - 1]][1]}");
+                //Console.ForegroundColor = ConsoleColor.DarkCyan;
+                //Console.WriteLine("을(를) 장착 해제하였습니다.\n");
+                //Console.ResetColor();
+                Console.WriteLine("해당 아이템을 이미 착용중입니다.\n");
             }
         }
 
@@ -218,6 +221,34 @@ namespace TeamTodayTextRPG
                 //Equip List에서 삭제
                 Equip.Remove(equipItemCode);
             }
+        }
+
+        //아이템 장착 및 해제에 따른 스탯 변화
+        public void StatChange(int code)
+        {
+            if (Equip.Contains(code))
+            {
+                //장착한 아이템의 보유 스탯만큼 PlusAtk 과 PlusDef 상승
+                Character.PlusAtk += int.Parse(DataManager.Instance.ItemDB.List
+                    [GameManager.Instance.Player.Bag[code]][2]);
+
+                Character.PlusDef += int.Parse(DataManager.Instance.ItemDB.List
+                    [GameManager.Instance.Player.Bag[code]][3]);
+            }
+
+            else
+            {
+                //해제하는 아이템의 보유 스탯만큼 PlusAtk 과 PlusDef 감소
+                Character.PlusAtk -= int.Parse(DataManager.Instance.ItemDB.List
+                    [GameManager.Instance.Player.Bag[code]][2]);
+
+                Character.PlusDef -= int.Parse(DataManager.Instance.ItemDB.List
+                    [GameManager.Instance.Player.Bag[code]][3]);
+            }
+
+            //현재 스탯 = 토탈 스탯
+            Character.Attack = Character.TotalAtk;
+            Character.Defence = Character.TotalDef;
         }
     }
 }
