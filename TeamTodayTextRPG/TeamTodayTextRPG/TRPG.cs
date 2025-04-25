@@ -6,17 +6,12 @@ using System.Threading.Tasks;
 
 namespace TeamTodayTextRPG
 {
-    class TRPG()
+    class TRPG
     {
         static void Main(string[] args)
         {
-            // 『효빈』VIEW_TYPE의 변수생성
-            VIEW_TYPE currentView = VIEW_TYPE.MAIN;
 
-            /* 『효빈』
-                게임 전체를 관리해줄 GameManager 인스턴스
-                이후 모든 메소드의 접근을 gm을 통해 행합니다!!
-            */
+            VIEW_TYPE currentView = VIEW_TYPE.MAIN;
             var gm = GameManager.Instance;
             var sm = SceneManager.Instance;
             var dm = DataManager.Instance;

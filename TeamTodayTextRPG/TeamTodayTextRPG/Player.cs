@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Authentication.ExtendedProtection;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
+using System.Numerics;
+using System.Threading;
 using System.Xml.Linq;
-using static TeamTodayTextRPG.Characterclass;
+using TeamTodayTextRPG;
 
 namespace TeamTodayTextRPG
 {
@@ -26,12 +22,13 @@ namespace TeamTodayTextRPG
     //스탯 관련 스크립트
     public partial class Player
     {
+
         public Player()
         {
             Bag = new List<int>();
             Equip = new List<int>();
+            //SetCharacter()
         }
-
 
         //SceneManager에서 사용할 메서드
         public void SetCharacter(int classCode, string name)
@@ -128,14 +125,14 @@ namespace TeamTodayTextRPG
 
             //인벤토리에 아이템이 들어오는 경우 2 - 던전 클리어
             //던전 클리어 시 랜덤(20%) 확률로 아이템 드롭
-            if(type == VIEW_TYPE.DUNGEONCLEAR)
+            if(type == VIEW_TYPE.DUNGEON_CLEAR)
             {
-                int ItemDrop = GameManager.Instance.rand.Next(0, 101);
+                int ItemDrop = GameManager.Instance.Rand.Next(0, 101);
                 //20% 확률로
                 if(ItemDrop >= 90 || ItemDrop <= 10)
                 {
                     //랜덤 아이템 드롭
-                    int dropItemCode = GameManager.Instance.rand.Next(0, DataManager.Instance.ItemDB.List.Count);
+                    int dropItemCode = GameManager.Instance.Rand.Next(0, DataManager.Instance.ItemDB.List.Count);
                     Bag.Add(dropItemCode);
                 }
             }
