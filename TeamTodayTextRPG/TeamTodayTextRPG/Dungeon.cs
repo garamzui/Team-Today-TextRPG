@@ -63,12 +63,14 @@ namespace TeamTodayTextRPG
             {
                 Dungeon_Monster.Add(GameManager.Instance.MonsterFactory(4));
             }
+            else
             {
+
                 int randNum = GameManager.Instance.Rand.Next(1, MonsterCount + 1);
                 for (int i = 0; i < randNum; i++)
                 {
                     Random randCode = new Random();
-
+                    // 던전 난이도 별로 switch case 문 혹은 if문
                     Dungeon_Monster.Add(GameManager.Instance.MonsterFactory(randCode.Next(0, 4)));
                 }
             }

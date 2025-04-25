@@ -45,12 +45,12 @@ namespace TeamTodayTextRPG
 
         public void Init(string[] parameter)
         {
-            // 0.몬스터코드 / 1.이름 / 2.레벨 / 3.공격력 / 4.방어력 / 5.체력 / 6.보상골드 / 7.보상경험치 / 8.텍스트
+            // 0.코드 / 1.이름 / 2.레벨 / 3.공격력 / 4.방어력 / 5.체력 / 6.보상골드 / 7.보상경험치 / 8.몬스터 종류 / 9.텍스트
             Parameter = parameter;
 
             if (!Enum.TryParse(parameter[0], out MONSTER_CODE code))
                 throw new ArgumentException("Invalid MONSTER code.");
-            Code = code;
+            Code = (MONSTER_CODE)(int.Parse(Parameter[8]));
             Name = Parameter[1];
             Level = int.Parse(Parameter[2]);
             Atk = int.Parse(Parameter[3]);
@@ -59,7 +59,7 @@ namespace TeamTodayTextRPG
             MaxHp = Hp;
             RewardGold = int.Parse(Parameter[6]);
             RewardExp = int.Parse(Parameter[7]);
-            Text = Parameter[8];
+            Text = Parameter[9];
         }
 
         //『효빈』 TakeDamage와 Heal 비슷한 역할을 하는 메소드 이기 때문에 ChangeHp로 합쳐서 관리하면 더 편할 것 같아요! 
@@ -124,7 +124,7 @@ namespace TeamTodayTextRPG
     {
         public Slime()
         {
-            Init(DataManager.Instance.MonsterDB.List[(int)Code]);
+            Init(DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.Slime]);
         }
     }
 
@@ -132,7 +132,7 @@ namespace TeamTodayTextRPG
     {
         public Goblin()
         {
-            Init(DataManager.Instance.MonsterDB.List[(int)Code]);
+            Init(DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.Goblin]);
         }
     }
 
@@ -140,7 +140,7 @@ namespace TeamTodayTextRPG
     {
         public Wolf()
         {
-            Init(DataManager.Instance.MonsterDB.List[(int)Code]);
+            Init(DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.Wolf]);
         }
     }
 
@@ -148,7 +148,7 @@ namespace TeamTodayTextRPG
     {
         public Ork()
         {
-            Init(DataManager.Instance.MonsterDB.List[(int)Code]);
+            Init(DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.Ork]);
         }
     }
 
@@ -156,7 +156,7 @@ namespace TeamTodayTextRPG
     {
         public Zakum()
         {
-            Init(DataManager.Instance.MonsterDB.List[(int)Code]);
+            Init(DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.Zakum]);
         }
     }
 }

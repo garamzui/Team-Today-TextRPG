@@ -80,6 +80,7 @@ namespace TeamTodayTextRPG
         // NextView 메서드 구현
         public override VIEW_TYPE NextView(int input)
         {
+            Console.Clear();
             switch (input)
             {
                 case 1:
@@ -91,7 +92,7 @@ namespace TeamTodayTextRPG
                 case 4:
                     return VIEW_TYPE.SHOP;
                 case 5:
-                    return VIEW_TYPE.DUNGEON;
+                    return VIEW_TYPE.DUNGEON_SELECT;
                 case 6:
                     return VIEW_TYPE.REST;
                 case 7:
@@ -465,18 +466,15 @@ namespace TeamTodayTextRPG
             Console.WriteLine("던전입장\n이곳에서 던전으로 들어가기전 활동을 할 수 있습니다.\n");
             foreach(var dun in DataManager.Instance.DungeonDB.List)
             {
-                Console.WriteLine($"{dun[0]}. {dun[1]} | {dun[7]}");
+                Console.WriteLine($"{int.Parse(dun[0])+1}. {dun[1]} \t\t| {dun[8]}");
             }
 
             Console.WriteLine("0. 나가기\n");
-
-            int input = GetInput();
-            VIEW_TYPE nextView = NextView(input);
-            SceneManager.Instance.SwitchScene(nextView);
         }
 
         public override VIEW_TYPE NextView(int input)
         {
+            Console.Clear();
             switch (input)
             {
                 case 0:
@@ -522,27 +520,25 @@ namespace TeamTodayTextRPG
             if (dungeon.Diff == DUNGEON_DIFF.Hell)
             {
                 Console.WriteLine("!!!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!!!");
-                Console.WriteLine("\n[보스 효과] 플레이어 능력치가 10% 감소합니다!");
+                Console.WriteLine("[보스 효과] 플레이어 능력치가 10% 감소합니다!\n");
             }
 
             Console.WriteLine("====================");
             Console.WriteLine("1. 던전 입장 (전투 시작)");
             Console.WriteLine("2. 던전 선택으로 돌아가기");
             Console.WriteLine("3. 메인으로 돌아가기");
-
-            int input = GetInput(); // 사용자 입력 받기
-            VIEW_TYPE nextView = NextView(input);
-            SceneManager.Instance.SwitchScene(nextView); // 화면 전환
         }
 
         public override VIEW_TYPE NextView(int input)
         {
+            Console.Clear();
             switch (input)
             {
                 case 1:
                     // 전투 몬스터 등록
                     //GameManager.Instance.BattleEnemy = monster; // 몬스터 설정
-                    return VIEW_TYPE.BATTLE;  // 전투 화면으로 이동
+                    GameManager.Instance.Dungeon.Enter();
+                    return VIEW_TYPE.BATTLE_PLAYER;  // 전투 화면으로 이동
                 case 2:
                     return VIEW_TYPE.DUNGEON_SELECT; // 던전 선택화면으로 돌아가기
                 case 3:
@@ -579,6 +575,7 @@ namespace TeamTodayTextRPG
         }
         public override VIEW_TYPE NextView(int input)
         {
+            Console.Clear();
             if (input == 0)
                 return VIEW_TYPE.DUNGEON_CLEAR;
             else
@@ -599,7 +596,7 @@ namespace TeamTodayTextRPG
             int count = 1;
             foreach (var monster in GameManager.Instance.Dungeon.Dungeon_Monster)
             {
-                Console.Write($"{ count } ");
+                Console.Write($"{ count++ } ");
                 monster.View_Monster_Status();
             }
 
