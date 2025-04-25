@@ -691,12 +691,12 @@ namespace TeamTodayTextRPG
             Console.WriteLine("Battle!!\n");
 
             Console.WriteLine($"{GameManager.Instance.Player.Name} 의 공격!");
-            Console.WriteLine($"Lv.{GameManager.Instance.Dungeon.TargetMonster.Level} {GameManager.Instance.Dungeon.TargetMonster.Name} 을(를) 맞췄습니다. [데미지 : {GameManager.Instance.Player.Character.Attack}]\n");
-
+            Console.WriteLine($"Lv.{GameManager.Instance.Dungeon.TargetMonster.Level}{GameManager.Instance.Dungeon.TargetMonster.Name}\n");
+            GameManager.Instance.Player.Character.DefaultAttack();
             Console.WriteLine($"Lv.{GameManager.Instance.Dungeon.TargetMonster.Level} {GameManager.Instance.Dungeon.TargetMonster.Name}");
             Console.Write($"HP {GameManager.Instance.Dungeon.TargetMonster.Hp} -> ");
 
-            GameManager.Instance.Dungeon.TargetMonster.ManageHp(-GameManager.Instance.Player.Character.Attack);
+           
 
             if (GameManager.Instance.Dungeon.TargetMonster.State == MONSTER_STATE.DEAD)
             {
