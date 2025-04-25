@@ -1664,7 +1664,7 @@ namespace TeamTodayTextRPG
         }
 
 
-        public void NextCut(int mS)
+        void NextCut(int mS)
         {
             Thread.Sleep(mS);
             Console.Clear();
