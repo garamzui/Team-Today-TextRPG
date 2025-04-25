@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using TeamTodayTextRPG;
-//Console.OutputEncoding = System.Text.Encoding.UTF8;
+//
 
 namespace TeamTodayTextRPG
 {
@@ -115,7 +115,7 @@ namespace TeamTodayTextRPG
                 {
                     Hp += HpChange;
                     if (Hp < 0) Hp = 0;
-                    Console.WriteLine($"{HpChange}의 피해를 입었습니다! \n현재 Hp : {Hp}/{MaxHp}");
+                    Console.WriteLine($"{-HpChange}의 피해를 입었습니다! \n현재 Hp : {Hp}/{MaxHp}");
 
                 }
 

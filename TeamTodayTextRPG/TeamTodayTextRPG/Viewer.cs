@@ -588,7 +588,7 @@ namespace TeamTodayTextRPG
         public BattlePlayerViewer()
         {
             StartIndex = 0;
-            EndIndex = 0;
+            EndIndex = GameManager.Instance.Dungeon.MonsterCount;
         }
         public override void ViewAction()
         {
@@ -608,10 +608,6 @@ namespace TeamTodayTextRPG
             Console.WriteLine("0. 도망");
 
             Console.WriteLine("대상을 선택해주세요.");
-
-            VIEW_TYPE nextView = NextView(SceneManager.Instance.InputAction(StartIndex, EndIndex));
-            SceneManager.Instance.SwitchScene(nextView);
-
         }
         public override VIEW_TYPE NextView(int input)
         {
@@ -655,7 +651,7 @@ namespace TeamTodayTextRPG
             Console.WriteLine("Battle!!\n");
 
             Console.WriteLine($"{GameManager.Instance.Player.Name} 의 공격!");
-            Console.WriteLine($"Lv.{GameManager.Instance.Dungeon.TargetMonster.Level} {GameManager.Instance.Dungeon.TargetMonster.Name} 을(를) 맞췄습니다. [데미지 : {GameManager.Instance.Player}]\n");
+            Console.WriteLine($"Lv.{GameManager.Instance.Dungeon.TargetMonster.Level} {GameManager.Instance.Dungeon.TargetMonster.Name} 을(를) 맞췄습니다. [데미지 : {GameManager.Instance.Player.Character.Attack}]\n");
 
             Console.WriteLine($"Lv.{GameManager.Instance.Dungeon.TargetMonster.Level} {GameManager.Instance.Dungeon.TargetMonster.Name}");
             Console.Write($"HP {GameManager.Instance.Dungeon.TargetMonster.Hp} -> ");
@@ -672,6 +668,7 @@ namespace TeamTodayTextRPG
         }
         public override VIEW_TYPE NextView(int input)
         {
+            Console.Clear();
             switch (input)
             {
                 case 0:
@@ -705,9 +702,9 @@ namespace TeamTodayTextRPG
                 Console.WriteLine($"{GameManager.Instance.Player.Name} 을(를) 맞췄습니다.\t[데미지 : {GameManager.Instance.Dungeon.Dungeon_Monster[GameManager.Instance.Dungeon.MonsterAtkCounter].Atk}]\n");
 
                 Console.WriteLine($"Lv.{GameManager.Instance.Player.Level} {GameManager.Instance.Player.Name}");
-                Console.Write($"HP {GameManager.Instance.Player.Character.Hp} -> ");
+                //Console.Write($"HP {GameManager.Instance.Player.Character.Hp} -> ");
                 GameManager.Instance.Player.Character.ManageHp(-GameManager.Instance.Dungeon.Dungeon_Monster[GameManager.Instance.Dungeon.MonsterAtkCounter].Atk);
-                Console.WriteLine($"{GameManager.Instance.Player.Character.Hp}\n");
+                //Console.WriteLine($"{GameManager.Instance.Player.Character.Hp}\n");
 
                 Console.WriteLine("\n0. 다음");
 
@@ -724,6 +721,7 @@ namespace TeamTodayTextRPG
         }
         public override VIEW_TYPE NextView(int input)
         {
+            Console.Clear();
             if(input == 0)
             {
                 // 공격할 몬스터가 남았다면 몬스터 공격화면을 계속 출력
