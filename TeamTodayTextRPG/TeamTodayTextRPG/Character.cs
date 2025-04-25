@@ -84,7 +84,7 @@ namespace TeamTodayTextRPG
             int AttackDamage = TotalAtk - GameManager.Instance.Dungeon.TargetMonster.Def;
             if (AttackDamage <= 0)
             { AttackDamage = 1; }
-            Monster.ChangeHp(-AttackDamage);
+            Monster.ManageHp(-AttackDamage);
             Console.WriteLine($"{Monster.Name}에게 {AttackDamage}의 피해");
         }
 

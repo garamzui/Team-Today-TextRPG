@@ -84,23 +84,6 @@ namespace TeamTodayTextRPG
             }
             else { Console.WriteLine("아무 일도 일어나지 않았습니다."); }
         }
-     
-
-        public void ChangeHp(int value)
-        {
-            Hp += value;
-
-            if (Hp <= 0)
-            {
-                Hp = 0;
-                Die();
-            }
-            else if (Hp > MaxHp) // 힐량이 최대 hp를 넘어가지 않게하는 조건도 추가하겠습니다
-            {
-                Hp = MaxHp;
-            }
-        } 
-
 
         public void Die()
         {
@@ -117,7 +100,6 @@ namespace TeamTodayTextRPG
             }
             else Console.WriteLine($"Lv. {Level}\t{Name}\tHP {Hp}/{MaxHp}");
         }
-
     }
 
     class Slime : Monster
