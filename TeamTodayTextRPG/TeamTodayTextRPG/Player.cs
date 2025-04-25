@@ -53,7 +53,7 @@ namespace TeamTodayTextRPG
             void SetStat()
             {
                 Level = 1;
-                Gold = 1500;
+                Gold = 150000;
                 Name = name;
             }
 

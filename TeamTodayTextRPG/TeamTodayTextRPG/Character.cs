@@ -71,10 +71,7 @@ namespace TeamTodayTextRPG
         //영훈) ↓보시면 참조 0개라고 쓰여있어요 그러면 이 메서드는 호출이 안되었다는 뜻이죠
         //Viewer 스크립트의 109번 줄부터 보면 거기에서 이미 비슷한 동작을 하고 있어서
         //ViewStatus() 메서드는 지우셔도 될거같아요!
-            public void ViewStatus()
-            {
-                Console.WriteLine($"{Jobname} {JobDescription()}\n- 공격력 {Attack} (+{PlusAtk}), 방어력 {Defence} (+{PlusDef}), HP {Hp}/{MaxHp}");
-            }
+           
 
 
         //기본공격을 두고, 래밸을 올리면 스킬이
@@ -87,8 +84,8 @@ namespace TeamTodayTextRPG
             int AttackDamage = TotalAtk - GameManager.Instance.Dungeon.TargetMonster.Def;
             if (AttackDamage <= 0)
             { AttackDamage = 1; }
-            Monster.ChangeHp(-AttackDamage);
-            Console.WriteLine($"{Monster.Name}에게 {AttackDamage}의 피해");
+            GameManager.Instance.Dungeon.TargetMonster.ManageHp(-AttackDamage);
+            Console.WriteLine($"{GameManager.Instance.Dungeon.TargetMonster.Name}에게 {AttackDamage}의 피해");
         }
 
 
@@ -184,9 +181,9 @@ namespace TeamTodayTextRPG
                 if (SkillDamage <= 0)
                 { SkillDamage = 1; }
 
-                Monster.ManageHp(-SkillDamage);
+                GameManager.Instance.Dungeon.TargetMonster.ManageHp(-SkillDamage);
 
-                Console.WriteLine($"{ActskillName}을 사용하여 {Monster.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
+                Console.WriteLine($"{ActskillName}을 사용하여 {GameManager.Instance.Dungeon.TargetMonster.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
             }
             else
             {
@@ -240,8 +237,8 @@ namespace TeamTodayTextRPG
                 if (SkillDamage <= 0)
                 { SkillDamage = 1; }
 
-                Monster.ManageHp(-SkillDamage);
-                Console.WriteLine($"{ActskillName}을 사용하여 {Monster.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
+                GameManager.Instance.Dungeon.TargetMonster.ManageHp(-SkillDamage);
+                Console.WriteLine($"{ActskillName}을 사용하여 {GameManager.Instance.Dungeon.TargetMonster.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
             }
             else
             {
@@ -307,8 +304,8 @@ namespace TeamTodayTextRPG
                 for (int i = 0; i < 2; i++) //2연격 구현
                 {
 
-                    Monster.ManageHp(-SkillDamage);
-                    Console.WriteLine($"{ActskillName}을 사용하여 {Monster.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
+                    GameManager.Instance.Dungeon.TargetMonster.ManageHp(-SkillDamage);
+                    Console.WriteLine($"{ActskillName}을 사용하여 {GameManager.Instance.Dungeon.TargetMonster.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
                 }
             }
             else

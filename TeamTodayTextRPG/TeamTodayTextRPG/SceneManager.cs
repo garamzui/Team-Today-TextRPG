@@ -35,7 +35,7 @@ namespace TeamTodayTextRPG
                 case VIEW_TYPE.EQUIP:
                     CurrentViewer = new EquipViewer();
                     break;
-                    /*
+                    
                 case VIEW_TYPE.SHOP:
                     CurrentViewer = new ShopViewer();
                     break;
@@ -44,7 +44,7 @@ namespace TeamTodayTextRPG
                     break;
                 case VIEW_TYPE.SALE:
                     CurrentViewer = new SaleViewer();
-                    break;*/
+                    break;
                     
                 case VIEW_TYPE.DUNGEON_SELECT:
                     CurrentViewer = new DungeonSelectViewer();
@@ -220,7 +220,7 @@ namespace TeamTodayTextRPG
             return num;
         }
 
-        /*
+        
         public void ShowName(string name)
         {
             Console.Write(name + "\t| ");
@@ -246,17 +246,17 @@ namespace TeamTodayTextRPG
                     if (view == VIEW_TYPE.EQUIP) Console.Write($"- {++count} ");
                     else Console.Write("- ");
 
-                    if (gm.Player.CheckEquip(item))
+                    if (GameManager.Instance.Player.CheckEquip(item))
                     {
                         Console.ForegroundColor = ConsoleColor.Green;
                         Console.Write("[E]");
                         Console.ResetColor();
                     }
 
-                    ShowName(DataManager.Instance.ItemDB.List[item].Name);
-                    if (DataManager.Instance.ItemDB.List[item].Atk != 0) ShowAtk(DataManager.Instance.ItemDB.List[item].Atk);
-                    if (DataManager.Instance.ItemDB.List[item].Def != 0) ShowDef(DataManager.Instance.ItemDB.List[item].Def);
-                    Console.WriteLine(DataManager.Instance.ItemDB.List[item].Text);
+                    ShowName(DataManager.Instance.ItemDB.List[item][1]);
+                    if (int.Parse(DataManager.Instance.ItemDB.List[item][2]) != 0) ShowAtk(int.Parse(DataManager.Instance.ItemDB.List[item][2]));
+                    if (int.Parse(DataManager.Instance.ItemDB.List[item][3]) != 0) ShowDef(int.Parse(DataManager.Instance.ItemDB.List[item][3]));
+                    Console.Write(DataManager.Instance.ItemDB.List[item][6] + "\t| ");
                 }
 
             }
@@ -268,22 +268,22 @@ namespace TeamTodayTextRPG
             {
                 foreach (var item in DataManager.Instance.ItemDB.List)
                 {
-                    if (GameManager.Instance.Player.CheckBag(item.Code)) Console.ForegroundColor = ConsoleColor.DarkGray;
+                    if (GameManager.Instance.Player.CheckBag(int.Parse(item[0]))) Console.ForegroundColor = ConsoleColor.DarkGray;
 
-                    if (view == VIEW_TYPE.PURCHASE) Console.Write("- " + (item.Code + 1) + " " + item.Name + "\t| ");
-                    else Console.Write("- " + item.Name + "\t| ");
+                    if (view == VIEW_TYPE.PURCHASE) Console.Write("- " + (int.Parse(item[0]) + 1) + " " + item[1] + "\t| ");
+                    else Console.Write("- " + item[1] + "\t| ");
 
-                    if (item.Atk != 0) ShowAtk(item.Atk);
-                    if (item.Def != 0) ShowDef(item.Def);
-                    Console.Write(item.Text + "\t| ");
+                    if (int.Parse(item[2]) != 0) ShowAtk(int.Parse(item[2]));
+                    if (int.Parse(item[3]) != 0) ShowDef(int.Parse(item[3]));
+                    Console.Write(item[6] + "\t| ");
 
-                    if (GameManager.Instance.Player.CheckBag(item.Code))
+                    if (GameManager.Instance.Player.CheckBag(int.Parse(item[0])))
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("구매 완료");
                         Console.ResetColor();
                     }
-                    else Console.WriteLine(item.Value + " G");
+                    else Console.WriteLine(int.Parse(item[7]) + " G");
                 }
             }
         }
@@ -295,13 +295,13 @@ namespace TeamTodayTextRPG
             {
                 foreach (var item in GameManager.Instance.Player.Bag)
                 {
-                    Console.Write("- " + (++count) + " " + DataManager.Instance.ItemDB.List[item].Name + "\t| ");
-                    if (DataManager.Instance.ItemDB.List[item].Atk != 0) ShowAtk(DataManager.Instance.ItemDB.List[item].Atk);
-                    if (DataManager.Instance.ItemDB.List[item].Def != 0) ShowDef(DataManager.Instance.ItemDB.List[item].Def);
-                    Console.Write(DataManager.Instance.ItemDB.List[item].Text + "\t| ");
-                    Console.WriteLine((int)(DataManager.Instance.ItemDB.List[item].Value * 0.85) + " G");
+                    Console.Write("- " + (++count) + " " + DataManager.Instance.ItemDB.List[item][1] + "\t| ");
+                    if (int.Parse(DataManager.Instance.ItemDB.List[item][2]) != 0) ShowAtk(int.Parse(DataManager.Instance.ItemDB.List[item][2]));
+                    if (int.Parse(DataManager.Instance.ItemDB.List[item][3]) != 0) ShowDef(int.Parse(DataManager.Instance.ItemDB.List[item][3]));
+                    Console.Write(DataManager.Instance.ItemDB.List[item][6] + "\t| ");
+                    Console.WriteLine((int)(int.Parse(DataManager.Instance.ItemDB.List[item][7]) * 0.85) + " G");
                 }
             }
-        }*/
+        }
     }
 }
