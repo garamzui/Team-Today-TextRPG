@@ -39,6 +39,7 @@ namespace TeamTodayTextRPG
         public int DungeonCode { get; set; }// 던전 코드 (사용할 경우)
 
         public Player Player => GameManager.Instance.Player;
+        
         protected Character Character => Player.Character;
 
         protected int GetInput()
@@ -737,13 +738,13 @@ namespace TeamTodayTextRPG
             if (GameManager.Instance.Dungeon.Dungeon_Monster[GameManager.Instance.Dungeon.MonsterAtkCounter].State == MONSTER_STATE.IDLE)
             {
                 Console.WriteLine("Battle!!\n");
-
+                GameManager.Instance.Dungeon.TargetMonster.DefaultAttack();
                 Console.WriteLine($"Lv.{GameManager.Instance.Dungeon.Dungeon_Monster[GameManager.Instance.Dungeon.MonsterAtkCounter].Level} {GameManager.Instance.Dungeon.Dungeon_Monster[GameManager.Instance.Dungeon.MonsterAtkCounter].Name} 의 공격!");
-                Console.WriteLine($"{GameManager.Instance.Player.Name} 을(를) 맞췄습니다.\t[데미지 : {GameManager.Instance.Dungeon.Dungeon_Monster[GameManager.Instance.Dungeon.MonsterAtkCounter].Atk}]\n");
+                
 
                 Console.WriteLine($"Lv.{GameManager.Instance.Player.Level} {GameManager.Instance.Player.Name}");
                 //Console.Write($"HP {GameManager.Instance.Player.Character.Hp} -> ");
-                GameManager.Instance.Player.Character.ManageHp(-GameManager.Instance.Dungeon.Dungeon_Monster[GameManager.Instance.Dungeon.MonsterAtkCounter].Atk);
+                
                 //Console.WriteLine($"{GameManager.Instance.Player.Character.Hp}\n");
 
                 Console.WriteLine("\n0. 다음");
