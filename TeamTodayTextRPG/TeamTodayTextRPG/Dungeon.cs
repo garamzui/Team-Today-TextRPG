@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace TeamTodayTextRPG
 {
-    enum DUNGEON_DIFF { Easy, Normal, Hard, Hell }
+    public enum DUNGEON_DIFF { Easy, Normal, Hard, Hell }
 
     class BattleLog
     {
@@ -21,10 +21,8 @@ namespace TeamTodayTextRPG
         }
     }
 
-    class Dungeon
+    public class Dungeon
     {
-        private Random rand = new Random();
-
         public int Code { get; set; }
         public string Name { get; set; }
         public int Reward { get; set; }
