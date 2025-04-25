@@ -135,8 +135,6 @@ namespace TeamTodayTextRPG
             Console.WriteLine("====================");
             Console.WriteLine("1. 메인으로 돌아가기");
 
-            VIEW_TYPE nextView = NextView(SceneManager.Instance.InputAction(StartIndex, EndIndex));
-            SceneManager.Instance.SwitchScene(nextView);
         }
 
         public override VIEW_TYPE NextView(int input)
@@ -180,9 +178,6 @@ namespace TeamTodayTextRPG
             Console.WriteLine("====================");
             Console.WriteLine("1. 아이템 사용");
             Console.WriteLine("2. 메인으로 돌아가기");
-
-            VIEW_TYPE nextView = NextView(SceneManager.Instance.InputAction(StartIndex, EndIndex));
-            SceneManager.Instance.SwitchScene(nextView);
         }
         // NextView 메서드 구현
         public override VIEW_TYPE NextView(int input)
@@ -234,10 +229,6 @@ namespace TeamTodayTextRPG
             Console.WriteLine("====================");
             Console.WriteLine("1~n. 장비 변경");
             Console.WriteLine("0. 메인으로 돌아가기");
-
-
-            VIEW_TYPE nextView = NextView(SceneManager.Instance.InputAction(StartIndex, EndIndex));
-            SceneManager.Instance.SwitchScene(nextView);
         }
 
         public override VIEW_TYPE NextView(int input)
@@ -257,6 +248,7 @@ namespace TeamTodayTextRPG
         }
     }
 
+    /*
     public class ShopViewer : Viewer
     {
         public ShopViewer()
@@ -293,10 +285,6 @@ namespace TeamTodayTextRPG
             Console.WriteLine("1. 아이템 구매");
             Console.WriteLine("2. 아이템 판매");
             Console.WriteLine("3. 메인으로 돌아가기");
-
-            int input = GetInput();
-            VIEW_TYPE nextView = NextView(input);
-            SceneManager.Instance.SwitchScene(nextView);
         }
 
         // NextView 메서드 구현
@@ -395,7 +383,6 @@ namespace TeamTodayTextRPG
     }
 
 
-
     public class SaleViewer : Viewer
     {
         public SaleViewer()
@@ -464,7 +451,7 @@ namespace TeamTodayTextRPG
                     return VIEW_TYPE.SHOP;
             }
         }
-    }
+    }*/
 
     public class DungeonSelectViewer : Viewer
     {
@@ -536,11 +523,6 @@ namespace TeamTodayTextRPG
             {
                 Console.WriteLine("!!!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!!!");
                 Console.WriteLine("\n[보스 효과] 플레이어 능력치가 10% 감소합니다!");
-                /*
-                var character = GameManager.Instance.Player.Character;
-                character.Attack = (int)(character.Attack * 0.9);
-                character.Defence = (int)(character.Defence * 0.9);*/
-                // 데미지 계산시에 적용시켜야 합니다.
             }
 
             Console.WriteLine("====================");
@@ -571,7 +553,7 @@ namespace TeamTodayTextRPG
             }
         }
     }
-    
+   
     public class BattleViewer : Viewer
     {
         public override void ViewAction()
@@ -690,10 +672,6 @@ namespace TeamTodayTextRPG
             else Console.WriteLine($"{GameManager.Instance.Dungeon.TargetMonster.Hp}");
 
             Console.WriteLine("\n0. 다음");
-
-            VIEW_TYPE nextView = NextView(SceneManager.Instance.InputAction(StartIndex, EndIndex));
-            SceneManager.Instance.SwitchScene(nextView);
-
         }
         public override VIEW_TYPE NextView(int input)
         {
@@ -825,10 +803,6 @@ namespace TeamTodayTextRPG
 
             Console.WriteLine("====================");
             Console.WriteLine("1. 메인으로 돌아가기");
-
-            int input = GetInput();
-            VIEW_TYPE nextView = NextView(input);
-            SceneManager.Instance.SwitchScene(nextView);
         }
 
         public override VIEW_TYPE NextView(int input)

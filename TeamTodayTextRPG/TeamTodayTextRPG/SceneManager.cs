@@ -35,6 +35,7 @@ namespace TeamTodayTextRPG
                 case VIEW_TYPE.EQUIP:
                     CurrentViewer = new EquipViewer();
                     break;
+                    /*
                 case VIEW_TYPE.SHOP:
                     CurrentViewer = new ShopViewer();
                     break;
@@ -43,7 +44,7 @@ namespace TeamTodayTextRPG
                     break;
                 case VIEW_TYPE.SALE:
                     CurrentViewer = new SaleViewer();
-                    break;
+                    break;*/
                     
                 case VIEW_TYPE.DUNGEON_SELECT:
                     CurrentViewer = new DungeonSelectViewer();

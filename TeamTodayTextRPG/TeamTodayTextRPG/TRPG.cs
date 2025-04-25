@@ -11,13 +11,16 @@ namespace TeamTodayTextRPG
         static void Main(string[] args)
         {
             Console.WriteLine("이건 실행되냐?");
-            // 『효빈』VIEW_TYPE의 변수생성
-            VIEW_TYPE currentView = VIEW_TYPE.MAIN;
+            // 콘솔 창이 바로 닫히는 걸 방지
+            Console.WriteLine("\n\n아무 키나 누르면 종료됩니다.");
+            Console.ReadKey();  // 또는 Console.ReadLine();
+                                // 『효빈』VIEW_TYPE의 변수생성
+                                // VIEW_TYPE currentView = VIEW_TYPE.MAIN;
 
             /* 『효빈』
                 게임 전체를 관리해줄 GameManager 인스턴스
                 이후 모든 메소드의 접근을 gm을 통해 행합니다!!
-            */
+            
             var gm = GameManager.Instance;
             var sm = SceneManager.Instance;
             var dm = DataManager.Instance;
@@ -36,7 +39,7 @@ namespace TeamTodayTextRPG
 
                 //『효빈』선택지 입력 시 다음 화면으로의 전환
                 currentView = sm.CurrentViewer.NextView(sm.InputAction(sm.CurrentViewer.StartIndex, sm.CurrentViewer.EndIndex));
-            }
+            }*/
         }
     }
 }
