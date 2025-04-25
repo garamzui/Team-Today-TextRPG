@@ -203,7 +203,7 @@ namespace TeamTodayTextRPG
 
                 GameManager.Instance.Dungeon.TargetMonster.ManageHp(-SkillDamage);
 
-                Console.WriteLine($"{ActskillName}을 사용하여 {GameManager.Instance.Dungeon.TargetMonster.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
+                Console.WriteLine($"{GameManager.Instance.Player.Name}의{ActskillName}!!! {GameManager.Instance.Dungeon.TargetMonster.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
             }
             else
             {
@@ -259,7 +259,7 @@ namespace TeamTodayTextRPG
                 { SkillDamage = 1; }
 
                 GameManager.Instance.Dungeon.TargetMonster.ManageHp(-SkillDamage);
-                Console.WriteLine($"{ActskillName}을 사용하여 {GameManager.Instance.Dungeon.TargetMonster.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
+                Console.WriteLine($"{GameManager.Instance.Player.Name}의{ActskillName}!!! {GameManager.Instance.Dungeon.TargetMonster.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
             }
             else
             {
@@ -327,7 +327,7 @@ namespace TeamTodayTextRPG
                 {
 
                     GameManager.Instance.Dungeon.TargetMonster.ManageHp(-SkillDamage);
-                    Console.WriteLine($"{ActskillName}을 사용하여 {GameManager.Instance.Dungeon.TargetMonster.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
+                    Console.WriteLine($"{GameManager.Instance.Player.Name} 의 {ActskillName} !!! {GameManager.Instance.Dungeon.TargetMonster.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
                 }
             }
             else
