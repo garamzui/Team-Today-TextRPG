@@ -23,7 +23,7 @@ namespace TeamTodayTextRPG
     {
         public abstract class Character
         {           
-            public Monster M { get; set; }
+            public Monster Monster { get; set; }
             public string Jobname { get; set; }
             public int Attack { get; set; }
             public int PlusAtk { get; set; } = 0;
@@ -176,13 +176,13 @@ namespace TeamTodayTextRPG
             if (Mp >= 10)
             {
                 ManageMp(-10);
-                int SkillDamage = (TotalAtk * 3) - M.Def;
+                int SkillDamage = (TotalAtk * 3) - Monster.Def;
                 if (SkillDamage < 0)
                 { SkillDamage = 1; }
 
-                M.ManageHp(-SkillDamage);
+                Monster.ManageHp(-SkillDamage);
 
-                Console.WriteLine($"{ActskillName}을 사용하여 {M.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
+                Console.WriteLine($"{ActskillName}을 사용하여 {Monster.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
             }
             else
             {
@@ -232,12 +232,12 @@ namespace TeamTodayTextRPG
             if (Mp >= 10)
             {
                 ManageMp(-10);
-                int SkillDamage = (int)((TotalAtk * 10) - Math.Round(M.Def / 2.0)); //방어무시를 구현하기위해서 방어도를 반으로 나누고 반올림하였습니다.
+                int SkillDamage = (int)((TotalAtk * 10) - Math.Round(Monster.Def / 2.0)); //방어무시를 구현하기위해서 방어도를 반으로 나누고 반올림하였습니다.
                 if (SkillDamage < 0)
                 { SkillDamage = 1; }
 
-                M.ManageHp(-SkillDamage);
-                Console.WriteLine($"{ActskillName}을 사용하여 {M.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
+                Monster.ManageHp(-SkillDamage);
+                Console.WriteLine($"{ActskillName}을 사용하여 {Monster.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
             }
             else
             {
@@ -286,7 +286,7 @@ namespace TeamTodayTextRPG
             if (Mp >= 10)
             {
                 ManageMp(-10);
-                int SkillDamage = (TotalAtk * 2) - M.Def;
+                int SkillDamage = (TotalAtk * 2) - Monster.Def;
                 if (SkillDamage < 0)
                 { SkillDamage = 1; }
 
@@ -303,8 +303,8 @@ namespace TeamTodayTextRPG
                 for (int i = 0; i < 2; i++) //2연격 구현
                 {
 
-                    M.ManageHp(-SkillDamage);
-                    Console.WriteLine($"{ActskillName}을 사용하여 {M.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
+                    Monster.ManageHp(-SkillDamage);
+                    Console.WriteLine($"{ActskillName}을 사용하여 {Monster.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
                 }
             }
             else
