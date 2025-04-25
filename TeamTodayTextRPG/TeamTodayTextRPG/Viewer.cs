@@ -828,14 +828,17 @@ namespace TeamTodayTextRPG
 
                 // 보상 처리
                 player.Gold += dungeon.Reward;
-                //character.Exp += dungeon.Exp; 캐릭터 경험치 필요
+                player.Exp += dungeon.Exp;
+                player.LevelUp();
 
-                // 보스 효과 복구
-                character.Attack = (int)(character.Attack / 0.9);
-                character.Defence = (int)(character.Defence / 0.9);
-                Console.WriteLine("\n[보스 효과] 플레이어 능력치 감소 효과가 복구되었습니다!");
+                if (dungeon.Diff == DUNGEON_DIFF.Hell)
+                {
+                    // 보스 효과 복구
+                    character.Attack = (int)(character.Attack / 0.9);
+                    character.Defence = (int)(character.Defence / 0.9);
+                    Console.WriteLine("\n[보스 효과] 플레이어 능력치 감소 효과가 복구되었습니다!");
+                }
             }
-
             Console.WriteLine("====================");
             Console.WriteLine("1. 메인으로 돌아가기");
         }
