@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Numerics;
 using System.Threading;
 using System.Xml.Linq;
@@ -123,6 +124,7 @@ namespace TeamTodayTextRPG
 
 
             // 플레이어의 상태를 출력
+            Console.WriteLine($"레벨: {Player.Level}");
             Console.WriteLine($"직업: {Character.Jobname}");
             Console.WriteLine($"체력: {Character.Hp}/{Character.MaxHp}");
             Console.WriteLine($"마나: {Character.Mp}/{Character.MaxMp}");
@@ -281,83 +283,63 @@ namespace TeamTodayTextRPG
         }
     }
 
-
-
-
-
-
-        /*
-        public class ShopViewer : Viewer
+    public class ShopViewer : Viewer
+    {
+        public ShopViewer()
         {
-            public ShopViewer()
-            {
-                StartIndex = 1;
-                EndIndex = 3;
-            }
-            public override void ViewAction()
-            {
-                Console.Clear();
-                Console.WriteLine("상점");
-                Console.WriteLine("====================");
+            StartIndex = 1;
+            EndIndex = 3;
+        }
+        public override void ViewAction()
+        {
+            Console.WriteLine("상점");
+            Console.WriteLine("====================");
 
-                Console.WriteLine($"플레이어 금액: {GameManager.Instance.Player.Gold}G");
+            Console.WriteLine($"플레이어 금액: {GameManager.Instance.Player.Gold}G");
 
-                Console.WriteLine("상점에서 판매하는 아이템:");
+            Console.WriteLine("상점에서 판매하는 아이템:");
 
-                for (int i = 0; i < DataManager.Instance.ItemDB.List.Count; i++)
-                {
-                    var item = DataManager.Instance.ItemDB.List[i];
+            SceneManager.Instance.ShowShop(VIEW_TYPE.SHOP);
 
-                    // 배열 길이 초과 예외 방지
-                    if (item.Length > 7)
-                    {
-                        Console.WriteLine($"{i + 1}. {item[1]} - {item[7]}G");
-                    }
-                    else
-                    {
-                        Console.WriteLine($"{i + 1}. [아이템 정보 부족]");
-                    }
-                }
-
-                Console.WriteLine("====================");
-                Console.WriteLine("1. 아이템 구매");
-                Console.WriteLine("2. 아이템 판매");
-                Console.WriteLine("3. 메인으로 돌아가기");
-            }
-
-            // NextView 메서드 구현
-            public override VIEW_TYPE NextView(int input)
-            {
-                switch (input)
-                {
-                    case 1:
-                        // 아이템 구매 화면으로 이동
-                        return VIEW_TYPE.PURCHASE;
-                    case 2:
-                        // 아이템 판매 화면으로 이동
-                        return VIEW_TYPE.SALE;
-                    case 3:
-                        // 메인 화면으로 돌아가기
-                        return VIEW_TYPE.MAIN;
-                    default:
-                        // 잘못된 입력 처리
-                        Console.WriteLine("잘못된 입력입니다.");
-                        return VIEW_TYPE.SHOP;  // 다시 상점 화면을 보여줌
-                }
-            }
+            Console.WriteLine("====================");
+            Console.WriteLine("1. 아이템 구매");
+            Console.WriteLine("2. 아이템 판매");
+            Console.WriteLine("3. 메인으로 돌아가기");
         }
 
-        public class PurchaseViewer : Viewer
+        // NextView 메서드 구현
+        public override VIEW_TYPE NextView(int input)
         {
-            public PurchaseViewer()
+            Console.Clear();
+            switch (input)
             {
-                StartIndex = 0;
-                EndIndex = DataManager.Instance.ItemDB.List.Count; // 아이템 개수만큼
+                case 1:
+                    // 아이템 구매 화면으로 이동
+                    return VIEW_TYPE.PURCHASE;
+                case 2:
+                    // 아이템 판매 화면으로 이동
+                    return VIEW_TYPE.SALE;
+                case 3:
+                    // 메인 화면으로 돌아가기
+                    return VIEW_TYPE.MAIN;
+                default:
+                    // 잘못된 입력 처리
+                    Console.WriteLine("잘못된 입력입니다.");
+                    return VIEW_TYPE.SHOP;  // 다시 상점 화면을 보여줌
             }
+        }
+    }
 
-            public override void ViewAction()
-            {
-                Console.Clear();
+    public class PurchaseViewer : Viewer
+    {
+        public PurchaseViewer()
+        {
+            StartIndex = -1;
+            EndIndex = DataManager.Instance.ItemDB.List.Count; // 아이템 개수만큼
+        }
+
+        public override void ViewAction()
+        {
                 Console.WriteLine("아이템 구매");
                 Console.WriteLine("====================");
 
@@ -365,137 +347,131 @@ namespace TeamTodayTextRPG
                 Console.WriteLine($"플레이어 금액: {player.Gold}G");
 
                 Console.WriteLine("구매할 아이템을 선택하세요:");
-                for (int i = 0; i < DataManager.Instance.ItemDB.List.Count; i++)
-                {
-                    var item = DataManager.Instance.ItemDB.List[i];
-                    if (item.Length > 7)
-                        Console.WriteLine($"{i + 1}. {item[1]} - {item[7]}G");
-                    else
-                        Console.WriteLine($"{i + 1}. [아이템 정보 부족]");
-                }
 
+                SceneManager.Instance.ShowShop(VIEW_TYPE.PURCHASE);
                 Console.WriteLine("0. 돌아가기");
-                Console.WriteLine("9. 판매 화면으로");
+                Console.WriteLine("-1. 판매 화면으로");
 
-                int input = GetInput(); // 헬퍼 메서드 사용
-
-                if (input == 0 || input == 9)
+        }
+        public override VIEW_TYPE NextView(int input)
+        {
+            Console.Clear();
+            if (input == 0) { return VIEW_TYPE.SHOP; }
+            else if (input == -1) { return VIEW_TYPE.SALE; }
+            else if (input > 0 && input <= DataManager.Instance.ItemDB.List.Count)
+            {
+                // 인벤토리에 아이템 존재 여부
+                if (!GameManager.Instance.Player.CheckBag(input - 1))
                 {
-                    SceneManager.Instance.SwitchScene(NextView(input));
-                }
-                else if (input > 0 && input <= DataManager.Instance.ItemDB.List.Count)
-                {
-                    var item = DataManager.Instance.ItemDB.List[input - 1];
-                    if (item.Length > 7 && player.Gold >= int.Parse(item[7]))
+                    // 잔금 여부
+                    if (GameManager.Instance.Player.Gold >= int.Parse(DataManager.Instance.ItemDB.List[input - 1][7]))
                     {
-                        player.Gold -= int.Parse(item[7]);
-                        player.InputBag(int.Parse(item[0]), VIEW_TYPE.PURCHASE);
-                        Console.WriteLine($"{item[1]} 아이템을 구매했습니다.");
+                        // 재화감소
+                        //GameManager.Instance.Player.Gold -= DataManager.Instance.ItemDB.List[input - 1].Value;
+                        // 인벤토리에 아이템 추가
+                        GameManager.Instance.Player.InputBag(int.Parse(DataManager.Instance.ItemDB.List[input - 1][0]),VIEW_TYPE.PURCHASE);
+                        Console.ForegroundColor = ConsoleColor.DarkCyan;
+                        Console.WriteLine(">> 구매를 완료했습니다.\n");
+                        Console.ResetColor();
                     }
+                    // 구매실패 (잔금 부족)
                     else
                     {
-                        Console.WriteLine("금액이 부족하거나 잘못된 아이템입니다.");
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine(">> Gold가 부족합니다.\n");
+                        Console.ResetColor();
                     }
-
-                    Console.WriteLine("계속하려면 아무 키나 누르세요...");
-                    Console.ReadKey();
-                    SceneManager.Instance.SwitchScene(VIEW_TYPE.SHOP);
                 }
+                // 구매실패 (보유중인 물품)
                 else
                 {
-                    Console.WriteLine("잘못된 입력입니다.");
-                    Console.ReadKey();
-                    SceneManager.Instance.SwitchScene(VIEW_TYPE.PURCHASE);
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine(">> 이미 구매한 아이템입니다.\n");
+                    Console.ResetColor();
                 }
+                return VIEW_TYPE.PURCHASE;
             }
-
-            public override VIEW_TYPE NextView(int input)
+            else
             {
-                switch (input)
-                {
-                    case 0: return VIEW_TYPE.SHOP;  // 돌아가기: SHOP 화면으로 돌아갑니다.
-                    case 9: return VIEW_TYPE.SALE;  // 판매 화면으로 이동
-                    default: return VIEW_TYPE.PURCHASE; // 잘못된 입력: 다시 구매 화면으로 돌아갑니다.
-                }
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(">> 잘못된 값을 입력하였습니다.\n");
+                Console.ResetColor();
+                return VIEW_TYPE.PURCHASE;
             }
         }
+    }
 
 
-        public class SaleViewer : Viewer
+    public class SaleViewer : Viewer
+    {
+        public SaleViewer()
         {
-            public SaleViewer()
+            StartIndex = -1;
+            EndIndex = GameManager.Instance.Player.Bag.Count; // Bag이 생기면 EndIndex = Bag.Count;
+        }
+        public override void ViewAction()
+        {
+            Console.WriteLine("아이템 판매");
+            Console.WriteLine("====================");
+
+            //var player = GameManager.Instance.Player;
+            //var playerItems = player.GetInventoryItems();  // 플레이어 인벤토리에서 아이템 목록 가져오기
+
+            Console.WriteLine("판매할 아이템을 선택하세요:");
+
+            SceneManager.Instance.ShowShopSale();
+
+            Console.WriteLine("0. 돌아가기");
+            Console.WriteLine("-1. 구매 화면으로");
+        }
+
+        // NextView 메서드 구현
+        public override VIEW_TYPE NextView(int input)
+        {
+        Console.Clear();
+        if (input == 0) { return VIEW_TYPE.SHOP; }
+        else if (input == -1) { return VIEW_TYPE.PURCHASE; }
+        else if (input > 0 && input <= GameManager.Instance.Player.Bag.Count)
+        {
+            // 인벤토리에 아이템 존재 여부
+            if (GameManager.Instance.Player.CheckBag(GameManager.Instance.Player.Bag[input - 1]))
             {
-                StartIndex = 0;
-                EndIndex = 0; // Bag이 생기면 EndIndex = Bag.Count;
+                // 재화증가
+                //GameManager.Instance.Player.Gold += (int)(int.Parse((DataManager.Instance.ItemDB.List[GameManager.Instance.Player.Bag[input - 1]][7])) * 0.85);
+                // 장비 중이라면 장비칸에서도 제거
+                //if (GameManager.Instance.Player.CheckEquip(GameManager.Instance.Player.Bag[input - 1])) 
+                //GameManager.Instance.Player.UnEquipItem(int.Parse(DataManager.Instance.ItemDB.List[GameManager.Instance.Player.Bag[input - 1]][0]));
+                // 인벤토리에서 아이템 제거
+                GameManager.Instance.Player.RemoveBag(int.Parse(DataManager.Instance.ItemDB.List[GameManager.Instance.Player.Bag[input - 1]][0]), VIEW_TYPE.SALE);
+                   // DataManager.Instance.ItemDB.List[GameManager.Instance.Player.Bag[input - 1]][0]
+
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
+                Console.WriteLine(">> 판매를 완료했습니다.\n");
+                Console.ResetColor();
             }
-            public override void ViewAction()
+            // 판매실패 (보유중이지 않은 물품)
+            else
             {
-                Console.Clear();
-                Console.WriteLine("아이템 판매");
-                Console.WriteLine("====================");
-
-                var player = GameManager.Instance.Player;
-                //var playerItems = player.GetInventoryItems();  // 플레이어 인벤토리에서 아이템 목록 가져오기
-
-                Console.WriteLine("판매할 아이템을 선택하세요:");
-                for (int i = 0; i < GameManager.Instance.Player.Bag.Count; i++)
-                {
-                    var item = GameManager.Instance.Player.Bag[i];
-                    Console.WriteLine($"{i + 1}. {DataManager.Instance.ItemDB.List[item][1]} - {DataManager.Instance.ItemDB.List[item][7]}G");
-                }
-
-                Console.WriteLine("0. 돌아가기");
-                Console.WriteLine("9. 구매 화면으로");
-
-                int input = SceneManager.Instance.InputAction(StartIndex, EndIndex);
-
-                if (input == 0)
-                {
-                    NextView(input);  // 상점 화면으로 돌아가기
-                }
-                else if (input == 9)
-                {
-                    // 9번을 선택하면 구매 화면으로 이동
-                    SceneManager.Instance.SwitchScene(VIEW_TYPE.PURCHASE);
-                }
-                else if (input > 0 && input <= GameManager.Instance.Player.Bag.Count)
-                {
-                    // 아이템 판매 처리
-                    var item = GameManager.Instance.Player.Bag[input - 1];
-                    player.Gold += int.Parse(DataManager.Instance.ItemDB.List[item][7]);  // 85%로 가격 처리할 것 매매가
-                    player.RemoveBag(item, VIEW_TYPE.SALE);
-                    Console.WriteLine($"{DataManager.Instance.ItemDB.List[item][1]} 아이템을 판매했습니다.");
-                }
-                else
-                {
-                    Console.WriteLine("잘못된 입력입니다.");
-                }
-
-                SceneManager.Instance.SwitchScene(VIEW_TYPE.SHOP); // 상점으로 돌아가기
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(">> 존재하지 않는 아이템입니다.\n");
+                Console.ResetColor();
             }
-
-            // NextView 메서드 구현
-            public override VIEW_TYPE NextView(int input)
-            {
-                switch (input)
-                {
-                    case 0:
-                        // 돌아가기: 상점 화면으로 이동
-                        return VIEW_TYPE.SHOP;
-                    case 9:
-                        // 구매 화면으로 이동
-                        return VIEW_TYPE.PURCHASE;
-                    default:
-                        return VIEW_TYPE.SHOP;
-                }
-            }
-        }*/
-
-        public class DungeonSelectViewer : Viewer
+            return VIEW_TYPE.SALE;
+        }
+        else
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(">> 잘못된 값을 입력하였습니다.\n");
+            Console.ResetColor();
+            return VIEW_TYPE.SALE;
+        }
+        }
+    }
+    public class DungeonSelectViewer : Viewer
     {
         public DungeonSelectViewer()
         {
-            StartIndex = 1;
+            StartIndex = 0;
             EndIndex = 4;
         }
         public override void ViewAction()
@@ -528,6 +504,7 @@ namespace TeamTodayTextRPG
             }
         }
     }
+
 
     public class DungeonViewer : Viewer
     {
@@ -587,6 +564,7 @@ namespace TeamTodayTextRPG
         }
     }
    
+
     public class BattleViewer : Viewer
     {
         public override void ViewAction()
@@ -620,6 +598,7 @@ namespace TeamTodayTextRPG
             }
         }
     
+
     public class BattlePlayerViewer : Viewer
     {
         public BattlePlayerViewer()
@@ -679,6 +658,7 @@ namespace TeamTodayTextRPG
         }
     }
 
+
     public class BattlePlayerLogViewer : Viewer
     {
         public BattlePlayerLogViewer()
@@ -722,6 +702,7 @@ namespace TeamTodayTextRPG
             }
         }
     }
+
 
     public class BattleEnemyViewer : Viewer
     {
@@ -852,6 +833,8 @@ namespace TeamTodayTextRPG
             }
         }
     }
+
+
     public class RestViewer : Viewer
     {
         public RestViewer()

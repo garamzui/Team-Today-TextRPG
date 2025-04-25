@@ -112,7 +112,6 @@ namespace TeamTodayTextRPG
             }
             else Console.WriteLine($"Lv. {Level}\t{Name}\tHP {Hp}/{MaxHp}");
         }
-
     }
 
     class Slime : Monster
