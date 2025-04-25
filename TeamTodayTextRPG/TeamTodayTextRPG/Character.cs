@@ -71,10 +71,7 @@ namespace TeamTodayTextRPG
         //영훈) ↓보시면 참조 0개라고 쓰여있어요 그러면 이 메서드는 호출이 안되었다는 뜻이죠
         //Viewer 스크립트의 109번 줄부터 보면 거기에서 이미 비슷한 동작을 하고 있어서
         //ViewStatus() 메서드는 지우셔도 될거같아요!
-            public void ViewStatus()
-            {
-                Console.WriteLine($"{Jobname} {JobDescription()}\n- 공격력 {Attack} (+{PlusAtk}), 방어력 {Defence} (+{PlusDef}), HP {Hp}/{MaxHp}");
-            }
+           
 
 
         //기본공격을 두고, 래밸을 올리면 스킬이
@@ -83,8 +80,12 @@ namespace TeamTodayTextRPG
         // 스킬 이름은 스탯과 함께 초기화해서 저장해두게 해놨습니다.
 
         public virtual void DefaultAttack()
-        {
-            Console.WriteLine($"{Jobname}의 기본 공격");
+        {  
+            int AttackDamage = TotalAtk - GameManager.Instance.Dungeon.TargetMonster.Def;
+            if (AttackDamage <= 0)
+            { AttackDamage = 1; }
+            Monster.ChangeHp(-AttackDamage);
+            Console.WriteLine($"{Monster.Name}에게 {AttackDamage}의 피해");
         }
 
 
@@ -176,8 +177,8 @@ namespace TeamTodayTextRPG
             if (Mp >= 10)
             {
                 ManageMp(-10);
-                int SkillDamage = (TotalAtk * 3) - Monster.Def;
-                if (SkillDamage < 0)
+                int SkillDamage = (TotalAtk * 3) - GameManager.Instance.Dungeon.TargetMonster.Def;
+                if (SkillDamage <= 0)
                 { SkillDamage = 1; }
 
                 Monster.ManageHp(-SkillDamage);
@@ -232,8 +233,8 @@ namespace TeamTodayTextRPG
             if (Mp >= 10)
             {
                 ManageMp(-10);
-                int SkillDamage = (int)((TotalAtk * 10) - Math.Round(Monster.Def / 2.0)); //방어무시를 구현하기위해서 방어도를 반으로 나누고 반올림하였습니다.
-                if (SkillDamage < 0)
+                int SkillDamage = (int)((TotalAtk * 10) - Math.Round(GameManager.Instance.Dungeon.TargetMonster.Def / 2.0)); //방어무시를 구현하기위해서 방어도를 반으로 나누고 반올림하였습니다.
+                if (SkillDamage <= 0)
                 { SkillDamage = 1; }
 
                 Monster.ManageHp(-SkillDamage);
@@ -286,8 +287,8 @@ namespace TeamTodayTextRPG
             if (Mp >= 10)
             {
                 ManageMp(-10);
-                int SkillDamage = (TotalAtk * 2) - Monster.Def;
-                if (SkillDamage < 0)
+                int SkillDamage = (TotalAtk * 2) - GameManager.Instance.Dungeon.TargetMonster.Def;
+                if (SkillDamage <= 0)
                 { SkillDamage = 1; }
 
                 int criticalHit = GameManager.Instance.Rand.Next(0, 10);
