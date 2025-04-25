@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using TeamTodayTextRPG;
 
 namespace TeamTodayTextRPG
@@ -44,12 +45,16 @@ namespace TeamTodayTextRPG
                     CurrentViewer = new SaleViewer();
                     break;
                     
+                case VIEW_TYPE.DUNGEON_SELECT:
+                    CurrentViewer = new DungeonSelectViewer();
+                    break;
                 case VIEW_TYPE.DUNGEON:
                     CurrentViewer = new DungeonViewer();
                     break;
                 case VIEW_TYPE.DUNGEON_CLEAR:
                     CurrentViewer = new DungeonClearViewer();
                     break;
+
                 case VIEW_TYPE.REST:
                     CurrentViewer = new RestViewer();
                     break;
@@ -65,6 +70,9 @@ namespace TeamTodayTextRPG
                     break;
                 case VIEW_TYPE.BATTLE_ENEMY:
                     CurrentViewer = new BattleEnemyViewer();
+                    break;
+                default:
+                    Console.WriteLine("error");
                     break;
 
                     //case VIEW_TYPE.MONSTER:
@@ -91,12 +99,13 @@ namespace TeamTodayTextRPG
         }
 
         // 새로운 뷰어의 화면 출력
-        public void ShowCurrentView()
+       public void ShowCurrentView()
         {
             if (CurrentViewer != null)
             {
                 CurrentViewer.ViewAction();  // gameManager 객체를 넘기기
             }
+
         }
 
         // 『효빈』초기 캐릭터 설정 (플레이어 이름, 플레이어할 캐릭터의 직업)을 도와주는 함수 입니다.
@@ -191,7 +200,7 @@ namespace TeamTodayTextRPG
                 {
                     if (int.TryParse(rtnStr, out num))
                     {
-                        if (num < startIndex && num > endIndex)
+                        if (num < startIndex || num > endIndex)
                         {
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("선택지 내에서 입력해주세요.\n");

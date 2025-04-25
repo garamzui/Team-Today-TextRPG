@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace TeamTodayTextRPG
 {
-    class TRPG()
+    class TRPG
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("이건 실행되냐?");
             // 『효빈』VIEW_TYPE의 변수생성
             VIEW_TYPE currentView = VIEW_TYPE.MAIN;
 
@@ -20,6 +21,8 @@ namespace TeamTodayTextRPG
             var gm = GameManager.Instance;
             var sm = SceneManager.Instance;
             var dm = DataManager.Instance;
+
+
 
 
             sm.Intro();

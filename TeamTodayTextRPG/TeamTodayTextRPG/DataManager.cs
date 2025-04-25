@@ -1,4 +1,10 @@
-﻿namespace TeamTodayTextRPG
+﻿using System;
+using System.Numerics;
+using System.Threading;
+using System.Xml.Linq;
+using TeamTodayTextRPG;
+
+namespace TeamTodayTextRPG
 {
     enum DATA_TYPE
     {
