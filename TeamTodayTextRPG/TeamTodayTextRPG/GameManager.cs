@@ -22,14 +22,16 @@ namespace TeamTodayTextRPG
         private GameManager()
         {
             Player = new Player();
-            rand = new Random();
+            Rand = new Random();
+            Dungeon = new Dungeon();
             
         }
 
 
         // 『효빈』GameMananger 클래스의 프로퍼티 입니다.
         public Player Player { get; set; }
-        public Random rand { get; set; }
+        public Random Rand { get; set; }
+        public Dungeon Dungeon { get; set; }
 
     }
 }

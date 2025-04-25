@@ -103,7 +103,7 @@ namespace TeamTodayTextRPG
             {
                 if (HpChange < 0)
                 {
-                    int DodgeHit = GameManager.Instance.rand.Next(1, 76);// 피격 메서드에 회피를 구현 해봤습니다.
+                    int DodgeHit = GameManager.Instance.Rand.Next(1, 76);// 피격 메서드에 회피를 구현 해봤습니다.
                     if (TotalDodge > DodgeHit)
                     {
                         Console.WriteLine("공격을 회피했습니다!");
@@ -289,7 +289,7 @@ namespace TeamTodayTextRPG
                     if (SkillDamage < 0)
                     { SkillDamage = 1; }
 
-                    int criticalHit = GameManager.Instance.rand.Next(0, 10); 
+                    int criticalHit = GameManager.Instance.Rand.Next(0, 10); 
 
 
                     if (criticalHit <= 2) //크리티컬 확률 계산

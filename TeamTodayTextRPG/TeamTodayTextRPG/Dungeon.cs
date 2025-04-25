@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
+using System.Xml.Linq;
 
 namespace TeamTodayTextRPG
 {
-    enum DUNGEON_DIFF { Easy, Normal, Hard, Hell }
+    public enum DUNGEON_DIFF { Easy = 0, Normal, Hard, Hell }
 
     class BattleLog
     {
@@ -21,7 +23,7 @@ namespace TeamTodayTextRPG
         }
     }
 
-    class Dungeon
+    public abstract class Dungeon
     {
         private Random rand = new Random();
 
@@ -29,22 +31,28 @@ namespace TeamTodayTextRPG
         public string Name { get; set; }
         public int Reward { get; set; }
         public int Exp { get; set; }
-        public int DefLevel { get; set; }
+
+        public int LowLevel { get; set; }
+        public int HighLevel { get; set; }
+
         public DUNGEON_DIFF Diff { get; set; }
 
-        public Dungeon(int code, string name, int reward, int exp, int defLevel, DUNGEON_DIFF diff)
+        //public Dungeon(int code, string name, int reward, int exp, int defLevel, DUNGEON_DIFF diff)
+
+        public void Init(string[] parameter)
         {
-            Code = code;
-            Name = name;
-            Reward = reward;
-            Exp = exp;
-            DefLevel = defLevel;
-            Diff = diff;
+            Code = int.Parse(parameter[0]);
+            Name = parameter[1];
+            Reward = int.Parse(parameter[2]);
+            Exp = int.Parse(parameter[3]);
+            LowLevel = int.Parse(parameter[4]);
+            HighLevel = int.Parse(parameter[5]);
+            Diff = (DUNGEON_DIFF)(int.Parse(parameter[6]));
         }
 
         public void Enter(Player player, Monster monster)
         {
-            /*
+
             Console.WriteLine($"\n[{Name}] 던전에 입장했습니다!");
             BattleLog log = new BattleLog();
 
@@ -119,10 +127,39 @@ namespace TeamTodayTextRPG
             if (player.Hp > 0 && !fled && monster.Hp <= 0)
             {
                 Console.WriteLine("\n 던전을 클리어했습니다!");
-            }*/
+            }
         }
     }
 
+
+    public class Dungeon_Easy : Dungeon
+    {
+        public Dungeon_Easy()
+        {
+
+        }
+    }
+
+    public class Dungeon_Noramal : Dungeon
+    {
+
+    }
+    public class Dungeon_Hard : Dungeon
+    {
+
+    }
+    public class Dungeon_Hell : Dungeon
+    {
+
+    }
+    /* 
+       능력치 감소
+       헬던전은 보스가 고정으로 등장
+    /* 
+    public class Dungeon_Hell : Dungeon
+    {
+
+    }
     /*
     class Program
     {

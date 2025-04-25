@@ -145,12 +145,12 @@ namespace TeamTodayTextRPG
             //던전 클리어 시 랜덤(20%) 확률로 아이템 드롭
             if(type == VIEW_TYPE.DUNGEONCLEAR)
             {
-                int ItemDrop = GameManager.Instance.rand.Next(0, 101);
+                int ItemDrop = GameManager.Instance.Rand.Next(0, 101);
                 //20% 확률로
                 if(ItemDrop >= 90 || ItemDrop <= 10)
                 {
                     //랜덤 아이템 드롭
-                    int dropItemCode = GameManager.Instance.rand.Next(0, DataManager.Instance.ItemDB.List.Count);
+                    int dropItemCode = GameManager.Instance.Rand.Next(0, DataManager.Instance.ItemDB.List.Count);
                     ItemCode = dropItemCode;
                     Bag.Add(ItemCode);
                 }
