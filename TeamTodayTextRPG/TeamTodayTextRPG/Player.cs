@@ -220,29 +220,25 @@ namespace TeamTodayTextRPG
         //아이템 장착 및 해제에 따른 스탯 변화
         public void StatChange(int code)
         {
-            if (Equip.Contains(code))
+            var item = DataManager.Instance.ItemDB.List[code]; // 아이템 코드 그대로 사용!
+            int atk = int.Parse(item[2]);
+            int def = int.Parse(item[3]);
+
+            if (CheckEquip(code))
             {
-                //장착한 아이템의 보유 스탯만큼 PlusAtk 과 PlusDef 상승
-                Character.PlusAtk += int.Parse(DataManager.Instance.ItemDB.List
-                    [GameManager.Instance.Player.Bag[code]][2]);
-
-                Character.PlusDef += int.Parse(DataManager.Instance.ItemDB.List
-                    [GameManager.Instance.Player.Bag[code]][3]);
+                Character.PlusAtk += atk;
+                Character.PlusDef += def;
             }
-
             else
             {
-                //해제하는 아이템의 보유 스탯만큼 PlusAtk 과 PlusDef 감소
-                Character.PlusAtk -= int.Parse(DataManager.Instance.ItemDB.List
-                    [GameManager.Instance.Player.Bag[code]][2]);
-
-                Character.PlusDef -= int.Parse(DataManager.Instance.ItemDB.List
-                    [GameManager.Instance.Player.Bag[code]][3]);
+                Character.PlusAtk -= atk;
+                Character.PlusDef -= def;
             }
 
-            //현재 스탯 = 토탈 스탯
+            // 토탈 반영
             Character.Attack = Character.TotalAtk;
             Character.Defence = Character.TotalDef;
         }
+
     }
 }
