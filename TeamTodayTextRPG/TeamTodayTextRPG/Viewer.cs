@@ -243,6 +243,7 @@ namespace TeamTodayTextRPG
             Console.WriteLine("0. 메인으로 돌아가기");
         }
 
+        private int equipedItemCode = 0;
         public override VIEW_TYPE NextView(int input)
         {
             var player = GameManager.Instance.Player;
@@ -251,6 +252,7 @@ namespace TeamTodayTextRPG
                 return VIEW_TYPE.MAIN;
 
             int index = input - 1;
+            
 
             if (index >= 0 && index < player.Bag.Count)
             {
@@ -258,14 +260,27 @@ namespace TeamTodayTextRPG
 
                 if (player.CheckEquip(itemCode))
                 {
-                    player.UnEquipItem(itemCode);
-                    player.StatChange(itemCode);  // <-- 여기 수정
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine("장비를 해제했습니다!");
+                    if (DataManager.Instance.ItemDB.List[equipedItemCode][8] ==
+                        DataManager.Instance.ItemDB.List[itemCode][8])
+                    {
+                        player.ChangeItem(itemCode ,equipedItemCode);
+                        player.StatChange(equipedItemCode);
+                        player.StatChange(itemCode);
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine("장비를 교체했습니다!");
+                    }
+                    else
+                    {
+                        player.UnEquipItem(itemCode);
+                        player.StatChange(itemCode);
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine("장비를 해제했습니다!");
+                    }
                 }
                 else
                 {
-                    player.Equip.Add(itemCode);  // 장착 리스트에 추가
+                    equipedItemCode = itemCode;
+                    player.EquipItem(itemCode);  // 장착 리스트에 추가
                     player.StatChange(itemCode);  // <-- 여기 수정
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine("장비를 장착했습니다!");
