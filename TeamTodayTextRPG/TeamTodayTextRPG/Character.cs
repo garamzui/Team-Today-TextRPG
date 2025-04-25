@@ -85,7 +85,7 @@ namespace TeamTodayTextRPG
             if (AttackDamage <= 0)
             { AttackDamage = 1; }
             GameManager.Instance.Dungeon.TargetMonster.ManageHp(-AttackDamage);
-            Console.WriteLine($"{GameManager.Instance.Dungeon.TargetMonster.Name}에게 {AttackDamage}의 피해");
+            
         }
 
 
@@ -1676,7 +1676,7 @@ namespace TeamTodayTextRPG
     }
     public class MonsterAnimation : Animation
     {
-        void SlimeAnimation()
+        public void SlimeAnimation()
         {
             Console.WriteLine(@"
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
