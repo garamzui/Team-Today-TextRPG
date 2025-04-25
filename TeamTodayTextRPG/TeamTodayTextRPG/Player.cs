@@ -161,6 +161,17 @@ namespace TeamTodayTextRPG
             return Equip.Contains(equipItemCode);
         }
 
+        //새로운 접근법----
+        //장비 아이템 슬룻을 만든다면?
+
+        //버추얼 장비착용
+        //무기 착용
+        //방어구 착용
+
+        //무기는 무기변수에
+        //방어구는 방어구변수에
+        //----
+
         private int? EquipedItemCode;
         public void ChangeItem(int equipItemCode, int equipedItemCode)
         {
@@ -187,7 +198,7 @@ namespace TeamTodayTextRPG
                     Console.ResetColor();
                 }
             }
-            
+
             //착용중인 같은 타입 아이템이 없다면
             else
             {
