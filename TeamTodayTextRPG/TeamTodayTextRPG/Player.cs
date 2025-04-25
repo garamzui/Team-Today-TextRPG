@@ -161,55 +161,46 @@ namespace TeamTodayTextRPG
             return Equip.Contains(equipItemCode);
         }
 
-        //장비 착용
-        public void EquipItem(int equipItemCode, int? equipedItemCode)
+        private int? EquipedItemCode;
+        public void ChangeItem(int equipItemCode, int equipedItemCode)
         {
-            //동일 코드 아이템을 장착하려 하면
-            if(equipItemCode == equipedItemCode)
-            {
-                Console.WriteLine("해당 아이템은 착용중입니다.");
-                return;
-            }
-
+            equipedItemCode = EquipedItemCode.Value;
             //착용중인 아이템이 있다면
-            if (equipedItemCode != null)
+            //같은 타입 아이템 착용중이라면
+            if ((DataManager.Instance.ItemDB.List[Equip[equipedItemCode]][8]) ==
+                (DataManager.Instance.ItemDB.List[Equip[equipItemCode - 1]][8]))
             {
-                //같은 타입 아이템 착용중이라면
-                if ((DataManager.Instance.ItemDB.List[Equip[equipedItemCode.Value - 1]][8]) ==
-                    (DataManager.Instance.ItemDB.List[Equip[equipItemCode - 1]][8]))
+                // 동일 타입 장비일 경우 해체
+                foreach (var code in GameManager.Instance.Player.Equip)
                 {
-                    // 동일 타입 장비일 경우 해체
-                    foreach (var code in GameManager.Instance.Player.Equip)
+                    if (DataManager.Instance.ItemDB.List[code][8] == DataManager.Instance.ItemDB.List[GameManager.Instance.Player.Bag[equipItemCode - 1]][8])
                     {
-                        if (DataManager.Instance.ItemDB.List[code][8] == DataManager.Instance.ItemDB.List[GameManager.Instance.Player.Bag[equipItemCode - 1]][8])
-                        {
-                            UnEquipItem(code);
-                            StatChange(code);
-                            break;
-                        }
-                        Equip.Add(equipItemCode);
-                        StatChange(equipItemCode);
-                        equipedItemCode = equipItemCode;
-
-                        Console.Write($">> {DataManager.Instance.ItemDB.List[Bag[equipItemCode - 1]][1]}");
-                        Console.ForegroundColor = ConsoleColor.DarkCyan;
-                        Console.WriteLine("을(를) 장착 하였습니다.\n");
-                        Console.ResetColor();
+                        UnEquipItem(code);
+                        break;
                     }
+                    Equip.Add(equipItemCode);
+                    equipedItemCode = equipItemCode;
+
+                    Console.Write($">> {DataManager.Instance.ItemDB.List[Bag[equipItemCode - 1]][1]}");
+                    Console.ForegroundColor = ConsoleColor.DarkCyan;
+                    Console.WriteLine("을(를) 장착 하였습니다.\n");
+                    Console.ResetColor();
                 }
             }
-
-            //착용중인 아이템이 없다면
-            else if (equipedItemCode == null)
+            
+            //착용중인 같은 타입 아이템이 없다면
+            else
             {
-                Equip.Add(equipItemCode);
-                equipedItemCode = int.Parse(DataManager.Instance.ItemDB.List[Bag[equipItemCode - 1]][0]);
-                StatChange(equipItemCode);
+                EquipItem(equipItemCode);
                 equipedItemCode = equipItemCode;
             }
         }
 
-        
+        public void EquipItem(int equipItemCode)
+        {
+            Equip.Add(equipItemCode);
+            EquipedItemCode = equipItemCode;
+        }
 
         //장비 해제
         public void UnEquipItem(int equipItemCode)
@@ -239,11 +230,6 @@ namespace TeamTodayTextRPG
                 Character.PlusAtk -= atk;
                 Character.PlusDef -= def;
             }
-
-            // 토탈 반영
-            Character.Attack = Character.TotalAtk;
-            Character.Defence = Character.TotalDef;
         }
-
     }
 }
