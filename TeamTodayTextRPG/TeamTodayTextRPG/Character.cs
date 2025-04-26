@@ -221,8 +221,9 @@ namespace TeamTodayTextRPG
                 { SkillDamage = 1; }
 
                 GameManager.Instance.Dungeon.TargetMonster.ManageHp(-SkillDamage);
-                GameManager.Instance.SceneManager.ColText($"{GameManager.Instance.Player.Name}의{ActskillName}!!! {GameManager.Instance.Dungeon.TargetMonster.Name}이(가) {SkillDamage}의 피해를 입었습니다." ,ConsoleColor.Blue, ConsoleColor.Cyan);
-                Console.WriteLine($"{GameManager.Instance.Player.Name}의{ActskillName}!!! {GameManager.Instance.Dungeon.TargetMonster.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
+                Console.Write($"{GameManager.Instance.Player.Name}의");
+                GameManager.Instance.SceneManager.ColText($"{ActskillName}", ConsoleColor.Red, ConsoleColor.White);
+                Console.WriteLine($"!!! {GameManager.Instance.Dungeon.TargetMonster.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
             }
             else
             {
@@ -278,7 +279,10 @@ namespace TeamTodayTextRPG
                 { SkillDamage = 1; }
 
                 GameManager.Instance.Dungeon.TargetMonster.ManageHp(-SkillDamage);
-                Console.WriteLine($"{GameManager.Instance.Player.Name}의{ActskillName}!!! {GameManager.Instance.Dungeon.TargetMonster.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
+            
+                Console.Write($"{GameManager.Instance.Player.Name}의");
+                GameManager.Instance.SceneManager.ColText($"{ActskillName}", ConsoleColor.Blue, ConsoleColor.Cyan);
+                Console.WriteLine($"!!! {GameManager.Instance.Dungeon.TargetMonster.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
             }
             else
             {
@@ -346,7 +350,9 @@ namespace TeamTodayTextRPG
                 {
 
                     GameManager.Instance.Dungeon.TargetMonster.ManageHp(-SkillDamage);
-                    Console.WriteLine($"{GameManager.Instance.Player.Name} 의 {ActskillName} !!! {GameManager.Instance.Dungeon.TargetMonster.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
+                    Console.Write($"{GameManager.Instance.Player.Name}의");
+                    GameManager.Instance.SceneManager.ColText($"{ActskillName}", ConsoleColor.Black, ConsoleColor.White);
+                    Console.WriteLine($"!!! {GameManager.Instance.Dungeon.TargetMonster.Name}이(가) {SkillDamage}의 피해를 입었습니다."); ;
                 }
             }
             else
