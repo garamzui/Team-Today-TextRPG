@@ -40,38 +40,64 @@ namespace TeamTodayTextRPG
             Console.ForegroundColor = prevColor;
             Console.BackgroundColor = prevBackColor;
         }
-
+       
         public void SysText(string message, int x = 0, int y = -1, ConsoleColor textColor = ConsoleColor.White, ConsoleColor backColor = ConsoleColor.Black, bool system = false)
         {
             ConsoleColor prevColor = Console.ForegroundColor;
+            ConsoleColor prevBackColor = Console.BackgroundColor;
 
-            if(y >= 0)
+            if (y >= 0)
                 Console.SetCursorPosition(x, y);
             else
                 Console.SetCursorPosition(x, Console.CursorTop);
-
+            Console.BackgroundColor = backColor;
             Console.ForegroundColor = textColor;
             if (system)
                 Console.Write($"=========================================================================================\n>> [SYSTEM] {message}\n=========================================================================================\n");
             else
                 Console.Write($"{message}");
 
-            Console.ForegroundColor = prevColor;
+            Console.ForegroundColor = prevColor; 
+            Console.BackgroundColor = prevBackColor;
         }
 
-
-        // >>> 문제 있음 수정 요구
-        public void ClearLines(int x, int fromLine, int lineCount)
+        public void Clear(int linesToClear)
         {
+            int currentTop = Console.CursorTop;
             int width = Console.WindowWidth;
 
-            for (int i = 0; i < lineCount; i++)
+            if (linesToClear < 0) linesToClear = 0; // 최상단 이상 올라가지 않도록 보정
+
+            for (int i = 0; i < linesToClear; i++)
             {
-                Console.SetCursorPosition(0, fromLine + i);
+                int line = linesToClear + i;
+                if (line >= Console.WindowHeight) break; // 콘솔 범위를 벗어나지 않게 보호
+
+                Console.SetCursorPosition(0, line);
                 Console.Write(new string(' ', width));
             }
 
-            Console.SetCursorPosition(x, fromLine);
+            Console.SetCursorPosition(0, linesToClear); // 
+        }
+        // >>> 문제 있음 수정 요구
+        public void ClearAbove(int linesToClear)
+        {
+            int currentTop = Console.CursorTop;
+            int width = Console.WindowWidth;
+
+            int startLine = currentTop - linesToClear;
+            if (startLine < 0) startLine = 0; // 최상단 이상 올라가지 않도록 보정
+
+            for (int i = 0; i < linesToClear; i++)
+            {
+                int line = startLine + i;
+                if (line >= Console.WindowHeight) break; // 콘솔 범위를 벗어나지 않게 보호
+
+                Console.SetCursorPosition(0, line);
+                Console.Write(new string(' ', width));
+            }
+
+            Console.SetCursorPosition(0, startLine); // 지운 마지막 줄에 커서 위치
         }
 
 
@@ -167,7 +193,7 @@ namespace TeamTodayTextRPG
             {
                 Console.WriteLine();
                 //글자색 빨강 배경색 노랑
-                SceneManager.Instance.ColText("[E] ", ConsoleColor.Green, ConsoleColor.Black);
+                //SceneManager.Instance.ColText("[E] ", ConsoleColor.Green, ConsoleColor.Black);
 
                 SysText("[이름 설정] 원하시는 이름을 설정해주세요.\n", 8, -1, ConsoleColor.Yellow, ConsoleColor.Black, false);
                 SysText("입력 >> ", 8, -1, ConsoleColor.White, ConsoleColor.Black, false);
@@ -175,7 +201,7 @@ namespace TeamTodayTextRPG
                 name = Console.ReadLine();
                 if (name == string.Empty)
                 {
-                    ClearLines(8, 3, 10);
+                    ClearAbove(3);
                     Console.ForegroundColor = ConsoleColor.Red;
                     SysText("※※ 빈칸은 이름으로 사용할 수 없습니다 ※※", 8, -1, ConsoleColor.Red, ConsoleColor.Black, false);
                     Console.ResetColor();
@@ -203,7 +229,7 @@ namespace TeamTodayTextRPG
                         if (num == 1) check = false;
                         else if (num == 2)
                         {
-                            ClearLines(8, 3, 20);
+                            ClearAbove(3);
                             check = false;
                             name = string.Empty;
                         }
@@ -243,21 +269,23 @@ namespace TeamTodayTextRPG
             bool check = false;
             while (!check)
             {
+                
                 if (y < 0)
                 {
-                    ClearLines(16, Console.CursorTop, 8);
+                    Clear(3);
                 }
                 else
-                    ClearLines(16, y, 8);
+                    Clear(y);
 
                 Console.Write("원하시는 행동을 입력해주세요.\n\t\t>>");
                 rtnStr = Console.ReadLine();
                 if (rtnStr == string.Empty)
                 {
-                    ClearLines(8, Console.CursorTop - 3, 8);
+                    //SysText("※※ 아무 행동도 입력하지 않으셨습니다 ※※", ConsoleColor.Red, ConsoleColor.Black, true);
+                    /*ClearLines(8, Console.CursorTop - 3, 8);
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("※※ 아무 행동도 입력하지 않으셨습니다 ※※");
-                    Console.ResetColor();
+                    Console.ResetColor();*/
                 }
                 else
                 {
@@ -265,7 +293,7 @@ namespace TeamTodayTextRPG
                     {
                         if (num < startIndex || num > endIndex)
                         {
-                            ClearLines(8, Console.CursorTop - 3, 8);
+                            ClearAbove(3);
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("※※ 선택지 내에서 입력해주세요 ※※");
                             Console.ResetColor();
@@ -274,7 +302,7 @@ namespace TeamTodayTextRPG
                     }
                     else
                     {
-                        ClearLines(8, Console.CursorTop - 3, 8);
+                        ClearAbove(3);
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("※※ 숫자만 입력해주세요 ※※");
                         Console.ResetColor();
