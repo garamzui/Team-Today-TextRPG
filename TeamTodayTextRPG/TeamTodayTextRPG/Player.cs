@@ -173,8 +173,17 @@ namespace TeamTodayTextRPG
         public bool CheckEquip(int equipItemCode)
         {
             //해당 코드의 아이템을 장착하고 있는지
-            return WeaponEquip.Contains(equipItemCode) ||
-                    ArmorEquip.Contains(equipItemCode);
+            switch (Type)
+            {
+                case ITEM_TYPE.WEAPON:
+                    return WeaponEquip.Contains(equipItemCode);
+
+                case ITEM_TYPE.ARMOR:
+                    return ArmorEquip.Contains(equipItemCode);
+
+                default:
+                    return false;
+            }
         }
 
         //장비 착용
@@ -199,25 +208,24 @@ namespace TeamTodayTextRPG
         public void ChangeItem(int equipItemCode)
         {
             //장착중이 아니라면
-            if (equipedWpCode == -1 || equipedAmCode == -1) return;
+            //if (equipedWpCode == -1 || equipedAmCode == -1) return;
+            
+            //if()
 
-            else
+            //타입비교
+            switch (Type)
             {
-                //타입비교
-                switch (Type)
-                {
-                    case ITEM_TYPE.WEAPON:
-                        WeaponEquip.Clear();
-                        WeaponEquip.Add(equipItemCode);
-                        equipedWpCode = equipItemCode;
-                        break;
+                case ITEM_TYPE.WEAPON:
+                    WeaponEquip.Clear();
+                    WeaponEquip.Add(equipItemCode);
+                    equipedWpCode = equipItemCode;
+                    break;
 
-                    case ITEM_TYPE.ARMOR:
-                        ArmorEquip.Clear();
-                        ArmorEquip.Add(equipItemCode);
-                        equipedAmCode = equipItemCode;
-                        break;
-                }
+                case ITEM_TYPE.ARMOR:
+                    ArmorEquip.Clear();
+                    ArmorEquip.Add(equipItemCode);
+                    equipedAmCode = equipItemCode;
+                    break;
             }
         }
 
@@ -244,7 +252,7 @@ namespace TeamTodayTextRPG
         }
 
         //아이템 장착 및 해제에 따른 스탯 변화
-        public void StatChange(int code)
+        public void ChangeStat(int code)
         {
             var item = DataManager.Instance.ItemDB.List[code]; // 아이템 코드 그대로 사용!
             int atk = int.Parse(item[2]);
