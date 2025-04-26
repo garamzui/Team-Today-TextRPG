@@ -107,6 +107,9 @@ namespace TeamTodayTextRPG
                     break;
 
             }
+            Console.WriteLine("Battle!!\n");
+
+            Console.WriteLine($"{GameManager.Instance.Player.Name} 의 공격!");
 
             int AttackDamage = TotalAtk - GameManager.Instance.Dungeon.TargetMonster.Def;
             if (AttackDamage <= 0)
@@ -136,7 +139,7 @@ namespace TeamTodayTextRPG
                 Hp += HpChange;
                 {
                     if (Hp < 0) Hp = 0;
-                    Console.WriteLine($"{-HpChange}의 피해를 입었습니다! ");
+                    Console.WriteLine($"{GameManager.Instance.Player.Name}{-HpChange}의 피해를 입었습니다! ");
                 }
 
 
