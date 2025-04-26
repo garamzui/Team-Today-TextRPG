@@ -303,7 +303,6 @@ namespace TeamTodayTextRPG
             Console.WriteLine("0. 메인으로 돌아가기");
         }
 
-        private int equipedItemCode = 0;
         public override VIEW_TYPE NextView(int input)
         {
             var player = GameManager.Instance.Player;
@@ -312,39 +311,92 @@ namespace TeamTodayTextRPG
                 return VIEW_TYPE.MAIN;
 
             int index = input - 1;
-            
 
             if (index >= 0 && index < player.Bag.Count)
             {
                 int itemCode = player.Bag[index];  // 실제 아이템 코드 가져오기
 
-                if (player.CheckEquip(itemCode))
+                switch (player.Type)
                 {
-                    if (DataManager.Instance.ItemDB.List[equipedItemCode][8] ==
-                        DataManager.Instance.ItemDB.List[itemCode][8])
-                    {
-                        player.ChangeItem(itemCode ,equipedItemCode);
-                        player.StatChange(equipedItemCode);
-                        player.StatChange(itemCode);
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.WriteLine("장비를 교체했습니다!");
-                    }
-                    else
-                    {
-                        player.UnEquipItem(itemCode);
-                        player.StatChange(itemCode);
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.WriteLine("장비를 해제했습니다!");
-                    }
+                    case ITEM_TYPE.WEAPON:
+
+                        if (player.equipedWpCode == -1)
+                        {
+                            player.EquipItem(itemCode);
+                            player.StatChange(itemCode);
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine("장비를 장착했습니다!");
+                        }
+
+                        else if (player.equipedWpCode == itemCode)
+                        {
+                            player.UnEquipItem(itemCode);
+                            player.StatChange(itemCode);
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.WriteLine("장비를 해제했습니다!");
+                        }
+
+                        else
+                        {
+                            player.ChangeItem(itemCode);
+                            player.StatChange(itemCode);
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.WriteLine("장비를 교체했습니다!");
+                        }
+                        break;
+
+                    case ITEM_TYPE.ARMOR:
+
+                        if(player.equipedAmCode == -1)
+                        {
+                            player.EquipItem(itemCode);
+                            player.StatChange(itemCode);
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine("장비를 장착했습니다!");
+                        }
+
+                        else if (player.equipedAmCode == itemCode)
+                        {
+                            player.UnEquipItem(itemCode);
+                            player.StatChange(itemCode);
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.WriteLine("장비를 해제했습니다!");
+                        }
+
+                        else
+                        {
+                            player.ChangeItem(itemCode);
+                            player.StatChange(itemCode);
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.WriteLine("장비를 교체했습니다!");
+                        }
+                        break;
                 }
-                else
-                {
-                    equipedItemCode = itemCode;
-                    player.EquipItem(itemCode);  // 장착 리스트에 추가
-                    player.StatChange(itemCode);  // <-- 여기 수정
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine("장비를 장착했습니다!");
-                }
+
+                //수정전 코드
+                //if (player.equipedWpCode == -1 || player.equipedAmCode == -1)
+                //{
+                //    player.EquipItem(itemCode);
+                //    player.StatChange(itemCode);
+                //    Console.ForegroundColor = ConsoleColor.Green;
+                //    Console.WriteLine("장비를 장착했습니다!");
+                //}
+
+                //else if (player.equipedWpCode == itemCode || player.equipedAmCode == itemCode)
+                //{
+                //    player.UnEquipItem(itemCode);
+                //    player.StatChange(itemCode);
+                //    Console.ForegroundColor = ConsoleColor.Yellow;
+                //    Console.WriteLine("장비를 해제했습니다!");
+                //}
+
+                //else
+                //{
+                //    player.ChangeItem(itemCode);
+                //    player.StatChange(itemCode);
+                //    Console.ForegroundColor = ConsoleColor.Yellow;
+                //    Console.WriteLine("장비를 교체했습니다!");
+                //}
 
                 Console.ResetColor();
                 Console.WriteLine("\n계속하려면 아무 키나 누르세요...");
@@ -358,6 +410,35 @@ namespace TeamTodayTextRPG
             return VIEW_TYPE.EQUIP;
         }
     }
+
+    //기존 코드
+    //if (player.CheckEquip(itemCode))
+    //{
+    //    if (DataManager.Instance.ItemDB.List[equipedItemCode][8] ==
+    //        DataManager.Instance.ItemDB.List[itemCode][8])
+    //    {
+    //        player.ChangeItem(itemCode ,equipedItemCode);
+    //        player.StatChange(equipedItemCode);
+    //        player.StatChange(itemCode);
+    //        Console.ForegroundColor = ConsoleColor.Yellow;
+    //        Console.WriteLine("장비를 교체했습니다!");
+    //    }
+    //    else
+    //    {
+    //        player.UnEquipItem(itemCode);
+    //        player.StatChange(itemCode);
+    //        Console.ForegroundColor = ConsoleColor.Yellow;
+    //        Console.WriteLine("장비를 해제했습니다!");
+    //    }
+    //}
+    //else
+    //{
+    //    equipedItemCode = itemCode;
+    //    player.EquipItem(itemCode);  // 장착 리스트에 추가
+    //    player.StatChange(itemCode);  // <-- 여기 수정
+    //    Console.ForegroundColor = ConsoleColor.Green;
+    //    Console.WriteLine("장비를 장착했습니다!");
+    //}
 
     public class ShopViewer : Viewer
     {
