@@ -770,9 +770,11 @@ namespace TeamTodayTextRPG
             Console.WriteLine($"HP {GameManager.Instance.Player.Character.Hp}/{GameManager.Instance.Player.Character.MaxHp}");
 
             Console.WriteLine("====================");
-            Console.WriteLine("0. 도망");
 
-            Console.WriteLine("대상을 선택해주세요.");
+            Console.WriteLine("\t1. 기본 공격");
+            //Console.WriteLine("\t2. 스킬");
+            Console.WriteLine("\n\t0. 도망\n\n");
+
         }
         public override VIEW_TYPE NextView(int input)
         {
