@@ -233,21 +233,16 @@ namespace TeamTodayTextRPG
         public void UnEquipItem(int equipItemCode)
         {
             //장착중 이라면
-            if (WeaponEquip.Contains(equipItemCode) == true || ArmorEquip.Contains(equipItemCode) == true)
+            if (WeaponEquip.Contains(equipItemCode) == true)
             {
-                //타입 비교
-                switch (Type)
-                {
-                    case ITEM_TYPE.WEAPON:
-                        WeaponEquip.Clear();
-                        equipedWpCode = -1;
-                        break;
+                WeaponEquip.Clear();
+                equipedWpCode = -1;
+            }
 
-                    case ITEM_TYPE.ARMOR:
-                        ArmorEquip.Clear();
-                        equipedAmCode = -1;
-                        break;
-                }
+            else
+            {
+                ArmorEquip.Clear();
+                equipedAmCode = -1;
             }
         }
 
