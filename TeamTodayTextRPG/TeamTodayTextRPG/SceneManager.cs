@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Security.Cryptography;
+using System.Xml.Linq;
 using TeamTodayTextRPG;
 
 namespace TeamTodayTextRPG
@@ -19,8 +20,7 @@ namespace TeamTodayTextRPG
             CurrentViewer = new MainViewer();
         }
 
-        //PrintCentered = Pc
-        public void Pc(string text)
+        public void PrintCentered(string text)
         {
             int consoleWidth = Console.WindowWidth;
             int padding = (consoleWidth - text.Length) / 2;
@@ -39,7 +39,7 @@ namespace TeamTodayTextRPG
 
             Console.ForegroundColor = textColor;
             if (system)
-                Console.Write($"========================================================================\n>> [SYSTEM] {message}\n========================================================================\n");
+                Console.Write($"=========================================================================================\n>> [SYSTEM] {message}\n=========================================================================================\n");
             else
                 Console.Write($"{message}");
 
@@ -58,6 +58,7 @@ namespace TeamTodayTextRPG
 
             Console.SetCursorPosition(x, fromLine);
         }
+
 
         public void SwitchScene(VIEW_TYPE viewType)
         {
@@ -131,6 +132,11 @@ namespace TeamTodayTextRPG
         {
             if (CurrentViewer != null)
             {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write("=========================================================================================\n" +
+                              "                          【Sparta Text RPG  _Team Today Present】                       \n" +
+                              "=========================================================================================\n");
+                Console.ResetColor();
                 CurrentViewer.ViewAction();  // gameManager 객체를 넘기기
             }
 
@@ -221,16 +227,16 @@ namespace TeamTodayTextRPG
             {
                 if (y < 0)
                 {
-                    ClearLines(8, Console.CursorTop, 10);
+                    ClearLines(16, Console.CursorTop, 8);
                 }
                 else
-                    ClearLines(8, y, 10);
+                    ClearLines(16, y, 8);
 
                 Console.Write("원하시는 행동을 입력해주세요.\n\t>>");
                 rtnStr = Console.ReadLine();
                 if (rtnStr == string.Empty)
                 {
-                    ClearLines(8, Console.CursorTop - 3, 10);
+                    ClearLines(8, Console.CursorTop - 3, 8);
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("※※ 아무 행동도 입력하지 않으셨습니다 ※※");
                     Console.ResetColor();
@@ -241,7 +247,7 @@ namespace TeamTodayTextRPG
                     {
                         if (num < startIndex || num > endIndex)
                         {
-                            ClearLines(8, Console.CursorTop - 3, 10);
+                            ClearLines(8, Console.CursorTop - 3, 8);
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("※※ 선택지 내에서 입력해주세요 ※※");
                             Console.ResetColor();
@@ -250,7 +256,7 @@ namespace TeamTodayTextRPG
                     }
                     else
                     {
-                        ClearLines(8, Console.CursorTop - 3, 10);
+                        ClearLines(8, Console.CursorTop - 3, 8);
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("※※ 숫자만 입력해주세요 ※※");
                         Console.ResetColor();
@@ -260,31 +266,33 @@ namespace TeamTodayTextRPG
             return num;
         }
 
-        
         public void ShowName(string name)
         {
             Console.Write(name + "\t| ");
         }
         public void ShowAtk(int atk)
         {
-            if (atk > 0) Console.Write("공격력 +" + atk + "\t| ");
-            else Console.Write("공격력 -" + atk + "\t| ");
+            if (atk > 0) Console.Write("\t  공격력 +" + atk + "\t| ");
+            else if (atk == 0) Console.Write("\t  공격력 -\t| ");
+            else Console.Write("\t  공격력 -" + atk + "\t| ");
         }
         public void ShowDef(int def)
         {
-            if (def > 0) Console.Write("방어력 +" + def + "\t| ");
-            else Console.Write("방어력 -" + def + "\t| ");
+            if (def > 0) Console.Write("\t  방어력 +" + def + "\t| ");
+            else if (def == 0) Console.Write("\t  방어력 -\t| ");
+            else Console.Write("\t  방어력 -" + def + "\t| ");
         }
 
         public void ShowInventory(VIEW_TYPE view)
         {
+            int count = 0;
             if (GameManager.Instance.Player.Bag != null)
             {
-                int count = 0;
                 foreach (var item in GameManager.Instance.Player.Bag)
                 {
-                    if (view == VIEW_TYPE.EQUIP) Console.Write($"- {++count} ");
-                    else Console.Write("- ");
+                    Console.WriteLine("   -----------------------------------------------------------------------------");
+                    if (view == VIEW_TYPE.EQUIP) Console.Write($"     -{++count} ");
+                    else Console.Write("     -");
 
                     if (GameManager.Instance.Player.CheckEquip(item))
                     {
@@ -292,13 +300,12 @@ namespace TeamTodayTextRPG
                         Console.Write("[E]");
                         Console.ResetColor();
                     }
-
-                    ShowName(DataManager.Instance.ItemDB.List[item][1]);
-                    if (int.Parse(DataManager.Instance.ItemDB.List[item][2]) != 0) ShowAtk(int.Parse(DataManager.Instance.ItemDB.List[item][2]));
-                    if (int.Parse(DataManager.Instance.ItemDB.List[item][3]) != 0) ShowDef(int.Parse(DataManager.Instance.ItemDB.List[item][3]));
-                    Console.Write(DataManager.Instance.ItemDB.List[item][6] + "\t| ");
+                    Console.WriteLine(" 『" + DataManager.Instance.ItemDB.List[item][1] + "』");
+                    ShowAtk(int.Parse(DataManager.Instance.ItemDB.List[item][2]));
+                    ShowDef(int.Parse(DataManager.Instance.ItemDB.List[item][3]));
+                    Console.WriteLine("\t  [ " + DataManager.Instance.ItemDB.List[item][6] + " ]");
                 }
-
+                Console.WriteLine("   -----------------------------------------------------------------------------");
             }
         }
 
@@ -308,23 +315,25 @@ namespace TeamTodayTextRPG
             {
                 foreach (var item in DataManager.Instance.ItemDB.List)
                 {
+                    Console.WriteLine("   -----------------------------------------------------------------------------");
                     if (GameManager.Instance.Player.CheckBag(int.Parse(item[0]))) Console.ForegroundColor = ConsoleColor.DarkGray;
 
-                    if (view == VIEW_TYPE.PURCHASE) Console.Write("- " + (int.Parse(item[0]) + 1) + " " + item[1] + "\t| ");
-                    else Console.Write("- " + item[1] + "\t| ");
-
-                    if (int.Parse(item[2]) != 0) ShowAtk(int.Parse(item[2]));
-                    if (int.Parse(item[3]) != 0) ShowDef(int.Parse(item[3]));
-                    Console.Write(item[6] + "\t| ");
-
+                    string idText = view == VIEW_TYPE.PURCHASE ? "-"+ (int.Parse(item[0]) + 1).ToString() : "-";
+                    Console.WriteLine($"     {idText} 『{item[1]}』");
+                    ShowAtk(int.Parse(item[2]));
+                    ShowDef(int.Parse(item[3]));
                     if (GameManager.Instance.Player.CheckBag(int.Parse(item[0])))
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("구매 완료");
+                        Console.WriteLine("\t [구매 완료]");
                         Console.ResetColor();
                     }
-                    else Console.WriteLine(int.Parse(item[7]) + " G");
+                    else Console.WriteLine("\t [" + int.Parse(item[7]) + " G]");
+                    if (GameManager.Instance.Player.CheckBag(int.Parse(item[0]))) Console.ForegroundColor = ConsoleColor.DarkGray;
+                    Console.WriteLine("\t  [ "+item[6]+" ]");
+                    Console.ResetColor();
                 }
+                Console.WriteLine("   -----------------------------------------------------------------------------");
             }
         }
 
@@ -335,12 +344,14 @@ namespace TeamTodayTextRPG
             {
                 foreach (var item in GameManager.Instance.Player.Bag)
                 {
-                    Console.Write("- " + (++count) + " " + DataManager.Instance.ItemDB.List[item][1] + "\t| ");
-                    if (int.Parse(DataManager.Instance.ItemDB.List[item][2]) != 0) ShowAtk(int.Parse(DataManager.Instance.ItemDB.List[item][2]));
-                    if (int.Parse(DataManager.Instance.ItemDB.List[item][3]) != 0) ShowDef(int.Parse(DataManager.Instance.ItemDB.List[item][3]));
-                    Console.Write(DataManager.Instance.ItemDB.List[item][6] + "\t| ");
-                    Console.WriteLine((int)(int.Parse(DataManager.Instance.ItemDB.List[item][7]) * 0.85) + " G");
+                    Console.WriteLine("   -----------------------------------------------------------------------------");
+                    Console.WriteLine("     -" + (++count) + " 『" + DataManager.Instance.ItemDB.List[item][1] + "』");
+                    ShowAtk(int.Parse(DataManager.Instance.ItemDB.List[item][2]));
+                    ShowDef(int.Parse(DataManager.Instance.ItemDB.List[item][3]));
+                    Console.WriteLine("\t [" + (int)(int.Parse(DataManager.Instance.ItemDB.List[item][7]) * 0.85) + " G]");
+                    Console.WriteLine("\t  [ "+DataManager.Instance.ItemDB.List[item][6] + " ]");
                 }
+                Console.WriteLine("   -----------------------------------------------------------------------------");
             }
         }
     }
