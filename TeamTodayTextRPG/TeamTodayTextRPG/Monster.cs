@@ -126,7 +126,9 @@ namespace TeamTodayTextRPG
             }
             else
             {
-                
+                Console.WriteLine("Battle!!\n");
+
+                Console.WriteLine($"Lv.{GameManager.Instance.Dungeon.Dungeon_Monster[GameManager.Instance.Dungeon.MonsterAtkCounter].Level} {GameManager.Instance.Dungeon.Dungeon_Monster[GameManager.Instance.Dungeon.MonsterAtkCounter].Name} 의 공격!");
 
 
                 int AttackDamage = Atk - GameManager.Instance.Player.Character.TotalDef;

@@ -731,15 +731,15 @@ namespace TeamTodayTextRPG
         }
         public override void ViewAction()
         {
-            Console.WriteLine("Battle!!\n");
-
-            Console.WriteLine($"{GameManager.Instance.Player.Name} 의 공격!");
-            Console.WriteLine($"Lv.{GameManager.Instance.Dungeon.TargetMonster.Level}{GameManager.Instance.Dungeon.TargetMonster.Name}\n");
+            
+             Console.WriteLine($"Lv.{GameManager.Instance.Dungeon.TargetMonster.Level}{GameManager.Instance.Dungeon.TargetMonster.Name}\n");
            
             Console.WriteLine($"Lv.{GameManager.Instance.Dungeon.TargetMonster.Level} {GameManager.Instance.Dungeon.TargetMonster.Name}");
+
+            
             
             GameManager.Instance.Player.Character.DefaultAttack();
-
+           
 
 
            
@@ -776,9 +776,7 @@ namespace TeamTodayTextRPG
             // 몬스터가 공격할 수 있는 상태라면 공격 출력
             if (GameManager.Instance.Dungeon.Dungeon_Monster[GameManager.Instance.Dungeon.MonsterAtkCounter].State == MONSTER_STATE.IDLE)
             {
-                Console.WriteLine("Battle!!\n");
                 
-                Console.WriteLine($"Lv.{GameManager.Instance.Dungeon.Dungeon_Monster[GameManager.Instance.Dungeon.MonsterAtkCounter].Level} {GameManager.Instance.Dungeon.Dungeon_Monster[GameManager.Instance.Dungeon.MonsterAtkCounter].Name} 의 공격!");
                 GameManager.Instance.Dungeon.TargetMonster.DefaultAttack();
 
                 
