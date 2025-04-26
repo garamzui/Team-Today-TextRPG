@@ -16,6 +16,7 @@ namespace TeamTodayTextRPG
         public int Level { get; set; }
         public int Exp { get; set; }
         public int Gold { get; set; }
+        public int RequiredExp { get; set; } = 100;
         public string Name { get; set; }
 
         public int equipedWpCode = -1;
@@ -71,7 +72,7 @@ namespace TeamTodayTextRPG
 
         public void LevelUp()
         {
-            int requiredExp = 100;
+            int requiredExp = RequiredExp;
 
             //던전 클리어시 처치한 몬스터에 따라 경험치를 얻는 구조 필요
             //경험치가 요구 경험치보다 크거나 같아진다.

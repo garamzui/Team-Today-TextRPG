@@ -396,5 +396,32 @@ namespace TeamTodayTextRPG
                 Console.WriteLine("   -----------------------------------------------------------------------------");
             }
         }
+        //일단은 복붙만
+        public void ShowEquip(VIEW_TYPE view)
+        {
+            int count = 0;
+            if (GameManager.Instance.Player.Bag != null)
+            {
+                foreach (var item in GameManager.Instance.Player.Bag)
+                {
+                    Console.WriteLine("   ------------------------------------------------------------------------------");
+                    if (view == VIEW_TYPE.EQUIP) Console.Write($"     -{++count} ");
+                    else Console.Write("     -");
+
+                    if (GameManager.Instance.Player.CheckEquip(item, ITEM_TYPE.WEAPON) ||
+                        GameManager.Instance.Player.CheckEquip(item, ITEM_TYPE.ARMOR))
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.Write("[E]");
+                        Console.ResetColor();
+                    }
+                    Console.WriteLine(" 『" + DataManager.Instance.ItemDB.List[item][1] + "』");
+                    ShowAtk(int.Parse(DataManager.Instance.ItemDB.List[item][2]));
+                    ShowDef(int.Parse(DataManager.Instance.ItemDB.List[item][3]));
+                    Console.WriteLine("\t  [ " + DataManager.Instance.ItemDB.List[item][6] + " ]");
+                }
+                Console.WriteLine("   ------------------------------------------------------------------------------");
+            }
+        }
     }
 }
