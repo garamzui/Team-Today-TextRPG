@@ -110,7 +110,7 @@ namespace TeamTodayTextRPG
                     break;
 
             }
-            int DodgeHit = GameManager.Instance.Rand.Next(1, 76);// 피격 메서드에 회피를 구현 해봤습니다.
+            int DodgeHit = GameManager.Instance.Rand.Next(1, 76);
             if (GameManager.Instance.Player.Character.TotalDodge > DodgeHit)
             {
                 Console.WriteLine("공격을 회피 했습니다!");

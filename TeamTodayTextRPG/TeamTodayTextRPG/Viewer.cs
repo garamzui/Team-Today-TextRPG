@@ -71,7 +71,7 @@ namespace TeamTodayTextRPG
         public override void ViewAction()
         {
             //SceneManager.Instance.ColText("스파르타 마을에 오신 여러분 환영합니다.", 0, -1, ConsoleColor.Yellow, ConsoleColor.Black,true);
-            SceneManager.Instance.ColText("\t\t『마을』", 8, -1, ConsoleColor.Cyan, ConsoleColor.Black, false);
+            SceneManager.Instance.SysText("\t\t『마을』", 8, -1, ConsoleColor.Cyan, ConsoleColor.Black, false);
             Console.WriteLine(" 여러가지 활동을 할 수 있습니다.\n");
             Console.WriteLine("\t\t\t=   1.     정  보\t =\n\t\t\t=   2.     가  방\t =\n\t\t\t=   3.     장  비\t =\n\t\t\t=   4.     던  전\t =\n\t\t\t=   5.     상  점\t =\n\t\t\t=   6.     여  관\t =");
             Console.WriteLine("\n\t\t\t>> 0. 게임 종료\n\n");
@@ -116,7 +116,7 @@ namespace TeamTodayTextRPG
         public override void ViewAction()
         {
             //SceneManager.Instance.ColText("스파르타 마을에 오신 여러분 환영합니다.", 0, -1, ConsoleColor.Yellow, ConsoleColor.Black, true);
-            SceneManager.Instance.ColText("\t『상태 보기』", 8, -1, ConsoleColor.Cyan, ConsoleColor.Black, false);
+            SceneManager.Instance.SysText("\t『상태 보기』", 8, -1, ConsoleColor.Cyan, ConsoleColor.Black, false);
             Console.WriteLine(" 플레이어의 정보가 표시됩니다.\n");
 
             Console.Write($"\t\tLv.{Player.Level} / {Player.Name} ( {Character.Jobname} )\t\t");
@@ -234,7 +234,7 @@ namespace TeamTodayTextRPG
         public override void ViewAction()
         {
             //SceneManager.Instance.ColText("스파르타 마을에 오신 여러분 환영합니다.", 0, -1, ConsoleColor.Yellow, ConsoleColor.Black, true);
-            SceneManager.Instance.ColText("\t\t『가방』", 8, -1, ConsoleColor.Cyan, ConsoleColor.Black, false);
+            SceneManager.Instance.SysText("\t\t『가방』", 8, -1, ConsoleColor.Cyan, ConsoleColor.Black, false);
             Console.WriteLine(" 아이템을 확인하거나, 소모품을 사용할 수 있습니다.\n");
             Console.WriteLine("  =====[목록]=====================================================================");
             SceneManager.Instance.ShowInventory(VIEW_TYPE.INVENTORY);
@@ -450,7 +450,7 @@ namespace TeamTodayTextRPG
         public override void ViewAction()
         {
             //SceneManager.Instance.ColText("Sparta Text RPG  _Team Today Present", 0, -1, ConsoleColor.Yellow, ConsoleColor.Black, true);
-            SceneManager.Instance.ColText("\t\t『상점』", 8, -1, ConsoleColor.Cyan, ConsoleColor.Black, false);
+            SceneManager.Instance.SysText("\t\t『상점』", 8, -1, ConsoleColor.Cyan, ConsoleColor.Black, false);
             Console.WriteLine(" 필요한 아이템을 구매하거나 판매합니다.\n");
 
             Console.Write("\t\t\t\t\t소지금 : ");
@@ -501,7 +501,7 @@ namespace TeamTodayTextRPG
 
         public override void ViewAction()
         {
-            SceneManager.Instance.ColText("\t\t『상점 - 구매』", 8, -1, ConsoleColor.Cyan, ConsoleColor.Black, false);
+            SceneManager.Instance.SysText("\t\t『상점 - 구매』", 8, -1, ConsoleColor.Cyan, ConsoleColor.Black, false);
             Console.WriteLine(" 필요한 아이템을 골드를 주고 구매합니다.\n");
             Console.Write("\t\t\t\t\t소지금 : ");
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -533,18 +533,18 @@ namespace TeamTodayTextRPG
                         //GameManager.Instance.Player.Gold -= DataManager.Instance.ItemDB.List[input - 1].Value;
                         // 인벤토리에 아이템 추가
                         GameManager.Instance.Player.InputBag(int.Parse(DataManager.Instance.ItemDB.List[input - 1][0]),VIEW_TYPE.PURCHASE);
-                        SceneManager.Instance.ColText($"{DataManager.Instance.ItemDB.List[input - 1][1]} 을(를) 구매 했습니다", 0, -1, ConsoleColor.DarkCyan, ConsoleColor.Black, true);
+                        SceneManager.Instance.SysText($"{DataManager.Instance.ItemDB.List[input - 1][1]} 을(를) 구매 했습니다", 0, -1, ConsoleColor.DarkCyan, ConsoleColor.Black, true);
                     }
                     // 구매실패 (잔금 부족)
                     else
                     {
-                        SceneManager.Instance.ColText("Gold가 부족합니다.", 0, -1, ConsoleColor.Red, ConsoleColor.Black, true);
+                        SceneManager.Instance.SysText("Gold가 부족합니다.", 0, -1, ConsoleColor.Red, ConsoleColor.Black, true);
                     }
                 }
                 // 구매실패 (보유중인 물품)
                 else
                 {
-                    SceneManager.Instance.ColText("이미 구매한 아이템입니다.", 0, -1, ConsoleColor.Red, ConsoleColor.Black, true);
+                    SceneManager.Instance.SysText("이미 구매한 아이템입니다.", 0, -1, ConsoleColor.Red, ConsoleColor.Black, true);
                 }
                 return VIEW_TYPE.PURCHASE;
             }
@@ -565,7 +565,7 @@ namespace TeamTodayTextRPG
         }
         public override void ViewAction()
         {
-            SceneManager.Instance.ColText("\t\t『상점 - 판매』", 8, -1, ConsoleColor.Cyan, ConsoleColor.Black, false);
+            SceneManager.Instance.SysText("\t\t『상점 - 판매』", 8, -1, ConsoleColor.Cyan, ConsoleColor.Black, false);
             Console.WriteLine(" 필요없는 아이템을 골드를 받고 판매합니다.\n");
             Console.Write("\t\t\t\t\t소지금 : ");
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -592,7 +592,7 @@ namespace TeamTodayTextRPG
                 // 인벤토리에 아이템 존재 여부
                 if (GameManager.Instance.Player.CheckBag(GameManager.Instance.Player.Bag[input - 1]))
                 {
-                    SceneManager.Instance.ColText($"{DataManager.Instance.ItemDB.List[GameManager.Instance.Player.Bag[input - 1]][1]} 을(를) 판매 했습니다.", 0, -1, ConsoleColor.DarkCyan, ConsoleColor.Black, true);
+                    SceneManager.Instance.SysText($"{DataManager.Instance.ItemDB.List[GameManager.Instance.Player.Bag[input - 1]][1]} 을(를) 판매 했습니다.", 0, -1, ConsoleColor.DarkCyan, ConsoleColor.Black, true);
 
                     GameManager.Instance.Player.RemoveBag(int.Parse(DataManager.Instance.ItemDB.List[GameManager.Instance.Player.Bag[input - 1]][0]), VIEW_TYPE.SALE);
 
@@ -600,7 +600,7 @@ namespace TeamTodayTextRPG
                 // 판매실패 (보유중이지 않은 물품)
                 else
                 {
-                    SceneManager.Instance.ColText("존재하지 않는 아이템입니다.", 0, -1, ConsoleColor.Red, ConsoleColor.Black, true);
+                    SceneManager.Instance.SysText("존재하지 않는 아이템입니다.", 0, -1, ConsoleColor.Red, ConsoleColor.Black, true);
                 }
                 return VIEW_TYPE.SALE;
             }
