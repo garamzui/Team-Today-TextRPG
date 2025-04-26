@@ -195,11 +195,13 @@ namespace TeamTodayTextRPG
                 case ITEM_TYPE.WEAPON:
                     WeaponEquip.Add(equipItemCode);
                     equipedWpCode = equipItemCode;
+                    ChangeStat(equipItemCode);
                     break;
 
                 case ITEM_TYPE.ARMOR:
                     ArmorEquip.Add(equipItemCode);
                     equipedAmCode = equipItemCode;
+                    ChangeStat(equipItemCode);
                     break;
             }
         }
@@ -218,12 +220,16 @@ namespace TeamTodayTextRPG
                 case ITEM_TYPE.WEAPON:
                     WeaponEquip.Clear();
                     WeaponEquip.Add(equipItemCode);
+                    ChangeStat(equipItemCode);
+                    ChangeStat(equipedWpCode);
                     equipedWpCode = equipItemCode;
                     break;
 
                 case ITEM_TYPE.ARMOR:
                     ArmorEquip.Clear();
                     ArmorEquip.Add(equipItemCode);
+                    ChangeStat(equipItemCode);
+                    ChangeStat(equipedAmCode);
                     equipedAmCode = equipItemCode;
                     break;
             }
@@ -237,12 +243,14 @@ namespace TeamTodayTextRPG
             {
                 WeaponEquip.Clear();
                 equipedWpCode = -1;
+                ChangeStat(equipItemCode);
             }
 
             else
             {
                 ArmorEquip.Clear();
                 equipedAmCode = -1;
+                ChangeStat(equipItemCode);
             }
         }
 
@@ -252,6 +260,7 @@ namespace TeamTodayTextRPG
             var item = DataManager.Instance.ItemDB.List[code]; // 아이템 코드 그대로 사용!
             int atk = int.Parse(item[2]);
             int def = int.Parse(item[3]);
+            
 
             if (CheckEquip(code, ITEM_TYPE.WEAPON) || CheckEquip(code, ITEM_TYPE.ARMOR))
             {
