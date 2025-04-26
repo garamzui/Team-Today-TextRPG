@@ -18,10 +18,20 @@ namespace TeamTodayTextRPG
         MAGICIAN,
         ASSASSIN
     }
+   
 
     public abstract class Character
     {
-        public Monster Monster { get; set; }
+        public List<string> ChooseBehavior { get; private set; }
+
+        public Character()
+        {
+            ChooseBehavior = new List<string>();
+            ChooseBehavior.Add("기본 공격");
+            ChooseBehavior.Add("스킬");
+            
+        }
+
         public CHAR_TYPE Code { get; set; }
         public string Jobname { get; set; }
         public int Attack { get; set; }
@@ -164,6 +174,7 @@ namespace TeamTodayTextRPG
         public void Die()
         {
             Console.WriteLine("눈앞이 깜깜해진다..");
+            GameManager.Instance.Animation.GameOverAnimation();
         }
 
         public void ManageMp(int ChangeMp) //Mp관리용 메서드입니다. Mp소모 매서드 이용시 최종 계산 자료를 음수로 입력하여야합니다
@@ -210,8 +221,9 @@ namespace TeamTodayTextRPG
                 { SkillDamage = 1; }
 
                 GameManager.Instance.Dungeon.TargetMonster.ManageHp(-SkillDamage);
-                GameManager.Instance.SceneManager.ColText($"{GameManager.Instance.Player.Name}의{ActskillName}!!! {GameManager.Instance.Dungeon.TargetMonster.Name}이(가) {SkillDamage}의 피해를 입었습니다." ,ConsoleColor.Blue, ConsoleColor.Cyan);
-                Console.WriteLine($"{GameManager.Instance.Player.Name}의{ActskillName}!!! {GameManager.Instance.Dungeon.TargetMonster.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
+                Console.Write($"{GameManager.Instance.Player.Name}의");
+                GameManager.Instance.SceneManager.ColText($"{ActskillName}", ConsoleColor.Red, ConsoleColor.White);
+                Console.WriteLine($"!!! {GameManager.Instance.Dungeon.TargetMonster.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
             }
             else
             {
@@ -267,7 +279,10 @@ namespace TeamTodayTextRPG
                 { SkillDamage = 1; }
 
                 GameManager.Instance.Dungeon.TargetMonster.ManageHp(-SkillDamage);
-                Console.WriteLine($"{GameManager.Instance.Player.Name}의{ActskillName}!!! {GameManager.Instance.Dungeon.TargetMonster.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
+            
+                Console.Write($"{GameManager.Instance.Player.Name}의");
+                GameManager.Instance.SceneManager.ColText($"{ActskillName}", ConsoleColor.Blue, ConsoleColor.Cyan);
+                Console.WriteLine($"!!! {GameManager.Instance.Dungeon.TargetMonster.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
             }
             else
             {
@@ -335,7 +350,9 @@ namespace TeamTodayTextRPG
                 {
 
                     GameManager.Instance.Dungeon.TargetMonster.ManageHp(-SkillDamage);
-                    Console.WriteLine($"{GameManager.Instance.Player.Name} 의 {ActskillName} !!! {GameManager.Instance.Dungeon.TargetMonster.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
+                    Console.Write($"{GameManager.Instance.Player.Name}의");
+                    GameManager.Instance.SceneManager.ColText($"{ActskillName}", ConsoleColor.Black, ConsoleColor.White);
+                    Console.WriteLine($"!!! {GameManager.Instance.Dungeon.TargetMonster.Name}이(가) {SkillDamage}의 피해를 입었습니다."); ;
                 }
             }
             else

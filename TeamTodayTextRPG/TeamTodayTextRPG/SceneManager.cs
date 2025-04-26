@@ -154,8 +154,14 @@ namespace TeamTodayTextRPG
                 case VIEW_TYPE.BATTLE_PLAYER:
                     CurrentViewer = new BattlePlayerViewer();
                     break;
+                case VIEW_TYPE.CHOOSE_BEHAVIOR:
+                    CurrentViewer = new ChooseBehaviorViewer();
+                    break;
                 case VIEW_TYPE.BATTLE_PLAYER_LOG:
                     CurrentViewer = new BattlePlayerLogViewer();
+                    break;
+                case VIEW_TYPE.BATTLE_PLAYER_SKILL_LOG:
+                    CurrentViewer = new BattlePlayerSkillLogViewer();
                     break;
                 case VIEW_TYPE.BATTLE_ENEMY:
                     CurrentViewer = new BattleEnemyViewer();

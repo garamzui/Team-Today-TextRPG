@@ -4,6 +4,7 @@ using System.Numerics;
 using System.Threading;
 using System.Xml.Linq;
 using TeamTodayTextRPG;
+using static System.Collections.Specialized.BitVector32;
 
 namespace TeamTodayTextRPG
 {
@@ -26,10 +27,12 @@ namespace TeamTodayTextRPG
         BATTLE,
         BATTLE_PLAYER,
         BATTLE_PLAYER_LOG,
+        BATTLE_PLAYER_SKILL_LOG,
         BATTLE_ENEMY,
 
         REST,           // 휴식 화면
-        MONSTER         // 몬스터 화면
+        MONSTER,         // 몬스터 화면
+        CHOOSE_BEHAVIOR
     }
 
     // 모든 뷰어 클래스의 부모가 되는 추상 클래스
@@ -771,7 +774,7 @@ namespace TeamTodayTextRPG
 
             Console.WriteLine("====================");
 
-            Console.WriteLine("\t1. 기본 공격");
+            Console.WriteLine("\tn. 대상 선택(대상 번호 입력)");
             //Console.WriteLine("\t2. 스킬");
             Console.WriteLine("\n\t0. 도망\n\n");
 
@@ -785,6 +788,9 @@ namespace TeamTodayTextRPG
             }
             else if (input > 0 && input <= GameManager.Instance.Dungeon.Dungeon_Monster.Count)
             {
+                
+                //행동 선택 뷰가 들어갈 자리
+
                 // 해당 몬스터가 죽은 상태라면
                 if (GameManager.Instance.Dungeon.Dungeon_Monster[input-1].State == MONSTER_STATE.DEAD)
                 {
@@ -797,7 +803,7 @@ namespace TeamTodayTextRPG
                     //GameManager.Instance.Animation = new CharaterAnimation();
                   
                     GameManager.Instance.Dungeon.TargetMonster = GameManager.Instance.Dungeon.Dungeon_Monster[input - 1];
-                    return VIEW_TYPE.BATTLE_PLAYER_LOG; 
+                    return VIEW_TYPE.CHOOSE_BEHAVIOR; 
                 }
             }
             else
@@ -807,6 +813,62 @@ namespace TeamTodayTextRPG
             }
         }
     }
+
+    public class ChooseBehaviorViewer : Viewer
+    {
+        public ChooseBehaviorViewer()
+        {
+            StartIndex = 0;
+            EndIndex = GameManager.Instance.Player.Character.ChooseBehavior.Count;
+        }
+
+        public override void ViewAction()
+        {
+            Console.WriteLine("무엇을 하시겠습니까?\n");
+            int count = 1;
+            foreach (var monster in GameManager.Instance.Dungeon.Dungeon_Monster)
+            {
+                Console.Write($"{count++} ");
+                monster.View_Monster_Status();
+            }
+
+            Console.WriteLine("\n[내정보]");
+            Console.WriteLine($"Lv.{GameManager.Instance.Player.Level}\t {GameManager.Instance.Player.Name} ({GameManager.Instance.Player.Character.Jobname})");
+            Console.WriteLine($"HP {GameManager.Instance.Player.Character.Hp}/{GameManager.Instance.Player.Character.MaxHp}");
+
+            Console.WriteLine("====================");
+            Console.WriteLine("\t1. 기본공격\n\t2. 스킬");
+            Console.WriteLine("\t0. 돌아가기");
+
+            
+        }
+        public override VIEW_TYPE NextView(int input)
+        {
+            Console.Clear();
+            if (input == 0)
+            {
+                return VIEW_TYPE.BATTLE_PLAYER;
+            }
+            else if (input > 0 && input <= GameManager.Instance.Player.Character.ChooseBehavior.Count)
+            {
+
+                if (input == 1)
+                { return VIEW_TYPE.BATTLE_PLAYER_LOG; }
+                else  
+                { return VIEW_TYPE.BATTLE_PLAYER_SKILL_LOG; }
+            }
+            else
+            {
+                Console.WriteLine("잘못된 입력입니다.");
+                return VIEW_TYPE.CHOOSE_BEHAVIOR;
+            }
+        }
+
+    }
+
+
+
+
 
 
     public class BattlePlayerLogViewer : Viewer
@@ -846,6 +908,47 @@ namespace TeamTodayTextRPG
                 default:
                     Console.WriteLine("잘못된 입력입니다.");
                     return VIEW_TYPE.BATTLE_PLAYER_LOG;
+            }
+        }
+    }
+
+    public class BattlePlayerSkillLogViewer : Viewer
+    {
+        public BattlePlayerSkillLogViewer()
+        {
+            StartIndex = 0;
+            EndIndex = 0;
+        }
+        public override void ViewAction()
+        {
+
+            Console.WriteLine($"Lv.{GameManager.Instance.Dungeon.TargetMonster.Level}{GameManager.Instance.Dungeon.TargetMonster.Name}\n");
+
+            Console.WriteLine($"Lv.{GameManager.Instance.Dungeon.TargetMonster.Level} {GameManager.Instance.Dungeon.TargetMonster.Name}");
+
+
+
+            GameManager.Instance.Player.Character.ActiveSkill();
+
+
+
+
+
+            Console.WriteLine("\n0. 다음");
+        }
+        public override VIEW_TYPE NextView(int input)
+        {
+            Console.Clear();
+            switch (input)
+            {
+                case 0:
+                    //GameManager.Instance.Dungeon.MonsterAtkCounter = GameManager.Instance.Dungeon.Dungeon_Monster.Count;
+                    // 공격 횟수를 담당
+                    GameManager.Instance.Dungeon.MonsterAtkCounter = 0;
+                    return VIEW_TYPE.BATTLE_ENEMY;
+                default:
+                    Console.WriteLine("잘못된 입력입니다.");
+                    return VIEW_TYPE.BATTLE_PLAYER_SKILL_LOG;
             }
         }
     }
