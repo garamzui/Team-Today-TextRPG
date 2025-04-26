@@ -354,7 +354,7 @@ namespace TeamTodayTextRPG
                         if (player.equipedAmCode == -1)
                         {
                             player.EquipItem(itemCode, ITEM_TYPE.ARMOR);
-                            player.ChangeStat(itemCode);
+                            //player.ChangeStat(itemCode);
                             Console.ForegroundColor = ConsoleColor.Green;
                             Console.WriteLine("장비를 장착했습니다!");
                         }
@@ -362,7 +362,7 @@ namespace TeamTodayTextRPG
                         else if (player.equipedAmCode == itemCode)
                         {
                             player.UnEquipItem(itemCode);
-                            player.ChangeStat(itemCode);
+                            //player.ChangeStat(itemCode);
                             Console.ForegroundColor = ConsoleColor.Yellow;
                             Console.WriteLine("장비를 해제했습니다!");
                         }
@@ -370,7 +370,7 @@ namespace TeamTodayTextRPG
                         else
                         {
                             player.ChangeItem(itemCode, ITEM_TYPE.ARMOR);
-                            player.ChangeStat(itemCode);
+                            //player.ChangeStat(itemCode);
                             Console.ForegroundColor = ConsoleColor.Yellow;
                             Console.WriteLine("장비를 교체했습니다!");
                         }
