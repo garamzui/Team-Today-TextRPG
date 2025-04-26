@@ -134,8 +134,10 @@ namespace TeamTodayTextRPG
             if (HpChange < 0)
             {
                 Hp += HpChange;
-                if (Hp < 0) Hp = 0;
-                Console.WriteLine($"{-HpChange}의 피해를 입었습니다! \n현재 Hp : {Hp}/{MaxHp}");
+                {
+                    if (Hp < 0) Hp = 0;
+                    Console.WriteLine($"{-HpChange}의 피해를 입었습니다! ");
+                }
 
 
 
@@ -144,6 +146,9 @@ namespace TeamTodayTextRPG
                     Die();
 
                 }
+               
+                Console.WriteLine($"HP {GameManager.Instance.Player.Character.Hp - HpChange} -> {GameManager.Instance.Player.Character.Hp} ");
+                
             }
             else if (HpChange > 0)
             {
@@ -202,7 +207,7 @@ namespace TeamTodayTextRPG
                 { SkillDamage = 1; }
 
                 GameManager.Instance.Dungeon.TargetMonster.ManageHp(-SkillDamage);
-
+                GameManager.Instance.SceneManager.ColText($"{GameManager.Instance.Player.Name}의{ActskillName}!!! {GameManager.Instance.Dungeon.TargetMonster.Name}이(가) {SkillDamage}의 피해를 입었습니다." ,ConsoleColor.Blue, ConsoleColor.Cyan);
                 Console.WriteLine($"{GameManager.Instance.Player.Name}의{ActskillName}!!! {GameManager.Instance.Dungeon.TargetMonster.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
             }
             else

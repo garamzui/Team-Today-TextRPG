@@ -737,16 +737,12 @@ namespace TeamTodayTextRPG
             Console.WriteLine($"Lv.{GameManager.Instance.Dungeon.TargetMonster.Level}{GameManager.Instance.Dungeon.TargetMonster.Name}\n");
            
             Console.WriteLine($"Lv.{GameManager.Instance.Dungeon.TargetMonster.Level} {GameManager.Instance.Dungeon.TargetMonster.Name}");
-            Console.Write($"HP {GameManager.Instance.Dungeon.TargetMonster.Hp} -> ");
+            
             GameManager.Instance.Player.Character.DefaultAttack();
 
 
 
-            if (GameManager.Instance.Dungeon.TargetMonster.State == MONSTER_STATE.DEAD)
-            {
-                Console.WriteLine("Dead");
-            }
-            else Console.WriteLine($"{GameManager.Instance.Dungeon.TargetMonster.Hp}");
+           
 
             Console.WriteLine("\n0. 다음");
         }
