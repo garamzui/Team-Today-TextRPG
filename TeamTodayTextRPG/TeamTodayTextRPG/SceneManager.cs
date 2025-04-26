@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Security.Cryptography;
+using System.Xml.Linq;
 using TeamTodayTextRPG;
 
 namespace TeamTodayTextRPG
@@ -17,6 +19,46 @@ namespace TeamTodayTextRPG
             //         추후에 가람님의 '그것'을 초기화면으로 설정하도록 바꿀예정입니다. 예를들어...IntroViewer 처럼요
             CurrentViewer = new MainViewer();
         }
+
+        public void PrintCentered(string text)
+        {
+            int consoleWidth = Console.WindowWidth;
+            int padding = (consoleWidth - text.Length) / 2;
+            padding = Math.Max(0, padding-7);
+            Console.WriteLine(new string(' ', padding) + text);
+        }
+
+        public void ColText(string message, int x = 0, int y = -1, ConsoleColor textColor = ConsoleColor.White, ConsoleColor backColor = ConsoleColor.Black, bool system = false)
+        {
+            ConsoleColor prevColor = Console.ForegroundColor;
+
+            if(y >= 0)
+                Console.SetCursorPosition(x, y);
+            else
+                Console.SetCursorPosition(x, Console.CursorTop);
+
+            Console.ForegroundColor = textColor;
+            if (system)
+                Console.Write($"=========================================================================================\n>> [SYSTEM] {message}\n=========================================================================================\n");
+            else
+                Console.Write($"{message}");
+
+            Console.ForegroundColor = prevColor;
+        }
+
+        public void ClearLines(int x, int fromLine, int lineCount)
+        {
+            int width = Console.WindowWidth;
+
+            for (int i = 0; i < lineCount; i++)
+            {
+                Console.SetCursorPosition(0, fromLine + i);
+                Console.Write(new string(' ', width));
+            }
+
+            Console.SetCursorPosition(x, fromLine);
+        }
+
 
         public void SwitchScene(VIEW_TYPE viewType)
         {
@@ -75,20 +117,6 @@ namespace TeamTodayTextRPG
                 default:
                     Console.WriteLine("error");
                     break;
-
-                    //case VIEW_TYPE.MONSTER:
-                    // GameManager에서 직접적으로 몬스터 객체를 가져오는 방식으로 수정
-                    /* 『효빈』GameManager에서 Dungeon을 관리하게 하고 
-                               1) 던전에 입장시에 몬스터들을 관리하는 List<Monster>를 생성  << 데이터 방식은 던전 설계에 따라 바뀔수도 있을 것 같아요
-                               2) 랜덤 값을 이용하여 랜덤하게 몬스터 리스트를 초기화
-                               3) 해당 정보는 GameManager.Instance.Dungeon.MonsterList  << 이런식으로 정보를 받아와서 사용하면 될것 같습니다.
-                     */
-                    // 『효빈』하단의 코드처럼 매개변수로 굳이 받아오지 않아도 된다는 뜻입니다! :)
-                    // Monster currentMonster = gameManager.CurrentMonster;//*GameManager에서 속성을 추가 후 받아야함
-                    //currentViewer = new MonsterViewer(currentMonster);
-
-                    //CurrentViewer = new MonsterViewer();
-                    // break;
             }
             ShowCurrentView();
         }
@@ -96,7 +124,7 @@ namespace TeamTodayTextRPG
         //『효빈』선택지 입력 시 다음 화면으로의 전환
         public VIEW_TYPE ChangeNextView()
         {
-            return CurrentViewer.NextView(InputAction(CurrentViewer.StartIndex, CurrentViewer.EndIndex));
+            return CurrentViewer.NextView(InputAction(CurrentViewer.StartIndex, CurrentViewer.EndIndex, Console.CursorTop));
         }
 
         // 새로운 뷰어의 화면 출력
@@ -104,6 +132,11 @@ namespace TeamTodayTextRPG
         {
             if (CurrentViewer != null)
             {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write("=========================================================================================\n" +
+                              "                          【Sparta Text RPG  _Team Today Present】                       \n" +
+                              "=========================================================================================\n");
+                Console.ResetColor();
                 CurrentViewer.ViewAction();  // gameManager 객체를 넘기기
             }
 
@@ -113,46 +146,46 @@ namespace TeamTodayTextRPG
         public void Intro()
         {
             string? name = string.Empty;
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("스파르타 마을에 오신 여러분 환영합니다.");
-            Console.ResetColor();
-
+   
+            ColText("스파르타 마을에 오신 여러분 환영합니다.", 0, -1, ConsoleColor.Yellow, ConsoleColor.Black, true);
             while (name == string.Empty)
             {
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("원하시는 이름을 설정해주세요.");
-                Console.ResetColor();
-                Console.Write("\n입력 >> ");
+                Console.WriteLine();
+                ColText("[이름 설정] 원하시는 이름을 설정해주세요.\n", 8, -1, ConsoleColor.Yellow, ConsoleColor.Black, false);
+                ColText("입력 >> ", 8, -1, ConsoleColor.White, ConsoleColor.Black, false);
+
                 name = Console.ReadLine();
                 if (name == string.Empty)
                 {
+                    ClearLines(8, 3, 10);
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("이름을 제대로 입력해주세요.\n");
+                    ColText("※※ 빈칸은 이름으로 사용할 수 없습니다 ※※", 8, -1, ConsoleColor.Red, ConsoleColor.Black, false);
                     Console.ResetColor();
                 }
                 else
                 {
                     bool check = true;
 
-                    while (check)
+                    while (check&&name!=string.Empty)
                     {
                         int num = 0;
-                        Console.Write("입력하신 이름은 『 ");
+                        Console.Write("\n\t입력하신 이름은 『 ");
                         Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.Write(name);
                         Console.ResetColor();
                         Console.WriteLine(" 』입니다.\n");
                         Console.ForegroundColor = ConsoleColor.Cyan;
-                        Console.WriteLine("1. 저장");
+                        Console.WriteLine("\t1. 저장");
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("2. 취소\n");
+                        Console.WriteLine("\t2. 취소\n\n");
                         Console.ResetColor();
 
-                        num = SceneManager.Instance.InputAction(1, 2);
+                        num = SceneManager.Instance.InputAction(1, 2, -1);
 
                         if (num == 1) check = false;
                         else if (num == 2)
                         {
+                            ClearLines(8, 3, 20);
                             check = false;
                             name = string.Empty;
                         }
@@ -160,16 +193,19 @@ namespace TeamTodayTextRPG
                 }
             }
             Console.Clear();
+            ColText("스파르타 마을에 오신 여러분 환영합니다.", 0, -1, ConsoleColor.Yellow, ConsoleColor.Black, true);
 
             int classCode = 0;
             while (classCode == 0)
             {
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("원하시는 직업을 설정해주세요.\n");
-                Console.ResetColor();
-                Console.WriteLine("1. 전사\n2. 마법사\n3. 도적\n");
+                Console.WriteLine();
+                ColText("[직업 선택] 원하시는 직업을 골라 주세요.\n", 8, -1, ConsoleColor.Yellow, ConsoleColor.Black, false);
+                ColText("1. 전사\n", 8, -1, ConsoleColor.Yellow, ConsoleColor.Black, false);
+                ColText("2. 마법사\n", 8, -1, ConsoleColor.Yellow, ConsoleColor.Black, false);
+                ColText("3. 도적\n\n", 8, -1, ConsoleColor.Yellow, ConsoleColor.Black, false);
+                Console.WriteLine();
 
-                classCode = SceneManager.Instance.InputAction(1, 3);
+                classCode = SceneManager.Instance.InputAction(1, 3, -1);
                 GameManager.Instance.Player.SetCharacter(classCode, name);
             }
             Console.Clear();
@@ -182,19 +218,27 @@ namespace TeamTodayTextRPG
                 ...이라면 startIndex = 0, endIndex = 2
             리턴 값으로는 "고른 선택지의 번호"를 반환합니다.
         */
-        public int InputAction(int startIndex, int endIndex)
+        public int InputAction(int startIndex, int endIndex, int y)
         {
             string rtnStr = string.Empty;
             int num = -1;
             bool check = false;
             while (!check)
             {
-                Console.Write("원하시는 행동을 입력해주세요.\n>>");
+                if (y < 0)
+                {
+                    ClearLines(16, Console.CursorTop, 8);
+                }
+                else
+                    ClearLines(16, y, 8);
+
+                Console.Write("원하시는 행동을 입력해주세요.\n\t>>");
                 rtnStr = Console.ReadLine();
                 if (rtnStr == string.Empty)
                 {
+                    ClearLines(8, Console.CursorTop - 3, 8);
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("아무 행동도 입력하지 않으셨습니다.\n");
+                    Console.WriteLine("※※ 아무 행동도 입력하지 않으셨습니다 ※※");
                     Console.ResetColor();
                 }
                 else
@@ -203,16 +247,18 @@ namespace TeamTodayTextRPG
                     {
                         if (num < startIndex || num > endIndex)
                         {
+                            ClearLines(8, Console.CursorTop - 3, 8);
                             Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("선택지 내에서 입력해주세요.\n");
+                            Console.WriteLine("※※ 선택지 내에서 입력해주세요 ※※");
                             Console.ResetColor();
                         }
                         else check = true;
                     }
                     else
                     {
+                        ClearLines(8, Console.CursorTop - 3, 8);
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("숫자만 입력해주세요.\n");
+                        Console.WriteLine("※※ 숫자만 입력해주세요 ※※");
                         Console.ResetColor();
                     }
                 }
@@ -220,31 +266,33 @@ namespace TeamTodayTextRPG
             return num;
         }
 
-        
         public void ShowName(string name)
         {
             Console.Write(name + "\t| ");
         }
         public void ShowAtk(int atk)
         {
-            if (atk > 0) Console.Write("공격력 +" + atk + "\t| ");
-            else Console.Write("공격력 -" + atk + "\t| ");
+            if (atk > 0) Console.Write("\t  공격력 +" + atk + "\t| ");
+            else if (atk == 0) Console.Write("\t  공격력 -\t| ");
+            else Console.Write("\t  공격력 -" + atk + "\t| ");
         }
         public void ShowDef(int def)
         {
-            if (def > 0) Console.Write("방어력 +" + def + "\t| ");
-            else Console.Write("방어력 -" + def + "\t| ");
+            if (def > 0) Console.Write("\t  방어력 +" + def + "\t| ");
+            else if (def == 0) Console.Write("\t  방어력 -\t| ");
+            else Console.Write("\t  방어력 -" + def + "\t| ");
         }
 
         public void ShowInventory(VIEW_TYPE view)
         {
+            int count = 0;
             if (GameManager.Instance.Player.Bag != null)
             {
-                int count = 0;
                 foreach (var item in GameManager.Instance.Player.Bag)
                 {
-                    if (view == VIEW_TYPE.EQUIP) Console.Write($"- {++count} ");
-                    else Console.Write("- ");
+                    Console.WriteLine("   -----------------------------------------------------------------------------");
+                    if (view == VIEW_TYPE.EQUIP) Console.Write($"     -{++count} ");
+                    else Console.Write("     -");
 
                     if (GameManager.Instance.Player.CheckEquip(item))
                     {
@@ -252,13 +300,12 @@ namespace TeamTodayTextRPG
                         Console.Write("[E]");
                         Console.ResetColor();
                     }
-
-                    ShowName(DataManager.Instance.ItemDB.List[item][1]);
-                    if (int.Parse(DataManager.Instance.ItemDB.List[item][2]) != 0) ShowAtk(int.Parse(DataManager.Instance.ItemDB.List[item][2]));
-                    if (int.Parse(DataManager.Instance.ItemDB.List[item][3]) != 0) ShowDef(int.Parse(DataManager.Instance.ItemDB.List[item][3]));
-                    Console.Write(DataManager.Instance.ItemDB.List[item][6] + "\t| ");
+                    Console.WriteLine(" 『" + DataManager.Instance.ItemDB.List[item][1] + "』");
+                    ShowAtk(int.Parse(DataManager.Instance.ItemDB.List[item][2]));
+                    ShowDef(int.Parse(DataManager.Instance.ItemDB.List[item][3]));
+                    Console.WriteLine("\t  [ " + DataManager.Instance.ItemDB.List[item][6] + " ]");
                 }
-
+                Console.WriteLine("   -----------------------------------------------------------------------------");
             }
         }
 
@@ -268,23 +315,25 @@ namespace TeamTodayTextRPG
             {
                 foreach (var item in DataManager.Instance.ItemDB.List)
                 {
+                    Console.WriteLine("   -----------------------------------------------------------------------------");
                     if (GameManager.Instance.Player.CheckBag(int.Parse(item[0]))) Console.ForegroundColor = ConsoleColor.DarkGray;
 
-                    if (view == VIEW_TYPE.PURCHASE) Console.Write("- " + (int.Parse(item[0]) + 1) + " " + item[1] + "\t| ");
-                    else Console.Write("- " + item[1] + "\t| ");
-
-                    if (int.Parse(item[2]) != 0) ShowAtk(int.Parse(item[2]));
-                    if (int.Parse(item[3]) != 0) ShowDef(int.Parse(item[3]));
-                    Console.Write(item[6] + "\t| ");
-
+                    string idText = view == VIEW_TYPE.PURCHASE ? "-"+ (int.Parse(item[0]) + 1).ToString() : "-";
+                    Console.WriteLine($"     {idText} 『{item[1]}』");
+                    ShowAtk(int.Parse(item[2]));
+                    ShowDef(int.Parse(item[3]));
                     if (GameManager.Instance.Player.CheckBag(int.Parse(item[0])))
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("구매 완료");
+                        Console.WriteLine("\t [구매 완료]");
                         Console.ResetColor();
                     }
-                    else Console.WriteLine(int.Parse(item[7]) + " G");
+                    else Console.WriteLine("\t [" + int.Parse(item[7]) + " G]");
+                    if (GameManager.Instance.Player.CheckBag(int.Parse(item[0]))) Console.ForegroundColor = ConsoleColor.DarkGray;
+                    Console.WriteLine("\t  [ "+item[6]+" ]");
+                    Console.ResetColor();
                 }
+                Console.WriteLine("   -----------------------------------------------------------------------------");
             }
         }
 
@@ -295,12 +344,14 @@ namespace TeamTodayTextRPG
             {
                 foreach (var item in GameManager.Instance.Player.Bag)
                 {
-                    Console.Write("- " + (++count) + " " + DataManager.Instance.ItemDB.List[item][1] + "\t| ");
-                    if (int.Parse(DataManager.Instance.ItemDB.List[item][2]) != 0) ShowAtk(int.Parse(DataManager.Instance.ItemDB.List[item][2]));
-                    if (int.Parse(DataManager.Instance.ItemDB.List[item][3]) != 0) ShowDef(int.Parse(DataManager.Instance.ItemDB.List[item][3]));
-                    Console.Write(DataManager.Instance.ItemDB.List[item][6] + "\t| ");
-                    Console.WriteLine((int)(int.Parse(DataManager.Instance.ItemDB.List[item][7]) * 0.85) + " G");
+                    Console.WriteLine("   -----------------------------------------------------------------------------");
+                    Console.WriteLine("     -" + (++count) + " 『" + DataManager.Instance.ItemDB.List[item][1] + "』");
+                    ShowAtk(int.Parse(DataManager.Instance.ItemDB.List[item][2]));
+                    ShowDef(int.Parse(DataManager.Instance.ItemDB.List[item][3]));
+                    Console.WriteLine("\t [" + (int)(int.Parse(DataManager.Instance.ItemDB.List[item][7]) * 0.85) + " G]");
+                    Console.WriteLine("\t  [ "+DataManager.Instance.ItemDB.List[item][6] + " ]");
                 }
+                Console.WriteLine("   -----------------------------------------------------------------------------");
             }
         }
     }

@@ -8,6 +8,7 @@ namespace TeamTodayTextRPG
 {
     class TRPG
     {
+
         static void Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
@@ -27,7 +28,7 @@ namespace TeamTodayTextRPG
 
 
                 //『효빈』선택지 입력 시 다음 화면으로의 전환
-                currentView = sm.CurrentViewer.NextView(sm.InputAction(sm.CurrentViewer.StartIndex, sm.CurrentViewer.EndIndex));
+                currentView = sm.CurrentViewer.NextView(sm.InputAction(sm.CurrentViewer.StartIndex, sm.CurrentViewer.EndIndex, Console.CursorTop));
             }
         }
     }
