@@ -130,19 +130,11 @@ namespace TeamTodayTextRPG
         {
             if (HpChange < 0)
             {
-                int DodgeHit = GameManager.Instance.Rand.Next(1, 76);// 피격 메서드에 회피를 구현 해봤습니다.
-                if (TotalDodge > DodgeHit)
-                {
-                    Console.WriteLine("공격을 회피했습니다!");
-                    return;
-                }
-                else
-                {
-                    Hp += HpChange;
-                    if (Hp < 0) Hp = 0;
-                    Console.WriteLine($"{-HpChange}의 피해를 입었습니다! \n현재 Hp : {Hp}/{MaxHp}");
+                Hp += HpChange;
+                if (Hp < 0) Hp = 0;
+                Console.WriteLine($"{-HpChange}의 피해를 입었습니다! \n현재 Hp : {Hp}/{MaxHp}");
 
-                }
+
 
                 if (Hp == 0)
                 {

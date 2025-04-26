@@ -89,13 +89,12 @@ namespace TeamTodayTextRPG
 
         public virtual void DefaultAttack()
         {
-            
             switch (GameManager.Instance.Dungeon.Dungeon_Monster[GameManager.Instance.Dungeon.MonsterAtkCounter].Code)
             {
-                case MONSTER_CODE.Slime :
+                case MONSTER_CODE.Slime:
                     GameManager.Instance.Animation.SlimeAnimation();
                     break;
-                case MONSTER_CODE.Goblin :
+                case MONSTER_CODE.Goblin:
                     GameManager.Instance.Animation.GoblinAnimation();
                     break;
                 case MONSTER_CODE.Wolf:
@@ -111,13 +110,23 @@ namespace TeamTodayTextRPG
                     break;
 
             }
-                       
-            
-            int AttackDamage = Atk - GameManager.Instance.Player.Character.TotalDef;
-            if (AttackDamage <= 0)
-            { AttackDamage = 1; }
-            GameManager.Instance.Player.Character.ManageHp(-AttackDamage);
-            Console.WriteLine($"{GameManager.Instance.Player.Name}에게 {AttackDamage}의 피해");
+            int DodgeHit = GameManager.Instance.Rand.Next(1, 76);// 피격 메서드에 회피를 구현 해봤습니다.
+            if (GameManager.Instance.Player.Character.TotalDodge > DodgeHit)
+            {
+                Console.WriteLine("공격을 회피 했습니다!");
+                return;
+            }
+            else
+            {
+                
+
+
+                int AttackDamage = Atk - GameManager.Instance.Player.Character.TotalDef;
+                if (AttackDamage <= 0)
+                { AttackDamage = 1; }
+                GameManager.Instance.Player.Character.ManageHp(-AttackDamage);
+                Console.WriteLine($"{GameManager.Instance.Player.Name}에게 {AttackDamage}의 피해");
+            }
         }
 
 
