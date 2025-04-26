@@ -17,7 +17,6 @@ namespace TeamTodayTextRPG
         public int Exp { get; set; }
         public int Gold { get; set; }
         public string Name { get; set; }
-        public ITEM_TYPE Type { get; set; }
 
         public int equipedWpCode = -1;
         public int equipedAmCode = -1;
@@ -141,16 +140,17 @@ namespace TeamTodayTextRPG
         }
 
         //인벤토리에 아이템이 나가는 경우 1 - 상점 판매
-        public void RemoveBag(int inputItemCode, VIEW_TYPE type)
+        public void RemoveBag(int inputItemCode, VIEW_TYPE Vtype)
         {
             int prise = int.Parse(DataManager.Instance.ItemDB.List[inputItemCode][7]);
 
             //상점에서 아이템 판매와 버리기
             //Bag에 있고 장착중이 아니라면
-            if (CheckBag(inputItemCode) == true && CheckEquip(inputItemCode) == false)
+            if (CheckBag(inputItemCode) == true && CheckEquip(inputItemCode, ITEM_TYPE.WEAPON) == false ||
+                CheckBag(inputItemCode) == true && CheckEquip(inputItemCode, ITEM_TYPE.ARMOR) == false)
             {
                 //판매하기 화면이라면
-                if (type == VIEW_TYPE.SALE)
+                if (Vtype == VIEW_TYPE.SALE)
                 {
                     Gold += (int)(prise * 0.85f);
                 }
@@ -170,10 +170,10 @@ namespace TeamTodayTextRPG
         //----
 
         //해당 무기 아이템을 장착중이면
-        public bool CheckEquip(int equipItemCode)
+        public bool CheckEquip(int equipItemCode, ITEM_TYPE Itype)
         {
             //해당 코드의 아이템을 장착하고 있는지
-            switch (Type)
+            switch (Itype)
             {
                 case ITEM_TYPE.WEAPON:
                     return WeaponEquip.Contains(equipItemCode);
@@ -187,10 +187,10 @@ namespace TeamTodayTextRPG
         }
 
         //장비 착용
-        public void EquipItem(int equipItemCode)
+        public void EquipItem(int equipItemCode, ITEM_TYPE Itype)
         {
             //타입 비교
-            switch (Type)
+            switch (Itype)
             {
                 case ITEM_TYPE.WEAPON:
                     WeaponEquip.Add(equipItemCode);
@@ -205,7 +205,7 @@ namespace TeamTodayTextRPG
         }
 
         //장비 교체
-        public void ChangeItem(int equipItemCode)
+        public void ChangeItem(int equipItemCode, ITEM_TYPE Itype)
         {
             //장착중이 아니라면
             //if (equipedWpCode == -1 || equipedAmCode == -1) return;
@@ -213,7 +213,7 @@ namespace TeamTodayTextRPG
             //if()
 
             //타입비교
-            switch (Type)
+            switch (Itype)
             {
                 case ITEM_TYPE.WEAPON:
                     WeaponEquip.Clear();
@@ -253,7 +253,7 @@ namespace TeamTodayTextRPG
             int atk = int.Parse(item[2]);
             int def = int.Parse(item[3]);
 
-            if (CheckEquip(code))
+            if (CheckEquip(code, ITEM_TYPE.WEAPON) || CheckEquip(code, ITEM_TYPE.ARMOR))
             {
                 Character.PlusAtk += atk;
                 Character.PlusDef += def;

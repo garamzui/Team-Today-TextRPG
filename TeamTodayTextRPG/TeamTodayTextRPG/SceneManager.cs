@@ -312,7 +312,8 @@ namespace TeamTodayTextRPG
                     if (view == VIEW_TYPE.EQUIP) Console.Write($"     -{++count} ");
                     else Console.Write("     -");
 
-                    if (GameManager.Instance.Player.CheckEquip(item))
+                    if (GameManager.Instance.Player.CheckEquip(item, ITEM_TYPE.WEAPON) ||
+                        GameManager.Instance.Player.CheckEquip(item, ITEM_TYPE.ARMOR))
                     {
                         Console.ForegroundColor = ConsoleColor.Green;
                         Console.Write("[E]");

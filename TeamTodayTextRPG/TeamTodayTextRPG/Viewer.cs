@@ -293,7 +293,8 @@ namespace TeamTodayTextRPG
                 int itemCode = player.Bag[i];
                 var item = DataManager.Instance.ItemDB.List[itemCode];
 
-                string equippedMark = player.CheckEquip(itemCode) ? "[E]" : "";
+                string equippedMark = player.CheckEquip(itemCode, ITEM_TYPE.WEAPON) ||
+                    player.CheckEquip(itemCode, ITEM_TYPE.ARMOR) ? "[E]" : "";
                 Console.WriteLine($"- {i + 1} {equippedMark}{item[1]} " +
                     $"| 공격력 +{item[2]} | 방어력 +{item[3]} | {item[6]}");
             }
@@ -302,10 +303,12 @@ namespace TeamTodayTextRPG
             Console.WriteLine("1~n. 장비 변경");
             Console.WriteLine("0. 메인으로 돌아가기");
         }
+        
 
         public override VIEW_TYPE NextView(int input)
         {
             var player = GameManager.Instance.Player;
+            
 
             if (input == 0)
                 return VIEW_TYPE.MAIN;
@@ -315,14 +318,15 @@ namespace TeamTodayTextRPG
             if (index >= 0 && index < player.Bag.Count)
             {
                 int itemCode = player.Bag[index];  // 실제 아이템 코드 가져오기
+                int Itype = int.Parse(DataManager.Instance.ItemDB.List[itemCode][8]);
 
-                switch (player.Type)
+                switch (Itype)
                 {
-                    case ITEM_TYPE.WEAPON:
+                    case (int)(ITEM_TYPE.WEAPON):
 
                         if (player.equipedWpCode == -1)
                         {
-                            player.EquipItem(itemCode);
+                            player.EquipItem(itemCode, ITEM_TYPE.WEAPON);
                             player.ChangeStat(itemCode);
                             Console.ForegroundColor = ConsoleColor.Green;
                             Console.WriteLine("장비를 장착했습니다!");
@@ -338,18 +342,18 @@ namespace TeamTodayTextRPG
 
                         else
                         {
-                            player.ChangeItem(itemCode);
+                            player.ChangeItem(itemCode, ITEM_TYPE.WEAPON);
                             player.ChangeStat(itemCode);
                             Console.ForegroundColor = ConsoleColor.Yellow;
                             Console.WriteLine("장비를 교체했습니다!");
                         }
                         break;
 
-                    case ITEM_TYPE.ARMOR:
+                    case (int)(ITEM_TYPE.ARMOR):
 
-                        if(player.equipedAmCode == -1)
+                        if (player.equipedAmCode == -1)
                         {
-                            player.EquipItem(itemCode);
+                            player.EquipItem(itemCode, ITEM_TYPE.ARMOR);
                             player.ChangeStat(itemCode);
                             Console.ForegroundColor = ConsoleColor.Green;
                             Console.WriteLine("장비를 장착했습니다!");
@@ -365,7 +369,7 @@ namespace TeamTodayTextRPG
 
                         else
                         {
-                            player.ChangeItem(itemCode);
+                            player.ChangeItem(itemCode, ITEM_TYPE.ARMOR);
                             player.ChangeStat(itemCode);
                             Console.ForegroundColor = ConsoleColor.Yellow;
                             Console.WriteLine("장비를 교체했습니다!");
