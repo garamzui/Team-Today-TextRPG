@@ -780,11 +780,11 @@ namespace TeamTodayTextRPG
             if (GameManager.Instance.Dungeon.Dungeon_Monster[GameManager.Instance.Dungeon.MonsterAtkCounter].State == MONSTER_STATE.IDLE)
             {
                 Console.WriteLine("Battle!!\n");
-                GameManager.Instance.Dungeon.TargetMonster.DefaultAttack();
-                Console.WriteLine($"Lv.{GameManager.Instance.Dungeon.Dungeon_Monster[GameManager.Instance.Dungeon.MonsterAtkCounter].Level} {GameManager.Instance.Dungeon.Dungeon_Monster[GameManager.Instance.Dungeon.MonsterAtkCounter].Name} 의 공격!");
                 
+                Console.WriteLine($"Lv.{GameManager.Instance.Dungeon.Dungeon_Monster[GameManager.Instance.Dungeon.MonsterAtkCounter].Level} {GameManager.Instance.Dungeon.Dungeon_Monster[GameManager.Instance.Dungeon.MonsterAtkCounter].Name} 의 공격!");
+                GameManager.Instance.Dungeon.TargetMonster.DefaultAttack();
 
-                Console.WriteLine($"Lv.{GameManager.Instance.Player.Level} {GameManager.Instance.Player.Name}");
+                
                 //Console.Write($"HP {GameManager.Instance.Player.Character.Hp} -> ");
                 
                 //Console.WriteLine($"{GameManager.Instance.Player.Character.Hp}\n");

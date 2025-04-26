@@ -125,7 +125,7 @@ namespace TeamTodayTextRPG
                 if (AttackDamage <= 0)
                 { AttackDamage = 1; }
                 GameManager.Instance.Player.Character.ManageHp(-AttackDamage);
-                Console.WriteLine($"{GameManager.Instance.Player.Name}에게 {AttackDamage}의 피해");
+                
             }
         }
 
