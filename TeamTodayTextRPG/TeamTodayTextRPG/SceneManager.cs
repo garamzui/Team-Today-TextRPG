@@ -28,7 +28,20 @@ namespace TeamTodayTextRPG
             Console.WriteLine(new string(' ', padding) + text);
         }
 
-        public void ColText(string message, int x = 0, int y = -1, ConsoleColor textColor = ConsoleColor.White, ConsoleColor backColor = ConsoleColor.Black, bool system = false)
+        // 매개변수 : 메세지 , 글자색, 배경색
+        public void ColText(string message, ConsoleColor textColor = ConsoleColor.White, ConsoleColor backColor = ConsoleColor.Black)
+        {
+            ConsoleColor prevColor = Console.ForegroundColor;
+            ConsoleColor prevBackColor = Console.BackgroundColor;
+
+            Console.BackgroundColor = backColor;
+            Console.ForegroundColor = textColor;
+            Console.Write($"{message}");
+            Console.ForegroundColor = prevColor;
+            Console.BackgroundColor = prevBackColor;
+        }
+
+        public void SysText(string message, int x = 0, int y = -1, ConsoleColor textColor = ConsoleColor.White, ConsoleColor backColor = ConsoleColor.Black, bool system = false)
         {
             ConsoleColor prevColor = Console.ForegroundColor;
 
@@ -46,6 +59,8 @@ namespace TeamTodayTextRPG
             Console.ForegroundColor = prevColor;
         }
 
+
+        // >>> 문제 있음 수정 요구
         public void ClearLines(int x, int fromLine, int lineCount)
         {
             int width = Console.WindowWidth;
@@ -146,20 +161,23 @@ namespace TeamTodayTextRPG
         public void Intro()
         {
             string? name = string.Empty;
-   
-            ColText("스파르타 마을에 오신 여러분 환영합니다.", 0, -1, ConsoleColor.Yellow, ConsoleColor.Black, true);
+        
+            SysText("스파르타 마을에 오신 여러분 환영합니다.", 0, -1, ConsoleColor.Yellow, ConsoleColor.Black, true);
             while (name == string.Empty)
             {
                 Console.WriteLine();
-                ColText("[이름 설정] 원하시는 이름을 설정해주세요.\n", 8, -1, ConsoleColor.Yellow, ConsoleColor.Black, false);
-                ColText("입력 >> ", 8, -1, ConsoleColor.White, ConsoleColor.Black, false);
+                //글자색 빨강 배경색 노랑
+                SceneManager.Instance.ColText("[E] ", ConsoleColor.Green, ConsoleColor.Black);
+
+                SysText("[이름 설정] 원하시는 이름을 설정해주세요.\n", 8, -1, ConsoleColor.Yellow, ConsoleColor.Black, false);
+                SysText("입력 >> ", 8, -1, ConsoleColor.White, ConsoleColor.Black, false);
 
                 name = Console.ReadLine();
                 if (name == string.Empty)
                 {
                     ClearLines(8, 3, 10);
                     Console.ForegroundColor = ConsoleColor.Red;
-                    ColText("※※ 빈칸은 이름으로 사용할 수 없습니다 ※※", 8, -1, ConsoleColor.Red, ConsoleColor.Black, false);
+                    SysText("※※ 빈칸은 이름으로 사용할 수 없습니다 ※※", 8, -1, ConsoleColor.Red, ConsoleColor.Black, false);
                     Console.ResetColor();
                 }
                 else
@@ -193,16 +211,16 @@ namespace TeamTodayTextRPG
                 }
             }
             Console.Clear();
-            ColText("스파르타 마을에 오신 여러분 환영합니다.", 0, -1, ConsoleColor.Yellow, ConsoleColor.Black, true);
+            SysText("스파르타 마을에 오신 여러분 환영합니다.", 0, -1, ConsoleColor.Yellow, ConsoleColor.Black, true);
 
             int classCode = 0;
             while (classCode == 0)
             {
                 Console.WriteLine();
-                ColText("[직업 선택] 원하시는 직업을 골라 주세요.\n", 8, -1, ConsoleColor.Yellow, ConsoleColor.Black, false);
-                ColText("1. 전사\n", 8, -1, ConsoleColor.Yellow, ConsoleColor.Black, false);
-                ColText("2. 마법사\n", 8, -1, ConsoleColor.Yellow, ConsoleColor.Black, false);
-                ColText("3. 도적\n\n", 8, -1, ConsoleColor.Yellow, ConsoleColor.Black, false);
+                SysText("[직업 선택] 원하시는 직업을 골라 주세요.\n", 8, -1, ConsoleColor.Yellow, ConsoleColor.Black, false);
+                SysText("1. 전사\n", 8, -1, ConsoleColor.Yellow, ConsoleColor.Black, false);
+                SysText("2. 마법사\n", 8, -1, ConsoleColor.Yellow, ConsoleColor.Black, false);
+                SysText("3. 도적\n\n", 8, -1, ConsoleColor.Yellow, ConsoleColor.Black, false);
                 Console.WriteLine();
 
                 classCode = SceneManager.Instance.InputAction(1, 3, -1);
@@ -232,7 +250,7 @@ namespace TeamTodayTextRPG
                 else
                     ClearLines(16, y, 8);
 
-                Console.Write("원하시는 행동을 입력해주세요.\n\t>>");
+                Console.Write("원하시는 행동을 입력해주세요.\n\t\t>>");
                 rtnStr = Console.ReadLine();
                 if (rtnStr == string.Empty)
                 {
