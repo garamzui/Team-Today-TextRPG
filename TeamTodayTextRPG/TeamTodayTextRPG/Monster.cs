@@ -70,12 +70,20 @@ namespace TeamTodayTextRPG
             {
                 Hp += HpChange; //최종 계산 자료를 음수로 입력해 주어야 합니다.
 
-                Console.WriteLine($"{Name}이(가){HpChange}의 데미지를 입었습니다. 현재 HP: {Hp}/{MaxHp}");
+                Console.WriteLine($"{Name}이(가){HpChange}의 데미지를 입었습니다. ");
                 if (Hp <= 0)
                 {
                     Hp = 0;
                     Die();
                 }
+                
+                Console.Write($"HP {GameManager.Instance.Dungeon.TargetMonster.Hp-HpChange} -> ");
+                if (GameManager.Instance.Dungeon.TargetMonster.State == MONSTER_STATE.DEAD)
+                {
+                    Console.WriteLine("Dead");
+                }
+                else Console.WriteLine($"{GameManager.Instance.Dungeon.TargetMonster.Hp}");
+
             }
             else if (HpChange > 0)
             {
@@ -118,14 +126,16 @@ namespace TeamTodayTextRPG
             }
             else
             {
-                
+                Console.WriteLine("Battle!!\n");
+
+                Console.WriteLine($"Lv.{GameManager.Instance.Dungeon.Dungeon_Monster[GameManager.Instance.Dungeon.MonsterAtkCounter].Level} {GameManager.Instance.Dungeon.Dungeon_Monster[GameManager.Instance.Dungeon.MonsterAtkCounter].Name} 의 공격!");
 
 
                 int AttackDamage = Atk - GameManager.Instance.Player.Character.TotalDef;
                 if (AttackDamage <= 0)
                 { AttackDamage = 1; }
                 GameManager.Instance.Player.Character.ManageHp(-AttackDamage);
-                Console.WriteLine($"{GameManager.Instance.Player.Name}에게 {AttackDamage}의 피해");
+                
             }
         }
 
