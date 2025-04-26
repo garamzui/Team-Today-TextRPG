@@ -18,10 +18,20 @@ namespace TeamTodayTextRPG
         MAGICIAN,
         ASSASSIN
     }
+   
 
     public abstract class Character
     {
-        public Monster Monster { get; set; }
+        public List<string> ChooseBehavior { get; private set; }
+
+        public Character()
+        {
+            ChooseBehavior = new List<string>();
+            ChooseBehavior.Add("기본 공격");
+            ChooseBehavior.Add("스킬");
+            
+        }
+
         public CHAR_TYPE Code { get; set; }
         public string Jobname { get; set; }
         public int Attack { get; set; }
@@ -164,6 +174,7 @@ namespace TeamTodayTextRPG
         public void Die()
         {
             Console.WriteLine("눈앞이 깜깜해진다..");
+            GameManager.Instance.Animation.GameOverAnimation();
         }
 
         public void ManageMp(int ChangeMp) //Mp관리용 메서드입니다. Mp소모 매서드 이용시 최종 계산 자료를 음수로 입력하여야합니다

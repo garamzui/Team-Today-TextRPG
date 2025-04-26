@@ -4,6 +4,7 @@ using System.Numerics;
 using System.Threading;
 using System.Xml.Linq;
 using TeamTodayTextRPG;
+using static System.Collections.Specialized.BitVector32;
 
 namespace TeamTodayTextRPG
 {
@@ -783,6 +784,9 @@ namespace TeamTodayTextRPG
             }
             else if (input > 0 && input <= GameManager.Instance.Dungeon.Dungeon_Monster.Count)
             {
+                
+                //행동 선택 뷰가 들어갈 자리
+
                 // 해당 몬스터가 죽은 상태라면
                 if (GameManager.Instance.Dungeon.Dungeon_Monster[input-1].State == MONSTER_STATE.DEAD)
                 {
@@ -805,6 +809,70 @@ namespace TeamTodayTextRPG
             }
         }
     }
+
+    public class ChooseBehaviorViewer : Viewer
+    {
+        public ChooseBehaviorViewer()
+        {
+            StartIndex = 0;
+            EndIndex = GameManager.Instance.Player.Character.ChooseBehavior.Count;
+        }
+
+        public override void ViewAction()
+        {
+            Console.WriteLine("무엇을 하시겠습니까?\n");
+            int count = 1;
+            foreach (var monster in GameManager.Instance.Dungeon.Dungeon_Monster)
+            {
+                Console.Write($"{count++} ");
+                monster.View_Monster_Status();
+            }
+
+            Console.WriteLine("\n[내정보]");
+            Console.WriteLine($"Lv.{GameManager.Instance.Player.Level}\t {GameManager.Instance.Player.Name} ({GameManager.Instance.Player.Character.Jobname})");
+            Console.WriteLine($"HP {GameManager.Instance.Player.Character.Hp}/{GameManager.Instance.Player.Character.MaxHp}");
+
+            Console.WriteLine("====================");
+            Console.WriteLine("0. 도망");
+
+            Console.WriteLine("대상을 선택해주세요.");
+        }
+        public override VIEW_TYPE NextView(int input)
+        {
+            Console.Clear();
+            if (input == 0)
+            {
+                return VIEW_TYPE.MAIN;
+            }
+            else if (input > 0 && input <= GameManager.Instance.Player.Character.ChooseBehavior.Count)
+            {
+               
+                if (GameManager.Instance.Dungeon.Dungeon_Monster[input - 1].State == MONSTER_STATE.DEAD)
+                {
+                    Console.WriteLine("이미 싸늘한 상태입니다. 다른 적을 선택해주세요.");
+                    return VIEW_TYPE.BATTLE_PLAYER;
+                }
+                // 해당 몬스터가 죽지 않았다면 대미지 처리 화면으로 이동
+                else
+                {
+                    //GameManager.Instance.Animation = new CharaterAnimation();
+
+                    GameManager.Instance.Dungeon.TargetMonster = GameManager.Instance.Dungeon.Dungeon_Monster[input - 1];
+                    return VIEW_TYPE.BATTLE_PLAYER_LOG;
+                }
+            }
+            else
+            {
+                Console.WriteLine("잘못된 입력입니다.");
+                return VIEW_TYPE.BATTLE_PLAYER;
+            }
+        }
+    
+    }
+
+
+
+
 
 
     public class BattlePlayerLogViewer : Viewer
