@@ -234,7 +234,7 @@ namespace TeamTodayTextRPG
         public override void ViewAction()
         {
             //SceneManager.Instance.ColText("스파르타 마을에 오신 여러분 환영합니다.", 0, -1, ConsoleColor.Yellow, ConsoleColor.Black, true);
-            SceneManager.Instance.ColText("\t『가방』", 8, -1, ConsoleColor.Cyan, ConsoleColor.Black, false);
+            SceneManager.Instance.ColText("\t\t『가방』", 8, -1, ConsoleColor.Cyan, ConsoleColor.Black, false);
             Console.WriteLine(" 아이템을 확인하거나, 소모품을 사용할 수 있습니다.\n");
             Console.WriteLine("  =====[목록]=====================================================================");
             SceneManager.Instance.ShowInventory(VIEW_TYPE.INVENTORY);
@@ -303,6 +303,7 @@ namespace TeamTodayTextRPG
             Console.WriteLine("0. 메인으로 돌아가기");
         }
 
+        private int equipedItemCode = 0;
         public override VIEW_TYPE NextView(int input)
         {
             var player = GameManager.Instance.Player;
@@ -311,6 +312,7 @@ namespace TeamTodayTextRPG
                 return VIEW_TYPE.MAIN;
 
             int index = input - 1;
+            
 
             if (index >= 0 && index < player.Bag.Count)
             {
@@ -318,14 +320,27 @@ namespace TeamTodayTextRPG
 
                 if (player.CheckEquip(itemCode))
                 {
-                    player.UnEquipItem(itemCode);
-                    player.StatChange(itemCode);  // <-- 여기 수정
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine("장비를 해제했습니다!");
+                    if (DataManager.Instance.ItemDB.List[equipedItemCode][8] ==
+                        DataManager.Instance.ItemDB.List[itemCode][8])
+                    {
+                        player.ChangeItem(itemCode ,equipedItemCode);
+                        player.StatChange(equipedItemCode);
+                        player.StatChange(itemCode);
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine("장비를 교체했습니다!");
+                    }
+                    else
+                    {
+                        player.UnEquipItem(itemCode);
+                        player.StatChange(itemCode);
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine("장비를 해제했습니다!");
+                    }
                 }
                 else
                 {
-                    player.Equip.Add(itemCode);  // 장착 리스트에 추가
+                    equipedItemCode = itemCode;
+                    player.EquipItem(itemCode);  // 장착 리스트에 추가
                     player.StatChange(itemCode);  // <-- 여기 수정
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine("장비를 장착했습니다!");
@@ -354,7 +369,7 @@ namespace TeamTodayTextRPG
         public override void ViewAction()
         {
             //SceneManager.Instance.ColText("Sparta Text RPG  _Team Today Present", 0, -1, ConsoleColor.Yellow, ConsoleColor.Black, true);
-            SceneManager.Instance.ColText("『상점』", 8, -1, ConsoleColor.Cyan, ConsoleColor.Black, false);
+            SceneManager.Instance.ColText("\t\t『상점』", 8, -1, ConsoleColor.Cyan, ConsoleColor.Black, false);
             Console.WriteLine(" 필요한 아이템을 구매하거나 판매합니다.\n");
 
             Console.Write("\t\t\t\t\t소지금 : ");
@@ -405,7 +420,7 @@ namespace TeamTodayTextRPG
 
         public override void ViewAction()
         {
-            SceneManager.Instance.ColText("『상점 - 구매』", 8, -1, ConsoleColor.Cyan, ConsoleColor.Black, false);
+            SceneManager.Instance.ColText("\t\t『상점 - 구매』", 8, -1, ConsoleColor.Cyan, ConsoleColor.Black, false);
             Console.WriteLine(" 필요한 아이템을 골드를 주고 구매합니다.\n");
             Console.Write("\t\t\t\t\t소지금 : ");
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -469,7 +484,7 @@ namespace TeamTodayTextRPG
         }
         public override void ViewAction()
         {
-            SceneManager.Instance.ColText("『상점 - 판매』", 8, -1, ConsoleColor.Cyan, ConsoleColor.Black, false);
+            SceneManager.Instance.ColText("\t\t『상점 - 판매』", 8, -1, ConsoleColor.Cyan, ConsoleColor.Black, false);
             Console.WriteLine(" 필요없는 아이템을 골드를 받고 판매합니다.\n");
             Console.Write("\t\t\t\t\t소지금 : ");
             Console.ForegroundColor = ConsoleColor.Yellow;
