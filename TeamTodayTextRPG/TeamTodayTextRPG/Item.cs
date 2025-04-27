@@ -8,14 +8,9 @@ namespace TeamTodayTextRPG
 {
     public enum ITEM_TYPE
     {
-        WEAPON = 0,        //무기
-        ARMOR = 1,         //방어구
-        CONSUMABLE = 2,    //소모품
-    }
-
-    public enum ITEM_CODE
-    {
-
+        WEAPON = 0,     //무기
+        ARMOR,          //방어구
+        CONSUMABLE      //소모품
     }
 
     public abstract class Item
@@ -31,10 +26,8 @@ namespace TeamTodayTextRPG
         public int Value { get; private set; }
         public string[]? Parameter { get; set; }
 
-        public void Init(string[] str) //Parse로 데이터 변환
+        public Item (string[] str) //Parse로 데이터 변환
         {
-            Parameter = str;
-
             Code = int.Parse(str[0]);
             Name = str[1];
             Atk = int.Parse(str[2]);
@@ -77,15 +70,6 @@ namespace TeamTodayTextRPG
 
         }
     }
-
-    public class LinenArmor : Item
-    {
-        public LinenArmor()
-        {
-            Init(DataManager.Instance.ItemDB.List[(int)Code]);
-        }
-    }
-
 
 
     /*
