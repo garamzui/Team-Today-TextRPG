@@ -365,7 +365,7 @@ namespace TeamTodayTextRPG
                         break;
 
                     case ITEM_TYPE.ARMOR:
-                        for (int i = 8; i < 12; i++)
+                        for (int i = 8; i < 14; i++)
                         {
                             Console.WriteLine("   -----------------------------------------------------------------------------");
                             if (GameManager.Instance.Player.CheckBag(int.Parse(item[i][0]))) Console.ForegroundColor = ConsoleColor.DarkGray;
