@@ -3,6 +3,7 @@
     public class SceneManager
     {
         public Viewer CurrentViewer { get; set; }
+        public int TabPage { get; set; } = 0;
 
         private static readonly Lazy<SceneManager> lazyInstance = new Lazy<SceneManager>(() => new SceneManager());
         public static SceneManager Instance => lazyInstance.Value;
