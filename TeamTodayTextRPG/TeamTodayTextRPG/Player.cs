@@ -69,7 +69,7 @@ namespace TeamTodayTextRPG
             //천 옷과 목검 Bag 리스트에 저장한다
             //직업별 초기 장비가 다르다면 수정
             Bag.Add(int.Parse(DataManager.Instance.ItemDB.List[0][0])); // 천 옷 기본제공
-            Bag.Add(int.Parse(DataManager.Instance.ItemDB.List[4][0])); // 목검 기본제공
+            Bag.Add(int.Parse(DataManager.Instance.ItemDB.List[1][0])); // 목검 기본제공  <- 인덱스 바뀔 예정
 
             //초기 장비를 가지고 있되 장착은 되어있지 않은 상태로 시작해서
             //인벤토리를 처음 열면 장착&해제 튜토리얼 구현해 보는 것 괜찮을지도
@@ -148,13 +148,13 @@ namespace TeamTodayTextRPG
             //던전 클리어 시 랜덤(20%) 확률로 아이템 드롭
             if (type == VIEW_TYPE.DUNGEON_RESULT)
             {
-                int ItemDrop = GameManager.Instance.Rand.Next(0, 101);
+                int randNum = GameManager.Instance.Rand.Next(0, 101);
                 //20% 확률로
-                if (ItemDrop >= 90 || ItemDrop <= 10)
+                if (randNum >= 90 || randNum <= 10)
                 {
                     //랜덤 아이템 드롭
-                    int dropItemCode = GameManager.Instance.Rand.Next(0, DataManager.Instance.ItemDB.List.Count);
-                    Bag.Add(dropItemCode);
+                    int dropItemCode = GameManager.Instance.Rand.Next(0, DataManager.Instance.ItemDB.List.Count + 1);
+                    Bag.Add(int.Parse(DataManager.Instance.ItemDB.List[dropItemCode][0]));
                 }
             }
         }
