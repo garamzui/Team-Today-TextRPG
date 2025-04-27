@@ -96,12 +96,10 @@ namespace TeamTodayTextRPG
             }
             else return false;
         }
-
-        //휴식 기능
-        public void Rest()
+        public void GetReward(int gold, int exp)
         {
-            Character.Hp += 50;
-            Gold -= 500;
+            Gold += gold;
+            Exp += exp;
         }
     }
 
@@ -134,7 +132,7 @@ namespace TeamTodayTextRPG
 
             //인벤토리에 아이템이 들어오는 경우 2 - 던전 클리어
             //던전 클리어 시 랜덤(20%) 확률로 아이템 드롭
-            if (type == VIEW_TYPE.DUNGEON_CLEAR)
+            if (type == VIEW_TYPE.DUNGEON_RESULT)
             {
                 int randNum = GameManager.Instance.Rand.Next(0, 101);
                 //20% 확률로
