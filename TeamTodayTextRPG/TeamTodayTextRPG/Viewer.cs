@@ -1313,6 +1313,7 @@ namespace TeamTodayTextRPG
 
                 Player.GetReward(Dungeon.Reward, Dungeon.Exp);
                 Player.LevelUp();
+                
 
                 //if (dungeon.Diff == DUNGEON_DIFF.Hell)
                 Console.WriteLine();
@@ -1408,6 +1409,73 @@ namespace TeamTodayTextRPG
             }
         }
     }
+
+    //public class Quest : Viewer
+    //{
+    //    public Quest()
+    //    {
+    //        StartIndex = 0;
+    //        EndIndex = //숫자;
+            
+    //    }
+    //    public override void ViewAction()
+    //    {
+    //        SceneManager.Instance.ColText($"    『{Dungeon.Name}』", ConsoleColor.Magenta, ConsoleColor.Black);
+    //        SceneManager.Instance.ColText($" {Dungeon.Text}\n\n", ConsoleColor.DarkMagenta, ConsoleColor.Black);
+
+    //        SceneManager.Instance.ColText($" >> TURN [{Dungeon.Turn}]  Battle!!!\n", ConsoleColor.Yellow, ConsoleColor.Black);
+    //        Console.WriteLine($"  ━━━━━ ✦ 몬스터 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+    //        int count = 1;
+    //        foreach (var monster in Dungeon.Dungeon_Monster)
+    //        {
+    //            Console.Write($"\t【 {count++} 】 ");
+    //            monster.View_Monster_Status();
+    //            Console.WriteLine();
+    //        }
+    //        Console.WriteLine("");
+    //        Console.WriteLine($"  ━━━━━ ✦ 플레이어 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+    //        ViewStatusDun();
+    //        Console.WriteLine($"  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+
+    //        Console.WriteLine($"\t1~{count - 1}. 공격 대상 선택(번호 입력)");
+    //        Console.WriteLine("\n\t0. 도망\n\n");
+
+    //    }
+    //    public override VIEW_TYPE NextView(int input)
+    //    {
+    //        Console.Clear();
+    //        if (input == 0)
+    //        {
+    //            SceneManager.Instance.SysText("☆★☆★☆ 당신은 한심하게 빤스런을 했습니다 ☆★☆★☆", ConsoleColor.Red, ConsoleColor.Black);
+    //            return VIEW_TYPE.MAIN;
+    //        }
+    //        else if (input > 0 && input <= Dungeon.Dungeon_Monster.Count)
+    //        {
+
+    //            //행동 선택 뷰가 들어갈 자리
+
+    //            // 해당 몬스터가 죽은 상태라면
+    //            if (Dungeon.Dungeon_Monster[input - 1].State == MONSTER_STATE.DEAD)
+    //            {
+    //                SceneManager.Instance.SysText("이미 싸늘한 상태입니다... 시체를 배려해주세요", ConsoleColor.Red, ConsoleColor.Black);
+
+    //                return VIEW_TYPE.BATTLE_PLAYER;
+    //            }
+    //            // 해당 몬스터가 죽지 않았다면 대미지 처리 화면으로 이동
+    //            else
+    //            {
+    //                Dungeon.TargetMonsterIndex = input - 1;
+    //                Dungeon.TargetMonster = Dungeon.Dungeon_Monster[Dungeon.TargetMonsterIndex];
+    //                SceneManager.Instance.SysDefault();
+    //                return VIEW_TYPE.CHOOSE_BEHAVIOR;
+    //            }
+    //        }
+    //        else
+    //        {
+    //            return VIEW_TYPE.BATTLE_PLAYER;
+    //        }
+    //    }
+    //}
 }
     /*
     public class BattleViewer : Viewer
