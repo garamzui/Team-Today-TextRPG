@@ -30,7 +30,7 @@ namespace TeamTodayTextRPG
         public Player Player { get; set; }
         public Random Rand { get; set; }
         public Dungeon Dungeon { get; set; }
-
+        public NonePlayerableChatacter NonePlayerableChatacter { get; set; }
         public Animation Animation { get; set; }
         
 

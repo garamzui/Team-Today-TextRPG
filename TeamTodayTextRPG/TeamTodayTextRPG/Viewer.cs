@@ -34,7 +34,10 @@ namespace TeamTodayTextRPG
 
         REST,           // 휴식 화면
         MONSTER,         // 몬스터 화면
-        CHOOSE_BEHAVIOR
+        CHOOSE_BEHAVIOR,
+        BACK_STREET,
+        QUEST
+        
     }
 
     // 모든 뷰어 클래스의 부모가 되는 추상 클래스
@@ -1410,214 +1413,256 @@ namespace TeamTodayTextRPG
         }
     }
 
-    //public class Quest : Viewer
-    //{
-    //    public Quest()
-    //    {
-    //        StartIndex = 0;
-    //        EndIndex = //숫자;
-            
-    //    }
-    //    public override void ViewAction()
-    //    {
-    //        SceneManager.Instance.ColText($"    『{Dungeon.Name}』", ConsoleColor.Magenta, ConsoleColor.Black);
-    //        SceneManager.Instance.ColText($" {Dungeon.Text}\n\n", ConsoleColor.DarkMagenta, ConsoleColor.Black);
-
-    //        SceneManager.Instance.ColText($" >> TURN [{Dungeon.Turn}]  Battle!!!\n", ConsoleColor.Yellow, ConsoleColor.Black);
-    //        Console.WriteLine($"  ━━━━━ ✦ 몬스터 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-    //        int count = 1;
-    //        foreach (var monster in Dungeon.Dungeon_Monster)
-    //        {
-    //            Console.Write($"\t【 {count++} 】 ");
-    //            monster.View_Monster_Status();
-    //            Console.WriteLine();
-    //        }
-    //        Console.WriteLine("");
-    //        Console.WriteLine($"  ━━━━━ ✦ 플레이어 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-    //        ViewStatusDun();
-    //        Console.WriteLine($"  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-
-    //        Console.WriteLine($"\t1~{count - 1}. 공격 대상 선택(번호 입력)");
-    //        Console.WriteLine("\n\t0. 도망\n\n");
-
-    //    }
-    //    public override VIEW_TYPE NextView(int input)
-    //    {
-    //        Console.Clear();
-    //        if (input == 0)
-    //        {
-    //            SceneManager.Instance.SysText("☆★☆★☆ 당신은 한심하게 빤스런을 했습니다 ☆★☆★☆", ConsoleColor.Red, ConsoleColor.Black);
-    //            return VIEW_TYPE.MAIN;
-    //        }
-    //        else if (input > 0 && input <= Dungeon.Dungeon_Monster.Count)
-    //        {
-
-    //            //행동 선택 뷰가 들어갈 자리
-
-    //            // 해당 몬스터가 죽은 상태라면
-    //            if (Dungeon.Dungeon_Monster[input - 1].State == MONSTER_STATE.DEAD)
-    //            {
-    //                SceneManager.Instance.SysText("이미 싸늘한 상태입니다... 시체를 배려해주세요", ConsoleColor.Red, ConsoleColor.Black);
-
-    //                return VIEW_TYPE.BATTLE_PLAYER;
-    //            }
-    //            // 해당 몬스터가 죽지 않았다면 대미지 처리 화면으로 이동
-    //            else
-    //            {
-    //                Dungeon.TargetMonsterIndex = input - 1;
-    //                Dungeon.TargetMonster = Dungeon.Dungeon_Monster[Dungeon.TargetMonsterIndex];
-    //                SceneManager.Instance.SysDefault();
-    //                return VIEW_TYPE.CHOOSE_BEHAVIOR;
-    //            }
-    //        }
-    //        else
-    //        {
-    //            return VIEW_TYPE.BATTLE_PLAYER;
-    //        }
-    //    }
-    //}
-}
-    /*
-    public class BattleViewer : Viewer
+    public class BackStreetViewer : Viewer
     {
-        public BattleViewer()
+        public BackStreetViewer()
         {
-            StartIndex = 1;
-            EndIndex = 2;
+            StartIndex = 0;
+            EndIndex = GameManager.Instance.NonePlayerableChatacter.NPC.Count;
         }
-
         public override void ViewAction()
         {
-            Console.Clear();
-            Console.WriteLine(" 전투 시작 ");
-            Console.WriteLine("====================");
+            SceneManager.Instance.ColText("    『뒷골목』", ConsoleColor.Cyan, ConsoleColor.Black);
+            SceneManager.Instance.ColText(" 사람들과 대화를 나눌 수 있습니다..\n\n", ConsoleColor.DarkCyan, ConsoleColor.Black);
+            Console.WriteLine("\t━━━━━ ✦ N P C ✦ ━━━━━━━━━━━━━━━━━━━━\n");
+            Console.WriteLine("\t【 1 】 노인\n\t【 2 】 소녀\n\t【 3 】 대장장이\n\t【 4 】 수상한 사람");
+                      
 
-            var character = GameManager.Instance.Player.Character;
-            var enemy = GameManager.Instance.BattleEnemy;
-
-            Console.WriteLine($"플레이어 체력: {character.Hp}/{character.MaxHp}");
-            Console.WriteLine($"적 몬스터 체력: {enemy.Hp}/{enemy.MaxHp}");
-
-            Console.WriteLine("====================");
-            Console.WriteLine("1. 공격");
-            Console.WriteLine("2. 도망");
-
-            int input = GetInput();
-            VIEW_TYPE nextView = NextView(input);
-            SceneManager.Instance.SwitchScene(nextView);
+            Console.WriteLine("\n\t>> 0. 돌아가기\n\n");
         }
-
         public override VIEW_TYPE NextView(int input)
         {
-            var character = GameManager.Instance.Player.Character;
-            var enemy = GameManager.Instance.BattleEnemy;
-
-            switch (input)
-            {
-                case 1:
-                    // 플레이어 공격
-                    int playerDamage = character.TotalAtk - enemy.Def;
-                    if (playerDamage < 0) playerDamage = 0;
-                    enemy.ManageHp(-playerDamage);
-                    Console.WriteLine($"\n플레이어가 {enemy.Name}에게 {playerDamage}의 데미지를 입혔습니다!");
-
-                    // 적이 죽었는지 확인
-                    if (enemy.Hp <= 0)
-                    {
-                        Console.WriteLine($"{enemy.Name}을(를) 처치했습니다!");
-                        Console.ReadKey();
-                        return VIEW_TYPE.DUNGEONCLEAR;
-                    }
-
-                    // 몬스터 반격
-                    int enemyDamage = enemy.Atk - character.TotalDef;
-                    if (enemyDamage < 0) enemyDamage = 0;
-                    character.Hp -= enemyDamage;
-                    Console.WriteLine($"{enemy.Name}이(가) 플레이어에게 {enemyDamage}의 데미지를 입혔습니다!");
-
-                    if (character.Hp <= 0)
-                    {
-                        Console.WriteLine("플레이어가 쓰러졌습니다...");
-                        Console.ReadKey();
-                        return VIEW_TYPE.DUNGEONCLEAR;
-                    }
-
-                    Console.WriteLine("\n계속하려면 아무 키나 누르세요...");
-                    Console.ReadKey();
-                    return VIEW_TYPE.BATTLE;
-
-                case 2:
-                    Console.WriteLine("플레이어가 도망쳤습니다...");
-                    Console.ReadKey();
-                    return VIEW_TYPE.MAIN;
-
-                default:
-                    Console.WriteLine("잘못된 입력입니다.");
-                    return VIEW_TYPE.BATTLE;
-            }
-        }
-    }
-    */
-    /*
-    public class MonsterViewer : Viewer
-    {
-        protected Monster currentMonster;
-
-        public MonsterViewer(Monster monster)
-        {
-            this.currentMonster = monster;
-            StartIndex = 1;
-            EndIndex = 2;
-        }
-
-        public override void ViewAction()
-        {
             Console.Clear();
-            Console.WriteLine(" 몬스터 정보");
-            Console.WriteLine("====================");
-
-            if (currentMonster == null)
+            if (input == 0)
             {
-                Console.WriteLine("몬스터 정보가 없습니다.");
+                SceneManager.Instance.SysText("마을로 돌아갑니다.", ConsoleColor.Red, ConsoleColor.Black);
+                return VIEW_TYPE.MAIN;
+            }
+            else if (input > 0 && input <= Dungeon.Dungeon_Monster.Count)
+            {
+                switch (GameManager.Instance.NonePlayerableChatacter.Code)
+                {
+                    case NPC_TYPE.OLDMAN:
+                        return VIEW_TYPE.BACK_STREET;
+                      
+                    case NPC_TYPE.YOUNGGIRL:
+                        return VIEW_TYPE.BACK_STREET;
+                  
+                    case NPC_TYPE.BLACKSMITH:
+                        return VIEW_TYPE.BACK_STREET;
+                       
+                    case NPC_TYPE.STRANGER:
+                        return VIEW_TYPE.BACK_STREET;
+                        
+                    default:
+                    return VIEW_TYPE.BACK_STREET;
+
+                }
+                
             }
             else
             {
-                Console.WriteLine($"이름: {currentMonster.Name}");
-                Console.WriteLine($"레벨: {currentMonster.Level}");
-                Console.WriteLine($"체력: {currentMonster.Hp}/{currentMonster.MaxHp}");
-                Console.WriteLine($"공격력: {currentMonster.Atk}");
-                Console.WriteLine($"보스 여부: {(currentMonster.Grade == MONSTER_GRADE.BOSS ? " 보스" : " 일반")}");
+                return VIEW_TYPE.BACK_STREET;
             }
-
-            Console.WriteLine("====================");
-            Console.WriteLine("1. 전투 시작");
-            Console.WriteLine("2. 메인으로 돌아가기");
-
-            int input = GetInput();
-            VIEW_TYPE nextView = NextView(input);
-            SceneManager.Instance.SwitchScene(nextView);
         }
+    }
 
+    public class QuestViewer : Viewer
+    {
+        public QuestViewer()
+        {
+            StartIndex = 0;
+            EndIndex = 1;
+        }
+        public override void ViewAction()
+        {
+            SceneManager.Instance.ColText($"    『{}』", ConsoleColor.Cyan, ConsoleColor.Black);
+            SceneManager.Instance.ColText(" 사람들과 대화를 나눌 수 있습니다..\n\n", ConsoleColor.DarkCyan, ConsoleColor.Black);
+            Console.WriteLine("\t━━━━━ ✦ N P C ✦ ━━━━━━━━━━━━━━━━━━━━\n");
+            Console.WriteLine("\t【 1 】 노인\n\t【 2 】 소녀\n\t【 3 】 대장장이\n\t【 4 】 수상한 사람");
+
+
+            Console.WriteLine("\n\t>> 0. 돌아가기\n\n");
+        }
         public override VIEW_TYPE NextView(int input)
         {
-            switch (input)
+            Console.Clear();
+            if (input == 0)
             {
-                case 1:
-                    GameManager.Instance.BattleEnemy = currentMonster; // 전투 대상 설정
-                    return VIEW_TYPE.BATTLE;
+                SceneManager.Instance.SysText("마을로 돌아갑니다.", ConsoleColor.Red, ConsoleColor.Black);
+                return VIEW_TYPE.MAIN;
+            }
+            else if (input > 0 && input <= Dungeon.Dungeon_Monster.Count)
+            {
+                switch (GameManager.Instance.NonePlayerableChatacter.Code)
+                {
+                    case NPC_TYPE.OLDMAN:
 
-                case 2:
-                    return VIEW_TYPE.MAIN;
+                        break;
+                    case NPC_TYPE.YOUNGGIRL:
 
-                default:
-                    Console.WriteLine("잘못된 입력입니다.");
-                    return VIEW_TYPE.MONSTER;
+                        break;
+                    case NPC_TYPE.BLACKSMITH:
+
+                        break;
+                    case NPC_TYPE.STRANGER:
+
+                        break;
+
+
+                }
+
+            }
+            else
+            {
+                return VIEW_TYPE.BACK_STREET;
             }
         }
-    }*/
+    }
 
 
-    
+}
+/*
+public class BattleViewer : Viewer
+{
+    public BattleViewer()
+    {
+        StartIndex = 1;
+        EndIndex = 2;
+    }
+
+    public override void ViewAction()
+    {
+        Console.Clear();
+        Console.WriteLine(" 전투 시작 ");
+        Console.WriteLine("====================");
+
+        var character = GameManager.Instance.Player.Character;
+        var enemy = GameManager.Instance.BattleEnemy;
+
+        Console.WriteLine($"플레이어 체력: {character.Hp}/{character.MaxHp}");
+        Console.WriteLine($"적 몬스터 체력: {enemy.Hp}/{enemy.MaxHp}");
+
+        Console.WriteLine("====================");
+        Console.WriteLine("1. 공격");
+        Console.WriteLine("2. 도망");
+
+        int input = GetInput();
+        VIEW_TYPE nextView = NextView(input);
+        SceneManager.Instance.SwitchScene(nextView);
+    }
+
+    public override VIEW_TYPE NextView(int input)
+    {
+        var character = GameManager.Instance.Player.Character;
+        var enemy = GameManager.Instance.BattleEnemy;
+
+        switch (input)
+        {
+            case 1:
+                // 플레이어 공격
+                int playerDamage = character.TotalAtk - enemy.Def;
+                if (playerDamage < 0) playerDamage = 0;
+                enemy.ManageHp(-playerDamage);
+                Console.WriteLine($"\n플레이어가 {enemy.Name}에게 {playerDamage}의 데미지를 입혔습니다!");
+
+                // 적이 죽었는지 확인
+                if (enemy.Hp <= 0)
+                {
+                    Console.WriteLine($"{enemy.Name}을(를) 처치했습니다!");
+                    Console.ReadKey();
+                    return VIEW_TYPE.DUNGEONCLEAR;
+                }
+
+                // 몬스터 반격
+                int enemyDamage = enemy.Atk - character.TotalDef;
+                if (enemyDamage < 0) enemyDamage = 0;
+                character.Hp -= enemyDamage;
+                Console.WriteLine($"{enemy.Name}이(가) 플레이어에게 {enemyDamage}의 데미지를 입혔습니다!");
+
+                if (character.Hp <= 0)
+                {
+                    Console.WriteLine("플레이어가 쓰러졌습니다...");
+                    Console.ReadKey();
+                    return VIEW_TYPE.DUNGEONCLEAR;
+                }
+
+                Console.WriteLine("\n계속하려면 아무 키나 누르세요...");
+                Console.ReadKey();
+                return VIEW_TYPE.BATTLE;
+
+            case 2:
+                Console.WriteLine("플레이어가 도망쳤습니다...");
+                Console.ReadKey();
+                return VIEW_TYPE.MAIN;
+
+            default:
+                Console.WriteLine("잘못된 입력입니다.");
+                return VIEW_TYPE.BATTLE;
+        }
+    }
+}
+*/
+/*
+public class MonsterViewer : Viewer
+{
+    protected Monster currentMonster;
+
+    public MonsterViewer(Monster monster)
+    {
+        this.currentMonster = monster;
+        StartIndex = 1;
+        EndIndex = 2;
+    }
+
+    public override void ViewAction()
+    {
+        Console.Clear();
+        Console.WriteLine(" 몬스터 정보");
+        Console.WriteLine("====================");
+
+        if (currentMonster == null)
+        {
+            Console.WriteLine("몬스터 정보가 없습니다.");
+        }
+        else
+        {
+            Console.WriteLine($"이름: {currentMonster.Name}");
+            Console.WriteLine($"레벨: {currentMonster.Level}");
+            Console.WriteLine($"체력: {currentMonster.Hp}/{currentMonster.MaxHp}");
+            Console.WriteLine($"공격력: {currentMonster.Atk}");
+            Console.WriteLine($"보스 여부: {(currentMonster.Grade == MONSTER_GRADE.BOSS ? " 보스" : " 일반")}");
+        }
+
+        Console.WriteLine("====================");
+        Console.WriteLine("1. 전투 시작");
+        Console.WriteLine("2. 메인으로 돌아가기");
+
+        int input = GetInput();
+        VIEW_TYPE nextView = NextView(input);
+        SceneManager.Instance.SwitchScene(nextView);
+    }
+
+    public override VIEW_TYPE NextView(int input)
+    {
+        switch (input)
+        {
+            case 1:
+                GameManager.Instance.BattleEnemy = currentMonster; // 전투 대상 설정
+                return VIEW_TYPE.BATTLE;
+
+            case 2:
+                return VIEW_TYPE.MAIN;
+
+            default:
+                Console.WriteLine("잘못된 입력입니다.");
+                return VIEW_TYPE.MONSTER;
+        }
+    }
+}*/
+
+
+
 
 
 
