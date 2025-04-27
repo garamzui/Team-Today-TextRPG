@@ -11,7 +11,7 @@
             var sm = SceneManager.Instance;
             var dm = DataManager.Instance;
 
-
+            Console.ReadLine();
             gm.Animation.TitleAnimation();
 
 
