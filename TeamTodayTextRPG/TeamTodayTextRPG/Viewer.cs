@@ -197,7 +197,7 @@ namespace TeamTodayTextRPG
         }
 
         protected void ViewGuage10(int value, int maxValue, ConsoleColor color)
-        {
+        { 
             int guage = (int)(((float)value / (float)maxValue) * 100) / 10;
             int guageDetail = (int)(((float)value / (float)maxValue) * 100) % 10;
 
@@ -400,7 +400,7 @@ namespace TeamTodayTextRPG
             var player = GameManager.Instance.Player;
             var character = player.Character;
             //SceneManager.Instance.ColText("스파르타 마을에 오신 여러분 환영합니다.", 0, -1, ConsoleColor.Yellow, ConsoleColor.Black, true);
-            SceneManager.Instance.SysText("\t\t『장비』", 8, -1, ConsoleColor.Cyan, ConsoleColor.Black, false);
+            SceneManager.Instance.SysText("\t\t『장비』", 0, -1, ConsoleColor.Cyan, ConsoleColor.Black, false);
             Console.WriteLine(" 장비를 장착하거나, 교체할 수 있습니다.\n");
             Console.WriteLine($"  ====직업: {character.Jobname}");
             Console.WriteLine($"      총 공격력: {character.TotalAtk} (기본: {character.Attack} + 추가: {character.PlusAtk})");
