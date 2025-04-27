@@ -25,6 +25,7 @@ namespace TeamTodayTextRPG
         private List<string> Logs = new List<string>();
 
         public Monster? TargetMonster { get; set; }
+        public int TargetMonsterIndex { get; set; }
         public int MonsterAtkCounter { get; set; }
 
         public DUNGEON_DIFF Diff { get; set; }
