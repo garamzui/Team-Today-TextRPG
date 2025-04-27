@@ -50,7 +50,7 @@ namespace TeamTodayTextRPG
 
         protected int GetInput()
         {
-            return SceneManager.Instance.InputAction(StartIndex, EndIndex,Console.CursorTop);
+            return SceneManager.Instance.InputAction(StartIndex, EndIndex, Console.CursorTop);
         }
 
         // 각 화면에서의 구체적인 액션을 구현하는 추상 메서드
@@ -856,7 +856,7 @@ namespace TeamTodayTextRPG
                 // 해당 몬스터가 죽은 상태라면
                 if (Dungeon.Dungeon_Monster[input-1].State == MONSTER_STATE.DEAD)
                 {
-                    SceneManager.Instance.SysText("이미 싸늘한 상태입니다... 시체를 배려해주세요", 0, 0, ConsoleColor.Red, ConsoleColor.Black, true);
+                    SceneManager.Instance.SysText("이미 싸늘한 상태입니다... 시체를 배려해주세요", 0, -1, ConsoleColor.Red, ConsoleColor.Black, true);
 
                     return VIEW_TYPE.BATTLE_PLAYER;
                 }
@@ -944,7 +944,7 @@ namespace TeamTodayTextRPG
             Console.WriteLine($"\n\t>> 『{Player.Name}』 의 일반 공격!!");
 
             Console.WriteLine($"\t>> 『{Dungeon.TargetMonster.Name}』이(가) 『{attackDamage}』의 데미지를 입었습니다.\n");
-
+            Dungeon.TargetMonster.ManageHp(-attackDamage);
             Console.Write($"\t>> HP {Dungeon.TargetMonster.Hp + attackDamage} -> ");
             if (GameManager.Instance.Dungeon.TargetMonster.State == MONSTER_STATE.DEAD)
             {
@@ -996,7 +996,6 @@ namespace TeamTodayTextRPG
             GameManager.Instance.SceneManager.ColText($"{Character.ActskillName}", ConsoleColor.Blue, ConsoleColor.Cyan);
             Console.WriteLine($"』!!!");
 
-            Console.Write("\t>> ");
             // 『효빈』애니메이션 출력 위치 바꾸고 추후 어새신:캐릭터 쪽으로 이동시켜야함 {연격 스킬}
             int totalDamage = 0;
             if (Character.Code == CHAR_TYPE.ASSASSIN)
@@ -1005,6 +1004,7 @@ namespace TeamTodayTextRPG
                 Random rand = new Random();
                 for (int i = 0; i < 2; i++)
                 {
+                    Console.Write("\t>> ");
                     int criticalHit = rand.Next(0, 10);
                     if (criticalHit <= 2) //크리티컬 확률 계산
                     {
@@ -1013,10 +1013,12 @@ namespace TeamTodayTextRPG
                     }
 
                     Console.WriteLine($"『{Dungeon.TargetMonster.Name}』이(가) 『{skillDamage}』의 데미지를 입었습니다.");
+                    Dungeon.TargetMonster.ManageHp(-skillDamage);
                     Console.Write($"\t>> HP {Dungeon.TargetMonster.Hp + skillDamage} -> ");
                     if (GameManager.Instance.Dungeon.TargetMonster.State == MONSTER_STATE.DEAD)
                     {
                         Console.WriteLine("Dead");
+                        break;
                     }
                     else Console.WriteLine($"{Dungeon.TargetMonster.Hp}\n");
                     totalDamage += skillDamage;
@@ -1025,7 +1027,8 @@ namespace TeamTodayTextRPG
             }// 여기까지가 연격 구현
             else
             {
-                Console.WriteLine($"『{Dungeon.TargetMonster.Name}』이(가) 『{skillDamage}』의 데미지를 입었습니다.");
+                Console.WriteLine($"\t>> 『{Dungeon.TargetMonster.Name}』이(가) 『{skillDamage}』의 데미지를 입었습니다.");
+                Dungeon.TargetMonster.ManageHp(-skillDamage);
                 Console.Write($"\t>> HP {Dungeon.TargetMonster.Hp + skillDamage} -> ");
                 if (GameManager.Instance.Dungeon.TargetMonster.State == MONSTER_STATE.DEAD)
                 {
@@ -1074,13 +1077,13 @@ namespace TeamTodayTextRPG
             // 몬스터가 공격할 수 있는 상태라면 공격 출력
             if (Dungeon.Dungeon_Monster[Dungeon.MonsterAtkCounter].State == MONSTER_STATE.IDLE)
             {
-                Dungeon.TargetMonster.DefaultAttack();
+                Dungeon.Dungeon_Monster[Dungeon.MonsterAtkCounter].DefaultAttack();
                 SceneManager.Instance.ColText($"    『{Dungeon.Name}』", ConsoleColor.Magenta, ConsoleColor.Black);
                 SceneManager.Instance.ColText($" {Dungeon.Text}\n\n", ConsoleColor.DarkMagenta, ConsoleColor.Black);
 
                 SceneManager.Instance.ColText($"  >> TURN [{Dungeon.Turn}]  Battle!!!\n", ConsoleColor.Yellow, ConsoleColor.Black);
                 Console.WriteLine($"  ━━━━━ ✦ 배틀로그 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-                Console.WriteLine($"\n\t>> 『{Dungeon.TargetMonster.Name}』 의 공격!!");
+                Console.WriteLine($"\n\t>> 『{Dungeon.Dungeon_Monster[Dungeon.MonsterAtkCounter].Name}』 의 공격!!");
                 int attackDamage = 0;
                 if (Character.CheckDodge())
                 {
@@ -1089,10 +1092,11 @@ namespace TeamTodayTextRPG
                 }
                 else
                 {
-                    attackDamage = Dungeon.TargetMonster.Atk - Character.Defence;
+                    attackDamage = Dungeon.Dungeon_Monster[Dungeon.MonsterAtkCounter].Atk - Character.Defence;
                     if (attackDamage <= 0) attackDamage = 1;
-                    Console.WriteLine($"\t>> 『{Player.Name}』이(가) 『{Dungeon.TargetMonster.Atk}』의 데미지를 입었습니다.\n");
-                    Console.Write($"\t>> HP {Character.Hp + attackDamage} -> ");
+                    Console.WriteLine($"\t>> 『{Player.Name}』이(가) 『{attackDamage}』의 데미지를 입었습니다.\n");
+                    Character.ManageHp(-attackDamage);
+                    Console.Write($"\t>> HP {Character.Hp+attackDamage} -> ");
                     if (Character.State == CHAR_STATE.DEAD)
                     {
                         Console.WriteLine("Dead");
@@ -1103,8 +1107,8 @@ namespace TeamTodayTextRPG
                 Console.WriteLine($"  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 
                 if (Character.CheckDodge())
-                    Dungeon.SaveLog($"\t- TURN[{Dungeon.Turn}]  |  {Dungeon.TargetMonster.Name}의 일반 공격을 {Player.Name} 이(가) 회피함 ");
-                Dungeon.SaveLog($"\t- TURN[{Dungeon.Turn}]  |  {Dungeon.TargetMonster.Name}의 일반 공격으로 {Player.Name} 이(가) {attackDamage}의 데미지를 받음 ");
+                    Dungeon.SaveLog($"\t- TURN[{Dungeon.Turn}]  |  {Dungeon.Dungeon_Monster[Dungeon.MonsterAtkCounter].Name}의 일반 공격을 {Player.Name} 이(가) 회피함 ");
+                Dungeon.SaveLog($"\t- TURN[{Dungeon.Turn}]  |  {Dungeon.Dungeon_Monster[Dungeon.MonsterAtkCounter].Name}의 일반 공격으로 {Player.Name} 이(가) {attackDamage}의 데미지를 받음 ");
 
 
 

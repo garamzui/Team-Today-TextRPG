@@ -157,7 +157,7 @@ namespace TeamTodayTextRPG
                     Die();
                 }
                
-                Console.WriteLine($"HP {GameManager.Instance.Player.Character.Hp - HpChange} -> {GameManager.Instance.Player.Character.Hp} ");
+                //Console.WriteLine($"HP {GameManager.Instance.Player.Character.Hp - HpChange} -> {GameManager.Instance.Player.Character.Hp} ");
                 
             }
             else if (HpChange > 0)
