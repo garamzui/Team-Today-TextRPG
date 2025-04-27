@@ -103,26 +103,6 @@
                     break;
 
             }
-            /*
-            int DodgeHit = GameManager.Instance.Rand.Next(1, 76);
-            if (GameManager.Instance.Player.Character.TotalDodge > DodgeHit)
-            {
-                Console.WriteLine("공격을 회피 했습니다!");
-                return;
-            }
-            else
-            {
-                Console.WriteLine("Battle!!\n");
-
-                Console.WriteLine($"Lv.{GameManager.Instance.Dungeon.Dungeon_Monster[GameManager.Instance.Dungeon.MonsterAtkCounter].Level} {GameManager.Instance.Dungeon.Dungeon_Monster[GameManager.Instance.Dungeon.MonsterAtkCounter].Name} 의 공격!");
-
-
-                int AttackDamage = Atk - GameManager.Instance.Player.Character.TotalDef;
-                if (AttackDamage <= 0)
-                { AttackDamage = 1; }
-                GameManager.Instance.Player.Character.ManageHp(-AttackDamage);
-                
-            }*/
         }
 
 
