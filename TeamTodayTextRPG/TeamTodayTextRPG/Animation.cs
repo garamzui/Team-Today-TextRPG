@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TeamTodayTextRPG
+﻿namespace TeamTodayTextRPG
 {
-   
+
 
     public class Animation
     {
@@ -3810,6 +3804,7 @@ namespace TeamTodayTextRPG
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ");
             NextCut(3000);
+            SceneManager.Instance.Intro();
         }
         public void SlimeAnimation()
         {

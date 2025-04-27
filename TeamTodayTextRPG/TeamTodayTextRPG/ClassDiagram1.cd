@@ -1,0 +1,382 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="TeamTodayTextRPG.Animation">
+    <Position X="1" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAABAAAEAEAAABQAAEUQAQAAAAAgEAABAAABEAEggA=</HashCode>
+      <FileName>Animation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.Character">
+    <Position X="1" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQBADACQiABACAgAAAgAEAAAIgQEAAAABACBoGIQpA=</HashCode>
+      <FileName>Character.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.Warrior" Collapsed="true">
+    <Position X="3" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAEAAAAgAAAAAABAAAAAAABA=</HashCode>
+      <FileName>Character.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.Magician" Collapsed="true">
+    <Position X="3" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAEAAAAgAAAAAABAAAAAAABA=</HashCode>
+      <FileName>Character.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.Assassin" Collapsed="true">
+    <Position X="3" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAAAAAAAAAAAAEAAAAgAAAAAABAAAAAAABA=</HashCode>
+      <FileName>Character.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.Dungeon">
+    <Position X="3.25" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAECAAAQAAgAABAAEAEiEARAAAAEBAIAABACCAgAAQA=</HashCode>
+      <FileName>Dungeon.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.Dungeon_Easy" Collapsed="true">
+    <Position X="5.25" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Dungeon.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.Dungeon_Normal" Collapsed="true">
+    <Position X="5.25" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Dungeon.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.Dungeon_Hard" Collapsed="true">
+    <Position X="5.25" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Dungeon.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.Dungeon_Hell" Collapsed="true">
+    <Position X="5.25" Y="12" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Dungeon.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.TRPG">
+    <Position X="12.25" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>TRPG.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.Viewer">
+    <Position X="15.75" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABEAAAAICAAgAAAgAAAIAMAACSAAIAAAAAAAUAgCEA=</HashCode>
+      <FileName>Viewer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.MainViewer" Collapsed="true">
+    <Position X="14" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Viewer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.StatusViewer" Collapsed="true">
+    <Position X="14" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Viewer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.InventoryViewer" Collapsed="true">
+    <Position X="14" Y="12" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Viewer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.EquipViewer" Collapsed="true">
+    <Position X="14" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Viewer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.ShopViewer" Collapsed="true">
+    <Position X="17.5" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Viewer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.PurchaseViewer" Collapsed="true">
+    <Position X="19.25" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Viewer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.SaleViewer" Collapsed="true">
+    <Position X="21" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Viewer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.DungeonSelectViewer" Collapsed="true">
+    <Position X="17.5" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Viewer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.DungeonViewer" Collapsed="true">
+    <Position X="19.25" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Viewer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.BattleViewer" Collapsed="true">
+    <Position X="17.5" Y="12" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Viewer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.BattlePlayerViewer" Collapsed="true">
+    <Position X="19.25" Y="12" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Viewer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.ChooseBehaviorViewer" Collapsed="true">
+    <Position X="21" Y="12" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Viewer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.BattlePlayerLogViewer" Collapsed="true">
+    <Position X="17.5" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Viewer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.BattlePlayerSkillLogViewer" Collapsed="true">
+    <Position X="19.25" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Viewer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.BattleEnemyViewer" Collapsed="true">
+    <Position X="21" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Viewer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.DungeonResultViewer" Collapsed="true">
+    <Position X="21" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Viewer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.RestViewer" Collapsed="true">
+    <Position X="14" Y="14" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Viewer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.SceneManager">
+    <Position X="15.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEACBAEAAAAAFAAAgAAkACAAEDAAQAAAwAAIIADAAAA=</HashCode>
+      <FileName>SceneManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.Item">
+    <Position X="5.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAACAAAAgAAQAAACQAAAAAQAgCAAAQgA=</HashCode>
+      <FileName>Item.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.GameManager">
+    <Position X="14" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAQAgAAAgAAAAAAAQAAAAAAAQAAAgQCAAAQ=</HashCode>
+      <FileName>GameManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.DataManager">
+    <Position X="12.25" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAQAAACAAAQAAAAACAACg=</HashCode>
+      <FileName>DataManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.Database&lt;T&gt;">
+    <Position X="7.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABAAAAAAAAAAAAQAAAAAAAAAAAAAACAAAAAAI=</HashCode>
+      <FileName>DataManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.CharacterDatabase" Collapsed="true">
+    <Position X="9.75" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>DataManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.MonsterDatabase" Collapsed="true">
+    <Position X="9.75" Y="11.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>DataManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.ItemDatabase" Collapsed="true">
+    <Position X="9.75" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>DataManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.DungeonDatabase" Collapsed="true">
+    <Position X="9.75" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>DataManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.Monster">
+    <Position X="20" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAABAAAAABAACgAAAgAAQAAACwAAABABACDAEIQIA=</HashCode>
+      <FileName>Monster.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.Slime" Collapsed="true">
+    <Position X="22" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Monster.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.Goblin" Collapsed="true">
+    <Position X="22" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Monster.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.Wolf" Collapsed="true">
+    <Position X="22" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Monster.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.Ork" Collapsed="true">
+    <Position X="22" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Monster.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.Zakum" Collapsed="true">
+    <Position X="22" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Monster.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.Player">
+    <Position X="9.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAATAAAAARgAAAAAAACAIEQBAAAAAgBBAAAAAACECCk=</HashCode>
+      <FileName>Player.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="TeamTodayTextRPG.CHAR_TYPE" Collapsed="true">
+    <Position X="3" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAIAAgAAAAAAAAACAA=</HashCode>
+      <FileName>Character.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TeamTodayTextRPG.CHAR_STATE" Collapsed="true">
+    <Position X="3" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Character.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TeamTodayTextRPG.DUNGEON_DIFF" Collapsed="true">
+    <Position X="5.25" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAACAAAAAAAAAAAAIAAAAAAAAAAAgAAA=</HashCode>
+      <FileName>Dungeon.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TeamTodayTextRPG.VIEW_TYPE" Collapsed="true">
+    <Position X="14" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQgiACEAAAAAI0AAAAIABQAAAAkIAAAAAAAgAAIA=</HashCode>
+      <FileName>Viewer.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TeamTodayTextRPG.ITEM_TYPE" Collapsed="true">
+    <Position X="7.25" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAACAAAAQAAAAQAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Item.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TeamTodayTextRPG.DATA_TYPE">
+    <Position X="11.5" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAIAIAAAQAAAAAAIA=</HashCode>
+      <FileName>DataManager.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TeamTodayTextRPG.MONSTER_STATE" Collapsed="true">
+    <Position X="18" Y="2.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Monster.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TeamTodayTextRPG.MONSTER_CODE" Collapsed="true">
+    <Position X="18" Y="1.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAgAACAAAACAAA=</HashCode>
+      <FileName>Monster.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TeamTodayTextRPG.MONSTER_GRADE" Collapsed="true">
+    <Position X="18" Y="2" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAA=</HashCode>
+      <FileName>Monster.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="맑은 고딕" Size="9" />
+</ClassDiagram>
