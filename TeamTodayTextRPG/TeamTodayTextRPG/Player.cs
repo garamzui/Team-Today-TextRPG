@@ -71,14 +71,15 @@ namespace TeamTodayTextRPG
             //인벤토리를 처음 열면 장착&해제 튜토리얼 구현해 보는 것 괜찮을지도
         }
 
-        public bool LevelUp()
+        public int LevelUp()
         {
+            int count = 0;
             //던전 클리어시 처치한 몬스터에 따라 경험치를 얻는 구조 필요
             //경험치가 요구 경험치보다 크거나 같아진다.
             if (Exp >= RequiredExp)
             {
                 //경험치에서 요구 경험치 만큼 빼고 초과량은 현재 경험치로 남는다.
-                int count = 0;
+                
                 while(Exp >= RequiredExp)
                 {
                     Exp -= RequiredExp;
@@ -91,10 +92,13 @@ namespace TeamTodayTextRPG
                 Character.Attack += (1*count);
                 Character.Defence += (2*count);
                 //『효빈』 패시브 정확히 뭔지 모르겠네요
-                //Character.PassiveSkill();
-                return true;
+                Character.PassiveSkill();
             }
-            else return false;
+            return count;
+        }
+        public void PrintLevelUp()
+        {
+
         }
         public void GetReward(int gold, int exp)
         {
@@ -296,6 +300,6 @@ namespace TeamTodayTextRPG
 
 //    Console.Write($">> {DataManager.Instance.ItemDB.List[Bag[equipItemCode - 1]][1]}");
 //    Console.ForegroundColor = ConsoleColor.DarkCyan;
-//    Console.WriteLine("을(를) 장착 하였습니다.\n");
+//      Console.WriteLine("을(를) 장착 하였습니다.\n");
 //    Console.ResetColor();
 //}

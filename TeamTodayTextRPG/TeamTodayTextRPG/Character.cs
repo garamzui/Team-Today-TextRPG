@@ -334,13 +334,13 @@ namespace TeamTodayTextRPG
                 {
                     Console.WriteLine($"{PasskillName}의 Lv이 최대가 되었습니다. 최대 래벨 보상으로 최대마나가 500이 됩니다.");
                     MaxMp = 500;
-                    Mp += 500;
+                    Mp = MaxMp;
                 }
                 else
                 {
                     Console.WriteLine($"{PasskillName}의 Lv이 1증가하였습니다. 최대 마나 + 50");
                     MaxMp += 50;
-                    Mp += 50;
+                    Mp = MaxMp;
                 }
             }
             else if (PassiveSkillLevel > MaxPassiveSkillLevel)
