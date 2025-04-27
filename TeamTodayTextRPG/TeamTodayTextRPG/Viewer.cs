@@ -1311,8 +1311,7 @@ namespace TeamTodayTextRPG
                 Player.GetReward(Dungeon.Reward, Dungeon.Exp);
                 if (Player.LevelUp() > 0)
                 {
-                    Console.WriteLine($"  ━━━━━ ✦ 레벨 업 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-                    Player.PrintLevelUp();
+                    //Console.WriteLine($"  ━━━━━ ✦ 레벨 업 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
                 }
 
                 //if (dungeon.Diff == DUNGEON_DIFF.Hell)

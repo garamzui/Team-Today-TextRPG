@@ -236,9 +236,9 @@ namespace TeamTodayTextRPG
             {
                 Console.WriteLine();
                 ColText("\t[직업 선택] 원하시는 직업을 골라 주세요.\n\n",ConsoleColor.Yellow, ConsoleColor.Black);
-                ColText("\t1. 전사     | 높은 방어력, 기본 공격력, 체력", ConsoleColor.Yellow, ConsoleColor.Black);
-                ColText("\t2. 마법사  | 방어 무시, 높은 마나, 스킬의존성", ConsoleColor.Yellow, ConsoleColor.Black);
-                ColText("\t3. 도적     | 높은 회피, 크리티컬 히트\n\n", ConsoleColor.Yellow, ConsoleColor.Black);
+                ColText("\t【 1 】 전사     | 높은 방어력, 기본 공격력, 체력\n\n", ConsoleColor.Yellow, ConsoleColor.Black);
+                ColText("\t【 2 】 마법사  | 방어 무시, 높은 마나, 스킬의존성\n\n", ConsoleColor.Yellow, ConsoleColor.Black);
+                ColText("\t【 3 】 도적     | 높은 회피, 크리티컬 히트\n\n", ConsoleColor.Yellow, ConsoleColor.Black);
                 Console.WriteLine();
 
                 cursorPos = Console.CursorTop;
