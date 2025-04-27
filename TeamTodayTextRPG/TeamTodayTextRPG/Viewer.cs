@@ -504,8 +504,8 @@
             SceneManager.Instance.ShowInventory(VIEW_TYPE.EQUIP);
             Console.WriteLine("\n\t━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 
-            Console.WriteLine($"1~{EndIndex}. 장비 변경");
-            Console.WriteLine("\n0. 메인으로 돌아가기\n\n");
+            Console.WriteLine($"\t1~{EndIndex}. 장비 변경");
+            Console.WriteLine("\n\t0. 메인으로 돌아가기\n\n");
         }
 
 
@@ -722,7 +722,7 @@
             //Console.WriteLine($"  ━━━━━ ✦ 무  기 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
             SceneManager.Instance.ShowShopSale();
             //Console.WriteLine($"  ━━━━━ ✦ 방어구 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-            SceneManager.Instance.ShowShopSale();
+            //SceneManager.Instance.ShowShopSale();
             //Console.WriteLine($"  ━━━━━ ✦ 소모품 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
             Console.WriteLine($"  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 
@@ -1442,11 +1442,11 @@
             ViewStatusRest();
             Console.WriteLine("\n\t━━━━━ ✦  요금표  ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 
-            Console.Write("\n\t\t【 1 】 대실    | ");
+            Console.Write("\n\t【 1 】 대실    | ");
             SceneManager.Instance.ColText("500", ConsoleColor.DarkCyan, ConsoleColor.Black);
             Console.WriteLine(" G    |  HP +50    |  MP +20");
 
-            Console.Write("\n\t\t【 2 】 숙박    | ");
+            Console.Write("\n\t【 2 】 숙박    | ");
             SceneManager.Instance.ColText("2000", ConsoleColor.DarkCyan, ConsoleColor.Black);
             Console.WriteLine(" G   |  HP +FULL  |  MP +FULL");
 
