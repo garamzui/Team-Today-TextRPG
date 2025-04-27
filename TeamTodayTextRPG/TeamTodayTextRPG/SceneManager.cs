@@ -15,18 +15,9 @@ namespace TeamTodayTextRPG
 
         public SceneManager() 
         {
-            //『효빈』 초기 생성시 메인뷰어로 들어가도록 하겠습니다.
-            //         추후에 가람님의 '그것'을 초기화면으로 설정하도록 바꿀예정입니다. 예를들어...IntroViewer 처럼요
             CurrentViewer = new MainViewer();
         }
 
-        public void PrintCentered(string text)
-        {
-            int consoleWidth = Console.WindowWidth;
-            int padding = (consoleWidth - text.Length) / 2;
-            padding = Math.Max(0, padding-7);
-            Console.WriteLine(new string(' ', padding) + text);
-        }
 
         // 매개변수 : 메세지 , 글자색, 배경색
         public void ColText(string message, ConsoleColor textColor = ConsoleColor.White, ConsoleColor backColor = ConsoleColor.Black)
@@ -41,31 +32,26 @@ namespace TeamTodayTextRPG
             Console.BackgroundColor = prevBackColor;
         }
        
-
-        public void SysText(string message, int x = 0, int y = -1, ConsoleColor textColor = ConsoleColor.White, ConsoleColor backColor = ConsoleColor.Black, bool system = false)
+        
+        public void SysText(string message, ConsoleColor textColor = ConsoleColor.White, ConsoleColor backColor = ConsoleColor.Black)
         {
+            Clear(0, 2);
             ConsoleColor prevColor = Console.ForegroundColor;
             ConsoleColor prevBackColor = Console.BackgroundColor;
-
-            if (y >= 0)
-                Console.SetCursorPosition(x, y);
-            else
-                Console.SetCursorPosition(x, Console.CursorTop);
 
             Console.BackgroundColor = backColor;
             Console.ForegroundColor = textColor;
             Console.Write("=========================================================================================\n");
-            if (system)
-                Console.Write($">> [SYSTEM] {message}\n");
-            else
-                Console.Write($">> {message}\n");
+            Console.Write($">> [SYSTEM] {message}\n");
             Console.Write("=========================================================================================\n");
-
 
             Console.ForegroundColor = prevColor; 
             Console.BackgroundColor = prevBackColor;
         }
-
+        public void SysDefault()
+        {
+            SysText("\t\t\t\t\t【Sparta Text RPG  _Team Today Present】", ConsoleColor.Yellow, ConsoleColor.Black);
+        }
 
         // linesToClear 부터 lineCount 까지 삭제
         public void Clear(int linesToClear, int lineCount)
@@ -143,7 +129,7 @@ namespace TeamTodayTextRPG
                 case VIEW_TYPE.DUNGEON:
                     CurrentViewer = new DungeonViewer();
                     break;
-                case VIEW_TYPE.DUNGEON_CLEAR:
+                case VIEW_TYPE.DUNGEON_RESULT:
                     CurrentViewer = new DungeonResultViewer();
                     break;
 
@@ -186,11 +172,7 @@ namespace TeamTodayTextRPG
        public void ShowCurrentView()
         {
             if (CurrentViewer != null)
-            {
-                SysText("\t\t\t\t\t【Sparta Text RPG  _Team Today Present】", 0, -1, ConsoleColor.Yellow, ConsoleColor.Black, true);
                 CurrentViewer.ViewAction();  // gameManager 객체를 넘기기
-            }
-
         }
 
         // 『효빈』초기 캐릭터 설정 (플레이어 이름, 플레이어할 캐릭터의 직업)을 도와주는 함수 입니다.
@@ -199,7 +181,7 @@ namespace TeamTodayTextRPG
             string? name = string.Empty;
             int cursorPos = 0;
 
-            SysText("스파르타 마을에 오신 여러분 환영합니다.", 0, -1, ConsoleColor.Yellow, ConsoleColor.Black, true);
+            SysText("스파르타 마을에 오신 여러분 환영합니다.", ConsoleColor.Yellow, ConsoleColor.Black);
             while (name == string.Empty)
             {
                 Console.WriteLine();
@@ -211,15 +193,14 @@ namespace TeamTodayTextRPG
                 name = Console.ReadLine();
                 if (name == string.Empty)
                 {
-                    cursorPos = Console.CursorTop;
-                    Clear(0, 2);
-                    SysText("빈칸은 이름으로 사용할 수 없습니다", 0, 0, ConsoleColor.Red, ConsoleColor.Black, true);
-                    //Console.SetCursorPosition(0, cursorPos);
+                    //cursorPos = Console.CursorTop;
+                    SysText("빈칸은 이름으로 사용할 수 없습니다", ConsoleColor.Red, ConsoleColor.Black);
                 }
                 else
                 {
+                    SysText("스파르타 마을에 오신 여러분 환영합니다.", ConsoleColor.Yellow, ConsoleColor.Black);
                     bool check = true;
-
+                    Console.SetCursorPosition(0, 7);
                     while (check&&name!=string.Empty)
                     {
                         int num = 0;
@@ -248,7 +229,7 @@ namespace TeamTodayTextRPG
                 }
             }
             Console.Clear();
-            SysText("스파르타 마을에 오신 여러분 환영합니다.", 0, -1, ConsoleColor.Yellow, ConsoleColor.Black, false);
+            SysText("스파르타 마을에 오신 여러분 환영합니다.", ConsoleColor.Yellow, ConsoleColor.Black);
 
             int classCode = 0;
             while (classCode == 0)
@@ -285,8 +266,8 @@ namespace TeamTodayTextRPG
                 rtnStr = Console.ReadLine();
                 if (rtnStr == string.Empty)
                 {
-                    Clear(0, 2);
-                    SysText("아무 행동도 입력하지 않으셨습니다", 0, 0, ConsoleColor.Red, ConsoleColor.Black, true);
+                    //Clear(0, 2);
+                    SysText("아무 행동도 입력하지 않으셨습니다",ConsoleColor.Red, ConsoleColor.Black);
                     Console.SetCursorPosition(0, y);
                 }
                 else
@@ -295,16 +276,16 @@ namespace TeamTodayTextRPG
                     {
                         if (num < startIndex || num > endIndex)
                         {
-                            Clear(0, 2);
-                            SysText("선택지 내에서 입력해주세요", 0, 0, ConsoleColor.Red, ConsoleColor.Black, true);
+                            //Clear(0, 2);
+                            SysText("선택지 내에서 입력해주세요", ConsoleColor.Red, ConsoleColor.Black);
                             Console.SetCursorPosition(0, y);
                         }
                         else check = true;
                     }
                     else
                     {
-                        Clear(0, 2);
-                        SysText("숫자만 입력해주세요", 0, 0, ConsoleColor.Red, ConsoleColor.Black, true);
+                        //Clear(0, 2);
+                        SysText("숫자만 입력해주세요", ConsoleColor.Red, ConsoleColor.Black);
                         Console.SetCursorPosition(0, y);
                     }
                 }
@@ -362,6 +343,7 @@ namespace TeamTodayTextRPG
             {
                 foreach (var item in DataManager.Instance.ItemDB.List)
                 {
+
                     Console.WriteLine("   -----------------------------------------------------------------------------");
                     if (GameManager.Instance.Player.CheckBag(int.Parse(item[0]))) Console.ForegroundColor = ConsoleColor.DarkGray;
 
