@@ -60,10 +60,6 @@ namespace TeamTodayTextRPG
                 Gold = 150000;
                 RequiredExp = 100;
                 Name = name;
-                equipedWpCode = -1;
-                equipedAmCode = -1;
-                //WeaponEquip.Add(equipedWpCode);
-                //ArmorEquip.Add(equipedAmCode);
             }
 
             //천 옷과 목검 Bag 리스트에 저장한다
@@ -94,18 +90,22 @@ namespace TeamTodayTextRPG
                 SceneManager.Instance.ColText($"\t>> [공격력  ↑] {Character.Attack} -> {Character.Attack + (1 * count)}\n", ConsoleColor.Green,  ConsoleColor.Black);
                 SceneManager.Instance.ColText($"\t>> [방어력  ↑] {Character.Defence} -> {Character.Defence + (2 * count)}\n",ConsoleColor.Green, ConsoleColor.Black);
 
-                        //레벨 및 요구 경험치 스탯이 늘어난다.
-                Level += count;
-                Character.Attack += (1 * count);
-                Character.Defence += (2 * count);
 
-                for (int lv = Level - count + 1; lv <= Level; lv++)
+                for (int lv = Level + 1; lv <= Level+count; lv++)
                 {
                     if (lv % 3 == 0)
                     {
                         Character.PassiveSkill();
                     }
                 }
+
+
+                //레벨 및 요구 경험치 스탯이 늘어난다.
+                Level += count;
+                Character.Attack += (1 * count);
+                Character.Defence += (2 * count);
+                //『효빈』 패시브 정확히 뭔지 모르겠네요
+                Character.PassiveSkill();
             }
             return count;
         }
