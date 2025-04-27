@@ -16,8 +16,8 @@ namespace TeamTodayTextRPG
         public int Level { get; set; }
         public int Exp { get; set; }
         public int Gold { get; set; }
-        public string Name { get; set; }
         public int RequiredExp { get; set; }
+        public string Name { get; set; }
 
         public int equipedWpCode = -1;
         public int equipedAmCode = -1;
@@ -71,22 +71,30 @@ namespace TeamTodayTextRPG
             //인벤토리를 처음 열면 장착&해제 튜토리얼 구현해 보는 것 괜찮을지도
         }
 
-        public void LevelUp()
+        public bool LevelUp()
         {
             //던전 클리어시 처치한 몬스터에 따라 경험치를 얻는 구조 필요
             //경험치가 요구 경험치보다 크거나 같아진다.
             if (Exp >= RequiredExp)
             {
                 //경험치에서 요구 경험치 만큼 빼고 초과량은 현재 경험치로 남는다.
-                Exp -= RequiredExp;
+                int count = 0;
+                while(Exp >= RequiredExp)
+                {
+                    Exp -= RequiredExp;
+                    RequiredExp += 25;
+                    count++;
+                }
 
                 //레벨 및 요구 경험치 스탯이 늘어난다.
-                Level++;
-                RequiredExp += 25;
-                Character.Attack += 1;
-                Character.Defence += 2;
-                Character.PassiveSkill();
+                Level+=count;
+                Character.Attack += (1*count);
+                Character.Defence += (2*count);
+                //『효빈』 패시브 정확히 뭔지 모르겠네요
+                //Character.PassiveSkill();
+                return true;
             }
+            else return false;
         }
 
         //휴식 기능
@@ -195,11 +203,13 @@ namespace TeamTodayTextRPG
                 case ITEM_TYPE.WEAPON:
                     WeaponEquip.Add(equipItemCode);
                     equipedWpCode = equipItemCode;
+                    ChangeStat(equipItemCode);
                     break;
 
                 case ITEM_TYPE.ARMOR:
                     ArmorEquip.Add(equipItemCode);
                     equipedAmCode = equipItemCode;
+                    ChangeStat(equipItemCode);
                     break;
             }
         }
@@ -218,12 +228,16 @@ namespace TeamTodayTextRPG
                 case ITEM_TYPE.WEAPON:
                     WeaponEquip.Clear();
                     WeaponEquip.Add(equipItemCode);
+                    ChangeStat(equipItemCode);
+                    ChangeStat(equipedWpCode);
                     equipedWpCode = equipItemCode;
                     break;
 
                 case ITEM_TYPE.ARMOR:
                     ArmorEquip.Clear();
                     ArmorEquip.Add(equipItemCode);
+                    ChangeStat(equipItemCode);
+                    ChangeStat(equipedAmCode);
                     equipedAmCode = equipItemCode;
                     break;
             }
@@ -237,12 +251,14 @@ namespace TeamTodayTextRPG
             {
                 WeaponEquip.Clear();
                 equipedWpCode = -1;
+                ChangeStat(equipItemCode);
             }
 
             else
             {
                 ArmorEquip.Clear();
                 equipedAmCode = -1;
+                ChangeStat(equipItemCode);
             }
         }
 
@@ -252,6 +268,7 @@ namespace TeamTodayTextRPG
             var item = DataManager.Instance.ItemDB.List[code]; // 아이템 코드 그대로 사용!
             int atk = int.Parse(item[2]);
             int def = int.Parse(item[3]);
+            
 
             if (CheckEquip(code, ITEM_TYPE.WEAPON) || CheckEquip(code, ITEM_TYPE.ARMOR))
             {

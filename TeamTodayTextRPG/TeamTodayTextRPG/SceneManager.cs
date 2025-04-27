@@ -144,7 +144,7 @@ namespace TeamTodayTextRPG
                     CurrentViewer = new DungeonViewer();
                     break;
                 case VIEW_TYPE.DUNGEON_CLEAR:
-                    CurrentViewer = new DungeonClearViewer();
+                    CurrentViewer = new DungeonResultViewer();
                     break;
 
                 case VIEW_TYPE.REST:
@@ -157,8 +157,14 @@ namespace TeamTodayTextRPG
                 case VIEW_TYPE.BATTLE_PLAYER:
                     CurrentViewer = new BattlePlayerViewer();
                     break;
+                case VIEW_TYPE.CHOOSE_BEHAVIOR:
+                    CurrentViewer = new ChooseBehaviorViewer();
+                    break;
                 case VIEW_TYPE.BATTLE_PLAYER_LOG:
                     CurrentViewer = new BattlePlayerLogViewer();
+                    break;
+                case VIEW_TYPE.BATTLE_PLAYER_SKILL_LOG:
+                    CurrentViewer = new BattlePlayerSkillLogViewer();
                     break;
                 case VIEW_TYPE.BATTLE_ENEMY:
                     CurrentViewer = new BattleEnemyViewer();
@@ -393,6 +399,33 @@ namespace TeamTodayTextRPG
                     Console.WriteLine("\t  [ "+DataManager.Instance.ItemDB.List[item][6] + " ]");
                 }
                 Console.WriteLine("   -----------------------------------------------------------------------------");
+            }
+        }
+        //일단은 복붙만
+        public void ShowEquip(VIEW_TYPE view)
+        {
+            int count = 0;
+            if (GameManager.Instance.Player.Bag != null)
+            {
+                foreach (var item in GameManager.Instance.Player.Bag)
+                {
+                    Console.WriteLine("   ------------------------------------------------------------------------------");
+                    if (view == VIEW_TYPE.EQUIP) Console.Write($"     -{++count} ");
+                    else Console.Write("     -");
+
+                    if (GameManager.Instance.Player.CheckEquip(item, ITEM_TYPE.WEAPON) ||
+                        GameManager.Instance.Player.CheckEquip(item, ITEM_TYPE.ARMOR))
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.Write("[E]");
+                        Console.ResetColor();
+                    }
+                    Console.WriteLine(" 『" + DataManager.Instance.ItemDB.List[item][1] + "』");
+                    ShowAtk(int.Parse(DataManager.Instance.ItemDB.List[item][2]));
+                    ShowDef(int.Parse(DataManager.Instance.ItemDB.List[item][3]));
+                    Console.WriteLine("\t  [ " + DataManager.Instance.ItemDB.List[item][6] + " ]");
+                }
+                Console.WriteLine("   ------------------------------------------------------------------------------");
             }
         }
     }

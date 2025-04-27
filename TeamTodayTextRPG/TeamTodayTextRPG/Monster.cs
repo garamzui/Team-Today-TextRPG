@@ -70,26 +70,26 @@ namespace TeamTodayTextRPG
             {
                 Hp += HpChange; //최종 계산 자료를 음수로 입력해 주어야 합니다.
 
-                Console.WriteLine($"{Name}이(가){HpChange}의 데미지를 입었습니다. ");
+                //Console.WriteLine($"{Name}이(가){HpChange}의 데미지를 입었습니다. ");
                 if (Hp <= 0)
                 {
                     Hp = 0;
                     Die();
                 }
-                
+                /*
                 Console.Write($"HP {GameManager.Instance.Dungeon.TargetMonster.Hp-HpChange} -> ");
                 if (GameManager.Instance.Dungeon.TargetMonster.State == MONSTER_STATE.DEAD)
                 {
                     Console.WriteLine("Dead");
                 }
-                else Console.WriteLine($"{GameManager.Instance.Dungeon.TargetMonster.Hp}");
+                else Console.WriteLine($"{GameManager.Instance.Dungeon.TargetMonster.Hp}");*/
 
             }
             else if (HpChange > 0)
             {
                 Hp += HpChange;
                 if (Hp > MaxHp) Hp = MaxHp;
-                Console.WriteLine($"{Name}이(가){HpChange}만큼 회복했습니다! 현재 HP: {Hp}/{MaxHp}");
+                //Console.WriteLine($"{Name}이(가){HpChange}만큼 회복했습니다! 현재 HP: {Hp}/{MaxHp}");
             }
             else { Console.WriteLine("아무 일도 일어나지 않았습니다."); }
         }
@@ -118,6 +118,7 @@ namespace TeamTodayTextRPG
                     break;
 
             }
+            /*
             int DodgeHit = GameManager.Instance.Rand.Next(1, 76);
             if (GameManager.Instance.Player.Character.TotalDodge > DodgeHit)
             {
@@ -136,7 +137,7 @@ namespace TeamTodayTextRPG
                 { AttackDamage = 1; }
                 GameManager.Instance.Player.Character.ManageHp(-AttackDamage);
                 
-            }
+            }*/
         }
 
 
