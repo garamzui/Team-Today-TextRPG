@@ -223,10 +223,7 @@ namespace TeamTodayTextRPG
             if (attackDamage <= 0) 
                 attackDamage = 1;
 
-            int rand = GameManager.Instance.Rand.Next(0, 10);
-            if (rand == 0) { GameManager.Instance.Animation.WARRIORATK1(); }
-            else if (rand == 1) { GameManager.Instance.Animation.WARRIORATK2(); }
-            else { GameManager.Instance.Animation.WarriorNomAtk(); }
+            
 
             GameManager.Instance.Dungeon.TargetMonster.ManageHp(-attackDamage);
 
@@ -241,7 +238,7 @@ namespace TeamTodayTextRPG
             if (Mp >= 10)
             {
                 ManageMp(-10);
-                GameManager.Instance.Animation.WarriorAnimation();
+                
          
                 GameManager.Instance.Dungeon.TargetMonster.ManageHp(-skillDamage);
 
@@ -295,24 +292,28 @@ namespace TeamTodayTextRPG
             if (attackDamage <= 0) 
                 attackDamage = 1;
 
-            int rand = GameManager.Instance.Rand.Next(0, 10);
-            if (rand == 0) { GameManager.Instance.Animation.MAGICIANATK1(); }
-            else if (rand == 1) { GameManager.Instance.Animation.MAGICIANATK2(); }
-            else { GameManager.Instance.Animation.MagicianNomAtk(); }
+          
 
             GameManager.Instance.Dungeon.TargetMonster.ManageHp(-attackDamage);
 
             return attackDamage;
         }
         public override int ActiveSkill()
-        {
-            int skillDamage = (int)((TotalAtk * 10) - Math.Round(GameManager.Instance.Dungeon.TargetMonster.Def / 2.0)); //방어무시를 구현하기위해서 방어도를 반으로 나누고 반올림하였습니다.
+        { 
+            double itd = Math.Round(GameManager.Instance.Dungeon.TargetMonster.Def / 2.0); //방어무시를 구현하기위해서 방어도를 반으로 나누고 반올림하였습니다.
+            if (itd ==1)
+            {
+                itd = 0;
+            }
+            
+            int skillDamage = (int)((TotalAtk * 10) - itd); 
             if (skillDamage <= 0)
                 skillDamage = 1;
+            
             if (Mp >= 10)
             {
                 ManageMp(-10);
-                GameManager.Instance.Animation.MagicianAnimation();
+                
 
                 GameManager.Instance.Dungeon.TargetMonster.ManageHp(-skillDamage);
 
@@ -377,9 +378,7 @@ namespace TeamTodayTextRPG
             int attackDamage = GameManager.Instance.Player.Character.TotalAtk - GameManager.Instance.Dungeon.TargetMonster.Def;
             if (attackDamage <= 0) attackDamage = 1;
 
-            int rand = GameManager.Instance.Rand.Next(0, 10);
-            if (rand == 0) { GameManager.Instance.Animation.ASSASSINATK(); }
-            else { GameManager.Instance.Animation.AssassinNomAtk(); }
+          
 
             GameManager.Instance.Dungeon.TargetMonster.ManageHp(-attackDamage);
 
@@ -394,7 +393,7 @@ namespace TeamTodayTextRPG
             if (Mp >= 10)
             {
                 ManageMp(-10);
-                GameManager.Instance.Animation.AssassinAnimation();
+                
                 
                 return skillDamage;
             }
