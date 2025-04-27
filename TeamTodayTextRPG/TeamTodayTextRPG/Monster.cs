@@ -68,22 +68,13 @@ namespace TeamTodayTextRPG
         {
             if (HpChange < 0)
             {
-                Hp += HpChange; //최종 계산 자료를 음수로 입력해 주어야 합니다.
+                Hp += HpChange;
 
-                //Console.WriteLine($"{Name}이(가){HpChange}의 데미지를 입었습니다. ");
                 if (Hp <= 0)
                 {
                     Hp = 0;
                     Die();
                 }
-                /*
-                Console.Write($"HP {GameManager.Instance.Dungeon.TargetMonster.Hp-HpChange} -> ");
-                if (GameManager.Instance.Dungeon.TargetMonster.State == MONSTER_STATE.DEAD)
-                {
-                    Console.WriteLine("Dead");
-                }
-                else Console.WriteLine($"{GameManager.Instance.Dungeon.TargetMonster.Hp}");*/
-
             }
             else if (HpChange > 0)
             {
@@ -152,9 +143,9 @@ namespace TeamTodayTextRPG
         {
             if (State == MONSTER_STATE.DEAD)
             {
-                Console.WriteLine($"Lv. {Level}\t{Name}\tDead");
+                Console.Write($"Lv. {Level}\t{Name}\tDead\t\t");
             }
-            else Console.WriteLine($"Lv. {Level}\t{Name}\tHP {Hp}/{MaxHp}");
+            else Console.Write($"Lv. {Level}\t{Name}\tHP {Hp}/{MaxHp}\t");
         }
     }
 

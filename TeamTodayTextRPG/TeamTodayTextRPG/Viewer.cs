@@ -88,7 +88,7 @@ namespace TeamTodayTextRPG
             else if (Character.PlusAtk < 0)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write($"-{Character.PlusAtk}");
+                Console.Write($"{Character.PlusAtk}");
             }
             else
                 Console.Write($"{Character.PlusAtk}");
@@ -105,7 +105,7 @@ namespace TeamTodayTextRPG
             else if (Character.PlusDef < 0)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write($"-{Character.PlusDef}");
+                Console.Write($"{Character.PlusDef}");
             }
             else
                 Console.Write($"{Character.PlusDef}");
@@ -122,7 +122,60 @@ namespace TeamTodayTextRPG
             else if (Character.PlusDodge < 0)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write($"-{Character.PlusDodge}");
+                Console.Write($"{Character.PlusDodge}");
+            }
+            else
+                Console.Write($"{Character.PlusDodge}");
+            Console.ResetColor();
+            Console.WriteLine(")");
+        }
+        protected void ViewStatusEquip()
+        {
+            Console.Write($"\t공격력   : {Character.TotalAtk}");
+            Console.Write(" (");
+            if (Character.PlusAtk > 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write($"+{Character.PlusAtk}");
+            }
+            else if (Character.PlusAtk < 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write($"{Character.PlusAtk}");
+            }
+            else
+                Console.Write($"{Character.PlusAtk}");
+            Console.ResetColor();
+            Console.WriteLine(")");
+
+            Console.Write($"\t방어력   : {Character.TotalDef}");
+            Console.Write(" (");
+            if (Character.PlusDef > 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write($"+{Character.PlusDef}");
+            }
+            else if (Character.PlusDef < 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write($"{Character.PlusDef}");
+            }
+            else
+                Console.Write($"{Character.PlusDef}");
+            Console.ResetColor();
+            Console.WriteLine(")");
+
+            Console.Write($"\t회피율   : {Character.TotalDodge}");
+            Console.Write(" (");
+            if (Character.PlusDodge > 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write($"+{Character.PlusDodge}");
+            }
+            else if (Character.PlusDodge < 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write($"{Character.PlusDodge}");
             }
             else
                 Console.Write($"{Character.PlusDodge}");
@@ -154,7 +207,7 @@ namespace TeamTodayTextRPG
             else if (Character.PlusAtk < 0)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write($"-{Character.PlusAtk}");
+                Console.Write($"{Character.PlusAtk}");
             }
             else
                 Console.Write($"{Character.PlusAtk}");
@@ -171,7 +224,7 @@ namespace TeamTodayTextRPG
             else if (Character.PlusDef < 0)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write($"-{Character.PlusDef}");
+                Console.Write($"{Character.PlusDef}");
             }
             else
                 Console.Write($"{Character.PlusDef}");
@@ -188,13 +241,43 @@ namespace TeamTodayTextRPG
             else if (Character.PlusDodge < 0)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write($"-{Character.PlusDodge}");
+                Console.Write($"{Character.PlusDodge}");
             }
             else
                 Console.Write($"{Character.PlusDodge}");
             Console.ResetColor();
             Console.WriteLine(")");
         }
+        protected void ViewEquipItem()
+        {
+            if(Player.equipedWpCode != -1)
+            {
+                SceneManager.Instance.ColText($"\t[ 무  기 ]  -  『{DataManager.Instance.ItemDB.List[Player.equipedWpCode][1]}』\n", ConsoleColor.DarkGreen, ConsoleColor.Black);
+                SceneManager.Instance.ShowAtk(int.Parse(DataManager.Instance.ItemDB.List[Player.equipedWpCode][2]));
+                SceneManager.Instance.ShowDef(int.Parse(DataManager.Instance.ItemDB.List[Player.equipedWpCode][3]));
+                Console.WriteLine("\n\t  [ " + DataManager.Instance.ItemDB.List[Player.equipedWpCode][6] + " ]");
+                Console.WriteLine();
+            }
+            if (Player.equipedAmCode != -1)
+            {
+                SceneManager.Instance.ColText($"\t[ 방어구 ]  -  『{DataManager.Instance.ItemDB.List[Player.equipedAmCode][1]}』\n", ConsoleColor.DarkGreen, ConsoleColor.Black);
+                SceneManager.Instance.ShowAtk(int.Parse(DataManager.Instance.ItemDB.List[Player.equipedAmCode][2]));
+                SceneManager.Instance.ShowDef(int.Parse(DataManager.Instance.ItemDB.List[Player.equipedAmCode][3]));
+                Console.WriteLine("\n\t  [ " + DataManager.Instance.ItemDB.List[Player.equipedAmCode][6] + " ]");
+            }
+        }
+
+
+        public void Attach_E_Mark(int itemCode)
+        {
+            if (Player.CheckEquip(itemCode, ITEM_TYPE.WEAPON) || Player.CheckEquip(itemCode, ITEM_TYPE.ARMOR))
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write("[E]");
+                Console.ResetColor();
+            }
+        }
+
 
         protected void ViewGuage10(int value, int maxValue, ConsoleColor color)
         {
@@ -325,10 +408,13 @@ namespace TeamTodayTextRPG
 
             Console.WriteLine("\n\t━━━━━ ✦  능력치  ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━\n");
             ViewStatus();
-
+            Console.WriteLine("\n\t━━━━━ ✦  장  비  ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+            ViewEquipItem();   
             Console.WriteLine("\n\t━━━━━ ✦  스  킬  ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━\n");
             Console.WriteLine($"\t 액티브 스킬 | {Character.ActskillName}");
             Console.WriteLine($"\t 패시브 스킬 | {Character.PasskillName} (레벨 {Character.PassiveSkillLevel}/{Character.MaxPassiveSkillLevel})");
+
+
             Console.WriteLine("\n\t━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 
             Console.WriteLine("\n\t0. 닫기\n\n");
@@ -407,103 +493,82 @@ namespace TeamTodayTextRPG
 
         public override void ViewAction()
         {
-            var player = GameManager.Instance.Player;
-            var character = player.Character;
-            //SceneManager.Instance.ColText("스파르타 마을에 오신 여러분 환영합니다.", 0, -1, ConsoleColor.Yellow, ConsoleColor.Black, true);
             SceneManager.Instance.ColText("    『장비』", ConsoleColor.Cyan, ConsoleColor.Black);
             SceneManager.Instance.ColText(" 장비를 장착하거나, 교체할 수 있습니다.\n\n", ConsoleColor.DarkCyan, ConsoleColor.Black);
 
-            Console.WriteLine($"  ====직업: {character.Jobname}");
-            Console.WriteLine($"      총 공격력: {character.TotalAtk} (기본: {character.Attack} + 추가: {character.PlusAtk})");
-            Console.WriteLine($"      총 방어력: {character.TotalDef} (기본: {character.Defence} + 추가: {character.PlusDef})");
-            Console.WriteLine($"      총 회피율: {character.TotalDodge} (기본: {character.Dodge} + 추가: {character.PlusDodge})");
+            Console.WriteLine("\n\t━━━━━ ✦  능력치  ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+            ViewStatusEquip();
             Console.WriteLine("");
-            Console.WriteLine("  =====[목록]=====================================================================");
-            SceneManager.Instance.ShowEquip(VIEW_TYPE.EQUIP);
-            Console.WriteLine("  ================================================================================\n");
 
-            Console.WriteLine("1~n. 장비 변경");
-            Console.WriteLine($"0. 메인으로 돌아가기\n\n");
+            Console.WriteLine("\t━━━━━ ✦ 장비목록 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+            SceneManager.Instance.ShowInventory(VIEW_TYPE.EQUIP);
+            Console.WriteLine("\n\t━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+
+            Console.WriteLine($"1~{EndIndex}. 장비 변경");
+            Console.WriteLine("\n0. 메인으로 돌아가기\n\n");
         }
         
 
         public override VIEW_TYPE NextView(int input)
         {
-            var player = GameManager.Instance.Player;
-            
-
-            if (input == 0)
-                return VIEW_TYPE.MAIN;
-
+            Console.Clear();
             int index = input - 1;
-
-            if (index >= 0 && index < player.Bag.Count)
+            if (input == 0)
             {
-                int itemCode = player.Bag[index];  // 실제 아이템 코드 가져오기
+                SceneManager.Instance.SysDefault();
+                return VIEW_TYPE.MAIN;
+            }
+            else if (index >= 0 && index < Player.Bag.Count)
+            {
+                int itemCode = Player.Bag[index];  // 실제 아이템 코드 가져오기
                 int Itype = int.Parse(DataManager.Instance.ItemDB.List[itemCode][8]);
 
                 switch (Itype)
                 {
                     case (int)(ITEM_TYPE.WEAPON):
 
-                        if (player.equipedWpCode == -1)
+                        if (Player.equipedWpCode == -1)
                         {
-                            player.EquipItem(itemCode, ITEM_TYPE.WEAPON);
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine("장비를 장착했습니다!");
+                            Player.EquipItem(itemCode, ITEM_TYPE.WEAPON);
+                            SceneManager.Instance.SysText($"{DataManager.Instance.ItemDB.List[itemCode][1]} 을(를) 장착 했습니다",ConsoleColor.DarkCyan,ConsoleColor.Black);
                         }
 
-                        else if (player.equipedWpCode == itemCode)
+                        else if (Player.equipedWpCode == itemCode)
                         {
-                            player.UnEquipItem(itemCode);
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine("장비를 해제했습니다!");
+                            Player.UnEquipItem(itemCode);
+                            SceneManager.Instance.SysText($"{DataManager.Instance.ItemDB.List[itemCode][1]} 을(를) 장착 해제 했습니다", ConsoleColor.DarkCyan, ConsoleColor.Black);
                         }
 
                         else
                         {
-                            player.ChangeItem(itemCode, ITEM_TYPE.WEAPON);
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine("장비를 교체했습니다!");
+                            Player.ChangeItem(itemCode, ITEM_TYPE.WEAPON);
+                            SceneManager.Instance.SysText($"{DataManager.Instance.ItemDB.List[itemCode][1]} 을(를) 장착 했습니다", ConsoleColor.DarkCyan, ConsoleColor.Black);
                         }
                         break;
-
                     case (int)(ITEM_TYPE.ARMOR):
 
-                        if (player.equipedAmCode == -1)
+                        if (Player.equipedAmCode == -1)
                         {
-                            player.EquipItem(itemCode, ITEM_TYPE.ARMOR);
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine("장비를 장착했습니다!");
+                            Player.EquipItem(itemCode, ITEM_TYPE.ARMOR);
+                            SceneManager.Instance.SysText($"{DataManager.Instance.ItemDB.List[itemCode][1]} 을(를) 장착 했습니다", ConsoleColor.DarkCyan, ConsoleColor.Black);
                         }
 
-                        else if (player.equipedAmCode == itemCode)
+                        else if (Player.equipedAmCode == itemCode)
                         {
-                            player.UnEquipItem(itemCode);
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine("장비를 해제했습니다!");
+                            Player.UnEquipItem(itemCode);
+                            SceneManager.Instance.SysText($"{DataManager.Instance.ItemDB.List[itemCode][1]} 을(를) 장착 해제 했습니다", ConsoleColor.DarkCyan, ConsoleColor.Black);
                         }
-
                         else
                         {
-                            player.ChangeItem(itemCode, ITEM_TYPE.ARMOR);
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine("장비를 교체했습니다!");
+                            Player.ChangeItem(itemCode, ITEM_TYPE.ARMOR);
+                            SceneManager.Instance.SysText($"{DataManager.Instance.ItemDB.List[itemCode][1]} 을(를) 장착 했습니다", ConsoleColor.DarkCyan, ConsoleColor.Black);
                         }
                         break;
                 }
-
-                Console.ResetColor();
-                Console.WriteLine("\n계속하려면 아무 키나 누르세요...");
-                Console.ReadKey();
-                Console.Clear();
-
                 return VIEW_TYPE.EQUIP;
             }
-
-            Console.WriteLine("잘못된 입력입니다.");
-            Console.ReadKey();
-            return VIEW_TYPE.EQUIP;
+            else
+                return VIEW_TYPE.EQUIP;
         }
     }
 
@@ -763,7 +828,7 @@ namespace TeamTodayTextRPG
             if (Dungeon.Diff == DUNGEON_DIFF.Hell)
             {   
                 //SceneManager.Instance.ColText("\t\t!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!\n\t\t     플레이어 능력치가 10% 감소합니다!     \n\t\t!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!\n",ConsoleColor.Red,ConsoleColor.Black);
-                SceneManager.Instance.ColText("\t\t!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!\n\t\t              기저귀를 착용하세요!!            \n\t\t!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!\n", ConsoleColor.Red, ConsoleColor.Black);
+                SceneManager.Instance.ColText("\t\t!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!\n\t\t              기저귀를 착용하세요!!            \n\t\t!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!\n\n", ConsoleColor.Red, ConsoleColor.Black);
             }
 
             Console.WriteLine($"\t던전 이름            : {Dungeon.Name}\n");
@@ -862,9 +927,15 @@ namespace TeamTodayTextRPG
             int count = 1;
             foreach (var monster in Dungeon.Dungeon_Monster)
             {
+                if(monster.State == MONSTER_STATE.DEAD)
+                    Console.ForegroundColor = ConsoleColor.DarkGray;
+
                 Console.Write($"\t【 {count++} 】 ");
                 monster.View_Monster_Status();
+                Console.ResetColor();
+                ViewGuage10(monster.Hp, monster.MaxHp, ConsoleColor.Red);
                 Console.WriteLine();
+
             }
             Console.WriteLine("");
             Console.WriteLine($"  ━━━━━ ✦ 플레이어 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -935,12 +1006,18 @@ namespace TeamTodayTextRPG
                     Console.Write($"    >>  【 {count++ } 】 ");
                     Dungeon.Dungeon_Monster[i].View_Monster_Status();
                     Console.ResetColor();
+                    ViewGuage10(Dungeon.Dungeon_Monster[i].Hp, Dungeon.Dungeon_Monster[i].MaxHp,ConsoleColor.Red);
                     Console.WriteLine();
                 }
                 else
                 {
+                    if (Dungeon.Dungeon_Monster[i].State == MONSTER_STATE.DEAD)
+                        Console.ForegroundColor = ConsoleColor.DarkGray;
+
                     Console.Write($"\t【 {count++} 】 ");
                     Dungeon.Dungeon_Monster[i].View_Monster_Status();
+                    Console.ResetColor();
+                    ViewGuage10(Dungeon.Dungeon_Monster[i].Hp, Dungeon.Dungeon_Monster[i].MaxHp, ConsoleColor.Red);
                     Console.WriteLine();
                 }
             }
@@ -1029,7 +1106,7 @@ namespace TeamTodayTextRPG
             }
 
 
-
+            SceneManager.Instance.SysDefault();
             SceneManager.Instance.ColText($"    『{Dungeon.Name}』", ConsoleColor.Magenta, ConsoleColor.Black);
             SceneManager.Instance.ColText($" {Dungeon.Text}\n\n", ConsoleColor.DarkMagenta, ConsoleColor.Black);
 
@@ -1038,8 +1115,8 @@ namespace TeamTodayTextRPG
             Console.WriteLine($"\n\t>> 『{Player.Name}』 의 일반 공격!!");
 
             Console.WriteLine($"\t>> 『{Dungeon.TargetMonster.Name}』이(가) 『{attackDamage}』의 데미지를 입었습니다.\n");
+            Console.Write($"\t>> HP {Dungeon.TargetMonster.Hp} -> ");
             Dungeon.TargetMonster.ManageHp(-attackDamage);
-            Console.Write($"\t>> HP {Dungeon.TargetMonster.Hp + attackDamage} -> ");
             if (GameManager.Instance.Dungeon.TargetMonster.State == MONSTER_STATE.DEAD)
             {
                 Console.WriteLine("Dead");
@@ -1201,7 +1278,7 @@ namespace TeamTodayTextRPG
                 int attackDamage = 0;
                 if (Character.CheckDodge())
                 {
-                    Console.WriteLine($"\t>> 『{Player.Name}』이(가) 공격을 회피했습니다!\n");
+                    SceneManager.Instance.ColText($"\t>> 『{Player.Name}』이(가) 공격을 회피했습니다!\n",ConsoleColor.Green,ConsoleColor.Black);
                     attackDamage = 0;
                 }
                 else
@@ -1209,8 +1286,8 @@ namespace TeamTodayTextRPG
                     attackDamage = Dungeon.Dungeon_Monster[Dungeon.MonsterAtkCounter].Atk - Character.Defence;
                     if (attackDamage <= 0) attackDamage = 1;
                     Console.WriteLine($"\t>> 『{Player.Name}』이(가) 『{attackDamage}』의 데미지를 입었습니다.\n");
+                    Console.Write($"\t>> HP {Character.Hp} -> ");
                     Character.ManageHp(-attackDamage);
-                    Console.Write($"\t>> HP {Character.Hp+attackDamage} -> ");
                     if (Character.State == CHAR_STATE.DEAD)
                     {
                         Console.WriteLine("Dead");

@@ -331,13 +331,8 @@ namespace TeamTodayTextRPG
                     if (view == VIEW_TYPE.EQUIP) Console.Write($"     -{++count} ");
                     else Console.Write("     -");
 
-                    if (GameManager.Instance.Player.CheckEquip(item, ITEM_TYPE.WEAPON) ||
-                        GameManager.Instance.Player.CheckEquip(item, ITEM_TYPE.ARMOR))
-                    {
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.Write("[E]");
-                        Console.ResetColor();
-                    }
+                    CurrentViewer.Attach_E_Mark(item);
+
                     Console.WriteLine(" 『" + DataManager.Instance.ItemDB.List[item][1] + "』");
                     ShowAtk(int.Parse(DataManager.Instance.ItemDB.List[item][2]));
                     ShowDef(int.Parse(DataManager.Instance.ItemDB.List[item][3]));
@@ -401,23 +396,18 @@ namespace TeamTodayTextRPG
             {
                 foreach (var item in GameManager.Instance.Player.Bag)
                 {
-                    Console.WriteLine("   ------------------------------------------------------------------------------");
+                    //Console.WriteLine("   ------------------------------------------------------------------------------");
                     if (view == VIEW_TYPE.EQUIP) Console.Write($"     -{++count} ");
                     else Console.Write("     -");
 
-                    if (GameManager.Instance.Player.CheckEquip(item, ITEM_TYPE.WEAPON) ||
-                        GameManager.Instance.Player.CheckEquip(item, ITEM_TYPE.ARMOR))
-                    {
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.Write("[E]");
-                        Console.ResetColor();
-                    }
+                    CurrentViewer.Attach_E_Mark(item);
+
                     Console.WriteLine(" 『" + DataManager.Instance.ItemDB.List[item][1] + "』");
                     ShowAtk(int.Parse(DataManager.Instance.ItemDB.List[item][2]));
                     ShowDef(int.Parse(DataManager.Instance.ItemDB.List[item][3]));
                     Console.WriteLine("\t  [ " + DataManager.Instance.ItemDB.List[item][6] + " ]");
                 }
-                Console.WriteLine("   ------------------------------------------------------------------------------");
+                //Console.WriteLine("   ------------------------------------------------------------------------------");
             }
         }
     }
