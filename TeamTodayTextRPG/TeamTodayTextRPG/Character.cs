@@ -11,7 +11,6 @@ using TeamTodayTextRPG;
 
 namespace TeamTodayTextRPG
 {
-
     public enum CHAR_TYPE
     {
         WARRIOR,
@@ -23,7 +22,6 @@ namespace TeamTodayTextRPG
         IDLE,
         DEAD
     }
-   
 
     public abstract class Character
     {

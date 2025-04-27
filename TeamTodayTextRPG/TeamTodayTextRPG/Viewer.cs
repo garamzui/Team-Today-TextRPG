@@ -125,6 +125,20 @@ namespace TeamTodayTextRPG
             Console.ResetColor();
             Console.WriteLine(")");
         }
+        protected void ViewStatusRest()
+        {
+            Console.Write("\t체력     : ");
+            SceneManager.Instance.ColText($"{Character.Hp}", ConsoleColor.Red, ConsoleColor.Black);
+            Console.Write(" / ");
+            SceneManager.Instance.ColText($"{Character.MaxHp}", ConsoleColor.Red, ConsoleColor.Black);
+            ViewGuage20(Character.Hp, Character.MaxHp, ConsoleColor.Red);
+
+            Console.Write("\t마나     : ");
+            SceneManager.Instance.ColText($"{Character.Mp}", ConsoleColor.Blue, ConsoleColor.Black);
+            Console.Write(" / ");
+            SceneManager.Instance.ColText($"{Character.MaxMp}", ConsoleColor.Blue, ConsoleColor.Black);
+            ViewGuage20(Character.Mp, Character.MaxMp, ConsoleColor.Blue);
+        }
         protected void ViewStatusEquip()
         {
             Console.Write($"\t공격력   : {Character.TotalAtk}");
@@ -1429,6 +1443,8 @@ namespace TeamTodayTextRPG
             SceneManager.Instance.ColText("    『여관』", ConsoleColor.Cyan, ConsoleColor.Black);
             SceneManager.Instance.ColText(" 골드를 지불하고 휴식합니다.\n\n", ConsoleColor.DarkCyan, ConsoleColor.Black);
 
+            Console.WriteLine("\n\t━━━━━ ✦  능력치  ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+            ViewStatusRest();
             Console.WriteLine("\n\t━━━━━ ✦  요금표  ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 
             Console.Write("\n\t\t【 1 】 대실    | ");
