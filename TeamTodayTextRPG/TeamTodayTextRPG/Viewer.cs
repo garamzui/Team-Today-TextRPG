@@ -838,7 +838,7 @@ namespace TeamTodayTextRPG
 
             Console.WriteLine("====================");
             Console.WriteLine("\t1. 기본공격\n\t2. 스킬");
-            Console.WriteLine("\t0. 돌아가기");
+            Console.WriteLine("\t0. 돌아가기\n\n");
 
             
         }
