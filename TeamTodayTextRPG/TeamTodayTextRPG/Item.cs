@@ -1,10 +1,4 @@
-﻿using System;
-using System.Numerics;
-using System.Threading;
-using System.Xml.Linq;
-using TeamTodayTextRPG;
-
-namespace TeamTodayTextRPG
+﻿namespace TeamTodayTextRPG
 {
     public enum ITEM_TYPE
     {
@@ -26,7 +20,7 @@ namespace TeamTodayTextRPG
         public int Value { get; private set; }
         public string[]? Parameter { get; set; }
 
-        public Item (string[] str) //Parse로 데이터 변환
+        public Item(string[] str) //Parse로 데이터 변환
         {
             Code = int.Parse(str[0]);
             Name = str[1];
@@ -65,7 +59,7 @@ namespace TeamTodayTextRPG
                 allowedJobs.Add(CHAR_TYPE.MAGICIAN);
             }
 
-            
+
             //items.Add(new Item(Code, Name, Atk, Def, Hp, Mp, Text, Value, Type, allowedJobs));
 
         }

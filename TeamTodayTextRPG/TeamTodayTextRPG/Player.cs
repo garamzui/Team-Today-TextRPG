@@ -1,10 +1,4 @@
-﻿using System;
-using System.Numerics;
-using System.Threading;
-using System.Xml.Linq;
-using TeamTodayTextRPG;
-
-namespace TeamTodayTextRPG
+﻿namespace TeamTodayTextRPG
 {
     //참조 관련 스크립트
     public partial class Player
@@ -79,16 +73,16 @@ namespace TeamTodayTextRPG
             if (Exp >= RequiredExp)
             {
                 //경험치에서 요구 경험치 만큼 빼고 초과량은 현재 경험치로 남는다.
-                while(Exp >= RequiredExp)
+                while (Exp >= RequiredExp)
                 {
                     Exp -= RequiredExp;
                     RequiredExp += 25;
                     count++;
                 }
 
-                SceneManager.Instance.ColText($"\t>> Level Up!!! {Level} -> {Level + count}\n",ConsoleColor.Black,ConsoleColor.Yellow);
-                SceneManager.Instance.ColText($"\t>> [공격력  ↑] {Character.Attack} -> {Character.Attack + (1 * count)}\n", ConsoleColor.Green,  ConsoleColor.Black);
-                SceneManager.Instance.ColText($"\t>> [방어력  ↑] {Character.Defence} -> {Character.Defence + (2 * count)}\n",ConsoleColor.Green, ConsoleColor.Black);
+                SceneManager.Instance.ColText($"\t>> Level Up!!! {Level} -> {Level + count}\n", ConsoleColor.Black, ConsoleColor.Yellow);
+                SceneManager.Instance.ColText($"\t>> [공격력  ↑] {Character.Attack} -> {Character.Attack + (1 * count)}\n", ConsoleColor.Green, ConsoleColor.Black);
+                SceneManager.Instance.ColText($"\t>> [방어력  ↑] {Character.Defence} -> {Character.Defence + (2 * count)}\n", ConsoleColor.Green, ConsoleColor.Black);
 
 
                 for (int lv = Level + 1; lv <= Level+count; lv++)
@@ -231,7 +225,7 @@ namespace TeamTodayTextRPG
         {
             //장착중이 아니라면
             //if (equipedWpCode == -1 || equipedAmCode == -1) return;
-            
+
             //if()
 
             //타입비교
@@ -280,7 +274,7 @@ namespace TeamTodayTextRPG
             var item = DataManager.Instance.ItemDB.List[code]; // 아이템 코드 그대로 사용!
             int atk = int.Parse(item[2]);
             int def = int.Parse(item[3]);
-            
+
 
             if (CheckEquip(code, ITEM_TYPE.WEAPON) || CheckEquip(code, ITEM_TYPE.ARMOR))
             {

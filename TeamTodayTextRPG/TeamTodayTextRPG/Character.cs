@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using TeamTodayTextRPG;
-//
-
-namespace TeamTodayTextRPG
+﻿namespace TeamTodayTextRPG
 {
-
     public enum CHAR_TYPE
     {
         WARRIOR,
@@ -23,7 +11,6 @@ namespace TeamTodayTextRPG
         IDLE,
         DEAD
     }
-   
 
     public abstract class Character
     {
@@ -34,7 +21,7 @@ namespace TeamTodayTextRPG
             ChooseBehavior = new List<string>();
             ChooseBehavior.Add("기본 공격");
             ChooseBehavior.Add("스킬");
-            
+
         }
 
         public CHAR_TYPE Code { get; set; }
@@ -81,10 +68,10 @@ namespace TeamTodayTextRPG
             PasskillName = (data[8]);
         }
 
-            public virtual string JobDescription() //직업 설명
-            {
-                return "";
-            }
+        public virtual string JobDescription() //직업 설명
+        {
+            return "";
+        }
         //영훈) ↓보시면 참조 0개라고 쓰여있어요 그러면 이 메서드는 호출이 안되었다는 뜻이죠
         //Viewer 스크립트의 109번 줄부터 보면 거기에서 이미 비슷한 동작을 하고 있어서
         //ViewStatus() 메서드는 지우셔도 될거같아요!
@@ -166,7 +153,7 @@ namespace TeamTodayTextRPG
                 if (Hp > MaxHp) Hp = MaxHp;
                 //Console.WriteLine($"{HpChange}만큼 회복했습니다! 현재 HP: {Hp}/{MaxHp}");
             }
-           // else { Console.WriteLine("아무 일도 일어나지 않았습니다."); }// 우선 예외처리 때문에 작성해 두었습니다.
+            // else { Console.WriteLine("아무 일도 일어나지 않았습니다."); }// 우선 예외처리 때문에 작성해 두었습니다.
         }
         public void Die()
         {
@@ -220,12 +207,12 @@ namespace TeamTodayTextRPG
         public override int DefaultAttack()
         {
             int attackDamage = GameManager.Instance.Player.Character.TotalAtk - GameManager.Instance.Dungeon.TargetMonster.Def;
-            if (attackDamage <= 0) 
+            if (attackDamage <= 0)
                 attackDamage = 1;
 
-            
 
-            GameManager.Instance.Dungeon.TargetMonster.ManageHp(-attackDamage);
+
+            //GameManager.Instance.Dungeon.TargetMonster.ManageHp(-attackDamage);
 
             return attackDamage;
         }
@@ -238,9 +225,9 @@ namespace TeamTodayTextRPG
             if (Mp >= 10)
             {
                 ManageMp(-10);
-                
-         
-                GameManager.Instance.Dungeon.TargetMonster.ManageHp(-skillDamage);
+
+
+                //GameManager.Instance.Dungeon.TargetMonster.ManageHp(-skillDamage);
 
                 return skillDamage;
             }
@@ -265,7 +252,7 @@ namespace TeamTodayTextRPG
                 }
                 else
                 {
-                    SceneManager.Instance.ColText($"\t>> 『{PasskillName}』의 Lv이 1증가 하였습니다 [{PassiveSkillLevel-1}->{PassiveSkillLevel}]\t|\t방어도 +2\n", ConsoleColor.DarkCyan, ConsoleColor.Black);
+                    SceneManager.Instance.ColText($"\t>> 『{PasskillName}』의 Lv이 1증가 하였습니다 [{PassiveSkillLevel - 1}->{PassiveSkillLevel}]\t| 방어도 +2\n", ConsoleColor.DarkCyan, ConsoleColor.Black);
                     Defence += 2;
                 }
             }
@@ -290,31 +277,31 @@ namespace TeamTodayTextRPG
         public override int DefaultAttack()
         {
             int attackDamage = GameManager.Instance.Player.Character.TotalAtk - GameManager.Instance.Dungeon.TargetMonster.Def;
-            if (attackDamage <= 0) 
+            if (attackDamage <= 0)
                 attackDamage = 1;
 
-          
+
 
             GameManager.Instance.Dungeon.TargetMonster.ManageHp(-attackDamage);
 
             return attackDamage;
         }
         public override int ActiveSkill()
-        { 
+        {
             double itd = Math.Round(GameManager.Instance.Dungeon.TargetMonster.Def / 2.0); //방어무시를 구현하기위해서 방어도를 반으로 나누고 반올림하였습니다.
-            if (itd ==1)
+            if (itd == 1)
             {
                 itd = 0;
             }
-            
-            int skillDamage = (int)((TotalAtk * 10) - itd); 
+
+            int skillDamage = (int)((TotalAtk * 10) - itd);
             if (skillDamage <= 0)
                 skillDamage = 1;
-            
+
             if (Mp >= 10)
             {
                 ManageMp(-10);
-                
+
 
                 GameManager.Instance.Dungeon.TargetMonster.ManageHp(-skillDamage);
 
@@ -379,12 +366,12 @@ namespace TeamTodayTextRPG
             int attackDamage = GameManager.Instance.Player.Character.TotalAtk - GameManager.Instance.Dungeon.TargetMonster.Def;
             if (attackDamage <= 0) attackDamage = 1;
 
-          
+
 
             GameManager.Instance.Dungeon.TargetMonster.ManageHp(-attackDamage);
 
             return attackDamage;
-            
+
         }
         public override int ActiveSkill()
         {
@@ -394,8 +381,8 @@ namespace TeamTodayTextRPG
             if (Mp >= 10)
             {
                 ManageMp(-10);
-                
-                
+
+
                 return skillDamage;
             }
             else
@@ -431,9 +418,9 @@ namespace TeamTodayTextRPG
     }
 
 
-  
 
-    
+
+
 }
 
 

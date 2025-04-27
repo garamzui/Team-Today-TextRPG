@@ -1,11 +1,4 @@
-﻿using System;
-using System.Numerics;
-using System.Threading;
-using System.Xml.Linq;
-using TeamTodayTextRPG;
-using static TeamTodayTextRPG.NonePlayableCharacter;
-
-namespace TeamTodayTextRPG
+﻿namespace TeamTodayTextRPG
 {
     class GameManager
     {
@@ -48,7 +41,7 @@ namespace TeamTodayTextRPG
 
       
         public Animation Animation { get; set; }
-        
+
 
 
         public Monster BattleEnemy { get; set; }
@@ -68,13 +61,14 @@ namespace TeamTodayTextRPG
                     return new Dungeon_Hard();
                 case (int)DUNGEON_DIFF.Hell:
                     return new Dungeon_Hell();
-                default: 
+                default:
                     throw new ArgumentException("잘못된 던전 코드입니다.");
             }
         }
         public Monster MonsterFactory(int code)
         {
-            switch (code) {
+            switch (code)
+            {
 
                 case (int)MONSTER_CODE.Slime:
                     return new Slime();
@@ -86,7 +80,7 @@ namespace TeamTodayTextRPG
                     return new Ork();
                 case (int)MONSTER_CODE.Zakum:
                     return new Zakum();
-                default: 
+                default:
                     throw new ArgumentException("잘못된 몬스터 코드입니다.");
             }
         }

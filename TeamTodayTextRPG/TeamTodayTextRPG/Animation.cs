@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TeamTodayTextRPG
+﻿namespace TeamTodayTextRPG
 {
-   
+
 
     public class Animation
     {
@@ -546,6 +540,7 @@ namespace TeamTodayTextRPG
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ");
             NextCut(200);
+            SceneManager.Instance.SysText("범. 부.", ConsoleColor.Red, ConsoleColor.Black);
             Environment.Exit(0);
         }
         public void WarriorAnimation()
@@ -3810,6 +3805,7 @@ namespace TeamTodayTextRPG
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ");
             NextCut(3000);
+            SceneManager.Instance.Intro();
         }
         public void SlimeAnimation()
         {
