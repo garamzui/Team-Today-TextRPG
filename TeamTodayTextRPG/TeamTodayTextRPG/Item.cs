@@ -8,13 +8,14 @@ namespace TeamTodayTextRPG
 {
     public enum ITEM_TYPE
     {
-        WEAPON = 0,        //무기
-        ARMOR = 1,         //방어구
-        CONSUMABLE = 2,    //소모품
+        WEAPON = 0,     //무기
+        ARMOR,          //방어구
+        CONSUMABLE      //소모품
     }
 
-    public class Item
+    public abstract class Item
     {
+        public ITEM_TYPE Type { get; set; }
         public int Code { get; private set; }
         public string Name { get; private set; }
         public int Atk { get; private set; }
@@ -23,9 +24,9 @@ namespace TeamTodayTextRPG
         public int Mp { get; private set; }
         public string Text { get; private set; }
         public int Value { get; private set; }
-        public ITEM_TYPE Type { get; set; }
+        public string[]? Parameter { get; set; }
 
-        public Item(string[] str) //Parse로 데이터 변환
+        public Item (string[] str) //Parse로 데이터 변환
         {
             Code = int.Parse(str[0]);
             Name = str[1];
@@ -69,7 +70,6 @@ namespace TeamTodayTextRPG
 
         }
     }
-
 
 
     /*
