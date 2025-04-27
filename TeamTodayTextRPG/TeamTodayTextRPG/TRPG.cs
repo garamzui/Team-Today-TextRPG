@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TeamTodayTextRPG
+﻿namespace TeamTodayTextRPG
 {
     class TRPG
     {
@@ -18,7 +12,7 @@ namespace TeamTodayTextRPG
             var dm = DataManager.Instance;
 
 
-            sm.Intro();
+            gm.Animation.TitleAnimation();
 
 
             // 『효빈』스테이트 머신

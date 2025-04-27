@@ -1,14 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Data;
-using System.Numerics;
-using System.Threading;
-using System.Xml.Linq;
-using TeamTodayTextRPG;
-using static System.Collections.Specialized.BitVector32;
-using static System.Net.Mime.MediaTypeNames;
-
-namespace TeamTodayTextRPG
+﻿namespace TeamTodayTextRPG
 {
     // 뷰어 화면 타입을 정의하는 열거형
     // 가나다라
@@ -21,7 +11,7 @@ namespace TeamTodayTextRPG
         SHOP,           // 상점 화면
         PURCHASE,       // 아이템 구매 화면
         SALE,           // 아이템 판매 화면
-        
+
         DUNGEON_SELECT,  // 던전 선택화면
         DUNGEON,         // 던전 화면
         DUNGEON_RESULT,   // 던전 클리어 화면
@@ -260,7 +250,7 @@ namespace TeamTodayTextRPG
         }
         protected void ViewEquipItem()
         {
-            if(Player.equipedWpCode != -1)
+            if (Player.equipedWpCode != -1)
             {
                 SceneManager.Instance.ColText($"\t[ 무  기 ]  -  『{DataManager.Instance.ItemDB.List[Player.equipedWpCode][1]}』\n", ConsoleColor.DarkGreen, ConsoleColor.Black);
                 SceneManager.Instance.ShowAtk(int.Parse(DataManager.Instance.ItemDB.List[Player.equipedWpCode][2]));
@@ -290,7 +280,7 @@ namespace TeamTodayTextRPG
 
 
         protected void ViewGuage10(int value, int maxValue, ConsoleColor color)
-        { 
+        {
             int guage = (int)(((float)value / (float)maxValue) * 100) / 10;
             int guageDetail = (int)(((float)value / (float)maxValue) * 100) % 10;
 
@@ -337,7 +327,7 @@ namespace TeamTodayTextRPG
             Console.Write("]\n");
 
         }
-    
+
     }
 
 
@@ -385,7 +375,7 @@ namespace TeamTodayTextRPG
                     SceneManager.Instance.SysDefault();
                     return VIEW_TYPE.REST;
                 case 0:
-                    SceneManager.Instance.SysText("게임을 종료합니다...",ConsoleColor.Red, ConsoleColor.Black);
+                    SceneManager.Instance.SysText("게임을 종료합니다...", ConsoleColor.Red, ConsoleColor.Black);
                     Environment.Exit(0);
                     return VIEW_TYPE.MAIN;
                 default:
@@ -419,7 +409,7 @@ namespace TeamTodayTextRPG
             Console.WriteLine("\n\t━━━━━ ✦  능력치  ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━\n");
             ViewStatus();
             Console.WriteLine("\n\t━━━━━ ✦  장  비  ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-            ViewEquipItem();   
+            ViewEquipItem();
             Console.WriteLine("\n\t━━━━━ ✦  스  킬  ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━\n");
             Console.WriteLine($"\t 액티브 스킬 | {Character.ActskillName}");
             Console.WriteLine($"\t 패시브 스킬 | {Character.PasskillName} (레벨 {Character.PassiveSkillLevel}/{Character.MaxPassiveSkillLevel})");
@@ -446,7 +436,7 @@ namespace TeamTodayTextRPG
             }
         }
 
-        
+
     }
 
 
@@ -461,7 +451,7 @@ namespace TeamTodayTextRPG
         {
             SceneManager.Instance.ColText("    『인벤토리』", ConsoleColor.Cyan, ConsoleColor.Black);
             SceneManager.Instance.ColText(" 보유중인 아이템을 확인하거나, 소모품을 사용할 수 있습니다.\n\n", ConsoleColor.DarkCyan, ConsoleColor.Black);
-            
+
             Console.WriteLine($"  ━━━━━ ✦ 아이템 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
             //Console.WriteLine($"  ━━━━━ ✦ 무  기 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
             SceneManager.Instance.ShowInventory(VIEW_TYPE.INVENTORY);
@@ -517,7 +507,7 @@ namespace TeamTodayTextRPG
             Console.WriteLine($"1~{EndIndex}. 장비 변경");
             Console.WriteLine("\n0. 메인으로 돌아가기\n\n");
         }
-        
+
 
         public override VIEW_TYPE NextView(int input)
         {
@@ -540,7 +530,7 @@ namespace TeamTodayTextRPG
                         if (Player.equipedWpCode == -1)
                         {
                             Player.EquipItem(itemCode, ITEM_TYPE.WEAPON);
-                            SceneManager.Instance.SysText($"{DataManager.Instance.ItemDB.List[itemCode][1]} 을(를) 장착 했습니다",ConsoleColor.DarkCyan,ConsoleColor.Black);
+                            SceneManager.Instance.SysText($"{DataManager.Instance.ItemDB.List[itemCode][1]} 을(를) 장착 했습니다", ConsoleColor.DarkCyan, ConsoleColor.Black);
                         }
 
                         else if (Player.equipedWpCode == itemCode)
@@ -593,7 +583,7 @@ namespace TeamTodayTextRPG
         {
             SceneManager.Instance.ColText("    『상점』", ConsoleColor.Cyan, ConsoleColor.Black);
             SceneManager.Instance.ColText(" 필요한 아이템을 구매하거나 판매합니다.\n\n", ConsoleColor.DarkCyan, ConsoleColor.Black);
-  
+
             Console.Write("\t\t\t\t\t소지금 : ");
             SceneManager.Instance.ColText($"{Player.Gold}", ConsoleColor.Yellow, ConsoleColor.Black);
             Console.WriteLine(" G");
@@ -669,13 +659,15 @@ namespace TeamTodayTextRPG
         public override VIEW_TYPE NextView(int input)
         {
             Console.Clear();
-            if (input == 0) {
+            if (input == 0)
+            {
                 SceneManager.Instance.SysDefault();
-                return VIEW_TYPE.SHOP; 
+                return VIEW_TYPE.SHOP;
             }
-            else if (input == -1) {
+            else if (input == -1)
+            {
                 SceneManager.Instance.SysDefault();
-                return VIEW_TYPE.SALE; 
+                return VIEW_TYPE.SALE;
             }
             else if (input > 0 && input <= DataManager.Instance.ItemDB.List.Count)
             {
@@ -686,7 +678,7 @@ namespace TeamTodayTextRPG
                     if (GameManager.Instance.Player.Gold >= int.Parse(DataManager.Instance.ItemDB.List[input - 1][7]))
                     {
                         // 인벤토리에 아이템 추가
-                        GameManager.Instance.Player.InputBag(int.Parse(DataManager.Instance.ItemDB.List[input - 1][0]),VIEW_TYPE.PURCHASE);
+                        GameManager.Instance.Player.InputBag(int.Parse(DataManager.Instance.ItemDB.List[input - 1][0]), VIEW_TYPE.PURCHASE);
                         SceneManager.Instance.SysText($"{DataManager.Instance.ItemDB.List[input - 1][1]} 을(를) 구매 했습니다", ConsoleColor.DarkCyan, ConsoleColor.Black);
                     }
                     // 구매실패 (잔금 부족)
@@ -743,13 +735,15 @@ namespace TeamTodayTextRPG
         public override VIEW_TYPE NextView(int input)
         {
             Console.Clear();
-            if (input == 0) {
+            if (input == 0)
+            {
                 SceneManager.Instance.SysDefault();
-                return VIEW_TYPE.SHOP; 
+                return VIEW_TYPE.SHOP;
             }
-            else if (input == -1) {
+            else if (input == -1)
+            {
                 SceneManager.Instance.SysDefault();
-                return VIEW_TYPE.PURCHASE; 
+                return VIEW_TYPE.PURCHASE;
             }
             else if (input > 0 && input <= Player.Bag.Count)
             {
@@ -760,7 +754,7 @@ namespace TeamTodayTextRPG
 
                     Player.RemoveBag(int.Parse(DataManager.Instance.ItemDB.List[Player.Bag[input - 1]][0]), VIEW_TYPE.SALE);
 
-            }   
+                }
                 // 판매실패 (보유중이지 않은 물품)
                 else
                 {
@@ -836,9 +830,9 @@ namespace TeamTodayTextRPG
             SceneManager.Instance.ColText(" 던전입장 전 정보를 확인합니다.\n\n", ConsoleColor.DarkMagenta, ConsoleColor.Black);
 
             Console.WriteLine($"  ━━━━━ ✦ 정  보 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-            
+
             if (Dungeon.Diff == DUNGEON_DIFF.Hell)
-            {   
+            {
                 //SceneManager.Instance.ColText("\t\t!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!\n\t\t     플레이어 능력치가 10% 감소합니다!     \n\t\t!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!\n",ConsoleColor.Red,ConsoleColor.Black);
                 SceneManager.Instance.ColText("\t\t!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!\n\t\t              기저귀를 착용하세요!!            \n\t\t!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!\n\n", ConsoleColor.Red, ConsoleColor.Black);
             }
@@ -850,7 +844,7 @@ namespace TeamTodayTextRPG
             Console.WriteLine($"\t기본 보상 경험치     : {Dungeon.Exp}Exp\n");
             Console.WriteLine($"  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 
-            
+
             Console.WriteLine("\t1. 전투 시작");
             Console.WriteLine("\t2. 던전 재선택");
             Console.WriteLine("\n\t0. 마을로 돌아가기\n\n");
@@ -878,7 +872,7 @@ namespace TeamTodayTextRPG
             }
         }
     }
-   
+
 
     public class BattleViewer : Viewer
     {
@@ -919,7 +913,7 @@ namespace TeamTodayTextRPG
 
         }
     }
-    
+
 
     public class BattlePlayerViewer : Viewer
     {
@@ -939,7 +933,7 @@ namespace TeamTodayTextRPG
             int count = 1;
             foreach (var monster in Dungeon.Dungeon_Monster)
             {
-                if(monster.State == MONSTER_STATE.DEAD)
+                if (monster.State == MONSTER_STATE.DEAD)
                     Console.ForegroundColor = ConsoleColor.DarkGray;
 
                 Console.Write($"\t【 {count++} 】 ");
@@ -954,7 +948,7 @@ namespace TeamTodayTextRPG
             ViewStatusDun();
             Console.WriteLine($"  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 
-            Console.WriteLine($"\t1~{count-1}. 공격 대상 선택(번호 입력)");
+            Console.WriteLine($"\t1~{count - 1}. 공격 대상 선택(번호 입력)");
             Console.WriteLine("\n\t0. 도망\n\n");
 
         }
@@ -968,23 +962,23 @@ namespace TeamTodayTextRPG
             }
             else if (input > 0 && input <= Dungeon.Dungeon_Monster.Count)
             {
-                
+
                 //행동 선택 뷰가 들어갈 자리
 
                 // 해당 몬스터가 죽은 상태라면
-                if (Dungeon.Dungeon_Monster[input-1].State == MONSTER_STATE.DEAD)
+                if (Dungeon.Dungeon_Monster[input - 1].State == MONSTER_STATE.DEAD)
                 {
-                    SceneManager.Instance.SysText("이미 싸늘한 상태입니다... 시체를 배려해주세요",ConsoleColor.Red, ConsoleColor.Black);
+                    SceneManager.Instance.SysText("이미 싸늘한 상태입니다... 시체를 배려해주세요", ConsoleColor.Red, ConsoleColor.Black);
 
                     return VIEW_TYPE.BATTLE_PLAYER;
                 }
                 // 해당 몬스터가 죽지 않았다면 대미지 처리 화면으로 이동
                 else
                 {
-                    Dungeon.TargetMonsterIndex = input-1;
+                    Dungeon.TargetMonsterIndex = input - 1;
                     Dungeon.TargetMonster = Dungeon.Dungeon_Monster[Dungeon.TargetMonsterIndex];
                     SceneManager.Instance.SysDefault();
-                    return VIEW_TYPE.CHOOSE_BEHAVIOR; 
+                    return VIEW_TYPE.CHOOSE_BEHAVIOR;
                 }
             }
             else
@@ -1010,15 +1004,15 @@ namespace TeamTodayTextRPG
             SceneManager.Instance.ColText($"  >> TURN [{Dungeon.Turn}]  Target Selected!!!\n", ConsoleColor.Yellow, ConsoleColor.Black);
             Console.WriteLine($"  ━━━━━ ✦ 몬스터 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
             int count = 1;
-            for (int i=0; i < Dungeon.Dungeon_Monster.Count;i++)
+            for (int i = 0; i < Dungeon.Dungeon_Monster.Count; i++)
             {
                 if (i == Dungeon.TargetMonsterIndex)
                 {
                     Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.Write($"    >>  【 {count++ } 】 ");
+                    Console.Write($"    >>  【 {count++} 】 ");
                     Dungeon.Dungeon_Monster[i].View_Monster_Status();
                     Console.ResetColor();
-                    ViewGuage10(Dungeon.Dungeon_Monster[i].Hp, Dungeon.Dungeon_Monster[i].MaxHp,ConsoleColor.Red);
+                    ViewGuage10(Dungeon.Dungeon_Monster[i].Hp, Dungeon.Dungeon_Monster[i].MaxHp, ConsoleColor.Red);
                     Console.WriteLine();
                 }
                 else
@@ -1060,9 +1054,9 @@ namespace TeamTodayTextRPG
                 if (input == 1)
                 {
                     SceneManager.Instance.SysDefault();
-                    return VIEW_TYPE.BATTLE_PLAYER_LOG; 
+                    return VIEW_TYPE.BATTLE_PLAYER_LOG;
                 }
-                else  
+                else
                 {
                     if (Character.Mp < 10)
                     {
@@ -1104,13 +1098,13 @@ namespace TeamTodayTextRPG
                     else { GameManager.Instance.Animation.WarriorNomAtk(); }
                     break;
                 case CHAR_TYPE.MAGICIAN:
-                    
+
                     if (rand == 0) { GameManager.Instance.Animation.MAGICIANATK1(); }
                     else if (rand == 1) { GameManager.Instance.Animation.MAGICIANATK2(); }
                     else { GameManager.Instance.Animation.MagicianNomAtk(); }
                     break;
                 case CHAR_TYPE.ASSASSIN:
-                    
+
                     if (rand == 0) { GameManager.Instance.Animation.ASSASSINATK(); }
                     else { GameManager.Instance.Animation.AssassinNomAtk(); }
                     break;
@@ -1170,8 +1164,8 @@ namespace TeamTodayTextRPG
         public override void ViewAction()
         {
             int skillDamage = Character.ActiveSkill();
-           
-           
+
+
             switch (GameManager.Instance.Player.Character.Code)
             {
                 case CHAR_TYPE.WARRIOR:
@@ -1201,7 +1195,7 @@ namespace TeamTodayTextRPG
             int totalDamage = 0;
             if (Character.Code == CHAR_TYPE.ASSASSIN)
             {
-                
+
                 Random rand = new Random();
                 for (int i = 0; i < 2; i++)
                 {
@@ -1290,7 +1284,7 @@ namespace TeamTodayTextRPG
                 int attackDamage = 0;
                 if (Character.CheckDodge())
                 {
-                    SceneManager.Instance.ColText($"\t>> 『{Player.Name}』이(가) 공격을 회피했습니다!\n",ConsoleColor.Green,ConsoleColor.Black);
+                    SceneManager.Instance.ColText($"\t>> 『{Player.Name}』이(가) 공격을 회피했습니다!\n", ConsoleColor.Green, ConsoleColor.Black);
                     attackDamage = 0;
                 }
                 else
@@ -1339,7 +1333,7 @@ namespace TeamTodayTextRPG
         public override VIEW_TYPE NextView(int input)
         {
             Console.Clear();
-            if(input == 0)
+            if (input == 0)
             {
                 // 공격할 몬스터가 남았다면 몬스터 공격화면을 계속 출력
                 if (GameManager.Instance.Dungeon.MonsterAtkCounter < GameManager.Instance.Dungeon.Dungeon_Monster.Count)
@@ -1381,10 +1375,11 @@ namespace TeamTodayTextRPG
 
                 Console.WriteLine($"  ━━━━━ ✦ 결  과 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 
-                SceneManager.Instance.ColText("\t\t\t☆ 축하합니다! 던전을 클리어했습니다 ☆\n\n", ConsoleColor.Yellow,ConsoleColor.Black);
+                SceneManager.Instance.ColText("\t\t\t☆ 축하합니다! 던전을 클리어했습니다 ☆\n\n", ConsoleColor.Yellow, ConsoleColor.Black);
 
                 Console.WriteLine($"\t보상 골드       : {Dungeon.Reward} G\n");
-                foreach (var monster in Dungeon.Dungeon_Monster){
+                foreach (var monster in Dungeon.Dungeon_Monster)
+                {
                     Console.WriteLine($"\t\t\t\t+{monster.RewardGold} G …………{monster.Name} 토벌 추가 보상");
                     Dungeon.Reward += monster.RewardGold;
                 }
@@ -1465,7 +1460,7 @@ namespace TeamTodayTextRPG
         public override VIEW_TYPE NextView(int input)
         {
             Console.Clear();
-            
+
             switch (input)
             {
                 case 1:
@@ -1514,66 +1509,66 @@ namespace TeamTodayTextRPG
         }
     }
 }
-    /*
-    public class MonsterViewer : Viewer
+/*
+public class MonsterViewer : Viewer
+{
+    protected Monster currentMonster;
+
+    public MonsterViewer(Monster monster)
     {
-        protected Monster currentMonster;
+        this.currentMonster = monster;
+        StartIndex = 1;
+        EndIndex = 2;
+    }
 
-        public MonsterViewer(Monster monster)
+    public override void ViewAction()
+    {
+        Console.Clear();
+        Console.WriteLine(" 몬스터 정보");
+        Console.WriteLine("====================");
+
+        if (currentMonster == null)
         {
-            this.currentMonster = monster;
-            StartIndex = 1;
-            EndIndex = 2;
+            Console.WriteLine("몬스터 정보가 없습니다.");
+        }
+        else
+        {
+            Console.WriteLine($"이름: {currentMonster.Name}");
+            Console.WriteLine($"레벨: {currentMonster.Level}");
+            Console.WriteLine($"체력: {currentMonster.Hp}/{currentMonster.MaxHp}");
+            Console.WriteLine($"공격력: {currentMonster.Atk}");
+            Console.WriteLine($"보스 여부: {(currentMonster.Grade == MONSTER_GRADE.BOSS ? " 보스" : " 일반")}");
         }
 
-        public override void ViewAction()
+        Console.WriteLine("====================");
+        Console.WriteLine("1. 전투 시작");
+        Console.WriteLine("2. 메인으로 돌아가기");
+
+        int input = GetInput();
+        VIEW_TYPE nextView = NextView(input);
+        SceneManager.Instance.SwitchScene(nextView);
+    }
+
+    public override VIEW_TYPE NextView(int input)
+    {
+        switch (input)
         {
-            Console.Clear();
-            Console.WriteLine(" 몬스터 정보");
-            Console.WriteLine("====================");
+            case 1:
+                GameManager.Instance.BattleEnemy = currentMonster; // 전투 대상 설정
+                return VIEW_TYPE.BATTLE;
 
-            if (currentMonster == null)
-            {
-                Console.WriteLine("몬스터 정보가 없습니다.");
-            }
-            else
-            {
-                Console.WriteLine($"이름: {currentMonster.Name}");
-                Console.WriteLine($"레벨: {currentMonster.Level}");
-                Console.WriteLine($"체력: {currentMonster.Hp}/{currentMonster.MaxHp}");
-                Console.WriteLine($"공격력: {currentMonster.Atk}");
-                Console.WriteLine($"보스 여부: {(currentMonster.Grade == MONSTER_GRADE.BOSS ? " 보스" : " 일반")}");
-            }
+            case 2:
+                return VIEW_TYPE.MAIN;
 
-            Console.WriteLine("====================");
-            Console.WriteLine("1. 전투 시작");
-            Console.WriteLine("2. 메인으로 돌아가기");
-
-            int input = GetInput();
-            VIEW_TYPE nextView = NextView(input);
-            SceneManager.Instance.SwitchScene(nextView);
+            default:
+                Console.WriteLine("잘못된 입력입니다.");
+                return VIEW_TYPE.MONSTER;
         }
-
-        public override VIEW_TYPE NextView(int input)
-        {
-            switch (input)
-            {
-                case 1:
-                    GameManager.Instance.BattleEnemy = currentMonster; // 전투 대상 설정
-                    return VIEW_TYPE.BATTLE;
-
-                case 2:
-                    return VIEW_TYPE.MAIN;
-
-                default:
-                    Console.WriteLine("잘못된 입력입니다.");
-                    return VIEW_TYPE.MONSTER;
-            }
-        }
-    }*/
+    }
+}*/
 
 
-    
+
 
 
 

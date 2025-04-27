@@ -1,10 +1,4 @@
-﻿using System;
-using System.Numerics;
-using System.Threading;
-using System.Xml.Linq;
-using TeamTodayTextRPG;
-
-namespace TeamTodayTextRPG
+﻿namespace TeamTodayTextRPG
 {
     enum DATA_TYPE
     {
@@ -108,8 +102,8 @@ namespace TeamTodayTextRPG
         public string Data { get; private set; } =
             "0/전사/12/5/100/40/1/겁나쎄게 올려치기/강철피부/높은 방어력, 기본 공격력, 체력#" +
             "1/마법사/3/3/50/100/3/썬더봁/마력증강/방어 무시, 높은 마나, 스킬의존성#" +
-            "2/도적/7/1/75/75/10/연격/날쌘 움직임/높은 회피, 크리티컬 히트"; 
-            
+            "2/도적/7/1/75/75/10/연격/날쌘 움직임/높은 회피, 크리티컬 히트";
+
 
 
         public CharacterDatabase()
