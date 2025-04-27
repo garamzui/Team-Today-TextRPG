@@ -25,10 +25,10 @@ namespace TeamTodayTextRPG
             while (true)
             {
                 sm.SwitchScene(currentView);
-
-
                 //『효빈』선택지 입력 시 다음 화면으로의 전환
-                currentView = sm.CurrentViewer.NextView(sm.InputAction(sm.CurrentViewer.StartIndex, sm.CurrentViewer.EndIndex, Console.CursorTop));
+                currentView = sm.ChangeNextView();
+
+                //currentView = sm.CurrentViewer.NextView(sm.InputAction(sm.CurrentViewer.StartIndex, sm.CurrentViewer.EndIndex, Console.CursorTop));
             }
         }
     }

@@ -54,10 +54,13 @@ namespace TeamTodayTextRPG
 
             Console.BackgroundColor = backColor;
             Console.ForegroundColor = textColor;
+            Console.Write("=========================================================================================\n");
             if (system)
-                Console.Write($"=========================================================================================\n>> [SYSTEM] {message}\n=========================================================================================\n");
+                Console.Write($">> [SYSTEM] {message}\n");
             else
-                Console.Write($"{message}");
+                Console.Write($">> {message}\n");
+            Console.Write("=========================================================================================\n");
+
 
             Console.ForegroundColor = prevColor; 
             Console.BackgroundColor = prevBackColor;
@@ -141,7 +144,7 @@ namespace TeamTodayTextRPG
                     CurrentViewer = new DungeonViewer();
                     break;
                 case VIEW_TYPE.DUNGEON_CLEAR:
-                    CurrentViewer = new DungeonClearViewer();
+                    CurrentViewer = new DungeonResultViewer();
                     break;
 
                 case VIEW_TYPE.REST:
@@ -184,11 +187,7 @@ namespace TeamTodayTextRPG
         {
             if (CurrentViewer != null)
             {
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.Write("=========================================================================================\n" +
-                              "                          【Sparta Text RPG  _Team Today Present】                       \n" +
-                              "=========================================================================================\n");
-                Console.ResetColor();
+                SysText("\t\t\t\t\t【Sparta Text RPG  _Team Today Present】", 0, -1, ConsoleColor.Yellow, ConsoleColor.Black, true);
                 CurrentViewer.ViewAction();  // gameManager 객체를 넘기기
             }
 
@@ -206,8 +205,8 @@ namespace TeamTodayTextRPG
                 Console.WriteLine();
                 Clear(4, 10);
                 Console.SetCursorPosition(0, 4);
-                SysText("[이름 설정] 원하시는 이름을 설정해주세요.\n", 8, -1, ConsoleColor.Yellow, ConsoleColor.Black, false);
-                SysText("이름 입력 >> ", 8, -1, ConsoleColor.White, ConsoleColor.Black, false);
+                ColText("\t[이름 설정] 원하시는 이름을 설정해주세요.\n", ConsoleColor.Yellow, ConsoleColor.Black);
+                ColText("\t이름 입력 ☞ ", ConsoleColor.White, ConsoleColor.Black);
 
                 name = Console.ReadLine();
                 if (name == string.Empty)
@@ -249,16 +248,16 @@ namespace TeamTodayTextRPG
                 }
             }
             Console.Clear();
-            SysText("스파르타 마을에 오신 여러분 환영합니다.", 0, -1, ConsoleColor.Yellow, ConsoleColor.Black, true);
+            SysText("스파르타 마을에 오신 여러분 환영합니다.", 0, -1, ConsoleColor.Yellow, ConsoleColor.Black, false);
 
             int classCode = 0;
             while (classCode == 0)
             {
                 Console.WriteLine();
-                SysText("[직업 선택] 원하시는 직업을 골라 주세요.\n", 8, -1, ConsoleColor.Yellow, ConsoleColor.Black, false);
-                SysText("\t1. 전사\n", 8, -1, ConsoleColor.Yellow, ConsoleColor.Black, false);
-                SysText("\t2. 마법사\n", 8, -1, ConsoleColor.Yellow, ConsoleColor.Black, false);
-                SysText("\t3. 도적\n\n", 8, -1, ConsoleColor.Yellow, ConsoleColor.Black, false);
+                ColText("\t[직업 선택] 원하시는 직업을 골라 주세요.\n\n",ConsoleColor.Yellow, ConsoleColor.Black);
+                ColText("\t1. 전사\n", ConsoleColor.Yellow, ConsoleColor.Black);
+                ColText("\t2. 마법사\n", ConsoleColor.Yellow, ConsoleColor.Black);
+                ColText("\t3. 도적\n\n", ConsoleColor.Yellow, ConsoleColor.Black);
                 Console.WriteLine();
 
                 cursorPos = Console.CursorTop;
@@ -282,7 +281,7 @@ namespace TeamTodayTextRPG
             bool check = false;
             while (!check)
             {
-                Console.Write("\t선택지 입력 >> ");
+                Console.Write("\t선택지 입력 ☞ ");
                 rtnStr = Console.ReadLine();
                 if (rtnStr == string.Empty)
                 {
@@ -400,6 +399,33 @@ namespace TeamTodayTextRPG
                     Console.WriteLine("\t  [ "+DataManager.Instance.ItemDB.List[item][6] + " ]");
                 }
                 Console.WriteLine("   -----------------------------------------------------------------------------");
+            }
+        }
+        //일단은 복붙만
+        public void ShowEquip(VIEW_TYPE view)
+        {
+            int count = 0;
+            if (GameManager.Instance.Player.Bag != null)
+            {
+                foreach (var item in GameManager.Instance.Player.Bag)
+                {
+                    Console.WriteLine("   ------------------------------------------------------------------------------");
+                    if (view == VIEW_TYPE.EQUIP) Console.Write($"     -{++count} ");
+                    else Console.Write("     -");
+
+                    if (GameManager.Instance.Player.CheckEquip(item, ITEM_TYPE.WEAPON) ||
+                        GameManager.Instance.Player.CheckEquip(item, ITEM_TYPE.ARMOR))
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.Write("[E]");
+                        Console.ResetColor();
+                    }
+                    Console.WriteLine(" 『" + DataManager.Instance.ItemDB.List[item][1] + "』");
+                    ShowAtk(int.Parse(DataManager.Instance.ItemDB.List[item][2]));
+                    ShowDef(int.Parse(DataManager.Instance.ItemDB.List[item][3]));
+                    Console.WriteLine("\t  [ " + DataManager.Instance.ItemDB.List[item][6] + " ]");
+                }
+                Console.WriteLine("   ------------------------------------------------------------------------------");
             }
         }
     }

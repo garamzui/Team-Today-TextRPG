@@ -18,6 +18,11 @@ namespace TeamTodayTextRPG
         MAGICIAN,
         ASSASSIN
     }
+    public enum CHAR_STATE
+    {
+        IDLE,
+        DEAD
+    }
    
 
     public abstract class Character
@@ -33,6 +38,7 @@ namespace TeamTodayTextRPG
         }
 
         public CHAR_TYPE Code { get; set; }
+        public CHAR_STATE State { get; set; } = CHAR_STATE.IDLE;
         public string Jobname { get; set; }
         public int Attack { get; set; }
         public int PlusAtk { get; set; } = 0;
@@ -82,7 +88,7 @@ namespace TeamTodayTextRPG
         //영훈) ↓보시면 참조 0개라고 쓰여있어요 그러면 이 메서드는 호출이 안되었다는 뜻이죠
         //Viewer 스크립트의 109번 줄부터 보면 거기에서 이미 비슷한 동작을 하고 있어서
         //ViewStatus() 메서드는 지우셔도 될거같아요!
-           
+
 
 
         //기본공격을 두고, 래밸을 올리면 스킬이
@@ -90,6 +96,9 @@ namespace TeamTodayTextRPG
         // 추후에 구현이 어려울 시 조건부는 빼 버리는 것으로 하면 될 것 같습니다.
         // 스킬 이름은 스탯과 함께 초기화해서 저장해두게 해놨습니다.
 
+
+        /*    >> 『효빈』 추상메소드로 만들어서 자식들이 각자 정의하게 하면 switch-case문을 쓸 필요도 없고 보다 객체지향적입니다!
+         *     내용은 동일하게 추상메소드로 만들어 보겠습니다.
         public virtual void DefaultAttack()
         {
             int rand = GameManager.Instance.Rand.Next(0, 10);
@@ -125,22 +134,13 @@ namespace TeamTodayTextRPG
             if (AttackDamage <= 0)
             { AttackDamage = 1; }
             GameManager.Instance.Dungeon.TargetMonster.ManageHp(-AttackDamage);
-            
-        }
-
+        }*/
+        public abstract int DefaultAttack();
 
         //active 스킬은 몬스터 체력을 -= 하는 방식으로 
         //passive 스킬은 각각 직업 특성에 맞는 스탯값을 += 하는 방식으로 만들어 보려 합니다.
-        public virtual void ActiveSkill()
-        {
-            Console.WriteLine($"{Jobname}의 기술 {ActskillName}");
-        }
-
-        public virtual void PassiveSkill()
-        {
-            //int exp = GameManager.Instance.Player.Exp;
-            Console.WriteLine($"{Jobname}의 기술 {PasskillName}");
-        }
+        public abstract int ActiveSkill();
+        public abstract void PassiveSkill();
 
         public void ManageHp(int HpChange)//Hp관리용 매서드 입니다. 공격 연출시 최종 계산 자료를 음수로 입력하여야합니다
         {
@@ -149,32 +149,30 @@ namespace TeamTodayTextRPG
                 Hp += HpChange;
                 {
                     if (Hp < 0) Hp = 0;
-                    Console.WriteLine($"{GameManager.Instance.Player.Name}{-HpChange}의 피해를 입었습니다! ");
+                    //Console.WriteLine($"{GameManager.Instance.Player.Name}{-HpChange}의 피해를 입었습니다! ");
                 }
-
-
 
                 if (Hp == 0)
                 {
                     Die();
-
                 }
                
-                Console.WriteLine($"HP {GameManager.Instance.Player.Character.Hp - HpChange} -> {GameManager.Instance.Player.Character.Hp} ");
+                //Console.WriteLine($"HP {GameManager.Instance.Player.Character.Hp - HpChange} -> {GameManager.Instance.Player.Character.Hp} ");
                 
             }
             else if (HpChange > 0)
             {
                 Hp += HpChange;
                 if (Hp > MaxHp) Hp = MaxHp;
-                Console.WriteLine($"{HpChange}만큼 회복했습니다! 현재 HP: {Hp}/{MaxHp}");
+                //Console.WriteLine($"{HpChange}만큼 회복했습니다! 현재 HP: {Hp}/{MaxHp}");
             }
-            else { Console.WriteLine("아무 일도 일어나지 않았습니다."); }// 우선 예외처리 때문에 작성해 두었습니다.
+           // else { Console.WriteLine("아무 일도 일어나지 않았습니다."); }// 우선 예외처리 때문에 작성해 두었습니다.
         }
         public void Die()
         {
-            Console.WriteLine("눈앞이 깜깜해진다..");
-            GameManager.Instance.Animation.GameOverAnimation();
+            State = CHAR_STATE.DEAD;
+            //Console.WriteLine("눈앞이 깜깜해진다..");
+            //GameManager.Instance.Animation.GameOverAnimation();
         }
 
         public void ManageMp(int ChangeMp) //Mp관리용 메서드입니다. Mp소모 매서드 이용시 최종 계산 자료를 음수로 입력하여야합니다
@@ -182,7 +180,7 @@ namespace TeamTodayTextRPG
             if (ChangeMp < 0)
             {
                 Mp += ChangeMp;
-                Console.WriteLine($" Mp {ChangeMp}소모 현재 Mp {Mp}/{MaxMp}");
+                //Console.WriteLine($" Mp {ChangeMp}소모 현재 Mp {Mp}/{MaxMp}");
                 if (Mp < 0) Mp = 0;
             }
 
@@ -190,10 +188,19 @@ namespace TeamTodayTextRPG
             {
                 Mp += ChangeMp;
                 if (Mp > MaxMp) Mp = MaxMp;
-                Console.WriteLine($"{ChangeMp}만큼 MP를 회복했습니다! 현재 MP: {Mp}/{MaxMp}");
+                //Console.WriteLine($"{ChangeMp}만큼 MP를 회복했습니다! 현재 MP: {Mp}/{MaxMp}");
             }
             else { }
 
+        }
+        public bool CheckDodge()
+        {
+            int DodgeHit = GameManager.Instance.Rand.Next(1, 76);
+            if (GameManager.Instance.Player.Character.TotalDodge > DodgeHit)
+            {
+                return true;
+            }
+            else return false;
         }
     }
 
@@ -210,25 +217,40 @@ namespace TeamTodayTextRPG
         {
             return "높은 방어력,기본 공격력,체력";
         }
-        public override void ActiveSkill()
+        public override int DefaultAttack()
         {
+            int attackDamage = GameManager.Instance.Player.Character.TotalAtk - GameManager.Instance.Dungeon.TargetMonster.Def;
+            if (attackDamage <= 0) 
+                attackDamage = 1;
+
+            int rand = GameManager.Instance.Rand.Next(0, 10);
+            if (rand == 0) { GameManager.Instance.Animation.WARRIORATK1(); }
+            else if (rand == 1) { GameManager.Instance.Animation.WARRIORATK2(); }
+            else { GameManager.Instance.Animation.WarriorNomAtk(); }
+
+            GameManager.Instance.Dungeon.TargetMonster.ManageHp(-attackDamage);
+
+            return attackDamage;
+        }
+        public override int ActiveSkill()
+        {
+            int skillDamage = (TotalAtk * 3) - GameManager.Instance.Dungeon.TargetMonster.Def;
+            if (skillDamage <= 0)
+                skillDamage = 1;
+
             if (Mp >= 10)
             {
                 ManageMp(-10);
                 GameManager.Instance.Animation.WarriorAnimation();
-                int SkillDamage = (TotalAtk * 3) - GameManager.Instance.Dungeon.TargetMonster.Def;
-                if (SkillDamage <= 0)
-                { SkillDamage = 1; }
+         
+                GameManager.Instance.Dungeon.TargetMonster.ManageHp(-skillDamage);
 
-                GameManager.Instance.Dungeon.TargetMonster.ManageHp(-SkillDamage);
-                Console.Write($"{GameManager.Instance.Player.Name}의");
-                GameManager.Instance.SceneManager.ColText($"{ActskillName}", ConsoleColor.Red, ConsoleColor.White);
-                Console.WriteLine($"!!! {GameManager.Instance.Dungeon.TargetMonster.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
+                return skillDamage;
             }
             else
             {
-                Console.WriteLine("MP가 모자랍니다.");
-
+                //Console.WriteLine("MP가 모자랍니다.");
+                return skillDamage = 0;
             }
         }
 
@@ -267,27 +289,39 @@ namespace TeamTodayTextRPG
         {
             return "방어 무시, 높은 마나, 스킬의존성";
         }
-
-        public override void ActiveSkill()
+        public override int DefaultAttack()
         {
+            int attackDamage = GameManager.Instance.Player.Character.TotalAtk - GameManager.Instance.Dungeon.TargetMonster.Def;
+            if (attackDamage <= 0) 
+                attackDamage = 1;
+
+            int rand = GameManager.Instance.Rand.Next(0, 10);
+            if (rand == 0) { GameManager.Instance.Animation.MAGICIANATK1(); }
+            else if (rand == 1) { GameManager.Instance.Animation.MAGICIANATK2(); }
+            else { GameManager.Instance.Animation.MagicianNomAtk(); }
+
+            GameManager.Instance.Dungeon.TargetMonster.ManageHp(-attackDamage);
+
+            return attackDamage;
+        }
+        public override int ActiveSkill()
+        {
+            int skillDamage = (int)((TotalAtk * 10) - Math.Round(GameManager.Instance.Dungeon.TargetMonster.Def / 2.0)); //방어무시를 구현하기위해서 방어도를 반으로 나누고 반올림하였습니다.
+            if (skillDamage <= 0)
+                skillDamage = 1;
             if (Mp >= 10)
             {
                 ManageMp(-10);
                 GameManager.Instance.Animation.MagicianAnimation();
-                int SkillDamage = (int)((TotalAtk * 10) - Math.Round(GameManager.Instance.Dungeon.TargetMonster.Def / 2.0)); //방어무시를 구현하기위해서 방어도를 반으로 나누고 반올림하였습니다.
-                if (SkillDamage <= 0)
-                { SkillDamage = 1; }
 
-                GameManager.Instance.Dungeon.TargetMonster.ManageHp(-SkillDamage);
-            
-                Console.Write($"{GameManager.Instance.Player.Name}의");
-                GameManager.Instance.SceneManager.ColText($"{ActskillName}", ConsoleColor.Blue, ConsoleColor.Cyan);
-                Console.WriteLine($"!!! {GameManager.Instance.Dungeon.TargetMonster.Name}이(가) {SkillDamage}의 피해를 입었습니다.");
+                GameManager.Instance.Dungeon.TargetMonster.ManageHp(-skillDamage);
+
+                return skillDamage;
             }
             else
             {
-                Console.WriteLine("MP가 모자랍니다.");
-
+                //Console.WriteLine("MP가 모자랍니다.");
+                return skillDamage = 0;
             }
         }
         public override void PassiveSkill()
@@ -326,44 +360,49 @@ namespace TeamTodayTextRPG
         {
             return "높은 회피, 크리티컬 히트";
         }
-        public override void ActiveSkill()
+        public bool Critical(ref int damage)
         {
+            int criticalHit = GameManager.Instance.Rand.Next(0, 10);
+
+            if (criticalHit <= 2) //크리티컬 확률 계산
+            {
+                damage *= 2;
+                return true;
+            }
+            else
+                return false;
+        }
+        public override int DefaultAttack()
+        {
+            int attackDamage = GameManager.Instance.Player.Character.TotalAtk - GameManager.Instance.Dungeon.TargetMonster.Def;
+            if (attackDamage <= 0) attackDamage = 1;
+
+            int rand = GameManager.Instance.Rand.Next(0, 10);
+            if (rand == 0) { GameManager.Instance.Animation.ASSASSINATK(); }
+            else { GameManager.Instance.Animation.AssassinNomAtk(); }
+
+            GameManager.Instance.Dungeon.TargetMonster.ManageHp(-attackDamage);
+
+            return attackDamage;
+            
+        }
+        public override int ActiveSkill()
+        {
+            int skillDamage = (TotalAtk * 2) - GameManager.Instance.Dungeon.TargetMonster.Def;
+            if (skillDamage <= 0)
+            { skillDamage = 1; }
             if (Mp >= 10)
             {
                 ManageMp(-10);
                 GameManager.Instance.Animation.AssassinAnimation();
-                int SkillDamage = (TotalAtk * 2) - GameManager.Instance.Dungeon.TargetMonster.Def;
-                if (SkillDamage <= 0)
-                { SkillDamage = 1; }
-
-                int criticalHit = GameManager.Instance.Rand.Next(0, 10);
-
-
-                if (criticalHit <= 2) //크리티컬 확률 계산
-                {
-                    SkillDamage *= 2;
-                    Console.WriteLine("치명타!");
-                }
-
-
-                for (int i = 0; i < 2; i++) //2연격 구현
-                {
-
-                    GameManager.Instance.Dungeon.TargetMonster.ManageHp(-SkillDamage);
-                    Console.Write($"{GameManager.Instance.Player.Name}의");
-                    GameManager.Instance.SceneManager.ColText($"{ActskillName}", ConsoleColor.Black, ConsoleColor.White);
-                    Console.WriteLine($"!!! {GameManager.Instance.Dungeon.TargetMonster.Name}이(가) {SkillDamage}의 피해를 입었습니다."); ;
-                }
+                
+                return skillDamage;
             }
             else
             {
-                Console.WriteLine("MP가 모자랍니다.");
-
+                //Console.WriteLine("MP가 모자랍니다.");
+                return 0;
             }
-
-
-
-
         }
         public override void PassiveSkill() //추후에 Player의 Level UP 메서드에서 호출 해주어야 함
         {
