@@ -71,14 +71,14 @@ namespace TeamTodayTextRPG
             //인벤토리를 처음 열면 장착&해제 튜토리얼 구현해 보는 것 괜찮을지도
         }
 
-        public bool LevelUp()
+        public int LevelUp()
         {
+            int count = 0;
             //던전 클리어시 처치한 몬스터에 따라 경험치를 얻는 구조 필요
             //경험치가 요구 경험치보다 크거나 같아진다.
             if (Exp >= RequiredExp)
             {
                 //경험치에서 요구 경험치 만큼 빼고 초과량은 현재 경험치로 남는다.
-                int count = 0;
                 while(Exp >= RequiredExp)
                 {
                     Exp -= RequiredExp;
@@ -86,16 +86,30 @@ namespace TeamTodayTextRPG
                     count++;
                 }
 
+                SceneManager.Instance.ColText($"\t>> Level Up!!! {Level} -> {Level + count}\n",ConsoleColor.Black,ConsoleColor.Yellow);
+                SceneManager.Instance.ColText($"\t>> [공격력  ↑] {Character.Attack} -> {Character.Attack + (1 * count)}\n", ConsoleColor.Green,  ConsoleColor.Black);
+                SceneManager.Instance.ColText($"\t>> [방어력  ↑] {Character.Defence} -> {Character.Defence + (2 * count)}\n",ConsoleColor.Green, ConsoleColor.Black);
+
+
+                for (int lv = Level + 1; lv <= Level+count; lv++)
+                {
+                    if (lv % 3 == 0)
+                    {
+                        Character.PassiveSkill();
+                    }
+                }
+
+
                 //레벨 및 요구 경험치 스탯이 늘어난다.
-                Level+=count;
-                Character.Attack += (1*count);
-                Character.Defence += (2*count);
+                Level += count;
+                Character.Attack += (1 * count);
+                Character.Defence += (2 * count);
                 //『효빈』 패시브 정확히 뭔지 모르겠네요
-                //Character.PassiveSkill();
-                return true;
+                Character.PassiveSkill();
             }
-            else return false;
+            return count;
         }
+
         public void GetReward(int gold, int exp)
         {
             Gold += gold;
@@ -296,6 +310,6 @@ namespace TeamTodayTextRPG
 
 //    Console.Write($">> {DataManager.Instance.ItemDB.List[Bag[equipItemCode - 1]][1]}");
 //    Console.ForegroundColor = ConsoleColor.DarkCyan;
-//    Console.WriteLine("을(를) 장착 하였습니다.\n");
+//      Console.WriteLine("을(를) 장착 하였습니다.\n");
 //    Console.ResetColor();
 //}

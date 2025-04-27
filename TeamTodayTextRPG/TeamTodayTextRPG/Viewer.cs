@@ -652,6 +652,7 @@ namespace TeamTodayTextRPG
             //Console.WriteLine($"  ━━━━━ ✦ 무  기 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
             SceneManager.Instance.ShowShopSale();
             //Console.WriteLine($"  ━━━━━ ✦ 방어구 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+            SceneManager.Instance.ShowShopSale();
             //Console.WriteLine($"  ━━━━━ ✦ 소모품 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
             Console.WriteLine($"  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 
@@ -760,7 +761,8 @@ namespace TeamTodayTextRPG
             
             if (Dungeon.Diff == DUNGEON_DIFF.Hell)
             {   
-                SceneManager.Instance.ColText("\t\t!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!\n\t\t     플레이어 능력치가 10% 감소합니다!     \n\t\t!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!\n",ConsoleColor.Red,ConsoleColor.Black);
+                //SceneManager.Instance.ColText("\t\t!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!\n\t\t     플레이어 능력치가 10% 감소합니다!     \n\t\t!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!\n",ConsoleColor.Red,ConsoleColor.Black);
+                SceneManager.Instance.ColText("\t\t!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!\n\t\t              기저귀를 착용하세요!!            \n\t\t!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!\n", ConsoleColor.Red, ConsoleColor.Black);
             }
 
             Console.WriteLine($"\t던전 이름            : {Dungeon.Name}\n");
@@ -1292,31 +1294,28 @@ namespace TeamTodayTextRPG
                 SceneManager.Instance.ColText("\t\t\t☆ 축하합니다! 던전을 클리어했습니다 ☆\n\n", ConsoleColor.Yellow,ConsoleColor.Black);
 
                 Console.WriteLine($"\t보상 골드       : {Dungeon.Reward} G\n");
-                //Console.WriteLine($"\t               +{monster.RewardGold} G …………{monster.Name} 토벌 추가 보상");
-                //Console.WriteLine($"--------------------------------------------------------------------------------------\n");
-    //SceneManager.Instance.ColText($"\t                                          Total Reward  :  {Dungeon.Reward}",ConsoleColor.Green,ConsoleColor.Blue);
-
-
                 foreach (var monster in Dungeon.Dungeon_Monster){
                     Console.WriteLine($"\t\t\t\t+{monster.RewardGold} G …………{monster.Name} 토벌 추가 보상");
                     Dungeon.Reward += monster.RewardGold;
                 }
                 Console.WriteLine($"\t--------------------------------------------------------------------------\n");
-                SceneManager.Instance.ColText($"\t\t\t\t\t\t\t최종 보상 골드   :  {Dungeon.Reward}\n\n", ConsoleColor.Green, ConsoleColor.Black);
+                SceneManager.Instance.ColText($"\t\t\t\t\t\t\t최종 보상 골드   :  {Dungeon.Reward} G\n\n", ConsoleColor.Green, ConsoleColor.Black);
 
-                Console.WriteLine($"\n\t보상 경험치     : {Dungeon.Exp}\n");
+                Console.WriteLine($"\n\t보상 경험치     : {Dungeon.Exp} Exp\n");
                 foreach (var monster in Dungeon.Dungeon_Monster)
                 {
-                    Console.WriteLine($"\t\t\t\t+{monster.RewardExp} G …………{monster.Name} 토벌 추가 보상");
+                    Console.WriteLine($"\t\t\t\t+{monster.RewardExp} Exp …………{monster.Name} 토벌 추가 보상");
                     Dungeon.Exp += monster.RewardExp;
                 }
                 Console.WriteLine($"\t--------------------------------------------------------------------------\n");
-                SceneManager.Instance.ColText($"\t\t\t\t\t\t\t최종 보상 경험치  :  {Dungeon.Exp}\n\n", ConsoleColor.Green, ConsoleColor.Black);
+                SceneManager.Instance.ColText($"\t\t\t\t\t\t\t최종 보상 경험치  :  {Dungeon.Exp} Exp\n\n", ConsoleColor.Green, ConsoleColor.Black);
 
 
                 Player.GetReward(Dungeon.Reward, Dungeon.Exp);
-                Player.LevelUp();
-                
+                if (Player.LevelUp() > 0)
+                {
+                    //Console.WriteLine($"  ━━━━━ ✦ 레벨 업 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+                }
 
                 //if (dungeon.Diff == DUNGEON_DIFF.Hell)
                 Console.WriteLine();
@@ -1362,7 +1361,7 @@ namespace TeamTodayTextRPG
 
             Console.Write("\n\t\t【 2 】 숙박    | ");
             SceneManager.Instance.ColText("2000", ConsoleColor.DarkCyan, ConsoleColor.Black);
-            Console.WriteLine(" G    |  HP +FULL  |  MP +FULL");
+            Console.WriteLine(" G   |  HP +FULL  |  MP +FULL");
 
             Console.WriteLine("\n\t━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 
@@ -1374,35 +1373,45 @@ namespace TeamTodayTextRPG
         public override VIEW_TYPE NextView(int input)
         {
             Console.Clear();
-            if(Character.Hp == Character.MaxHp)
-            {
-                SceneManager.Instance.SysText($"이미 최대 체력입니다", ConsoleColor.Green, ConsoleColor.Black);
-                return VIEW_TYPE.REST;
-            }
+            
             switch (input)
             {
                 case 1:
-                    if (Player.Gold >= 500)
+                    if (Character.Hp == Character.MaxHp)
                     {
-                        Character.ManageHp(50);
-                        Character.ManageMp(50);
-                        Player.Gold -= 500;
-                        SceneManager.Instance.SysText($"잠시동안 휴식을 취했습니다", ConsoleColor.DarkCyan, ConsoleColor.Black);
+                        SceneManager.Instance.SysText($"이미 최대 체력입니다", ConsoleColor.Green, ConsoleColor.Black);
                     }
                     else
-                        SceneManager.Instance.SysText($"Gold가 부족합니다", ConsoleColor.DarkCyan, ConsoleColor.Black);
+                    {
+                        if (Player.Gold >= 500)
+                        {
+                            Character.ManageHp(50);
+                            Character.ManageMp(50);
+                            Player.Gold -= 500;
+                            SceneManager.Instance.SysText($"잠시동안 휴식을 취했습니다", ConsoleColor.DarkCyan, ConsoleColor.Black);
+                        }
+                        else
+                            SceneManager.Instance.SysText($"Gold가 부족합니다", ConsoleColor.DarkCyan, ConsoleColor.Black);
+                    }
 
                     return VIEW_TYPE.REST;
                 case 2:
-                    if (Player.Gold >= 2000)
+                    if (Character.Hp == Character.MaxHp)
                     {
-                        Character.ManageHp(Character.MaxHp);
-                        Character.ManageMp(Character.MaxMp);
-                        Player.Gold -= 2000;
-                        SceneManager.Instance.SysText($"오랫동안 휴식을 취했습니다", ConsoleColor.DarkCyan, ConsoleColor.Black);
+                        SceneManager.Instance.SysText($"이미 최대 체력입니다", ConsoleColor.Green, ConsoleColor.Black);
                     }
                     else
-                        SceneManager.Instance.SysText($"Gold가 부족합니다", ConsoleColor.DarkCyan, ConsoleColor.Black);
+                    {
+                        if (Player.Gold >= 2000)
+                        {
+                            Character.ManageHp(Character.MaxHp);
+                            Character.ManageMp(Character.MaxMp);
+                            Player.Gold -= 2000;
+                            SceneManager.Instance.SysText($"오랫동안 휴식을 취했습니다", ConsoleColor.DarkCyan, ConsoleColor.Black);
+                        }
+                        else
+                            SceneManager.Instance.SysText($"Gold가 부족합니다", ConsoleColor.DarkCyan, ConsoleColor.Black);
+                    }
                     return VIEW_TYPE.REST;
                 case 0:
                     SceneManager.Instance.SysDefault();
