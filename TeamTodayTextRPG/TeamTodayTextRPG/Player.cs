@@ -17,6 +17,7 @@ namespace TeamTodayTextRPG
         public int Exp { get; set; }
         public int Gold { get; set; }
         public string Name { get; set; }
+        public int RequiredExp { get; set; }
 
         public int equipedWpCode = -1;
         public int equipedAmCode = -1;
@@ -57,6 +58,7 @@ namespace TeamTodayTextRPG
             {
                 Level = 1;
                 Gold = 150000;
+                RequiredExp = 100;
                 Name = name;
             }
 
@@ -71,18 +73,16 @@ namespace TeamTodayTextRPG
 
         public void LevelUp()
         {
-            int requiredExp = 100;
-
             //던전 클리어시 처치한 몬스터에 따라 경험치를 얻는 구조 필요
             //경험치가 요구 경험치보다 크거나 같아진다.
-            if (Exp >= requiredExp)
+            if (Exp >= RequiredExp)
             {
                 //경험치에서 요구 경험치 만큼 빼고 초과량은 현재 경험치로 남는다.
-                Exp -= requiredExp;
+                Exp -= RequiredExp;
 
                 //레벨 및 요구 경험치 스탯이 늘어난다.
                 Level++;
-                requiredExp += 25;
+                RequiredExp += 25;
                 Character.Attack += 1;
                 Character.Defence += 2;
                 Character.PassiveSkill();

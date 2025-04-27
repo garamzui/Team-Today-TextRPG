@@ -26,14 +26,17 @@ namespace TeamTodayTextRPG
 
     public abstract class Dungeon
     {
+
         public int Code { get; set; }
         public string Name { get; set; }
         public int Reward { get; set; }
         public int Exp { get; set; }
+        public string Text { get; set; }
 
         public int LowLevel { get; set; }
         public int HighLevel { get; set; }
         public int MonsterCount { get; set; }
+        public int Turn { get; set; } = 0;
 
         public Monster? TargetMonster { get; set; }
         public int MonsterAtkCounter { get; set; } 
@@ -55,6 +58,7 @@ namespace TeamTodayTextRPG
             HighLevel = int.Parse(parameter[5]);
             MonsterCount = int.Parse(parameter[6]);
             Diff = (DUNGEON_DIFF)(int.Parse(parameter[7]));
+            Text = parameter[8];
         }
 
         public void Enter()
