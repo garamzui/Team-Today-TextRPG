@@ -259,12 +259,13 @@ namespace TeamTodayTextRPG
 
                 if (PassiveSkillLevel == MaxPassiveSkillLevel)
                 {
-                    Console.WriteLine($"{PasskillName}의 Lv이 최대가 되었습니다. 최대 래벨 보상으로 방어도가 20이 됩니다.");
+
+                    SceneManager.Instance.ColText($"\t>> 『{PasskillName}』의 Lv이 최대가 되었습니다\t|\t=☆ 최대 레벨 보상으로 기본 방어도가 20이 됩니다 ☆=\n", ConsoleColor.DarkCyan, ConsoleColor.Black);
                     Defence = 20;
                 }
                 else
                 {
-                    Console.WriteLine($"{PasskillName}의 Lv이 1증가하였습니다. 방어도 +2");
+                    SceneManager.Instance.ColText($"\t>> 『{PasskillName}』의 Lv이 1증가 하였습니다 [{PassiveSkillLevel-1}->{PassiveSkillLevel}]\t|\t방어도 +2\n", ConsoleColor.DarkCyan, ConsoleColor.Black);
                     Defence += 2;
                 }
             }
@@ -333,15 +334,15 @@ namespace TeamTodayTextRPG
 
                 if (PassiveSkillLevel == MaxPassiveSkillLevel)
                 {
-                    Console.WriteLine($"{PasskillName}의 Lv이 최대가 되었습니다. 최대 래벨 보상으로 최대마나가 500이 됩니다.");
+                    SceneManager.Instance.ColText($"\t>> 『{PasskillName}』의 Lv이 최대가 되었습니다\t|\t=☆ 최대 레벨 보상으로 최대 마나가 500이 됩니다 ☆=\n", ConsoleColor.DarkCyan, ConsoleColor.Black);
                     MaxMp = 500;
-                    Mp += 500;
+                    Mp = MaxMp;
                 }
                 else
                 {
-                    Console.WriteLine($"{PasskillName}의 Lv이 1증가하였습니다. 최대 마나 + 50");
+                    SceneManager.Instance.ColText($"\t>> 『{PasskillName}』의 Lv이 1증가하였습니다 [{PassiveSkillLevel - 1}->{PassiveSkillLevel}]\t|\t최대 마나 +50\n", ConsoleColor.DarkCyan, ConsoleColor.Black);
                     MaxMp += 50;
-                    Mp += 50;
+                    Mp = MaxMp;
                 }
             }
             else if (PassiveSkillLevel > MaxPassiveSkillLevel)
@@ -411,16 +412,14 @@ namespace TeamTodayTextRPG
 
                 if (PassiveSkillLevel == MaxPassiveSkillLevel)
                 {
-                    Console.WriteLine($"{PasskillName}의 Lv이 최대가 되었습니다. 최대 래벨 보상으로 회피가 25가 됩니다.");
+                    SceneManager.Instance.ColText($"\t>> 『{PasskillName}』의 Lv이 최대가 되었습니다\t|\t=☆ 최대 레벨 보상으로 기본 회피율이 25가 됩니다 ☆=\n", ConsoleColor.DarkCyan, ConsoleColor.Black);
                     Dodge = 25;
-
                 }
                 else
                 {
-                    Console.WriteLine($"{PasskillName}의 Lv이 1증가하였습니다. 회피 +2 공격력+1");
+                    SceneManager.Instance.ColText($"\t>> 『{PasskillName}』의 Lv이 1증가 하였습니다 [{PassiveSkillLevel - 1}->{PassiveSkillLevel}]\t|\t공격력 +1 회피율 +2\n", ConsoleColor.DarkCyan, ConsoleColor.Black);
                     Dodge += 2;
                     Attack += 1;
-
                 }
             }
             else if (PassiveSkillLevel > MaxPassiveSkillLevel)
