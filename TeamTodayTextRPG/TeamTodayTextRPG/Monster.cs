@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TeamTodayTextRPG
+﻿namespace TeamTodayTextRPG
 {
     public enum MONSTER_STATE
     {
@@ -13,15 +7,15 @@ namespace TeamTodayTextRPG
     }
     public enum MONSTER_CODE
     {
-        Slime = 0,   
-        Goblin,    
-        Wolf,        
-        Ork,         
-        Zakum        
+        Slime = 0,
+        Goblin,
+        Wolf,
+        Ork,
+        Zakum
     }
     public enum MONSTER_GRADE
     {
-        NORMAL =0,
+        NORMAL = 0,
         BOSS
     }
 
@@ -30,7 +24,7 @@ namespace TeamTodayTextRPG
         public MONSTER_CODE Code { get; set; }
         public MONSTER_STATE State { get; set; } = MONSTER_STATE.IDLE;
         public MONSTER_GRADE Grade { get; set; }
-           
+
         public string? Name { get; set; }
         public int Level { get; set; }
         public int Atk { get; set; }

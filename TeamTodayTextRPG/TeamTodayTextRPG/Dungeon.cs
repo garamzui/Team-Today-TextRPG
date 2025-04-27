@@ -1,9 +1,3 @@
-using System;
-using System.Numerics;
-using System.Threading;
-using System.Xml.Linq;
-using TeamTodayTextRPG;
-
 namespace TeamTodayTextRPG
 {
     public enum DUNGEON_DIFF { Easy = 0, Normal, Hard, Hell }

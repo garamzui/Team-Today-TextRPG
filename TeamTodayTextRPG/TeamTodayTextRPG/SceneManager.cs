@@ -1,10 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.Security.Cryptography;
-using System.Xml.Linq;
-using TeamTodayTextRPG;
-
-namespace TeamTodayTextRPG
+﻿namespace TeamTodayTextRPG
 {
     public class SceneManager
     {
@@ -13,7 +7,7 @@ namespace TeamTodayTextRPG
         private static readonly Lazy<SceneManager> lazyInstance = new Lazy<SceneManager>(() => new SceneManager());
         public static SceneManager Instance => lazyInstance.Value;
 
-        public SceneManager() 
+        public SceneManager()
         {
             CurrentViewer = new MainViewer();
         }
@@ -31,8 +25,8 @@ namespace TeamTodayTextRPG
             Console.ForegroundColor = prevColor;
             Console.BackgroundColor = prevBackColor;
         }
-       
-        
+
+
         public void SysText(string message, ConsoleColor textColor = ConsoleColor.White, ConsoleColor backColor = ConsoleColor.Black)
         {
             Clear(0, 2);
@@ -45,7 +39,7 @@ namespace TeamTodayTextRPG
             Console.Write($">> [SYSTEM] {message}\n");
             Console.Write("=========================================================================================\n");
 
-            Console.ForegroundColor = prevColor; 
+            Console.ForegroundColor = prevColor;
             Console.BackgroundColor = prevBackColor;
         }
         public void SysDefault()
@@ -58,7 +52,7 @@ namespace TeamTodayTextRPG
         {
             int currentTop = Console.CursorTop;
             int width = Console.WindowWidth;
-            
+
             if (linesToClear < 0) linesToClear = 0; // 최상단 이상 올라가지 않도록 보정
 
             for (int i = 0; i < lineCount; i++)
@@ -112,7 +106,7 @@ namespace TeamTodayTextRPG
                 case VIEW_TYPE.EQUIP:
                     CurrentViewer = new EquipViewer();
                     break;
-                    
+
                 case VIEW_TYPE.SHOP:
                     CurrentViewer = new ShopViewer();
                     break;
@@ -122,7 +116,7 @@ namespace TeamTodayTextRPG
                 case VIEW_TYPE.SALE:
                     CurrentViewer = new SaleViewer();
                     break;
-                    
+
                 case VIEW_TYPE.DUNGEON_SELECT:
                     CurrentViewer = new DungeonSelectViewer();
                     break;
@@ -136,7 +130,7 @@ namespace TeamTodayTextRPG
                 case VIEW_TYPE.REST:
                     CurrentViewer = new RestViewer();
                     break;
-                    
+
                 case VIEW_TYPE.BATTLE:
                     CurrentViewer = new BattleViewer();
                     break;
@@ -169,7 +163,7 @@ namespace TeamTodayTextRPG
         }
 
         // 새로운 뷰어의 화면 출력
-       public void ShowCurrentView()
+        public void ShowCurrentView()
         {
             if (CurrentViewer != null)
                 CurrentViewer.ViewAction();  // gameManager 객체를 넘기기
@@ -201,7 +195,7 @@ namespace TeamTodayTextRPG
                     SysText("스파르타 마을에 오신 여러분 환영합니다.", ConsoleColor.Yellow, ConsoleColor.Black);
                     bool check = true;
                     Console.SetCursorPosition(0, 7);
-                    while (check&&name!=string.Empty)
+                    while (check && name != string.Empty)
                     {
                         int num = 0;
                         Console.Write("\n\t입력하신 이름은 『 ");
@@ -235,7 +229,7 @@ namespace TeamTodayTextRPG
             while (classCode == 0)
             {
                 Console.WriteLine();
-                ColText("\t[직업 선택] 원하시는 직업을 골라 주세요.\n\n",ConsoleColor.Yellow, ConsoleColor.Black);
+                ColText("\t[직업 선택] 원하시는 직업을 골라 주세요.\n\n", ConsoleColor.Yellow, ConsoleColor.Black);
                 ColText("\t【 1 】 전사     | 높은 방어력, 기본 공격력, 체력\n\n", ConsoleColor.Yellow, ConsoleColor.Black);
                 ColText("\t【 2 】 마법사  | 방어 무시, 높은 마나, 스킬의존성\n\n", ConsoleColor.Yellow, ConsoleColor.Black);
                 ColText("\t【 3 】 도적     | 높은 회피, 크리티컬 히트\n\n", ConsoleColor.Yellow, ConsoleColor.Black);
@@ -267,7 +261,7 @@ namespace TeamTodayTextRPG
                 if (rtnStr == string.Empty)
                 {
                     //Clear(0, 2);
-                    SysText("아무 행동도 입력하지 않으셨습니다",ConsoleColor.Red, ConsoleColor.Black);
+                    SysText("아무 행동도 입력하지 않으셨습니다", ConsoleColor.Red, ConsoleColor.Black);
                     Console.SetCursorPosition(0, y);
                 }
                 else
@@ -386,8 +380,8 @@ namespace TeamTodayTextRPG
                             Console.ResetColor();
                         }
                         Console.WriteLine("   -----------------------------------------------------------------------------");
-                        break;        
-                    
+                        break;
+
                 }
 
                 //기존 코드
@@ -430,7 +424,7 @@ namespace TeamTodayTextRPG
                     ShowAtk(int.Parse(DataManager.Instance.ItemDB.List[item][2]));
                     ShowDef(int.Parse(DataManager.Instance.ItemDB.List[item][3]));
                     Console.WriteLine("\t [" + (int)(int.Parse(DataManager.Instance.ItemDB.List[item][7]) * 0.85) + " G]");
-                    Console.WriteLine("\t  [ "+DataManager.Instance.ItemDB.List[item][6] + " ]");
+                    Console.WriteLine("\t  [ " + DataManager.Instance.ItemDB.List[item][6] + " ]");
                 }
                 Console.WriteLine("   -----------------------------------------------------------------------------");
             }
