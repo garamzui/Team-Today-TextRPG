@@ -72,6 +72,10 @@ namespace TeamTodayTextRPG
 
         public class OldMan : NonePlayableCharacter
         {
+            public OldMan() 
+            {
+                Init(DataManager.Instance.NpcDB.List[(int)NPC_TYPE.OLDMAN]);
+            }
             public override void Quest()
             {
                 Console.WriteLine("고블린 사냥");
@@ -81,6 +85,10 @@ namespace TeamTodayTextRPG
 
         public class YoungGirl : NonePlayableCharacter
         {
+            public YoungGirl()
+            {
+                Init(DataManager.Instance.NpcDB.List[(int)NPC_TYPE.YOUNGGIRL]);
+            }
             public override void Quest()
             {
                 Console.WriteLine("슬라임 사냥");
@@ -90,6 +98,10 @@ namespace TeamTodayTextRPG
 
         public class BlackSmith : NonePlayableCharacter
         {
+            public BlackSmith()
+            {
+                Init(DataManager.Instance.NpcDB.List[(int)NPC_TYPE.BLACKSMITH]);
+            }
             public override void Quest()
             {
                 Console.WriteLine("글라디우스 사오기");
@@ -99,6 +111,10 @@ namespace TeamTodayTextRPG
 
         public class Stranger : NonePlayableCharacter
         {
+            public Stranger()
+            {
+                Init(DataManager.Instance.NpcDB.List[(int)NPC_TYPE.STRANGER]);
+            }
             public override void Quest()
             {
                 Console.WriteLine("자쿰 사냥");

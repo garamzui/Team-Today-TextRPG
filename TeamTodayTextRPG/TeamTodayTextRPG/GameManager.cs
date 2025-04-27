@@ -28,6 +28,7 @@ namespace TeamTodayTextRPG
             YoungGirl = new YoungGirl();
             BlackSmith = new BlackSmith();
             Stranger = new Stranger();
+            NonePlayableCharacter = OldMan;
         }
 
 

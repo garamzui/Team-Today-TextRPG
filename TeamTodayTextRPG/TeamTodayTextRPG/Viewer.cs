@@ -253,7 +253,7 @@ namespace TeamTodayTextRPG
         public MainViewer()
         {
             StartIndex = 0;
-            EndIndex = 6;
+            EndIndex = 7;
         }
         public override void ViewAction()
         {
@@ -262,7 +262,7 @@ namespace TeamTodayTextRPG
             Console.WriteLine("\t━━━━━ ✦ 캐릭터 ✦ ━━━━━━━━━━━━━━━━━━━━\n");
             Console.WriteLine("\t【 1 】 플레이어\n\t【 2 】 인벤토리\n\t【 3 】 장비\n");
             Console.WriteLine("\t━━━━━ ✦ 행선지 ✦ ━━━━━━━━━━━━━━━━━━━━\n");
-            Console.WriteLine("\t【 4 】 던전\n\t【 5 】 상점\n\t【 6 】 여관");
+            Console.WriteLine("\t【 4 】 던전\n\t【 5 】 상점\n\t【 6 】 여관\n\t【 7 】 뒷골목");
             Console.WriteLine("\n\t━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 
             Console.WriteLine("\n\t>> 0. 게임 종료\n\n");
@@ -291,8 +291,11 @@ namespace TeamTodayTextRPG
                 case 6:
                     SceneManager.Instance.SysDefault();
                     return VIEW_TYPE.REST;
+                case 7:
+                    SceneManager.Instance.SysDefault();
+                    return VIEW_TYPE.BACK_STREET;
                 case 0:
-                    SceneManager.Instance.SysText("게임을 종료합니다...",ConsoleColor.Red, ConsoleColor.Black);
+                    SceneManager.Instance.SysText("게임을 종료합니다...", ConsoleColor.Red, ConsoleColor.Black);
                     Environment.Exit(0);
                     return VIEW_TYPE.MAIN;
                 default:
@@ -1424,225 +1427,298 @@ namespace TeamTodayTextRPG
             }
         }
     }
-    ////잔혹하고도 냉정한 뒷골목입니다.
-    //public class BackStreetViewer : Viewer
-    //{
-    //    public BackStreetViewer()
-    //    {
-    //        StartIndex = 0;
-    //        EndIndex = GameManager.Instance.NonePlayableCharacter.NPC.Count; 
-    //    }
-    //    public override void ViewAction()
-    //    {
-    //        SceneManager.Instance.ColText("    『뒷골목』", ConsoleColor.Cyan, ConsoleColor.Black);
-    //        SceneManager.Instance.ColText(" 사람들과 대화를 나눌 수 있습니다..\n\n", ConsoleColor.DarkCyan, ConsoleColor.Black);
-    //        Console.WriteLine("\t━━━━━ ✦ N P C ✦ ━━━━━━━━━━━━━━━━━━━━\n");
-    //        Console.WriteLine("\t【 1 】 노인\n\t【 2 】 소녀\n\t【 3 】 대장장이\n\t【 4 】 수상한 사람");
-                      
-
-    //        Console.WriteLine("\n\t>> 0. 돌아가기\n\n");
-    //    }
-    //    public override VIEW_TYPE NextView(int input)
-    //    {
-    //        Console.Clear();
-    //        if (input == 0)
-    //        {
-    //            SceneManager.Instance.SysText("마을로 돌아갑니다.", ConsoleColor.Red, ConsoleColor.Black);
-    //            return VIEW_TYPE.MAIN;
-    //        }
-    //        else if (input > 0 && input <= GameManager.Instance.NonePlayableCharacter.NPC.Count)
-    //        {
-    //            //Qcod를 이용해 다음 Viewer에서 각기 다르게 출력하기 위해 선택지마다 맞는 enum값을 Qcode에 저장해 줍니다.
-    //            switch (GameManager.Instance.NonePlayableCharacter.Code)
-    //            {
-    //                case NPC_TYPE.OLDMAN:
-    //                    if (!GameManager.Instance.OldMan.IsQuest)//퀘스트를 받았는지 확인할 불리언값 속성 IsQuest 초기값 false
-    //                    {
-
-    //                        GameManager.Instance.NonePlayableCharacter.QCode = QUEST_TYPE.OLDMAN;
-    //                        return VIEW_TYPE.QUEST;
-    //                    }
-    //                    else {
-    //                        GameManager.Instance.NonePlayableCharacter.QCode = QUEST_TYPE.OLDMAN;
-    //                        return VIEW_TYPE.CHECK_QUEST; }
+    //잔혹하고도 냉정한 뒷골목입니다.
+    public class BackStreetViewer : Viewer
+    {
+        public BackStreetViewer()
+        {
+           
+            StartIndex = 0;
+            EndIndex = GameManager.Instance.NonePlayableCharacter.NPC.Count;
+        }
+        public override void ViewAction()
+        {
+            SceneManager.Instance.ColText("    『뒷골목』", ConsoleColor.Cyan, ConsoleColor.Black);
+            SceneManager.Instance.ColText(" 사람들과 대화를 나눌 수 있습니다..\n\n", ConsoleColor.DarkCyan, ConsoleColor.Black);
+            Console.WriteLine("\t━━━━━ ✦ N P C ✦ ━━━━━━━━━━━━━━━━━━━━\n");
+            Console.WriteLine("\t【 1 】 노인\n\t【 2 】 소녀\n\t【 3 】 대장장이\n\t【 4 】 수상한 사람");
 
 
-    //                case NPC_TYPE.YOUNGGIRL:
-    //                    if (!GameManager.Instance.OldMan.IsQuest)
-    //                    {
+            Console.WriteLine("\n\t>> 0. 돌아가기\n\n");
+        }
+        public override VIEW_TYPE NextView(int input)
+        {
+            Console.Clear();
+            if (input == 0)
+            {
+                SceneManager.Instance.SysText("마을로 돌아갑니다.", ConsoleColor.Red, ConsoleColor.Black);
+                return VIEW_TYPE.MAIN;
+            }
+            else if (input > 0 && input <= GameManager.Instance.NonePlayableCharacter.NPC.Count)
+            {
+                GameManager.Instance.NonePlayableCharacter.Code = (NPC_TYPE)(input - 1);
 
-    //                        GameManager.Instance.NonePlayableCharacter.QCode = QUEST_TYPE.YOUNGGIRL;
-    //                        return VIEW_TYPE.QUEST;
-    //                    }
-    //                    else
-    //                    {
-    //                        GameManager.Instance.NonePlayableCharacter.QCode = QUEST_TYPE.YOUNGGIRL;
-    //                        return VIEW_TYPE.CHECK_QUEST;
-    //                    }
-
-    //                case NPC_TYPE.BLACKSMITH:
-    //                    if (!GameManager.Instance.OldMan.IsQuest)
-    //                    {
-
-    //                        GameManager.Instance.NonePlayableCharacter.QCode = QUEST_TYPE.BLACKSMITH;
-    //                        return VIEW_TYPE.QUEST;
-    //                    }
-    //                    else
-    //                    {
-    //                        GameManager.Instance.NonePlayableCharacter.QCode = QUEST_TYPE.BLACKSMITH;
-    //                        return VIEW_TYPE.CHECK_QUEST;
-    //                    }
-    //                case NPC_TYPE.STRANGER:
-    //                    if (!GameManager.Instance.OldMan.IsQuest)
-    //                    {
-
-    //                        GameManager.Instance.NonePlayableCharacter.QCode = QUEST_TYPE.STRANGER;
-    //                        return VIEW_TYPE.QUEST;
-    //                    }
-    //                    else
-    //                    {
-    //                        GameManager.Instance.NonePlayableCharacter.QCode = QUEST_TYPE.STRANGER;
-    //                        return VIEW_TYPE.CHECK_QUEST;
-    //                    }
-
-    //                default:
-    //                    return VIEW_TYPE.BACK_STREET;
-
-    //            }
-
-    //        }
-    //        else
-    //        {
-    //            return VIEW_TYPE.BACK_STREET;
-    //        }
-    //    }
-    //}
-
-    //public class QuestViewer : Viewer //NPC가 등장해 퀘스트 문구를 보여주는 Viewer
-    //{
-    //    string npcname = string.Empty; //NPC 이름을 QCode를이용해 알맞게 저장하기위한 빈 string
-    //    string nopequest = string.Empty;//퀘스트 거절 시 나올 문구를 NPC에 맞게 저장 하기 위한 빈 string
-    //    public QuestViewer()
-    //    {
-    //        StartIndex = 0;
-    //        EndIndex = 1;
-    //    }
-    //    public override void ViewAction()
-    //    {   
-            
-    //        switch (GameManager.Instance.NonePlayableCharacter.QCode)//QCode이용해 각기 string 초기화 해줄 switch문
-    //        {
-    //            case QUEST_TYPE.OLDMAN:
-    //                nopequest = GameManager.Instance.OldMan.NopeQuest;
-    //                npcname = GameManager.Instance.OldMan.Name;
-    //                break;
-    //            case QUEST_TYPE.YOUNGGIRL:
-    //                nopequest = GameManager.Instance.YoungGirl.NopeQuest;
-    //                npcname = GameManager.Instance.YoungGirl.Name;
-    //                break;
-    //            case QUEST_TYPE.BLACKSMITH:
-    //                nopequest = GameManager.Instance.BlackSmith.NopeQuest;
-    //                npcname = GameManager.Instance.BlackSmith.Name;
-    //                break;
-    //            case QUEST_TYPE.STRANGER:
-    //                nopequest = GameManager.Instance.Stranger.NopeQuest;
-    //                npcname = GameManager.Instance.Stranger.Name;
-    //                break;
-
-    //        }
+                //Qcod를 이용해 다음 Viewer에서 각기 다르게 출력하기 위해 선택지마다 맞는 enum값을 Qcode에 저장해 줍니다.
+                switch (GameManager.Instance.NonePlayableCharacter.Code)
+                {
+                    case NPC_TYPE.OLDMAN:
+                        if (!GameManager.Instance.OldMan.IsQuest)//퀘스트를 받았는지 확인할 불리언값 속성 IsQuest 초기값 false
+                        {
+                            GameManager.Instance.NonePlayableCharacter = GameManager.Instance.OldMan;
+                           
+                            GameManager.Instance.NonePlayableCharacter.QCode = QUEST_TYPE.OLDMAN;
+                            return VIEW_TYPE.QUEST;
+                        }
+                        else if (GameManager.Instance.OldMan.IsQuest)
+                        {
+                            GameManager.Instance.NonePlayableCharacter = GameManager.Instance.OldMan;
+                            GameManager.Instance.NonePlayableCharacter.QCode = QUEST_TYPE.OLDMAN;
+                            return VIEW_TYPE.CHECK_QUEST;
+                        }
+                        else if (GameManager.Instance.OldMan.CompletQuest)
+                        {
+                            Console.WriteLine("어디에 갔는지 보이지 않는다.");
+                            return VIEW_TYPE.BACK_STREET;
+                        }
+                        else
+                        {
+                            return VIEW_TYPE.BACK_STREET;
+                        }
 
 
-    //        SceneManager.Instance.ColText($"    『{npcname}』", ConsoleColor.Cyan, ConsoleColor.Black);
-    //        SceneManager.Instance.ColText($" {npcname}이 말을 걸어옵니다....\n\n", ConsoleColor.DarkCyan, ConsoleColor.Black);
-    //        Console.WriteLine("\t━━━━━ ✦ N P C ✦ ━━━━━━━━━━━━━━━━━━━━\n");
-    //        Console.WriteLine("\t【 1 】 수락하기");
+
+                    case NPC_TYPE.YOUNGGIRL:
+                        if (!GameManager.Instance.YoungGirl.IsQuest)
+                        {
+                            GameManager.Instance.NonePlayableCharacter = GameManager.Instance.YoungGirl;
+                            GameManager.Instance.NonePlayableCharacter.QCode = QUEST_TYPE.YOUNGGIRL;
+                            return VIEW_TYPE.QUEST;
+                        }
+                        else if (GameManager.Instance.YoungGirl.IsQuest)
+                        {
+                            GameManager.Instance.NonePlayableCharacter = GameManager.Instance.YoungGirl;
+                            GameManager.Instance.NonePlayableCharacter.QCode = QUEST_TYPE.YOUNGGIRL;
+                            return VIEW_TYPE.CHECK_QUEST;
+                        }
+                        else if (GameManager.Instance.YoungGirl.CompletQuest)
+                        {
+                            Console.WriteLine("어디에 갔는지 보이지 않는다.");
+                            return VIEW_TYPE.BACK_STREET;
+                        }
+                        else
+                        {
+                            return VIEW_TYPE.BACK_STREET;
+                        }
+
+                    case NPC_TYPE.BLACKSMITH:
+                        if (!GameManager.Instance.BlackSmith.IsQuest)
+                        {
+                            GameManager.Instance.NonePlayableCharacter = GameManager.Instance.BlackSmith;
+                            GameManager.Instance.NonePlayableCharacter.QCode = QUEST_TYPE.BLACKSMITH;
+                            return VIEW_TYPE.QUEST;
+                        }
+                        else if (GameManager.Instance.BlackSmith.IsQuest)
+                        {
+                            GameManager.Instance.NonePlayableCharacter = GameManager.Instance.BlackSmith;
+                            GameManager.Instance.NonePlayableCharacter.QCode = QUEST_TYPE.BLACKSMITH;
+                            return VIEW_TYPE.CHECK_QUEST;
+                        }
+                        else if (GameManager.Instance.BlackSmith.CompletQuest)
+                        {
+                            Console.WriteLine("어디에 갔는지 보이지 않는다.");
+                            return VIEW_TYPE.BACK_STREET;
+                        }
+                        else
+                        {
+                            return VIEW_TYPE.BACK_STREET;
+                        }
+                    
+                    case NPC_TYPE.STRANGER:
+                        if (!GameManager.Instance.Stranger.IsQuest)
+                        {
+                            GameManager.Instance.NonePlayableCharacter = GameManager.Instance.Stranger;
+                            GameManager.Instance.NonePlayableCharacter.QCode = QUEST_TYPE.STRANGER;
+                            return VIEW_TYPE.QUEST;
+                        }
+                        else if (GameManager.Instance.Stranger.IsQuest)
+                        {
+                            GameManager.Instance.NonePlayableCharacter = GameManager.Instance.Stranger;
+                            GameManager.Instance.NonePlayableCharacter.QCode = QUEST_TYPE.STRANGER;
+                            return VIEW_TYPE.CHECK_QUEST;
+                        }
+                        else if (GameManager.Instance.Stranger.CompletQuest)
+                        {
+                            Console.WriteLine("어디에 갔는지 보이지 않는다.");
+                            return VIEW_TYPE.BACK_STREET;
+                        }
+                        else
+                        {
+                            return VIEW_TYPE.BACK_STREET;
+                        }
+
+                    default:
+                                return VIEW_TYPE.BACK_STREET;
+
+                            }
+
+            }
+            else
+            {
+                return VIEW_TYPE.BACK_STREET;
+            }
+        }
+    }
+
+    public class QuestViewer : Viewer //NPC가 등장해 퀘스트 문구를 보여주는 Viewer
+    {
+        string npcname = string.Empty; //NPC 이름을 QCode를이용해 알맞게 저장하기위한 빈 string
+        string nopequest = string.Empty;//퀘스트 거절 시 나올 문구를 NPC에 맞게 저장 하기 위한 빈 string
+        public QuestViewer()
+        {
+            StartIndex = 0;
+            EndIndex = 1;
+        }
+        public override void ViewAction()
+        {
+
+            switch (GameManager.Instance.NonePlayableCharacter.QCode)//QCode이용해 각기 string 초기화 해줄 switch문
+            {
+                case QUEST_TYPE.OLDMAN:
+                    GameManager.Instance.NonePlayableCharacter = GameManager.Instance.OldMan;
+                    nopequest = GameManager.Instance.OldMan.NopeQuest;
+                    npcname = GameManager.Instance.OldMan.Name;
+                    break;
+                case QUEST_TYPE.YOUNGGIRL:
+                    GameManager.Instance.NonePlayableCharacter = GameManager.Instance.YoungGirl;
+                    nopequest = GameManager.Instance.YoungGirl.NopeQuest;
+                    npcname = GameManager.Instance.YoungGirl.Name;
+                    break;
+                case QUEST_TYPE.BLACKSMITH:
+                    GameManager.Instance.NonePlayableCharacter = GameManager.Instance.BlackSmith;
+                    nopequest = GameManager.Instance.BlackSmith.NopeQuest;
+                    npcname = GameManager.Instance.BlackSmith.Name;
+                    break;
+                case QUEST_TYPE.STRANGER:
+                    GameManager.Instance.NonePlayableCharacter = GameManager.Instance.Stranger;
+                    nopequest = GameManager.Instance.Stranger.NopeQuest;
+                    npcname = GameManager.Instance.Stranger.Name;
+                    break;
+
+            }
 
 
-    //        Console.WriteLine("\n\t>> 0. 거절하고 면박주기\n\n");
-    //    }
-    //    public override VIEW_TYPE NextView(int input)
-    //    {
-    //        Console.Clear();
-    //        if (input == 0)
-    //        {
-    //            SceneManager.Instance.SysText(nopequest, ConsoleColor.Red, ConsoleColor.Black);
-    //            return VIEW_TYPE.BACK_STREET;
-    //        }
-    //        else if (input > 0 && input <= Dungeon.Dungeon_Monster.Count)
-    //        {
-    //            Console.WriteLine($"{GameManager.Instance.NonePlayableCharacter.QuestDialog}");
-    //            GameManager.Instance.OldMan.IsQuest = true; //퀘스트 수락시 IsQuest true로 저장
-    //            return VIEW_TYPE.BACK_STREET;
-    //        }
-    //        else
-    //        {
-    //            return VIEW_TYPE.BACK_STREET;
-    //        }
-    //    }
-    //}
-
-    //public class CheckQuestViewer : Viewer
-    //{
-    //    string questfinished = string.Empty; //퀘스트 완료 문구 저장
-    //    string questunfinished = string.Empty;//퀘스트 미완 문구 저장
-    //    public CheckQuestViewer()
-    //    {
-    //        StartIndex = 0;
-    //        EndIndex = 1;
-    //    }
-    //    public override void ViewAction()
-    //    {
-
-    //        switch (GameManager.Instance.NonePlayableCharacter.QCode)
-    //        {
-    //            case QUEST_TYPE.OLDMAN:
-    //                questfinished = GameManager.Instance.OldMan.NopeQuest;
-    //                questunfinished = GameManager.Instance.OldMan.Name;
-    //                break;
-    //            case QUEST_TYPE.YOUNGGIRL:
-    //                questfinished = GameManager.Instance.YoungGirl.NopeQuest;
-    //                questunfinished = GameManager.Instance.YoungGirl.Name;
-    //                break;
-    //            case QUEST_TYPE.BLACKSMITH:
-    //                questfinished = GameManager.Instance.BlackSmith.NopeQuest;
-    //                questunfinished = GameManager.Instance.BlackSmith.Name;
-    //                break;
-    //            case QUEST_TYPE.STRANGER:
-    //                questfinished = GameManager.Instance.Stranger.NopeQuest;
-    //                questunfinished = GameManager.Instance.Stranger.Name;
-    //                break;
-
-    //        }
+            SceneManager.Instance.ColText($"    『{npcname}』", ConsoleColor.Cyan, ConsoleColor.Black);
+            SceneManager.Instance.ColText($" {npcname}이 말을 걸어옵니다....\n\n", ConsoleColor.DarkCyan, ConsoleColor.Black);
+            Console.WriteLine("\t━━━━━ ✦ N P C ✦ ━━━━━━━━━━━━━━━━━━━━\n");
+            Console.WriteLine("\t【 1 】 수락하기");
 
 
-    //        SceneManager.Instance.ColText($"    『{npcname}』", ConsoleColor.Cyan, ConsoleColor.Black);
-    //        SceneManager.Instance.ColText($" 어디보자....\n\n", ConsoleColor.DarkCyan, ConsoleColor.Black);
-    //        Console.WriteLine("\t━━━━━ ✦ N P C ✦ ━━━━━━━━━━━━━━━━━━━━\n");
-            
+            Console.WriteLine("\n\t>> 0. 거절하고 면박주기\n\n");
+        }
+        public override VIEW_TYPE NextView(int input)
+        {
+            Console.Clear();
+            if (input == 0)
+            {
+                SceneManager.Instance.SysText(nopequest, ConsoleColor.Red, ConsoleColor.Black);
+                return VIEW_TYPE.BACK_STREET;
+            }
+            else if (input > 0 && input <= 1)
+            {
+                Console.WriteLine($"{GameManager.Instance.NonePlayableCharacter.QuestDialog}");
+                GameManager.Instance.OldMan.IsQuest = true; //퀘스트 수락시 IsQuest true로 저장
+                Console.ReadLine();
+                return VIEW_TYPE.BACK_STREET;
+            }
+            else
+            {
+                return VIEW_TYPE.BACK_STREET;
+            }
+        }
+    }
+
+    public class CheckQuestViewer : Viewer
+    {
+        string npcname = string.Empty;
+        bool questcomplete;
+        bool questgoals;
+        string questfinished = string.Empty; //퀘스트 완료 문구 저장
+        string questunfinished = string.Empty;//퀘스트 미완 문구 저장
+        public CheckQuestViewer()
+        {
+            StartIndex = 0;
+            EndIndex = 0;
+        }
+        public override void ViewAction()
+        {
+
+            switch (GameManager.Instance.NonePlayableCharacter.QCode)
+            {
+                case QUEST_TYPE.OLDMAN:
+                    npcname = GameManager.Instance.OldMan.Name;
+                    questcomplete = GameManager.Instance.OldMan.CompletQuest;
+                    questgoals = GameManager.Instance.OldMan.QuestGoals;
+                    questfinished = GameManager.Instance.OldMan.QuestFinished;
+                    questunfinished = GameManager.Instance.OldMan.QuestUnFinished;
+                    break;
+                case QUEST_TYPE.YOUNGGIRL:
+                    npcname = GameManager.Instance.YoungGirl.Name;
+                    questcomplete = GameManager.Instance.YoungGirl.CompletQuest;
+                    questgoals = GameManager.Instance.YoungGirl.QuestGoals;
+                    questfinished = GameManager.Instance.YoungGirl.QuestFinished;
+                    questunfinished = GameManager.Instance.YoungGirl.QuestUnFinished;
+                    break;
+                case QUEST_TYPE.BLACKSMITH:
+                    npcname = GameManager.Instance.BlackSmith.Name;
+                    questcomplete = GameManager.Instance.BlackSmith.CompletQuest;
+                    questgoals = GameManager.Instance.BlackSmith.QuestGoals;
+                    questfinished = GameManager.Instance.BlackSmith.QuestFinished;
+                    questunfinished = GameManager.Instance.BlackSmith.QuestUnFinished;
+                    break;
+                case QUEST_TYPE.STRANGER:
+                    npcname = GameManager.Instance.Stranger.Name;
+                    questcomplete = GameManager.Instance.Stranger.CompletQuest;
+                    questgoals = GameManager.Instance.Stranger.QuestGoals;
+                    questfinished = GameManager.Instance.Stranger.QuestFinished;
+                    questunfinished = GameManager.Instance.Stranger.QuestUnFinished;
+                    break;
+
+            }
 
 
-    //        Console.WriteLine("\n\t>> 0. 퀘스트 검사 받기\n\n");
-    //    }
-    //    public override VIEW_TYPE NextView(int input)
-    //    {
-    //        Console.Clear();
-    //        if (input == 0)
-    //        {
-    //            SceneManager.Instance.SysText(nopequest, ConsoleColor.Red, ConsoleColor.Black);
-    //            return VIEW_TYPE.MAIN;
-    //        }
-    //        else if (input > 0 && input <= Dungeon.Dungeon_Monster.Count)
-    //        {
-    //            Console.WriteLine($"{GameManager.Instance.NonePlayableCharacter.QuestDialog}");
-    //            GameManager.Instance.OldMan.IsQuest = true;
-    //            return VIEW_TYPE.MAIN;
-    //        }
-    //        else
-    //        {
-    //            return VIEW_TYPE.BACK_STREET;
-    //        }
-    //    }
-    //}
+            SceneManager.Instance.ColText("    『"+npcname+"』", ConsoleColor.Cyan, ConsoleColor.Black);
+            SceneManager.Instance.ColText($" 어디보자....\n\n", ConsoleColor.DarkCyan, ConsoleColor.Black);
+            Console.WriteLine("\t━━━━━ ✦ N P C ✦ ━━━━━━━━━━━━━━━━━━━━\n");
+
+
+
+            Console.WriteLine("\n\t>> 0. 퀘스트 검사 받기\n\n");
+        }
+        public override VIEW_TYPE NextView(int input)
+        {
+            Console.Clear();
+            if (input == 0)
+            {
+                if (questgoals)
+                {
+                    Console.WriteLine(questfinished);
+                    questcomplete = true;
+                    return VIEW_TYPE.BACK_STREET;
+                }
+                else 
+                {
+                    Console.WriteLine(questunfinished);
+                    Console.ReadLine();
+                    return VIEW_TYPE.BACK_STREET;
+                }
+            }
+          
+            else
+            {
+                return VIEW_TYPE.CHECK_QUEST;
+            }
+        }
+    }
 
 
 

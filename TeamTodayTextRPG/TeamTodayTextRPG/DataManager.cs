@@ -65,12 +65,15 @@ namespace TeamTodayTextRPG
             MonsterDB = new MonsterDatabase();
             ItemDB = new ItemDatabase();
             DungeonDB = new DungeonDatabase();
+            NpcDB = new NonePlayerableCharacterDatabase(); 
         }
 
         public CharacterDatabase CharacterDB { get; private set; }
         public MonsterDatabase MonsterDB { get; private set; }
         public ItemDatabase ItemDB { get; private set; }
         public DungeonDatabase DungeonDB { get; private set; }
+
+        public NonePlayerableCharacterDatabase NpcDB { get; private set; }
     }
 
     abstract class Database<T>

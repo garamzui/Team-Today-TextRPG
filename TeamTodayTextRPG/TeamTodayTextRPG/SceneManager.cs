@@ -136,17 +136,20 @@ namespace TeamTodayTextRPG
                 case VIEW_TYPE.REST:
                     CurrentViewer = new RestViewer();
                     break;
-                //case VIEW_TYPE.BACK_STREET:
-                //    CurrentViewer = new BackStreetViewer();
-                //    break;
-                //case VIEW_TYPE.QUEST:
-                //    CurrentViewer = new QuestViewer();
-                //    break;
-                //case VIEW_TYPE.CHECK_QUEST:
-                //    CurrentViewer = new CheckQuestViewer();
-                //    break;
-  
-  
+                
+                
+                case VIEW_TYPE.BACK_STREET:
+                    CurrentViewer = new BackStreetViewer();
+                    break;
+                case VIEW_TYPE.QUEST:
+                    CurrentViewer = new QuestViewer();
+                    break;
+                case VIEW_TYPE.CHECK_QUEST:
+                    CurrentViewer = new CheckQuestViewer();
+                    break;
+
+
+
                 case VIEW_TYPE.BATTLE:
                     CurrentViewer = new BattleViewer();
                     break;
