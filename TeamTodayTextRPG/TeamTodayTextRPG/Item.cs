@@ -48,7 +48,6 @@ namespace TeamTodayTextRPG
                 Type = ITEM_TYPE.CONSUMABLE;
             }
 
-
             // 직업 제한 파싱
             List<CHAR_TYPE> allowedJobs = new List<CHAR_TYPE>();
 
@@ -70,6 +69,9 @@ namespace TeamTodayTextRPG
 
         }
     }
+
+
+
     /*
     public class HpPotion : Item
     {
