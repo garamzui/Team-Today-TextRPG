@@ -1000,7 +1000,30 @@ namespace TeamTodayTextRPG
         {
             int attackDamage = Character.DefaultAttack();
 
-            SceneManager.Instance.SysDefault();
+            int rand = GameManager.Instance.Rand.Next(0, 10);
+            switch (GameManager.Instance.Player.Character.Code)
+            {
+                case CHAR_TYPE.WARRIOR:
+                    if (rand == 0) { GameManager.Instance.Animation.WARRIORATK1(); }
+                    else if (rand == 1) { GameManager.Instance.Animation.WARRIORATK2(); }
+                    else { GameManager.Instance.Animation.WarriorNomAtk(); }
+                    break;
+                case CHAR_TYPE.MAGICIAN:
+                    
+                    if (rand == 0) { GameManager.Instance.Animation.MAGICIANATK1(); }
+                    else if (rand == 1) { GameManager.Instance.Animation.MAGICIANATK2(); }
+                    else { GameManager.Instance.Animation.MagicianNomAtk(); }
+                    break;
+                case CHAR_TYPE.ASSASSIN:
+                    
+                    if (rand == 0) { GameManager.Instance.Animation.ASSASSINATK(); }
+                    else { GameManager.Instance.Animation.AssassinNomAtk(); }
+                    break;
+
+            }
+
+
+
             SceneManager.Instance.ColText($"    『{Dungeon.Name}』", ConsoleColor.Magenta, ConsoleColor.Black);
             SceneManager.Instance.ColText($" {Dungeon.Text}\n\n", ConsoleColor.DarkMagenta, ConsoleColor.Black);
 
@@ -1052,7 +1075,23 @@ namespace TeamTodayTextRPG
         public override void ViewAction()
         {
             int skillDamage = Character.ActiveSkill();
-            SceneManager.Instance.SysDefault();
+           
+           
+            switch (GameManager.Instance.Player.Character.Code)
+            {
+                case CHAR_TYPE.WARRIOR:
+                    GameManager.Instance.Animation.WarriorAnimation();
+                    break;
+                case CHAR_TYPE.MAGICIAN:
+                    GameManager.Instance.Animation.MagicianAnimation();
+
+                    break;
+                case CHAR_TYPE.ASSASSIN:
+                    GameManager.Instance.Animation.AssassinAnimation();
+
+                    break;
+
+            }
             SceneManager.Instance.ColText($"    『{Dungeon.Name}』", ConsoleColor.Magenta, ConsoleColor.Black);
             SceneManager.Instance.ColText($" {Dungeon.Text}\n\n", ConsoleColor.DarkMagenta, ConsoleColor.Black);
 
