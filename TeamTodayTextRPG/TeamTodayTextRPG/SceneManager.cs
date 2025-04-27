@@ -142,6 +142,9 @@ namespace TeamTodayTextRPG
                 case VIEW_TYPE.QUEST:
                     CurrentViewer = new QuestViewer();
                     break;
+                case VIEW_TYPE.CHECK_QUEST:
+                    CurrentViewer = new CheckQuestViewer();
+                    break;
 
 
                 case VIEW_TYPE.BATTLE:

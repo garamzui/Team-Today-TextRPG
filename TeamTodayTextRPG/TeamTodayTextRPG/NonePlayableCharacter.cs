@@ -17,15 +17,19 @@ namespace TeamTodayTextRPG
     }
 
     public enum QUEST_TYPE
-    { 
-    
+    {
+        OLDMAN,
+        YOUNGGIRL,
+        BLACKSMITH,
+        STRANGER
+
     }
-    public abstract class NonePlayerableChatacter
+    public abstract class NonePlayableCharacter
     {
 
         public List<string> NPC { get; private set; }
 
-        public NonePlayerableChatacter()
+        public NonePlayableCharacter()
         {
             NPC = new List<string>();
             NPC.Add("노인");
@@ -34,25 +38,39 @@ namespace TeamTodayTextRPG
             NPC.Add("수상한사람");
 
         }
+       
         public NPC_TYPE Code { get; set; }
         public QUEST_TYPE QCode { get; set; }
         public string Name { get; set; }
+        public int QuestNum { get; set; }
+        public bool IsQuest { get; set; } = false;
+        public bool QuestGoals { get; set; } = false ;
+        public bool CompletQuest { get; set; } = false;
 
+        public string QuestDialog {  get; set; }
+        public string NopeQuest { get; set; }
+
+        public string QuestFinished { get; set; }
+        public string QuestUnFinished { get; set; }
         public abstract void Quest();
 
         public void Init(string[] data) 
         {
-            //0.NPC코드/1.퀘스트코드/2.NPC이름
+            //0.NPC코드/1.퀘스트코드/2.NPC이름/3.퀘스트멘트/4.퀘스트 거절 시 멘트/5.퀘스트 완료문구/6.퀘스트 미완 문구
             Code = (NPC_TYPE)int.Parse(data[0]);
             QCode = (QUEST_TYPE)int.Parse(data[1]);
             Name = data[2];
-        
+            QuestDialog = data[3];
+            NopeQuest = data[4];
+            QuestFinished = data[5];
+            QuestUnFinished = data[6];
+
         }
 
 
 
 
-        public class OldMan : NonePlayerableChatacter
+        public class OldMan : NonePlayableCharacter
         {
             public override void Quest()
             {
@@ -61,7 +79,7 @@ namespace TeamTodayTextRPG
 
         }
 
-        public class YoungGirl : NonePlayerableChatacter
+        public class YoungGirl : NonePlayableCharacter
         {
             public override void Quest()
             {
@@ -70,7 +88,7 @@ namespace TeamTodayTextRPG
 
         }
 
-        public class BlackSmith : NonePlayerableChatacter
+        public class BlackSmith : NonePlayableCharacter
         {
             public override void Quest()
             {
@@ -79,7 +97,7 @@ namespace TeamTodayTextRPG
 
         }
 
-        public class Stranger : NonePlayerableChatacter
+        public class Stranger : NonePlayableCharacter
         {
             public override void Quest()
             {
