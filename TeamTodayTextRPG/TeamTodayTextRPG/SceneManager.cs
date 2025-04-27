@@ -3,6 +3,7 @@
     public class SceneManager
     {
         public Viewer CurrentViewer { get; set; }
+        public int TabPage { get; set; } = 0;
 
         private static readonly Lazy<SceneManager> lazyInstance = new Lazy<SceneManager>(() => new SceneManager());
         public static SceneManager Instance => lazyInstance.Value;
@@ -240,6 +241,7 @@
                 GameManager.Instance.Player.SetCharacter(classCode, name);
             }
             Console.Clear();
+            SysDefault();
         }
 
         /* 『효빈』
@@ -307,7 +309,7 @@
         public void ShowInventory(VIEW_TYPE view)
         {
             int count = 0;
-            if (GameManager.Instance.Player.Bag != null)
+            if (GameManager.Instance.Player.Bag.Count != 0)
             {
                 foreach (var item in GameManager.Instance.Player.Bag)
                 {
@@ -322,7 +324,7 @@
                     ShowDef(int.Parse(DataManager.Instance.ItemDB.List[item][3]));
                     Console.WriteLine("\t  [ " + DataManager.Instance.ItemDB.List[item][6] + " ]");
                 }
-                Console.WriteLine("   -----------------------------------------------------------------------------");
+                Console.WriteLine("   -----------------------------------------------------------------------------\n");
             }
         }
 
@@ -355,7 +357,7 @@
                             Console.WriteLine("\t  [ " + item[i][6] + " ]");
                             Console.ResetColor();
                         }
-                        Console.WriteLine("   -----------------------------------------------------------------------------");
+                        Console.WriteLine("   -----------------------------------------------------------------------------\n");
                         break;
 
                     case ITEM_TYPE.ARMOR:
@@ -379,7 +381,7 @@
                             Console.WriteLine("\t  [ " + item[i][6] + " ]");
                             Console.ResetColor();
                         }
-                        Console.WriteLine("   -----------------------------------------------------------------------------");
+                        Console.WriteLine("   -----------------------------------------------------------------------------\n");
                         break;
 
                 }
@@ -415,7 +417,8 @@
         public void ShowShopSale()
         {
             int count = 0;
-            if (GameManager.Instance.Player.Bag != null)
+
+            if (GameManager.Instance.Player.Bag.Count != 0)
             {
                 foreach (var item in GameManager.Instance.Player.Bag)
                 {
@@ -426,14 +429,14 @@
                     Console.WriteLine("\t [" + (int)(int.Parse(DataManager.Instance.ItemDB.List[item][7]) * 0.85) + " G]");
                     Console.WriteLine("\t  [ " + DataManager.Instance.ItemDB.List[item][6] + " ]");
                 }
-                Console.WriteLine("   -----------------------------------------------------------------------------");
+                Console.WriteLine("   -----------------------------------------------------------------------------\n");
             }
         }
         //일단은 복붙만
         public void ShowEquip(VIEW_TYPE view)
         {
             int count = 0;
-            if (GameManager.Instance.Player.Bag != null)
+            if (GameManager.Instance.Player.Bag.Count != 0)
             {
                 foreach (var item in GameManager.Instance.Player.Bag)
                 {

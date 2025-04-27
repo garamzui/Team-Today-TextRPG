@@ -34,6 +34,7 @@
         public int EndIndex { get; set; }  // 화면에서 입력 가능한 끝 값
         public int DungeonCode { get; set; }// 던전 코드 (사용할 경우)
 
+
         protected Player Player => GameManager.Instance.Player;
         protected Character Character => Player.Character;
         protected Dungeon Dungeon => GameManager.Instance.Dungeon;
@@ -504,8 +505,8 @@
             SceneManager.Instance.ShowInventory(VIEW_TYPE.EQUIP);
             Console.WriteLine("\n\t━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 
-            Console.WriteLine($"1~{EndIndex}. 장비 변경");
-            Console.WriteLine("\n0. 메인으로 돌아가기\n\n");
+            Console.WriteLine($"\t1~{EndIndex}. 장비 변경");
+            Console.WriteLine("\n\t0. 메인으로 돌아가기\n\n");
         }
 
 
@@ -576,7 +577,7 @@
     {
         public ShopViewer()
         {
-            StartIndex = 0;
+            StartIndex = -2;
             EndIndex = 2;
         }
         public override void ViewAction()
@@ -588,14 +589,30 @@
             SceneManager.Instance.ColText($"{Player.Gold}", ConsoleColor.Yellow, ConsoleColor.Black);
             Console.WriteLine(" G");
 
-            //Console.WriteLine($"  ━━━━━ ✦ 아이템 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-            Console.WriteLine($"  ━━━━━ ✦ 무  기 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-            SceneManager.Instance.ShowShop(VIEW_TYPE.SHOP, ITEM_TYPE.WEAPON);
-            Console.WriteLine($"  ━━━━━ ✦ 방어구 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-            SceneManager.Instance.ShowShop(VIEW_TYPE.SHOP, ITEM_TYPE.ARMOR);
+            if(SceneManager.Instance.TabPage == 0)
+            {
+                Console.Write($"  ━━━━━");
+                SceneManager.Instance.ColText(" ✦ 무  기 ✦ ", ConsoleColor.Yellow, ConsoleColor.Black);
+                Console.WriteLine($"━ ✦ 방어구 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+                SceneManager.Instance.ShowShop(VIEW_TYPE.SHOP, ITEM_TYPE.WEAPON);
+            }
+            else if(SceneManager.Instance.TabPage == 1)
+            {
+                Console.Write($"  ━━━━━ ✦ 무  기 ✦ ━");
+                SceneManager.Instance.ColText(" ✦ 방어구 ✦ ", ConsoleColor.Yellow, ConsoleColor.Black);
+                Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+                SceneManager.Instance.ShowShop(VIEW_TYPE.SHOP, ITEM_TYPE.ARMOR);
+            }
+
+                //Console.WriteLine($"  ━━━━━ ✦ 아이템 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+               // Console.WriteLine($"  ━━━━━ ✦ 무  기 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+            //SceneManager.Instance.ShowShop(VIEW_TYPE.SHOP, ITEM_TYPE.WEAPON);
+            //Console.WriteLine($"  ━━━━━ ✦ 방어구 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+            //SceneManager.Instance.ShowShop(VIEW_TYPE.SHOP, ITEM_TYPE.ARMOR);
             //Console.WriteLine($"  ━━━━━ ✦ 소모품 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
             Console.WriteLine($"  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 
+            Console.WriteLine("\t-1. << 이전\t-2. 다음 >>\n");
             Console.WriteLine("\t1. 아이템 구매");
             Console.WriteLine("\t2. 아이템 판매");
             Console.WriteLine("\n\t0. 마을로 돌아가기\n\n");
@@ -610,15 +627,44 @@
                 case 1:
                     // 아이템 구매 화면으로 이동
                     SceneManager.Instance.SysDefault();
+                    SceneManager.Instance.TabPage = 0;
                     return VIEW_TYPE.PURCHASE;
                 case 2:
                     // 아이템 판매 화면으로 이동
                     SceneManager.Instance.SysDefault();
+                    SceneManager.Instance.TabPage = 0;
                     return VIEW_TYPE.SALE;
                 case 0:
                     // 메인 화면으로 돌아가기
                     SceneManager.Instance.SysDefault();
+                    SceneManager.Instance.TabPage = 0;
                     return VIEW_TYPE.MAIN;
+                case -1:
+                    // 이전
+                    SceneManager.Instance.TabPage--;
+                    if (SceneManager.Instance.TabPage < 0)
+                    {
+                        SceneManager.Instance.TabPage = 0;
+                        SceneManager.Instance.SysText("첫 페이지입니다", ConsoleColor.Red, ConsoleColor.Black);
+                    }
+                    else
+                    {
+                        SceneManager.Instance.SysDefault();
+                    }
+                        return VIEW_TYPE.SHOP;
+                case -2:
+                    // 다음
+                    SceneManager.Instance.TabPage++;
+                    if (SceneManager.Instance.TabPage > 1)
+                    {
+                        SceneManager.Instance.TabPage = 1;
+                        SceneManager.Instance.SysText("마지막 페이지입니다", ConsoleColor.Red, ConsoleColor.Black);
+                    }
+                    else
+                    {
+                        SceneManager.Instance.SysDefault();
+                    }
+                    return VIEW_TYPE.SHOP;
                 default:
                     // 잘못된 입력 처리
                     return VIEW_TYPE.SHOP;  // 다시 상점 화면을 보여줌
@@ -631,7 +677,7 @@
     {
         public PurchaseViewer()
         {
-            StartIndex = -1;
+            StartIndex = -3;
             EndIndex = DataManager.Instance.ItemDB.List.Count; // 아이템 개수만큼
         }
 
@@ -644,17 +690,32 @@
             SceneManager.Instance.ColText($"{Player.Gold}", ConsoleColor.Yellow, ConsoleColor.Black);
             Console.WriteLine(" G");
 
+            if (SceneManager.Instance.TabPage == 0)
+            {
+                Console.Write($"  ━━━━━");
+                SceneManager.Instance.ColText(" ✦ 무  기 ✦ ", ConsoleColor.Yellow, ConsoleColor.Black);
+                Console.WriteLine($"━ ✦ 방어구 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+                SceneManager.Instance.ShowShop(VIEW_TYPE.PURCHASE, ITEM_TYPE.WEAPON);
+            }
+            else if (SceneManager.Instance.TabPage == 1)
+            {
+                Console.Write($"  ━━━━━ ✦ 무  기 ✦ ━");
+                SceneManager.Instance.ColText(" ✦ 방어구 ✦ ", ConsoleColor.Yellow, ConsoleColor.Black);
+                Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+                SceneManager.Instance.ShowShop(VIEW_TYPE.PURCHASE, ITEM_TYPE.ARMOR);
+            }
             //Console.WriteLine($"  ━━━━━ ✦ 아이템 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-            Console.WriteLine($"  ━━━━━ ✦ 무  기 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-            SceneManager.Instance.ShowShop(VIEW_TYPE.PURCHASE, ITEM_TYPE.WEAPON);
-            Console.WriteLine($"  ━━━━━ ✦ 방어구 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-            SceneManager.Instance.ShowShop(VIEW_TYPE.PURCHASE, ITEM_TYPE.ARMOR);
+            //Console.WriteLine($"  ━━━━━ ✦ 무  기 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+            //SceneManager.Instance.ShowShop(VIEW_TYPE.PURCHASE, ITEM_TYPE.WEAPON);
+            //Console.WriteLine($"  ━━━━━ ✦ 방어구 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+            //SceneManager.Instance.ShowShop(VIEW_TYPE.PURCHASE, ITEM_TYPE.ARMOR);
             //Console.WriteLine($"  ━━━━━ ✦ 소모품 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
             Console.WriteLine($"  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 
+            Console.WriteLine("\t-1. << 이전\t-2. 다음 >>\n");
             Console.WriteLine($"\t1 ~ {DataManager.Instance.ItemDB.List.Count}. 아이템 구매\n");
             Console.WriteLine("\t0. 상점으로");
-            Console.WriteLine("\t-1. 판매 화면으로\n\n");
+            Console.WriteLine("\t-3. 판매 화면으로\n\n");
         }
         public override VIEW_TYPE NextView(int input)
         {
@@ -662,11 +723,41 @@
             if (input == 0)
             {
                 SceneManager.Instance.SysDefault();
+                SceneManager.Instance.TabPage = 0;
                 return VIEW_TYPE.SHOP;
             }
             else if (input == -1)
             {
+                SceneManager.Instance.TabPage--;
+                if (SceneManager.Instance.TabPage < 0)
+                {
+                    SceneManager.Instance.TabPage = 0;
+                    SceneManager.Instance.SysText("첫 페이지입니다", ConsoleColor.Red, ConsoleColor.Black);
+                }
+                else
+                {
+                    SceneManager.Instance.SysDefault();
+                }
+                return VIEW_TYPE.PURCHASE;
+            }
+            else if (input == -2)
+            {
+                SceneManager.Instance.TabPage++;
+                if (SceneManager.Instance.TabPage > 1)
+                {
+                    SceneManager.Instance.TabPage = 1;
+                    SceneManager.Instance.SysText("마지막 페이지입니다", ConsoleColor.Red, ConsoleColor.Black);
+                }
+                else
+                {
+                    SceneManager.Instance.SysDefault();
+                }
+                return VIEW_TYPE.PURCHASE;
+            }
+            else if (input == -3)
+            {
                 SceneManager.Instance.SysDefault();
+                SceneManager.Instance.TabPage = 0;
                 return VIEW_TYPE.SALE;
             }
             else if (input > 0 && input <= DataManager.Instance.ItemDB.List.Count)
@@ -722,7 +813,7 @@
             //Console.WriteLine($"  ━━━━━ ✦ 무  기 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
             SceneManager.Instance.ShowShopSale();
             //Console.WriteLine($"  ━━━━━ ✦ 방어구 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-            SceneManager.Instance.ShowShopSale();
+            //SceneManager.Instance.ShowShopSale();
             //Console.WriteLine($"  ━━━━━ ✦ 소모품 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
             Console.WriteLine($"  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 
@@ -1442,11 +1533,11 @@
             ViewStatusRest();
             Console.WriteLine("\n\t━━━━━ ✦  요금표  ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 
-            Console.Write("\n\t\t【 1 】 대실    | ");
+            Console.Write("\n\t【 1 】 대실    | ");
             SceneManager.Instance.ColText("500", ConsoleColor.DarkCyan, ConsoleColor.Black);
             Console.WriteLine(" G    |  HP +50    |  MP +20");
 
-            Console.Write("\n\t\t【 2 】 숙박    | ");
+            Console.Write("\n\t【 2 】 숙박    | ");
             SceneManager.Instance.ColText("2000", ConsoleColor.DarkCyan, ConsoleColor.Black);
             Console.WriteLine(" G   |  HP +FULL  |  MP +FULL");
 
