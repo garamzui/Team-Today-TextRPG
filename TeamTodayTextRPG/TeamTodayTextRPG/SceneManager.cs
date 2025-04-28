@@ -4,6 +4,7 @@
     {
         public Viewer CurrentViewer { get; set; }
         public int TabPage { get; set; } = 0;
+        public VIEW_TYPE CurrentViewType { get; set; }
 
         private static readonly Lazy<SceneManager> lazyInstance = new Lazy<SceneManager>(() => new SceneManager());
         public static SceneManager Instance => lazyInstance.Value;
@@ -11,10 +12,11 @@
         public SceneManager()
         {
             CurrentViewer = new MainViewer();
+            CurrentViewType = VIEW_TYPE.MAIN;
         }
 
 
-        // 매개변수 : 메세지 , 글자색, 배경색
+        // 색깔글자 출력 메소드      매개변수 : 메세지 , 글자색, 배경색
         public void ColText(string message, ConsoleColor textColor = ConsoleColor.White, ConsoleColor backColor = ConsoleColor.Black)
         {
             ConsoleColor prevColor = Console.ForegroundColor;
@@ -27,7 +29,7 @@
             Console.BackgroundColor = prevBackColor;
         }
 
-
+        // 시스템 문구 출력 메소드, 색깔글자와 매개변수 동일(배경색 사용 권장x)
         public void SysText(string message, ConsoleColor textColor = ConsoleColor.White, ConsoleColor backColor = ConsoleColor.Black)
         {
             Clear(0, 2);
@@ -43,6 +45,8 @@
             Console.ForegroundColor = prevColor;
             Console.BackgroundColor = prevBackColor;
         }
+
+        // 기본 시스템 문구 출력
         public void SysDefault()
         {
             SysText("\t\t\t\t\t【Sparta Text RPG  _Team Today Present】", ConsoleColor.Yellow, ConsoleColor.Black);
@@ -67,7 +71,6 @@
             Console.SetCursorPosition(0, linesToClear); // 
         }
 
-
         // 입력받은 숫자만큼, 현재 커서 위로 삭제
         public void ClearAbove(int linesToClear)
         {
@@ -90,10 +93,10 @@
         }
 
 
-        public void SwitchScene(VIEW_TYPE viewType)
+        public void SwitchScene(VIEW_TYPE type)
         {
             // 새로운 뷰어 할당
-            switch (viewType)
+            switch (type)
             {
                 case VIEW_TYPE.MAIN:
                     CurrentViewer = new MainViewer();
@@ -167,21 +170,13 @@
                     Console.WriteLine("error");
                     break;
             }
-            ShowCurrentView();
-        }
-
-        //『효빈』선택지 입력 시 다음 화면으로의 전환
-        public VIEW_TYPE ChangeNextView()
-        {
-            return CurrentViewer.NextView(InputAction(CurrentViewer.StartIndex, CurrentViewer.EndIndex, Console.CursorTop));
-        }
-
-        // 새로운 뷰어의 화면 출력
-        public void ShowCurrentView()
-        {
             if (CurrentViewer != null)
-                CurrentViewer.ViewAction();  // gameManager 객체를 넘기기
+            {
+                CurrentViewer.ViewAction();
+                CurrentViewType = CurrentViewer.NextView(InputAction(CurrentViewer.StartIndex, CurrentViewer.EndIndex, Console.CursorTop));
+            }
         }
+
 
         // 『효빈』초기 캐릭터 설정 (플레이어 이름, 플레이어할 캐릭터의 직업)을 도와주는 함수 입니다.
         public void Intro()

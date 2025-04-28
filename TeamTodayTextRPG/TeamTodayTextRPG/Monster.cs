@@ -7,11 +7,12 @@
     }
     public enum MONSTER_CODE
     {
-        Slime = 0,
-        Goblin,
-        Wolf,
-        Ork,
-        Zakum
+        SLIME = 0,
+        GOBLIN,
+        WOLF,
+        BOAR,
+        ORK,
+        ZAKUM
     }
     public enum MONSTER_GRADE
     {
@@ -40,12 +41,12 @@
 
         public void Init(string[] parameter)
         {
-            // 0.코드 / 1.이름 / 2.레벨 / 3.공격력 / 4.방어력 / 5.체력 / 6.보상골드 / 7.보상경험치 / 8.몬스터 종류 / 9.텍스트
+            // 0.코드 / 1.이름 / 2.레벨 / 3.공격력 / 4.방어력 / 5.체력 / 6.보상골드 / 7.보상경험치 / 8.몬스터 등급 / 9.텍스트
             Parameter = parameter;
 
             if (!Enum.TryParse(parameter[0], out MONSTER_CODE code))
                 throw new ArgumentException("Invalid MONSTER code.");
-            Code = (MONSTER_CODE)(int.Parse(Parameter[8]));
+            Code = (MONSTER_CODE)(int.Parse(Parameter[0]));
             Name = Parameter[1];
             Level = int.Parse(Parameter[2]);
             Atk = int.Parse(Parameter[3]);
@@ -54,6 +55,8 @@
             MaxHp = Hp;
             RewardGold = int.Parse(Parameter[6]);
             RewardExp = int.Parse(Parameter[7]);
+            if (!Enum.TryParse(parameter[8], out MONSTER_GRADE grade))
+                throw new ArgumentException("Invalid MONSTER grade.");
             Text = Parameter[9];
         }
 
@@ -93,19 +96,22 @@
         {
             switch (GameManager.Instance.Dungeon.Dungeon_Monster[GameManager.Instance.Dungeon.MonsterAtkCounter].Code)
             {
-                case MONSTER_CODE.Slime:
+                case MONSTER_CODE.SLIME:
                     GameManager.Instance.Animation.SlimeAnimation();
                     break;
-                case MONSTER_CODE.Goblin:
+                case MONSTER_CODE.GOBLIN:
                     GameManager.Instance.Animation.GoblinAnimation();
                     break;
-                case MONSTER_CODE.Wolf:
+                case MONSTER_CODE.WOLF:
                     GameManager.Instance.Animation.WolfAnimation();
                     break;
-                case MONSTER_CODE.Ork:
+                case MONSTER_CODE.BOAR:
+                    GameManager.Instance.Animation.BoarAnimation();
+                    break;
+                case MONSTER_CODE.ORK:
                     GameManager.Instance.Animation.OrkAnimation();
                     break;
-                case MONSTER_CODE.Zakum:
+                case MONSTER_CODE.ZAKUM:
                     GameManager.Instance.Animation.ZakumAnimation();
                     break;
                 default:
@@ -136,7 +142,7 @@
     {
         public Slime()
         {
-            Init(DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.Slime]);
+            Init(DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.SLIME]);
         }
     }
 
@@ -144,7 +150,7 @@
     {
         public Goblin()
         {
-            Init(DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.Goblin]);
+            Init(DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.GOBLIN]);
         }
     }
 
@@ -152,7 +158,15 @@
     {
         public Wolf()
         {
-            Init(DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.Wolf]);
+            Init(DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.WOLF]);
+        }
+    }
+
+    class Boar : Monster
+    {
+        public Boar()
+        {
+            Init(DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.BOAR]);
         }
     }
 
@@ -160,7 +174,7 @@
     {
         public Ork()
         {
-            Init(DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.Ork]);
+            Init(DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.ORK]);
         }
     }
 
@@ -168,7 +182,7 @@
     {
         public Zakum()
         {
-            Init(DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.Zakum]);
+            Init(DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.ZAKUM]);
         }
     }
 }
