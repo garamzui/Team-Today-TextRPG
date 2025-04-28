@@ -59,12 +59,15 @@
             MonsterDB = new MonsterDatabase();
             ItemDB = new ItemDatabase();
             DungeonDB = new DungeonDatabase();
+            NpcDB = new NonePlayerableCharacterDatabase(); 
         }
 
         public CharacterDatabase CharacterDB { get; private set; }
         public MonsterDatabase MonsterDB { get; private set; }
         public ItemDatabase ItemDB { get; private set; }
         public DungeonDatabase DungeonDB { get; private set; }
+
+        public NonePlayerableCharacterDatabase NpcDB { get; private set; }
     }
 
     abstract class Database<T>
@@ -101,7 +104,7 @@
         //0.코드/1.직업이름/2.공격력/3.방어력/4.체력/5.마력/6.회피/7.액티브스킬이름/8.패시브스킬이름/9.직업설명
         public string Data { get; private set; } =
             "0/전사/12/5/100/40/1/겁나쎄게 올려치기/강철피부/높은 방어력, 기본 공격력, 체력#" +
-            "1/마법사/3/3/50/100/3/썬더봁/마력증강/방어 무시, 높은 마나, 스킬의존성#" +
+            "1/마법사/5/3/50/100/3/썬더봁/마력증강/방어 무시, 높은 마나, 스킬의존성#" +
             "2/도적/7/1/75/75/10/연격/날쌘 움직임/높은 회피, 크리티컬 히트";
 
 
@@ -195,6 +198,28 @@
         {
             Init(Data);
         }
+        protected override void SetData(string[] parameter)
+        {
+            List.Add(parameter);
+        }
+    }
+    class NonePlayerableCharacterDatabase : Database<string[]>
+    {
+
+        //0.NPC코드/1.퀘스트코드/2.NPC이름/3.퀘스트멘트/4.퀘스트 거절 시 멘트/5.퀘스트 완료문구/6.퀘스트 미완 문구
+        public string Data { get; private set; } =
+            "0/0/노인/블라블라 고블린을 10마리 어쩌구 /떼잉 쯧 배알도 없는 놈 같으니/나도 그정도는 해/아직 덜 됐다 이 덜떨어진 놈#" +
+            "1/1/소녀/어젯밤 내 슬라임이 무너졌어 어쩌구 내 목숨을 가져가도 좋아 저쩌구/떼잉 쯧/곰마워/무너졌어흐흑 #" +
+            "2/2/대장장이/상점으로 돌아가 글라디우스를 구매하여 가져 오십시오/어디가십니까/사오라고/이 칼은 이제 제 껍니다#"+
+            "3/3/수상한사람/크크크ㅡ크크크크큭크크크큭크큭 크하하하하하하 크엑 컹 /후후후후...푸후후후..크흐흐..크하하하하핰핰캌/진짜로 했다고?ㄷㄷ/오호호호이히히히낄낄낄";
+
+
+
+        public NonePlayerableCharacterDatabase()
+        {
+            Init(Data);
+        }
+
         protected override void SetData(string[] parameter)
         {
             List.Add(parameter);
