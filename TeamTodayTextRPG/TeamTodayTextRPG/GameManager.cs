@@ -1,5 +1,10 @@
-﻿namespace TeamTodayTextRPG
-{
+﻿
+
+using static TeamTodayTextRPG.NonePlayableCharacter;
+
+namespace TeamTodayTextRPG
+{ 
+
     class GameManager
     {
         /* 『효빈』
@@ -85,4 +90,5 @@
             }
         }
     }
+
 }
