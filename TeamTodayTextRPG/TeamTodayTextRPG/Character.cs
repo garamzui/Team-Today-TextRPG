@@ -48,7 +48,7 @@
         public string ActskillName { get; set; }
         public string PasskillName { get; set; }
 
-        public int PassiveSkillLevel = 0;
+        public int PassiveSkillLevel = 1;
         public int MaxPassiveSkillLevel { get; set; } = 5;  // <= 수정 생각해보기 위치...static
 
 
@@ -84,44 +84,6 @@
         // 스킬 이름은 스탯과 함께 초기화해서 저장해두게 해놨습니다.
 
 
-        /*    >> 『효빈』 추상메소드로 만들어서 자식들이 각자 정의하게 하면 switch-case문을 쓸 필요도 없고 보다 객체지향적입니다!
-         *     내용은 동일하게 추상메소드로 만들어 보겠습니다.
-        public virtual void DefaultAttack()
-        {
-            int rand = GameManager.Instance.Rand.Next(0, 10);
-
-            switch (GameManager.Instance.Player.Character.Code)
-            {
-                case CHAR_TYPE.WARRIOR:
-                    if (rand ==0) { GameManager.Instance.Animation.WARRIORATK1(); }
-                    else if (rand == 1) { GameManager.Instance.Animation.WARRIORATK2(); }
-                    else { GameManager.Instance.Animation.WarriorNomAtk(); }
-                    break;
-                case CHAR_TYPE.MAGICIAN:
-                    if (rand ==0) { GameManager.Instance.Animation.MAGICIANATK1(); }
-                    else if (rand ==1) { GameManager.Instance.Animation.MAGICIANATK2(); }
-                    else { GameManager.Instance.Animation.MagicianNomAtk(); }
-                    break;
-                case CHAR_TYPE.ASSASSIN:
-                    if (rand ==0)
-                    { GameManager.Instance.Animation.ASSASSINATK(); }
-                    else { GameManager.Instance.Animation.AssassinNomAtk(); }
-                    break;
-
-
-                default:
-                    break;
-
-            }
-            Console.WriteLine("Battle!!\n");
-
-            Console.WriteLine($"{GameManager.Instance.Player.Name} 의 공격!");
-
-            int AttackDamage = TotalAtk - GameManager.Instance.Dungeon.TargetMonster.Def;
-            if (AttackDamage <= 0)
-            { AttackDamage = 1; }
-            GameManager.Instance.Dungeon.TargetMonster.ManageHp(-AttackDamage);
-        }*/
         public abstract int DefaultAttack();
 
         //active 스킬은 몬스터 체력을 -= 하는 방식으로 
@@ -136,22 +98,17 @@
                 Hp += HpChange;
                 {
                     if (Hp < 0) Hp = 0;
-                    //Console.WriteLine($"{GameManager.Instance.Player.Name}{-HpChange}의 피해를 입었습니다! ");
                 }
 
                 if (Hp == 0)
                 {
                     Die();
                 }
-               
-                //Console.WriteLine($"HP {GameManager.Instance.Player.Character.Hp - HpChange} -> {GameManager.Instance.Player.Character.Hp} ");
-                
             }
             else if (HpChange > 0)
             {
                 Hp += HpChange;
                 if (Hp > MaxHp) Hp = MaxHp;
-                //Console.WriteLine($"{HpChange}만큼 회복했습니다! 현재 HP: {Hp}/{MaxHp}");
             }
             // else { Console.WriteLine("아무 일도 일어나지 않았습니다."); }// 우선 예외처리 때문에 작성해 두었습니다.
         }
@@ -247,7 +204,7 @@
                 if (PassiveSkillLevel == MaxPassiveSkillLevel)
                 {
 
-                    SceneManager.Instance.ColText($"\t>> 『{PasskillName}』의 Lv이 최대가 되었습니다\t|\t=☆ 최대 레벨 보상으로 기본 방어도가 20이 됩니다 ☆=\n", ConsoleColor.DarkCyan, ConsoleColor.Black);
+                    SceneManager.Instance.ColText($"\t>> 『{PasskillName}』의 Lv이 최대가 되었습니다\n\t\t==☆ 최대 레벨 보상으로 기본 방어도가 20이 됩니다 ☆==\n", ConsoleColor.DarkCyan, ConsoleColor.Black);
                     Defence = 20;
                 }
                 else
@@ -294,7 +251,7 @@
                 itd = 0;
             }
 
-            int skillDamage = (int)((TotalAtk * 6) - itd);
+            int skillDamage = (int)((TotalAtk * 10) - itd);
             if (skillDamage <= 0)
                 skillDamage = 1;
 
@@ -321,13 +278,13 @@
 
                 if (PassiveSkillLevel == MaxPassiveSkillLevel)
                 {
-                    SceneManager.Instance.ColText($"\t>> 『{PasskillName}』의 Lv이 최대가 되었습니다\t|\t=☆ 최대 레벨 보상으로 최대 마나가 500이 됩니다 ☆=\n", ConsoleColor.DarkCyan, ConsoleColor.Black);
+                    SceneManager.Instance.ColText($"\t>> 『{PasskillName}』의 Lv이 최대가 되었습니다\n\t\t==☆ 최대 레벨 보상으로 최대 마나가 500이 됩니다 ☆==\n", ConsoleColor.DarkCyan, ConsoleColor.Black);
                     MaxMp = 500;
                     Mp = MaxMp;
                 }
                 else
                 {
-                    SceneManager.Instance.ColText($"\t>> 『{PasskillName}』의 Lv이 1증가하였습니다 [{PassiveSkillLevel - 1}->{PassiveSkillLevel}]\t|\t최대 마나 +50\n", ConsoleColor.DarkCyan, ConsoleColor.Black);
+                    SceneManager.Instance.ColText($"\t>> 『{PasskillName}』의 Lv이 1증가하였습니다 [ {PassiveSkillLevel - 1} -> {PassiveSkillLevel} ]\t| 최대 마나 +50\n", ConsoleColor.DarkCyan, ConsoleColor.Black);
                     MaxMp += 50;
                     Mp = MaxMp;
                 }
@@ -399,12 +356,12 @@
 
                 if (PassiveSkillLevel == MaxPassiveSkillLevel)
                 {
-                    SceneManager.Instance.ColText($"\t>> 『{PasskillName}』의 Lv이 최대가 되었습니다\t|\t=☆ 최대 레벨 보상으로 기본 회피율이 25가 됩니다 ☆=\n", ConsoleColor.DarkCyan, ConsoleColor.Black);
+                    SceneManager.Instance.ColText($"\t>> 『{PasskillName}』의 Lv이 최대가 되었습니다\n\t\t==☆ 최대 레벨 보상으로 기본 회피율이 25가 됩니다 ☆==\n", ConsoleColor.DarkCyan, ConsoleColor.Black);
                     Dodge = 25;
                 }
                 else
                 {
-                    SceneManager.Instance.ColText($"\t>> 『{PasskillName}』의 Lv이 1증가 하였습니다 [{PassiveSkillLevel - 1}->{PassiveSkillLevel}]\t|\t공격력 +1 회피율 +2\n", ConsoleColor.DarkCyan, ConsoleColor.Black);
+                    SceneManager.Instance.ColText($"\t>> 『{PasskillName}』의 Lv이 1증가 하였습니다 [ {PassiveSkillLevel - 1} -> {PassiveSkillLevel} ]\t| 공격력 +1 회피율 +2\n", ConsoleColor.DarkCyan, ConsoleColor.Black);
                     Dodge += 2;
                     Attack += 1;
                 }

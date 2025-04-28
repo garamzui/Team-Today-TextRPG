@@ -130,23 +130,10 @@
                 case VIEW_TYPE.DUNGEON_RESULT:
                     CurrentViewer = new DungeonResultViewer();
                     break;
-  
+
                 case VIEW_TYPE.REST:
                     CurrentViewer = new RestViewer();
                     break;
-                
-                
-                case VIEW_TYPE.BACK_STREET:
-                    CurrentViewer = new BackStreetViewer();
-                    break;
-                case VIEW_TYPE.QUEST:
-                    CurrentViewer = new QuestViewer();
-                    break;
-                case VIEW_TYPE.CHECK_QUEST:
-                    CurrentViewer = new CheckQuestViewer();
-                    break;
-
-
 
                 case VIEW_TYPE.BATTLE:
                     CurrentViewer = new BattleViewer();
@@ -325,13 +312,8 @@
                     if (view == VIEW_TYPE.EQUIP) Console.Write($"     -{++count} ");
                     else Console.Write("     -");
 
-                    if (GameManager.Instance.Player.CheckEquip(item, ITEM_TYPE.WEAPON) ||
-                        GameManager.Instance.Player.CheckEquip(item, ITEM_TYPE.ARMOR))
-                    {
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.Write("[E]");
-                        Console.ResetColor();
-                    }
+                    CurrentViewer.Attach_E_Mark(item);
+
                     Console.WriteLine(" 『" + DataManager.Instance.ItemDB.List[item][1] + "』");
                     ShowAtk(int.Parse(DataManager.Instance.ItemDB.List[item][2]));
                     ShowDef(int.Parse(DataManager.Instance.ItemDB.List[item][3]));
@@ -453,23 +435,18 @@
             {
                 foreach (var item in GameManager.Instance.Player.Bag)
                 {
-                    Console.WriteLine("   ------------------------------------------------------------------------------");
+                    //Console.WriteLine("   ------------------------------------------------------------------------------");
                     if (view == VIEW_TYPE.EQUIP) Console.Write($"     -{++count} ");
                     else Console.Write("     -");
 
-                    if (GameManager.Instance.Player.CheckEquip(item, ITEM_TYPE.WEAPON) ||
-                        GameManager.Instance.Player.CheckEquip(item, ITEM_TYPE.ARMOR))
-                    {
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.Write("[E]");
-                        Console.ResetColor();
-                    }
+                    CurrentViewer.Attach_E_Mark(item);
+
                     Console.WriteLine(" 『" + DataManager.Instance.ItemDB.List[item][1] + "』");
                     ShowAtk(int.Parse(DataManager.Instance.ItemDB.List[item][2]));
                     ShowDef(int.Parse(DataManager.Instance.ItemDB.List[item][3]));
                     Console.WriteLine("\t  [ " + DataManager.Instance.ItemDB.List[item][6] + " ]");
                 }
-                Console.WriteLine("   ------------------------------------------------------------------------------");
+                //Console.WriteLine("   ------------------------------------------------------------------------------");
             }
         }
     }

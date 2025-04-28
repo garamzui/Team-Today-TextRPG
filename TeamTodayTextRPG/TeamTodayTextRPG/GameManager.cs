@@ -1,10 +1,5 @@
-﻿
-
-using static TeamTodayTextRPG.NonePlayableCharacter;
-
-namespace TeamTodayTextRPG
-{ 
-
+﻿namespace TeamTodayTextRPG
+{
     class GameManager
     {
         /* 『효빈』
@@ -21,12 +16,7 @@ namespace TeamTodayTextRPG
             Player = new Player();
             Rand = new Random();
             Animation = new Animation();
-            //NPC 인스턴스 (퀘스트 완료했을 때 값 등을 계속 저장 해두어야 하기 때문에 필요하다 생각했어요.)
-            OldMan = new OldMan();
-            YoungGirl = new YoungGirl();
-            BlackSmith = new BlackSmith();
-            Stranger = new Stranger();
-            NonePlayableCharacter = OldMan;
+
         }
 
 
@@ -34,17 +24,7 @@ namespace TeamTodayTextRPG
         public Player Player { get; set; }
         public Random Rand { get; set; }
         public Dungeon Dungeon { get; set; }
-        //NPC 프로퍼티
-        public NonePlayableCharacter NonePlayableCharacter { get; set; }
-        public OldMan OldMan { get; private set; }
-        public YoungGirl YoungGirl { get; private set; }
-        public BlackSmith BlackSmith { get; private set; }
-        public Stranger Stranger { get; private set; }
 
-        
-
-
-      
         public Animation Animation { get; set; }
 
 
@@ -91,5 +71,4 @@ namespace TeamTodayTextRPG
             }
         }
     }
-
 }
