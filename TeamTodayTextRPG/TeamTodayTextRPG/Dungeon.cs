@@ -46,11 +46,11 @@ namespace TeamTodayTextRPG
         {
             if (Diff == DUNGEON_DIFF.Hell)
             {
-                Dungeon_Monster.Add(GameManager.Instance.MonsterFactory(4));
+                Dungeon_Monster.Add(GameManager.Instance.MonsterFactory(5));
             }
+
             else
             {
-
                 int randNum = GameManager.Instance.Rand.Next(1, MonsterCount + 1);
                 for (int i = 0; i < randNum; i++)
                 {
@@ -60,20 +60,20 @@ namespace TeamTodayTextRPG
                     // 던전 난이도 별로 switch case 문 혹은 if문
                     if (Diff == DUNGEON_DIFF.Easy)
                     {
-                        weakMon = (int)MONSTER_CODE.Slime;
-                        strongMon = (int)MONSTER_CODE.Wolf;
+                        weakMon = (int)MONSTER_CODE.SLIME;
+                        strongMon = (int)MONSTER_CODE.WOLF;
                     }
 
                     else if (Diff == DUNGEON_DIFF.Normal)
                     {
-                        weakMon = (int)MONSTER_CODE.Slime;
-                        strongMon = (int)MONSTER_CODE.Ork;
+                        weakMon = (int)MONSTER_CODE.GOBLIN;
+                        strongMon = (int)MONSTER_CODE.BOAR;
                     }
 
                     else if (Diff == DUNGEON_DIFF.Hard)
                     {
-                        weakMon = (int)MONSTER_CODE.Goblin;
-                        strongMon = (int)MONSTER_CODE.Zakum;
+                        weakMon = (int)MONSTER_CODE.WOLF;
+                        strongMon = (int)MONSTER_CODE.ZAKUM;
                     }
 
                     Dungeon_Monster.Add(GameManager.Instance.MonsterFactory

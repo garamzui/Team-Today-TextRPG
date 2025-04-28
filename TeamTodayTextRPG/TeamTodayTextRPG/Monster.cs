@@ -7,11 +7,12 @@
     }
     public enum MONSTER_CODE
     {
-        Slime = 0,
-        Goblin,
-        Wolf,
-        Ork,
-        Zakum
+        SLIME = 0,
+        GOBLIN,
+        WOLF,
+        BOAR,
+        ORK,
+        ZAKUM
     }
     public enum MONSTER_GRADE
     {
@@ -84,19 +85,22 @@
         {
             switch (GameManager.Instance.Dungeon.Dungeon_Monster[GameManager.Instance.Dungeon.MonsterAtkCounter].Code)
             {
-                case MONSTER_CODE.Slime:
+                case MONSTER_CODE.SLIME:
                     GameManager.Instance.Animation.SlimeAnimation();
                     break;
-                case MONSTER_CODE.Goblin:
+                case MONSTER_CODE.GOBLIN:
                     GameManager.Instance.Animation.GoblinAnimation();
                     break;
-                case MONSTER_CODE.Wolf:
+                case MONSTER_CODE.WOLF:
                     GameManager.Instance.Animation.WolfAnimation();
                     break;
-                case MONSTER_CODE.Ork:
+                case MONSTER_CODE.BOAR:
+                    GameManager.Instance.Animation.BoarAnimation();
+                    break;
+                case MONSTER_CODE.ORK:
                     GameManager.Instance.Animation.OrkAnimation();
                     break;
-                case MONSTER_CODE.Zakum:
+                case MONSTER_CODE.ZAKUM:
                     GameManager.Instance.Animation.ZakumAnimation();
                     break;
                 default:
@@ -127,7 +131,7 @@
     {
         public Slime()
         {
-            Init(DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.Slime]);
+            Init(DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.SLIME]);
         }
     }
 
@@ -135,7 +139,7 @@
     {
         public Goblin()
         {
-            Init(DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.Goblin]);
+            Init(DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.GOBLIN]);
         }
     }
 
@@ -143,7 +147,15 @@
     {
         public Wolf()
         {
-            Init(DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.Wolf]);
+            Init(DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.WOLF]);
+        }
+    }
+
+    class Boar : Monster
+    {
+        public Boar()
+        {
+            Init(DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.BOAR]);
         }
     }
 
@@ -151,7 +163,7 @@
     {
         public Ork()
         {
-            Init(DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.Ork]);
+            Init(DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.ORK]);
         }
     }
 
@@ -159,7 +171,7 @@
     {
         public Zakum()
         {
-            Init(DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.Zakum]);
+            Init(DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.ZAKUM]);
         }
     }
 }
