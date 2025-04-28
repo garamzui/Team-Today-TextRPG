@@ -294,7 +294,7 @@
                 itd = 0;
             }
 
-            int skillDamage = (int)((TotalAtk * 10) - itd);
+            int skillDamage = (int)((TotalAtk * 6) - itd);
             if (skillDamage <= 0)
                 skillDamage = 1;
 
