@@ -169,7 +169,7 @@
 
 
 
-            GameManager.Instance.Dungeon.TargetMonster.ManageHp(-attackDamage);
+            //GameManager.Instance.Dungeon.TargetMonster.ManageHp(-attackDamage);
 
             return attackDamage;
         }
@@ -184,7 +184,7 @@
                 ManageMp(-10);
 
 
-                GameManager.Instance.Dungeon.TargetMonster.ManageHp(-skillDamage);
+                //GameManager.Instance.Dungeon.TargetMonster.ManageHp(-skillDamage);
 
                 return skillDamage;
             }
