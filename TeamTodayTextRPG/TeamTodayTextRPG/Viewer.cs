@@ -392,6 +392,7 @@
             Console.WriteLine("\n\t━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 
             Console.WriteLine("\n\t>> 0. 게임 종료\n\n");
+            SceneManager.Instance.CurrentViewType = SceneManager.Instance.CurrentViewer.NextView(SceneManager.Instance.InputAction(StartIndex, EndIndex, Console.CursorTop));
         }
         // NextView 메서드 구현
         public override VIEW_TYPE NextView(int input)
@@ -460,7 +461,9 @@
 
             Console.WriteLine("\n\t━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 
+
             Console.WriteLine("\n\t0. 닫기\n\n");
+            SceneManager.Instance.CurrentViewType = SceneManager.Instance.CurrentViewer.NextView(SceneManager.Instance.InputAction(StartIndex, EndIndex, Console.CursorTop));
         }
 
         public override VIEW_TYPE NextView(int input)
@@ -504,6 +507,7 @@
 
             Console.WriteLine("\t1. 아이템 장착");
             Console.WriteLine("\t0. 닫기\n\n");
+            SceneManager.Instance.CurrentViewType = SceneManager.Instance.CurrentViewer.NextView(SceneManager.Instance.InputAction(StartIndex, EndIndex, Console.CursorTop));
         }
         // NextView 메서드 구현
         public override VIEW_TYPE NextView(int input)
@@ -549,6 +553,7 @@
 
             Console.WriteLine($"\t1~{EndIndex}. 장비 변경");
             Console.WriteLine("\n\t0. 메인으로 돌아가기\n\n");
+            SceneManager.Instance.CurrentViewType = SceneManager.Instance.CurrentViewer.NextView(SceneManager.Instance.InputAction(StartIndex, EndIndex, Console.CursorTop));
         }
 
 
@@ -665,8 +670,8 @@
                 SceneManager.Instance.ColText(" ✦ 방어구 ✦ ", ConsoleColor.Yellow, ConsoleColor.Black);
                 Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
                 SceneManager.Instance.ShowShop(VIEW_TYPE.SHOP, ITEM_TYPE.ARMOR);
-                Console.WriteLine($"  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
             }
+            Console.WriteLine($"  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
         }
         private void DisplayMenu()
         {
@@ -682,6 +687,7 @@
             DisplayGold();
             DisplayTabs();
             DisplayMenu();
+            SceneManager.Instance.CurrentViewType = SceneManager.Instance.CurrentViewer.NextView(SceneManager.Instance.InputAction(StartIndex, EndIndex, Console.CursorTop));
         }
         // NextView 메서드 구현
         public override VIEW_TYPE NextView(int input)
@@ -740,6 +746,7 @@
             Console.WriteLine($"\t1 ~ {DataManager.Instance.ItemDB.List.Count}. 아이템 구매\n");
             Console.WriteLine("\t0. 상점으로");
             Console.WriteLine("\t-3. 판매 화면으로\n\n");
+            SceneManager.Instance.CurrentViewType = SceneManager.Instance.CurrentViewer.NextView(SceneManager.Instance.InputAction(StartIndex, EndIndex, Console.CursorTop));
         }
         public override VIEW_TYPE NextView(int input)
         {
@@ -844,6 +851,7 @@
             Console.WriteLine($"\t1 ~ {GameManager.Instance.Player.Bag.Count}. 아이템 판매\n");
             Console.WriteLine("\t0. 상점으로");
             Console.WriteLine("\t-1. 구매 화면으로\n\n");
+            SceneManager.Instance.CurrentViewType = SceneManager.Instance.CurrentViewer.NextView(SceneManager.Instance.InputAction(StartIndex, EndIndex, Console.CursorTop));
         }
 
         // NextView 메서드 구현
@@ -907,6 +915,7 @@
 
             Console.WriteLine($"\t1 ~ {DataManager.Instance.DungeonDB.List.Count}. 던전 입장\n");
             Console.WriteLine("\t0. 나가기\n\n");
+            SceneManager.Instance.CurrentViewType = SceneManager.Instance.CurrentViewer.NextView(SceneManager.Instance.InputAction(StartIndex, EndIndex, Console.CursorTop));
         }
 
         public override VIEW_TYPE NextView(int input)
@@ -963,6 +972,7 @@
             Console.WriteLine("\t1. 전투 시작");
             Console.WriteLine("\t2. 던전 재선택");
             Console.WriteLine("\n\t0. 마을로 돌아가기\n\n");
+            SceneManager.Instance.CurrentViewType = SceneManager.Instance.CurrentViewer.NextView(SceneManager.Instance.InputAction(StartIndex, EndIndex, Console.CursorTop));
         }
 
         public override VIEW_TYPE NextView(int input)
@@ -975,6 +985,7 @@
                     //GameManager.Instance.BattleEnemy = monster; // 몬스터 설정
                     Dungeon.Enter();
                     SceneManager.Instance.SysDefault();
+                    //SceneManager.Instance.BattleInput = 1;
                     return VIEW_TYPE.BATTLE_PLAYER;  // 전투 화면으로 이동
                 case 2:
                     SceneManager.Instance.SysDefault();
@@ -988,46 +999,47 @@
         }
     }
 
-
+    /*
     public class BattleViewer : Viewer
     {
         public override void ViewAction()
         {
+            
             // 몬스터가 모두 죽었다면 던전 CLEAR로 이동
             if (GameManager.Instance.Dungeon.CheckClear())
             {
-                SceneManager.Instance.SwitchScene(NextView(0));
+                SceneManager.Instance.BattleInput = 1;
             }
             else
             {
                 // 플레이어가 죽었다면 던전 CLEAR로 이동
                 if (GameManager.Instance.Player.Character.Hp <= 0)
                 {
-                    SceneManager.Instance.SwitchScene(NextView(0));
+                    SceneManager.Instance.BattleInput = 1;
                 }
                 // 배틀플레이어로 이동해서 전투 지속
                 else
                 {
-                    SceneManager.Instance.SwitchScene(NextView(1));
+                    SceneManager.Instance.BattleInput = 2;
                 }
             }
         }
         public override VIEW_TYPE NextView(int input)
         {
             Console.Clear();
-            if (input == 0)
+            if (input == 1)
             {
                 SceneManager.Instance.SysDefault();
                 return VIEW_TYPE.DUNGEON_RESULT;
             }
-            else
+            else if (input == 2)
             {
                 SceneManager.Instance.SysDefault();
                 return VIEW_TYPE.BATTLE_PLAYER;
             }
-
+            return VIEW_TYPE.BATTLE;
         }
-    }
+    }*/
 
 
     public class BattlePlayerViewer : Viewer
@@ -1035,7 +1047,7 @@
         public BattlePlayerViewer()
         {
             StartIndex = 0;
-            EndIndex = Dungeon.MonsterCount;
+            EndIndex = Dungeon.Dungeon_Monster.Count;
             Dungeon.Turn++;
         }
         public override void ViewAction()
@@ -1066,6 +1078,7 @@
             Console.WriteLine($"\t1~{count - 1}. 공격 대상 선택(번호 입력)");
             Console.WriteLine("\n\t0. 도망\n\n");
 
+            SceneManager.Instance.CurrentViewType = SceneManager.Instance.CurrentViewer.NextView(SceneManager.Instance.InputAction(StartIndex, EndIndex, Console.CursorTop));
         }
         public override VIEW_TYPE NextView(int input)
         {
@@ -1073,6 +1086,7 @@
             if (input == 0)
             {
                 SceneManager.Instance.SysText("☆★☆★☆ 당신은 한심하게 빤스런을 했습니다 ☆★☆★☆", ConsoleColor.Red, ConsoleColor.Black);
+                Dungeon.Turn = 0;
                 return VIEW_TYPE.MAIN;
             }
             else if (input > 0 && input <= Dungeon.Dungeon_Monster.Count)
@@ -1084,7 +1098,7 @@
                 if (Dungeon.Dungeon_Monster[input - 1].State == MONSTER_STATE.DEAD)
                 {
                     SceneManager.Instance.SysText("이미 싸늘한 상태입니다... 시체를 배려해주세요", ConsoleColor.Red, ConsoleColor.Black);
-
+                    Dungeon.Turn--;
                     return VIEW_TYPE.BATTLE_PLAYER;
                 }
                 // 해당 몬스터가 죽지 않았다면 대미지 처리 화면으로 이동
@@ -1098,6 +1112,7 @@
             }
             else
             {
+                Dungeon.Turn--;
                 return VIEW_TYPE.BATTLE_PLAYER;
             }
         }
@@ -1155,6 +1170,7 @@
             else
                 Console.WriteLine("\n\t2. 스킬\n");
             Console.WriteLine("\n\t0. 대상 재선택\n\n");
+            SceneManager.Instance.CurrentViewType = SceneManager.Instance.CurrentViewer.NextView(SceneManager.Instance.InputAction(StartIndex, EndIndex, Console.CursorTop));
         }
         public override VIEW_TYPE NextView(int input)
         {
@@ -1433,7 +1449,7 @@
                 }
 
                 Dungeon.MonsterAtkCounter += 1;
-                VIEW_TYPE nextView = NextView(0);
+                VIEW_TYPE nextView = NextView(1);
                 //VIEW_TYPE nextView = NextView(SceneManager.Instance.InputAction(StartIndex, EndIndex, Console.CursorTop));
                 SceneManager.Instance.SwitchScene(nextView);
             }
@@ -1441,14 +1457,14 @@
             else
             {
                 Dungeon.MonsterAtkCounter += 1;
-                SceneManager.Instance.SwitchScene(NextView(0));
+                SceneManager.Instance.SwitchScene(NextView(1));
             }
         }
 
         public override VIEW_TYPE NextView(int input)
         {
             Console.Clear();
-            if (input == 0)
+            if (input == 1)
             {
                 // 공격할 몬스터가 남았다면 몬스터 공격화면을 계속 출력
                 if (GameManager.Instance.Dungeon.MonsterAtkCounter < GameManager.Instance.Dungeon.Dungeon_Monster.Count)
@@ -1459,7 +1475,26 @@
                 // 몬스터의 공격이 끝났다. <<<<<<<여기 이어서 작성
                 else
                 {
-                    return VIEW_TYPE.BATTLE;
+                    if (GameManager.Instance.Dungeon.CheckClear())
+                    {
+                        SceneManager.Instance.SysDefault();
+                        return VIEW_TYPE.DUNGEON_RESULT;
+                    }
+                    else
+                    {
+                        // 플레이어가 죽었다면 던전 CLEAR로 이동
+                        if (GameManager.Instance.Player.Character.Hp <= 0)
+                        {
+                            SceneManager.Instance.SysDefault();
+                            return VIEW_TYPE.DUNGEON_RESULT;
+                        }
+                        // 배틀플레이어로 이동해서 전투 지속
+                        else
+                        {
+                            SceneManager.Instance.SysDefault();
+                            return VIEW_TYPE.BATTLE_PLAYER;
+                        }
+                    }
                 }
             }
             else
@@ -1523,6 +1558,7 @@
             }
             Console.WriteLine("\t1. 던전 입구로 돌아가기");
             Console.WriteLine("\n\t0. 마을로 돌아가기\n\n");
+            SceneManager.Instance.CurrentViewType = SceneManager.Instance.CurrentViewer.NextView(SceneManager.Instance.InputAction(StartIndex, EndIndex, Console.CursorTop));
         }
 
         public override VIEW_TYPE NextView(int input)
@@ -1570,6 +1606,7 @@
             Console.WriteLine("\t1. 대실");
             Console.WriteLine("\t2. 숙박");
             Console.WriteLine("\n\t0. 마을로 돌아가기\n\n");
+            SceneManager.Instance.CurrentViewType = SceneManager.Instance.CurrentViewer.NextView(SceneManager.Instance.InputAction(StartIndex, EndIndex, Console.CursorTop));
         }
 
         public override VIEW_TYPE NextView(int input)

@@ -5,6 +5,7 @@
         public Viewer CurrentViewer { get; set; }
         public int TabPage { get; set; } = 0;
         public VIEW_TYPE CurrentViewType { get; set; }
+        public int BattleInput { get; set; }
 
         private static readonly Lazy<SceneManager> lazyInstance = new Lazy<SceneManager>(() => new SceneManager());
         public static SceneManager Instance => lazyInstance.Value;
@@ -13,6 +14,7 @@
         {
             CurrentViewer = new MainViewer();
             CurrentViewType = VIEW_TYPE.MAIN;
+            BattleInput = 0;
         }
 
 
@@ -99,58 +101,75 @@
             switch (type)
             {
                 case VIEW_TYPE.MAIN:
+                    CurrentViewer.Type = VIEW_TYPE.MAIN;
                     CurrentViewer = new MainViewer();
                     break;
                 case VIEW_TYPE.STATUS:
+                    CurrentViewer.Type = VIEW_TYPE.STATUS;
                     CurrentViewer = new StatusViewer();
                     break;
                 case VIEW_TYPE.INVENTORY:
+                    CurrentViewer.Type = VIEW_TYPE.INVENTORY;
                     CurrentViewer = new InventoryViewer();
                     break;
                 case VIEW_TYPE.EQUIP:
+                    CurrentViewer.Type = VIEW_TYPE.EQUIP;
                     CurrentViewer = new EquipViewer();
                     break;
 
                 case VIEW_TYPE.SHOP:
+                    CurrentViewer.Type = VIEW_TYPE.SHOP;
                     CurrentViewer = new ShopViewer();
                     break;
                 case VIEW_TYPE.PURCHASE:
+                    CurrentViewer.Type = VIEW_TYPE.PURCHASE;
                     CurrentViewer = new PurchaseViewer();
                     break;
                 case VIEW_TYPE.SALE:
+                    CurrentViewer.Type = VIEW_TYPE.SALE;
                     CurrentViewer = new SaleViewer();
                     break;
 
                 case VIEW_TYPE.DUNGEON_SELECT:
+                    CurrentViewer.Type = VIEW_TYPE.DUNGEON_SELECT;
                     CurrentViewer = new DungeonSelectViewer();
                     break;
                 case VIEW_TYPE.DUNGEON:
+                    CurrentViewer.Type = VIEW_TYPE.DUNGEON;
                     CurrentViewer = new DungeonViewer();
                     break;
                 case VIEW_TYPE.DUNGEON_RESULT:
+                    CurrentViewer.Type = VIEW_TYPE.DUNGEON_RESULT;
                     CurrentViewer = new DungeonResultViewer();
                     break;
 
                 case VIEW_TYPE.REST:
+                    CurrentViewer.Type = VIEW_TYPE.REST;
                     CurrentViewer = new RestViewer();
                     break;
-
+                    /*
                 case VIEW_TYPE.BATTLE:
+                    CurrentViewer.Type = VIEW_TYPE.BATTLE;
                     CurrentViewer = new BattleViewer();
-                    break;
+                    break;*/
                 case VIEW_TYPE.BATTLE_PLAYER:
+                    CurrentViewer.Type = VIEW_TYPE.BATTLE_PLAYER;
                     CurrentViewer = new BattlePlayerViewer();
                     break;
                 case VIEW_TYPE.CHOOSE_BEHAVIOR:
+                    CurrentViewer.Type = VIEW_TYPE.CHOOSE_BEHAVIOR;
                     CurrentViewer = new ChooseBehaviorViewer();
                     break;
                 case VIEW_TYPE.BATTLE_PLAYER_LOG:
+                    CurrentViewer.Type = VIEW_TYPE.BATTLE_PLAYER_LOG;
                     CurrentViewer = new BattlePlayerLogViewer();
                     break;
                 case VIEW_TYPE.BATTLE_PLAYER_SKILL_LOG:
+                    CurrentViewer.Type = VIEW_TYPE.BATTLE_PLAYER_SKILL_LOG;
                     CurrentViewer = new BattlePlayerSkillLogViewer();
                     break;
                 case VIEW_TYPE.BATTLE_ENEMY:
+                    CurrentViewer.Type = VIEW_TYPE.BATTLE_ENEMY;
                     CurrentViewer = new BattleEnemyViewer();
                     break;
                 default:
@@ -159,8 +178,10 @@
             }
             if (CurrentViewer != null)
             {
-                CurrentViewer.ViewAction();
-                CurrentViewType = CurrentViewer.NextView(InputAction(CurrentViewer.StartIndex, CurrentViewer.EndIndex, Console.CursorTop));
+                    CurrentViewer.ViewAction();
+
+                    // 입력 대기해서 다음 씬을 정함
+                    //CurrentViewType = CurrentViewer.NextView(InputAction(CurrentViewer.StartIndex, CurrentViewer.EndIndex, Console.CursorTop));
             }
         }
 

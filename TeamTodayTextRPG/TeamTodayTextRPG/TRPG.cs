@@ -7,9 +7,9 @@
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             
-            GameManager.Instance.Animation.TitleAnimation();
+            //GameManager.Instance.Animation.TitleAnimation();
             var sm = SceneManager.Instance;
-
+            sm.Intro();
             // 『효빈』스테이트 머신
             while (true)
             {
