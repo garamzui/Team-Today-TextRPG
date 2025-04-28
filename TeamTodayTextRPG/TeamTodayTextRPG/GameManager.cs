@@ -54,16 +54,17 @@
         {
             switch (code)
             {
-
-                case (int)MONSTER_CODE.Slime:
+                case (int)MONSTER_CODE.SLIME:
                     return new Slime();
-                case (int)MONSTER_CODE.Goblin:
+                case (int)MONSTER_CODE.GOBLIN:
                     return new Goblin();
-                case (int)MONSTER_CODE.Wolf:
+                case (int)MONSTER_CODE.WOLF:
                     return new Wolf();
-                case (int)MONSTER_CODE.Ork:
+                case (int)MONSTER_CODE.BOAR:
+                    return new Boar();
+                case (int)MONSTER_CODE.ORK:
                     return new Ork();
-                case (int)MONSTER_CODE.Zakum:
+                case (int)MONSTER_CODE.ZAKUM:
                     return new Zakum();
                 default:
                     throw new ArgumentException("잘못된 몬스터 코드입니다.");

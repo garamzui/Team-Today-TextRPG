@@ -1,13 +1,13 @@
 ﻿namespace TeamTodayTextRPG
 {
-    // 뷰어 화면 타입을 정의하는 열거형
-    // 가나다라
     public enum VIEW_TYPE
     {
         MAIN,           // 게임 시작 화면
         STATUS,         // 상태 보기 화면
+
         INVENTORY,      // 인벤토리 화면
         EQUIP,          // 장비 화면
+
         SHOP,           // 상점 화면
         PURCHASE,       // 아이템 구매 화면
         SALE,           // 아이템 판매 화면
@@ -18,13 +18,13 @@
 
         BATTLE,
         BATTLE_PLAYER,
+        CHOOSE_BEHAVIOR,
         BATTLE_PLAYER_LOG,
         BATTLE_PLAYER_SKILL_LOG,
         BATTLE_ENEMY,
 
         REST,           // 휴식 화면
-        MONSTER,         // 몬스터 화면
-        CHOOSE_BEHAVIOR
+        //MONSTER,         // 몬스터 화면
     }
 
     // 모든 뷰어 클래스의 부모가 되는 추상 클래스
@@ -32,20 +32,57 @@
     {
         public int StartIndex { get; set; }  // 화면에서 입력 가능한 시작 값
         public int EndIndex { get; set; }  // 화면에서 입력 가능한 끝 값
-        public int DungeonCode { get; set; }// 던전 코드 (사용할 경우)
+        public VIEW_TYPE Type { get; set; }
+        public int MaxPage { get; set; }  // 최대페이지
 
+        protected Dictionary<int, Func<VIEW_TYPE>> inputActions;
 
+        protected Viewer()
+        {
+            inputActions = new Dictionary<int, Func<VIEW_TYPE>>();
+        }
         protected Player Player => GameManager.Instance.Player;
         protected Character Character => Player.Character;
         protected Dungeon Dungeon => GameManager.Instance.Dungeon;
         protected Animation Animation => GameManager.Instance.Animation;
 
-        // 각 화면에서의 구체적인 액션을 구현하는 추상 메서드
-        public abstract void ViewAction();
+        // 탭 페이지 전환 관련
+        protected void ClampTabPage(int maxPage)
+        {
+            if (SceneManager.Instance.TabPage < 0)
+            {
+                SceneManager.Instance.TabPage = 0;
+                SceneManager.Instance.SysText("첫 페이지입니다", ConsoleColor.Red, ConsoleColor.Black);
+            }
+            else if (SceneManager.Instance.TabPage > maxPage-1)
+            {
+                SceneManager.Instance.TabPage = maxPage - 1;
+                SceneManager.Instance.SysText("마지막 페이지입니다", ConsoleColor.Red, ConsoleColor.Black);
+            }
+            else
+            {
+                SceneManager.Instance.SysDefault();
+            }
+        }
+        protected VIEW_TYPE NextTab()
+        {
+            SceneManager.Instance.TabPage++;
+            ClampTabPage(2);
+            return Type;
+        }
+        protected VIEW_TYPE PreviousTab()
+        {
+            SceneManager.Instance.TabPage--;
+            ClampTabPage(2);
+            return Type;
+        }
+        protected void ResetTab()
+        {
+            SceneManager.Instance.SysDefault();
+            SceneManager.Instance.TabPage = 0;
+        }
 
-        // 입력에 따라 다음 화면을 반환하는 추상 메서드
-        public abstract VIEW_TYPE NextView(int choiceNum);
-
+        // 단순 출력용 함수들
         protected void ViewNameLv()
         {
             Console.WriteLine($"\t이름     : {Player.Name}   ({Character.Jobname})");
@@ -268,7 +305,7 @@
             }
         }
 
-
+        // 장착중이라면 [E]붙여주는 함수
         public void Attach_E_Mark(int itemCode)
         {
             if (Player.CheckEquip(itemCode, ITEM_TYPE.WEAPON) || Player.CheckEquip(itemCode, ITEM_TYPE.ARMOR))
@@ -279,7 +316,7 @@
             }
         }
 
-
+        // 비례 게이지 표시 10칸, 20칸 짜리
         protected void ViewGuage10(int value, int maxValue, ConsoleColor color)
         {
             int guage = (int)(((float)value / (float)maxValue) * 100) / 10;
@@ -329,6 +366,11 @@
 
         }
 
+        // 각 화면에서의 구체적인 액션을 구현하는 추상 메서드
+        public abstract void ViewAction();
+
+        // 입력에 따라 다음 화면을 반환하는 추상 메서드
+        public abstract VIEW_TYPE NextView(int choiceNum);
     }
 
 
@@ -575,100 +617,82 @@
 
     public class ShopViewer : Viewer
     {
+        private readonly Dictionary<int, Func<VIEW_TYPE>> inputActions;
         public ShopViewer()
         {
             StartIndex = -2;
             EndIndex = 2;
+            Type = VIEW_TYPE.SHOP;
+
+            inputActions = new Dictionary<int, Func<VIEW_TYPE>>()
+            {
+                { -1, PreviousTab },
+                { -2, NextTab },
+                { 0, () => { ResetTab(); return VIEW_TYPE.MAIN; } },
+                { 1, () => { ResetTab(); return VIEW_TYPE.PURCHASE; } },
+                { 2, () => { ResetTab(); return VIEW_TYPE.SALE; } }
+            };
         }
-        public override void ViewAction()
+        private VIEW_TYPE PreviousTab()
+        {
+            SceneManager.Instance.TabPage--;
+            ClampTabPage(2);
+            return VIEW_TYPE.SHOP;
+        }
+        private void DisplayHeader()
         {
             SceneManager.Instance.ColText("    『상점』", ConsoleColor.Cyan, ConsoleColor.Black);
             SceneManager.Instance.ColText(" 필요한 아이템을 구매하거나 판매합니다.\n\n", ConsoleColor.DarkCyan, ConsoleColor.Black);
-
+        }
+        private void DisplayGold()
+        {
             Console.Write("\t\t\t\t\t소지금 : ");
             SceneManager.Instance.ColText($"{Player.Gold}", ConsoleColor.Yellow, ConsoleColor.Black);
             Console.WriteLine(" G");
-
-            if(SceneManager.Instance.TabPage == 0)
+        }
+        private void DisplayTabs()
+        {
+            if (SceneManager.Instance.TabPage == 0)
             {
                 Console.Write($"  ━━━━━");
                 SceneManager.Instance.ColText(" ✦ 무  기 ✦ ", ConsoleColor.Yellow, ConsoleColor.Black);
                 Console.WriteLine($"━ ✦ 방어구 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
                 SceneManager.Instance.ShowShop(VIEW_TYPE.SHOP, ITEM_TYPE.WEAPON);
             }
-            else if(SceneManager.Instance.TabPage == 1)
+            else if (SceneManager.Instance.TabPage == 1)
             {
                 Console.Write($"  ━━━━━ ✦ 무  기 ✦ ━");
                 SceneManager.Instance.ColText(" ✦ 방어구 ✦ ", ConsoleColor.Yellow, ConsoleColor.Black);
                 Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
                 SceneManager.Instance.ShowShop(VIEW_TYPE.SHOP, ITEM_TYPE.ARMOR);
+                Console.WriteLine($"  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
             }
-
-                //Console.WriteLine($"  ━━━━━ ✦ 아이템 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-               // Console.WriteLine($"  ━━━━━ ✦ 무  기 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-            //SceneManager.Instance.ShowShop(VIEW_TYPE.SHOP, ITEM_TYPE.WEAPON);
-            //Console.WriteLine($"  ━━━━━ ✦ 방어구 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-            //SceneManager.Instance.ShowShop(VIEW_TYPE.SHOP, ITEM_TYPE.ARMOR);
-            //Console.WriteLine($"  ━━━━━ ✦ 소모품 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-            Console.WriteLine($"  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-
+        }
+        private void DisplayMenu()
+        {
             Console.WriteLine("\t-1. << 이전\t-2. 다음 >>\n");
             Console.WriteLine("\t1. 아이템 구매");
             Console.WriteLine("\t2. 아이템 판매");
             Console.WriteLine("\n\t0. 마을로 돌아가기\n\n");
         }
-
+        
+        public override void ViewAction()
+        {
+            DisplayHeader();
+            DisplayGold();
+            DisplayTabs();
+            DisplayMenu();
+        }
         // NextView 메서드 구현
         public override VIEW_TYPE NextView(int input)
         {
             Console.Clear();
-            switch (input)
+            if (inputActions.TryGetValue(input, out var action))
             {
-                case 1:
-                    // 아이템 구매 화면으로 이동
-                    SceneManager.Instance.SysDefault();
-                    SceneManager.Instance.TabPage = 0;
-                    return VIEW_TYPE.PURCHASE;
-                case 2:
-                    // 아이템 판매 화면으로 이동
-                    SceneManager.Instance.SysDefault();
-                    SceneManager.Instance.TabPage = 0;
-                    return VIEW_TYPE.SALE;
-                case 0:
-                    // 메인 화면으로 돌아가기
-                    SceneManager.Instance.SysDefault();
-                    SceneManager.Instance.TabPage = 0;
-                    return VIEW_TYPE.MAIN;
-                case -1:
-                    // 이전
-                    SceneManager.Instance.TabPage--;
-                    if (SceneManager.Instance.TabPage < 0)
-                    {
-                        SceneManager.Instance.TabPage = 0;
-                        SceneManager.Instance.SysText("첫 페이지입니다", ConsoleColor.Red, ConsoleColor.Black);
-                    }
-                    else
-                    {
-                        SceneManager.Instance.SysDefault();
-                    }
-                        return VIEW_TYPE.SHOP;
-                case -2:
-                    // 다음
-                    SceneManager.Instance.TabPage++;
-                    if (SceneManager.Instance.TabPage > 1)
-                    {
-                        SceneManager.Instance.TabPage = 1;
-                        SceneManager.Instance.SysText("마지막 페이지입니다", ConsoleColor.Red, ConsoleColor.Black);
-                    }
-                    else
-                    {
-                        SceneManager.Instance.SysDefault();
-                    }
-                    return VIEW_TYPE.SHOP;
-                default:
-                    // 잘못된 입력 처리
-                    return VIEW_TYPE.SHOP;  // 다시 상점 화면을 보여줌
+                return action();
             }
+            return VIEW_TYPE.SHOP;
+            
         }
     }
 
