@@ -1819,7 +1819,7 @@
 
     public class CheckQuestViewer : Viewer
     {
-        string npcname = string.Empty;
+        string npcname = string.Empty; 
         bool questcomplete;
         bool questgoals;
         string questfinished = string.Empty; //퀘스트 완료 문구 저장
