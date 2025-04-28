@@ -24,7 +24,10 @@
 
         REST,           // 휴식 화면
         MONSTER,         // 몬스터 화면
-        CHOOSE_BEHAVIOR
+        CHOOSE_BEHAVIOR,
+        BACK_STREET,
+        QUEST,
+        CHECK_QUEST
     }
 
     // 모든 뷰어 클래스의 부모가 되는 추상 클래스
@@ -75,7 +78,7 @@
             else if (Character.PlusAtk < 0)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write($"{Character.PlusAtk}");
+                Console.Write($"-{Character.PlusAtk}");
             }
             else
                 Console.Write($"{Character.PlusAtk}");
@@ -92,7 +95,7 @@
             else if (Character.PlusDef < 0)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write($"{Character.PlusDef}");
+                Console.Write($"-{Character.PlusDef}");
             }
             else
                 Console.Write($"{Character.PlusDef}");
@@ -109,7 +112,7 @@
             else if (Character.PlusDodge < 0)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write($"{Character.PlusDodge}");
+                Console.Write($"-{Character.PlusDodge}");
             }
             else
                 Console.Write($"{Character.PlusDodge}");
@@ -208,7 +211,7 @@
             else if (Character.PlusAtk < 0)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write($"{Character.PlusAtk}");
+                Console.Write($"-{Character.PlusAtk}");
             }
             else
                 Console.Write($"{Character.PlusAtk}");
@@ -225,7 +228,7 @@
             else if (Character.PlusDef < 0)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write($"{Character.PlusDef}");
+                Console.Write($"-{Character.PlusDef}");
             }
             else
                 Console.Write($"{Character.PlusDef}");
@@ -242,7 +245,7 @@
             else if (Character.PlusDodge < 0)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write($"{Character.PlusDodge}");
+                Console.Write($"-{Character.PlusDodge}");
             }
             else
                 Console.Write($"{Character.PlusDodge}");
@@ -267,18 +270,6 @@
                 Console.WriteLine("\n\t  [ " + DataManager.Instance.ItemDB.List[Player.equipedAmCode][6] + " ]");
             }
         }
-
-
-        public void Attach_E_Mark(int itemCode)
-        {
-            if (Player.CheckEquip(itemCode, ITEM_TYPE.WEAPON) || Player.CheckEquip(itemCode, ITEM_TYPE.ARMOR))
-            {
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.Write("[E]");
-                Console.ResetColor();
-            }
-        }
-
 
         protected void ViewGuage10(int value, int maxValue, ConsoleColor color)
         {
@@ -337,7 +328,7 @@
         public MainViewer()
         {
             StartIndex = 0;
-            EndIndex = 6;
+            EndIndex = 7;
         }
         public override void ViewAction()
         {
@@ -346,7 +337,7 @@
             Console.WriteLine("\t━━━━━ ✦ 캐릭터 ✦ ━━━━━━━━━━━━━━━━━━━━\n");
             Console.WriteLine("\t【 1 】 플레이어\n\t【 2 】 인벤토리\n\t【 3 】 장비\n");
             Console.WriteLine("\t━━━━━ ✦ 행선지 ✦ ━━━━━━━━━━━━━━━━━━━━\n");
-            Console.WriteLine("\t【 4 】 던전\n\t【 5 】 상점\n\t【 6 】 여관");
+            Console.WriteLine("\t【 4 】 던전\n\t【 5 】 상점\n\t【 6 】 여관\n\t【 7 】 뒷골목");
             Console.WriteLine("\n\t━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 
             Console.WriteLine("\n\t>> 0. 게임 종료\n\n");
@@ -375,6 +366,9 @@
                 case 6:
                     SceneManager.Instance.SysDefault();
                     return VIEW_TYPE.REST;
+                case 7:
+                    SceneManager.Instance.SysDefault();
+                    return VIEW_TYPE.BACK_STREET;
                 case 0:
                     SceneManager.Instance.SysText("게임을 종료합니다...", ConsoleColor.Red, ConsoleColor.Black);
                     Environment.Exit(0);
@@ -414,8 +408,6 @@
             Console.WriteLine("\n\t━━━━━ ✦  스  킬  ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━\n");
             Console.WriteLine($"\t 액티브 스킬 | {Character.ActskillName}");
             Console.WriteLine($"\t 패시브 스킬 | {Character.PasskillName} (레벨 {Character.PassiveSkillLevel}/{Character.MaxPassiveSkillLevel})");
-
-
             Console.WriteLine("\n\t━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 
             Console.WriteLine("\n\t0. 닫기\n\n");
@@ -494,12 +486,20 @@
 
         public override void ViewAction()
         {
+            var player = GameManager.Instance.Player;
+            var character = player.Character;
+            //SceneManager.Instance.ColText("스파르타 마을에 오신 여러분 환영합니다.", 0, -1, ConsoleColor.Yellow, ConsoleColor.Black, true);
             SceneManager.Instance.ColText("    『장비』", ConsoleColor.Cyan, ConsoleColor.Black);
             SceneManager.Instance.ColText(" 장비를 장착하거나, 교체할 수 있습니다.\n\n", ConsoleColor.DarkCyan, ConsoleColor.Black);
 
-            Console.WriteLine("\n\t━━━━━ ✦  능력치  ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-            ViewStatusEquip();
+            Console.WriteLine($"  ====직업: {character.Jobname}");
+            Console.WriteLine($"      총 공격력: {character.TotalAtk} (기본: {character.Attack} + 추가: {character.PlusAtk})");
+            Console.WriteLine($"      총 방어력: {character.TotalDef} (기본: {character.Defence} + 추가: {character.PlusDef})");
+            Console.WriteLine($"      총 회피율: {character.TotalDodge} (기본: {character.Dodge} + 추가: {character.PlusDodge})");
             Console.WriteLine("");
+            Console.WriteLine("  =====[목록]=====================================================================");
+            SceneManager.Instance.ShowEquip(VIEW_TYPE.EQUIP);
+            Console.WriteLine("  ================================================================================\n");
 
             Console.WriteLine("\t━━━━━ ✦ 장비목록 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━\n");
             SceneManager.Instance.ShowInventory(VIEW_TYPE.EQUIP);
@@ -512,64 +512,80 @@
 
         public override VIEW_TYPE NextView(int input)
         {
-            Console.Clear();
-            int index = input - 1;
+            var player = GameManager.Instance.Player;
+            
+
             if (input == 0)
-            {
-                SceneManager.Instance.SysDefault();
                 return VIEW_TYPE.MAIN;
-            }
-            else if (index >= 0 && index < Player.Bag.Count)
+
+            int index = input - 1;
+
+            if (index >= 0 && index < player.Bag.Count)
             {
-                int itemCode = Player.Bag[index];  // 실제 아이템 코드 가져오기
+                int itemCode = player.Bag[index];  // 실제 아이템 코드 가져오기
                 int Itype = int.Parse(DataManager.Instance.ItemDB.List[itemCode][8]);
 
                 switch (Itype)
                 {
                     case (int)(ITEM_TYPE.WEAPON):
 
-                        if (Player.equipedWpCode == -1)
+                        if (player.equipedWpCode == -1)
                         {
                             Player.EquipItem(itemCode, ITEM_TYPE.WEAPON);
                             SceneManager.Instance.SysText($"{DataManager.Instance.ItemDB.List[itemCode][1]} 을(를) 장착 했습니다", ConsoleColor.DarkCyan, ConsoleColor.Black);
                         }
 
-                        else if (Player.equipedWpCode == itemCode)
+                        else if (player.equipedWpCode == itemCode)
                         {
-                            Player.UnEquipItem(itemCode);
-                            SceneManager.Instance.SysText($"{DataManager.Instance.ItemDB.List[itemCode][1]} 을(를) 장착 해제 했습니다", ConsoleColor.DarkCyan, ConsoleColor.Black);
+                            player.UnEquipItem(itemCode);
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.WriteLine("장비를 해제했습니다!");
                         }
 
                         else
                         {
-                            Player.ChangeItem(itemCode, ITEM_TYPE.WEAPON);
-                            SceneManager.Instance.SysText($"{DataManager.Instance.ItemDB.List[itemCode][1]} 을(를) 장착 했습니다", ConsoleColor.DarkCyan, ConsoleColor.Black);
+                            player.ChangeItem(itemCode, ITEM_TYPE.WEAPON);
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.WriteLine("장비를 교체했습니다!");
                         }
                         break;
+
                     case (int)(ITEM_TYPE.ARMOR):
 
-                        if (Player.equipedAmCode == -1)
+                        if (player.equipedAmCode == -1)
                         {
-                            Player.EquipItem(itemCode, ITEM_TYPE.ARMOR);
-                            SceneManager.Instance.SysText($"{DataManager.Instance.ItemDB.List[itemCode][1]} 을(를) 장착 했습니다", ConsoleColor.DarkCyan, ConsoleColor.Black);
+                            player.EquipItem(itemCode, ITEM_TYPE.ARMOR);
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine("장비를 장착했습니다!");
                         }
 
-                        else if (Player.equipedAmCode == itemCode)
+                        else if (player.equipedAmCode == itemCode)
                         {
-                            Player.UnEquipItem(itemCode);
-                            SceneManager.Instance.SysText($"{DataManager.Instance.ItemDB.List[itemCode][1]} 을(를) 장착 해제 했습니다", ConsoleColor.DarkCyan, ConsoleColor.Black);
+                            player.UnEquipItem(itemCode);
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.WriteLine("장비를 해제했습니다!");
                         }
+
                         else
                         {
-                            Player.ChangeItem(itemCode, ITEM_TYPE.ARMOR);
-                            SceneManager.Instance.SysText($"{DataManager.Instance.ItemDB.List[itemCode][1]} 을(를) 장착 했습니다", ConsoleColor.DarkCyan, ConsoleColor.Black);
+                            player.ChangeItem(itemCode, ITEM_TYPE.ARMOR);
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.WriteLine("장비를 교체했습니다!");
                         }
                         break;
                 }
+
+                Console.ResetColor();
+                Console.WriteLine("\n계속하려면 아무 키나 누르세요...");
+                Console.ReadKey();
+                Console.Clear();
+
                 return VIEW_TYPE.EQUIP;
             }
-            else
-                return VIEW_TYPE.EQUIP;
+
+            Console.WriteLine("잘못된 입력입니다.");
+            Console.ReadKey();
+            return VIEW_TYPE.EQUIP;
         }
     }
 
@@ -925,7 +941,7 @@
             if (Dungeon.Diff == DUNGEON_DIFF.Hell)
             {
                 //SceneManager.Instance.ColText("\t\t!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!\n\t\t     플레이어 능력치가 10% 감소합니다!     \n\t\t!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!\n",ConsoleColor.Red,ConsoleColor.Black);
-                SceneManager.Instance.ColText("\t\t!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!\n\t\t              기저귀를 착용하세요!!            \n\t\t!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!\n\n", ConsoleColor.Red, ConsoleColor.Black);
+                SceneManager.Instance.ColText("\t\t!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!\n\t\t              기저귀를 착용하세요!!            \n\t\t!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!\n", ConsoleColor.Red, ConsoleColor.Black);
             }
 
             Console.WriteLine($"\t던전 이름            : {Dungeon.Name}\n");
@@ -1029,10 +1045,7 @@
 
                 Console.Write($"\t【 {count++} 】 ");
                 monster.View_Monster_Status();
-                Console.ResetColor();
-                ViewGuage10(monster.Hp, monster.MaxHp, ConsoleColor.Red);
                 Console.WriteLine();
-
             }
             Console.WriteLine("");
             Console.WriteLine($"  ━━━━━ ✦ 플레이어 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -1108,13 +1121,8 @@
                 }
                 else
                 {
-                    if (Dungeon.Dungeon_Monster[i].State == MONSTER_STATE.DEAD)
-                        Console.ForegroundColor = ConsoleColor.DarkGray;
-
                     Console.Write($"\t【 {count++} 】 ");
                     Dungeon.Dungeon_Monster[i].View_Monster_Status();
-                    Console.ResetColor();
-                    ViewGuage10(Dungeon.Dungeon_Monster[i].Hp, Dungeon.Dungeon_Monster[i].MaxHp, ConsoleColor.Red);
                     Console.WriteLine();
                 }
             }
@@ -1203,7 +1211,7 @@
             }
 
 
-            SceneManager.Instance.SysDefault();
+
             SceneManager.Instance.ColText($"    『{Dungeon.Name}』", ConsoleColor.Magenta, ConsoleColor.Black);
             SceneManager.Instance.ColText($" {Dungeon.Text}\n\n", ConsoleColor.DarkMagenta, ConsoleColor.Black);
 
@@ -1212,8 +1220,8 @@
             Console.WriteLine($"\n\t>> 『{Player.Name}』 의 일반 공격!!");
 
             Console.WriteLine($"\t>> 『{Dungeon.TargetMonster.Name}』이(가) 『{attackDamage}』의 데미지를 입었습니다.\n");
-            Console.Write($"\t>> HP {Dungeon.TargetMonster.Hp} -> ");
             Dungeon.TargetMonster.ManageHp(-attackDamage);
+            Console.Write($"\t>> HP {Dungeon.TargetMonster.Hp + attackDamage} -> ");
             if (GameManager.Instance.Dungeon.TargetMonster.State == MONSTER_STATE.DEAD)
             {
                 Console.WriteLine("Dead");
@@ -1383,8 +1391,8 @@
                     attackDamage = Dungeon.Dungeon_Monster[Dungeon.MonsterAtkCounter].Atk - Character.Defence;
                     if (attackDamage <= 0) attackDamage = 1;
                     Console.WriteLine($"\t>> 『{Player.Name}』이(가) 『{attackDamage}』의 데미지를 입었습니다.\n");
-                    Console.Write($"\t>> HP {Character.Hp} -> ");
                     Character.ManageHp(-attackDamage);
+                    Console.Write($"\t>> HP {Character.Hp+attackDamage} -> ");
                     if (Character.State == CHAR_STATE.DEAD)
                     {
                         Console.WriteLine("Dead");
@@ -1597,6 +1605,383 @@
                 default:
                     return VIEW_TYPE.REST;
             }
+        }
+    }
+    //잔혹하고도 냉정한 뒷골목입니다.
+    public class BackStreetViewer : Viewer
+    {
+        public BackStreetViewer()
+        {
+           
+            StartIndex = 0;
+            EndIndex = GameManager.Instance.NonePlayableCharacter.NPC.Count;
+        }
+        public override void ViewAction()
+        {
+            SceneManager.Instance.ColText("    『뒷골목』", ConsoleColor.Cyan, ConsoleColor.Black);
+            SceneManager.Instance.ColText(" 사람들과 대화를 나눌 수 있습니다..\n\n", ConsoleColor.DarkCyan, ConsoleColor.Black);
+            Console.WriteLine("\t━━━━━ ✦ N P C ✦ ━━━━━━━━━━━━━━━━━━━━\n");
+            Console.WriteLine("\t【 1 】 노인\n\t【 2 】 소녀\n\t【 3 】 대장장이\n\t【 4 】 수상한 사람");
+
+
+            Console.WriteLine("\n\t>> 0. 돌아가기\n\n");
+        }
+        public override VIEW_TYPE NextView(int input)
+        {
+            Console.Clear();
+            if (input == 0)
+            {
+                SceneManager.Instance.SysText("마을로 돌아갑니다.", ConsoleColor.Red, ConsoleColor.Black);
+                return VIEW_TYPE.MAIN;
+            }
+            else if (input > 0 && input <= GameManager.Instance.NonePlayableCharacter.NPC.Count)
+            {
+                GameManager.Instance.NonePlayableCharacter.Code = (NPC_TYPE)(input - 1);
+
+                //Qcod를 이용해 다음 Viewer에서 각기 다르게 출력하기 위해 선택지마다 맞는 enum값을 Qcode에 저장해 줍니다.
+                switch (GameManager.Instance.NonePlayableCharacter.Code)
+                {
+                    case NPC_TYPE.OLDMAN:
+                        if (!GameManager.Instance.OldMan.IsQuest)//퀘스트를 받았는지 확인할 불리언값 속성 IsQuest 초기값 false
+                        {
+                            GameManager.Instance.NonePlayableCharacter = GameManager.Instance.OldMan;
+                           
+                            GameManager.Instance.NonePlayableCharacter.QCode = QUEST_TYPE.OLDMAN;
+                            return VIEW_TYPE.QUEST;
+                        }
+                        else if (GameManager.Instance.OldMan.IsQuest)
+                        {
+                            GameManager.Instance.NonePlayableCharacter = GameManager.Instance.OldMan;
+                            GameManager.Instance.NonePlayableCharacter.QCode = QUEST_TYPE.OLDMAN;
+                            return VIEW_TYPE.CHECK_QUEST;
+                        }
+                        else if (GameManager.Instance.OldMan.CompletQuest)
+                        {
+                            Console.WriteLine("어디에 갔는지 보이지 않는다.");
+                            return VIEW_TYPE.BACK_STREET;
+                        }
+                        else
+                        {
+                            return VIEW_TYPE.BACK_STREET;
+                        }
+
+
+
+                    case NPC_TYPE.YOUNGGIRL:
+                        if (!GameManager.Instance.YoungGirl.IsQuest)
+                        {
+                            GameManager.Instance.NonePlayableCharacter = GameManager.Instance.YoungGirl;
+                            GameManager.Instance.NonePlayableCharacter.QCode = QUEST_TYPE.YOUNGGIRL;
+                            return VIEW_TYPE.QUEST;
+                        }
+                        else if (GameManager.Instance.YoungGirl.IsQuest)
+                        {
+                            GameManager.Instance.NonePlayableCharacter = GameManager.Instance.YoungGirl;
+                            GameManager.Instance.NonePlayableCharacter.QCode = QUEST_TYPE.YOUNGGIRL;
+                            return VIEW_TYPE.CHECK_QUEST;
+                        }
+                        else if (GameManager.Instance.YoungGirl.CompletQuest)
+                        {
+                            Console.WriteLine("어디에 갔는지 보이지 않는다.");
+                            return VIEW_TYPE.BACK_STREET;
+                        }
+                        else
+                        {
+                            return VIEW_TYPE.BACK_STREET;
+                        }
+
+                    case NPC_TYPE.BLACKSMITH:
+                        if (!GameManager.Instance.BlackSmith.IsQuest)
+                        {
+                            GameManager.Instance.NonePlayableCharacter = GameManager.Instance.BlackSmith;
+                            GameManager.Instance.NonePlayableCharacter.QCode = QUEST_TYPE.BLACKSMITH;
+                            return VIEW_TYPE.QUEST;
+                        }
+                        else if (GameManager.Instance.BlackSmith.IsQuest)
+                        {
+                            GameManager.Instance.NonePlayableCharacter = GameManager.Instance.BlackSmith;
+                            GameManager.Instance.NonePlayableCharacter.QCode = QUEST_TYPE.BLACKSMITH;
+                            return VIEW_TYPE.CHECK_QUEST;
+                        }
+                        else if (GameManager.Instance.BlackSmith.CompletQuest)
+                        {
+                            Console.WriteLine("어디에 갔는지 보이지 않는다.");
+                            return VIEW_TYPE.BACK_STREET;
+                        }
+                        else
+                        {
+                            return VIEW_TYPE.BACK_STREET;
+                        }
+                    
+                    case NPC_TYPE.STRANGER:
+                        if (!GameManager.Instance.Stranger.IsQuest)
+                        {
+                            GameManager.Instance.NonePlayableCharacter = GameManager.Instance.Stranger;
+                            GameManager.Instance.NonePlayableCharacter.QCode = QUEST_TYPE.STRANGER;
+                            return VIEW_TYPE.QUEST;
+                        }
+                        else if (GameManager.Instance.Stranger.IsQuest)
+                        {
+                            GameManager.Instance.NonePlayableCharacter = GameManager.Instance.Stranger;
+                            GameManager.Instance.NonePlayableCharacter.QCode = QUEST_TYPE.STRANGER;
+                            return VIEW_TYPE.CHECK_QUEST;
+                        }
+                        else if (GameManager.Instance.Stranger.CompletQuest)
+                        {
+                            Console.WriteLine("어디에 갔는지 보이지 않는다.");
+                            return VIEW_TYPE.BACK_STREET;
+                        }
+                        else
+                        {
+                            return VIEW_TYPE.BACK_STREET;
+                        }
+
+                    default:
+                                return VIEW_TYPE.BACK_STREET;
+
+                            }
+
+            }
+            else
+            {
+                return VIEW_TYPE.BACK_STREET;
+            }
+        }
+    }
+
+    public class QuestViewer : Viewer //NPC가 등장해 퀘스트 문구를 보여주는 Viewer
+    {
+        string npcname = string.Empty; //NPC 이름을 QCode를이용해 알맞게 저장하기위한 빈 string
+        string nopequest = string.Empty;//퀘스트 거절 시 나올 문구를 NPC에 맞게 저장 하기 위한 빈 string
+        public QuestViewer()
+        {
+            StartIndex = 0;
+            EndIndex = 1;
+        }
+        public override void ViewAction()
+        {
+
+            switch (GameManager.Instance.NonePlayableCharacter.QCode)//QCode이용해 각기 string 초기화 해줄 switch문
+            {
+                case QUEST_TYPE.OLDMAN:
+                    GameManager.Instance.NonePlayableCharacter = GameManager.Instance.OldMan;
+                    nopequest = GameManager.Instance.OldMan.NopeQuest;
+                    npcname = GameManager.Instance.OldMan.Name;
+                    break;
+                case QUEST_TYPE.YOUNGGIRL:
+                    GameManager.Instance.NonePlayableCharacter = GameManager.Instance.YoungGirl;
+                    nopequest = GameManager.Instance.YoungGirl.NopeQuest;
+                    npcname = GameManager.Instance.YoungGirl.Name;
+                    break;
+                case QUEST_TYPE.BLACKSMITH:
+                    GameManager.Instance.NonePlayableCharacter = GameManager.Instance.BlackSmith;
+                    nopequest = GameManager.Instance.BlackSmith.NopeQuest;
+                    npcname = GameManager.Instance.BlackSmith.Name;
+                    break;
+                case QUEST_TYPE.STRANGER:
+                    GameManager.Instance.NonePlayableCharacter = GameManager.Instance.Stranger;
+                    nopequest = GameManager.Instance.Stranger.NopeQuest;
+                    npcname = GameManager.Instance.Stranger.Name;
+                    break;
+
+            }
+
+
+            SceneManager.Instance.ColText($"    『{npcname}』", ConsoleColor.Cyan, ConsoleColor.Black);
+            SceneManager.Instance.ColText($" {npcname}이 말을 걸어옵니다....\n\n", ConsoleColor.DarkCyan, ConsoleColor.Black);
+            Console.WriteLine("\t━━━━━ ✦ N P C ✦ ━━━━━━━━━━━━━━━━━━━━\n");
+            Console.WriteLine("\t【 1 】 수락하기");
+
+
+            Console.WriteLine("\n\t>> 0. 거절하고 면박주기\n\n");
+        }
+        public override VIEW_TYPE NextView(int input)
+        {
+            Console.Clear();
+            if (input == 0)
+            {
+                SceneManager.Instance.SysText(nopequest, ConsoleColor.Red, ConsoleColor.Black);
+                return VIEW_TYPE.BACK_STREET;
+            }
+            else if (input > 0 && input <= 1)
+            {
+                Console.WriteLine($"{GameManager.Instance.NonePlayableCharacter.QuestDialog}");
+                GameManager.Instance.OldMan.IsQuest = true; //퀘스트 수락시 IsQuest true로 저장
+                Console.ReadLine();
+                return VIEW_TYPE.BACK_STREET;
+            }
+            else
+            {
+                return VIEW_TYPE.BACK_STREET;
+            }
+        }
+    }
+
+    public class CheckQuestViewer : Viewer
+    {
+        string npcname = string.Empty; 
+        bool questcomplete;
+        bool questgoals;
+        string questfinished = string.Empty; //퀘스트 완료 문구 저장
+        string questunfinished = string.Empty;//퀘스트 미완 문구 저장
+        public CheckQuestViewer()
+        {
+            StartIndex = 0;
+            EndIndex = 0;
+        }
+        public override void ViewAction()
+        {
+
+            switch (GameManager.Instance.NonePlayableCharacter.QCode)
+            {
+                case QUEST_TYPE.OLDMAN:
+                    npcname = GameManager.Instance.OldMan.Name;
+                    questcomplete = GameManager.Instance.OldMan.CompletQuest;
+                    questgoals = GameManager.Instance.OldMan.QuestGoals;
+                    questfinished = GameManager.Instance.OldMan.QuestFinished;
+                    questunfinished = GameManager.Instance.OldMan.QuestUnFinished;
+                    break;
+                case QUEST_TYPE.YOUNGGIRL:
+                    npcname = GameManager.Instance.YoungGirl.Name;
+                    questcomplete = GameManager.Instance.YoungGirl.CompletQuest;
+                    questgoals = GameManager.Instance.YoungGirl.QuestGoals;
+                    questfinished = GameManager.Instance.YoungGirl.QuestFinished;
+                    questunfinished = GameManager.Instance.YoungGirl.QuestUnFinished;
+                    break;
+                case QUEST_TYPE.BLACKSMITH:
+                    npcname = GameManager.Instance.BlackSmith.Name;
+                    questcomplete = GameManager.Instance.BlackSmith.CompletQuest;
+                    questgoals = GameManager.Instance.BlackSmith.QuestGoals;
+                    questfinished = GameManager.Instance.BlackSmith.QuestFinished;
+                    questunfinished = GameManager.Instance.BlackSmith.QuestUnFinished;
+                    break;
+                case QUEST_TYPE.STRANGER:
+                    npcname = GameManager.Instance.Stranger.Name;
+                    questcomplete = GameManager.Instance.Stranger.CompletQuest;
+                    questgoals = GameManager.Instance.Stranger.QuestGoals;
+                    questfinished = GameManager.Instance.Stranger.QuestFinished;
+                    questunfinished = GameManager.Instance.Stranger.QuestUnFinished;
+                    break;
+
+            }
+
+
+            SceneManager.Instance.ColText("    『"+npcname+"』", ConsoleColor.Cyan, ConsoleColor.Black);
+            SceneManager.Instance.ColText($" 어디보자....\n\n", ConsoleColor.DarkCyan, ConsoleColor.Black);
+            Console.WriteLine("\t━━━━━ ✦ N P C ✦ ━━━━━━━━━━━━━━━━━━━━\n");
+
+
+
+            Console.WriteLine("\n\t>> 0. 퀘스트 검사 받기\n\n");
+        }
+        public override VIEW_TYPE NextView(int input)
+        {
+            Console.Clear();
+            if (input == 0)
+            {
+                if (questgoals)
+                {
+                    Console.WriteLine(questfinished);
+                    questcomplete = true;
+                    return VIEW_TYPE.BACK_STREET;
+                }
+                else 
+                {
+                    Console.WriteLine(questunfinished);
+                    Console.ReadLine();
+                    return VIEW_TYPE.BACK_STREET;
+                }
+            }
+          
+            else
+            {
+                return VIEW_TYPE.CHECK_QUEST;
+            }
+        }
+    }
+
+
+
+
+
+}
+/*
+public class BattleViewer : Viewer
+{
+    public BattleViewer()
+    {
+        StartIndex = 1;
+        EndIndex = 2;
+    }
+
+    public override void ViewAction()
+    {
+        Console.Clear();
+        Console.WriteLine(" 전투 시작 ");
+        Console.WriteLine("====================");
+
+        var character = GameManager.Instance.Player.Character;
+        var enemy = GameManager.Instance.BattleEnemy;
+
+        Console.WriteLine($"플레이어 체력: {character.Hp}/{character.MaxHp}");
+        Console.WriteLine($"적 몬스터 체력: {enemy.Hp}/{enemy.MaxHp}");
+
+        Console.WriteLine("====================");
+        Console.WriteLine("1. 공격");
+        Console.WriteLine("2. 도망");
+
+        int input = GetInput();
+        VIEW_TYPE nextView = NextView(input);
+        SceneManager.Instance.SwitchScene(nextView);
+    }
+
+    public override VIEW_TYPE NextView(int input)
+    {
+        var character = GameManager.Instance.Player.Character;
+        var enemy = GameManager.Instance.BattleEnemy;
+
+        switch (input)
+        {
+            case 1:
+                // 플레이어 공격
+                int playerDamage = character.TotalAtk - enemy.Def;
+                if (playerDamage < 0) playerDamage = 0;
+                enemy.ManageHp(-playerDamage);
+                Console.WriteLine($"\n플레이어가 {enemy.Name}에게 {playerDamage}의 데미지를 입혔습니다!");
+
+                // 적이 죽었는지 확인
+                if (enemy.Hp <= 0)
+                {
+                    Console.WriteLine($"{enemy.Name}을(를) 처치했습니다!");
+                    Console.ReadKey();
+                    return VIEW_TYPE.DUNGEONCLEAR;
+                }
+
+                // 몬스터 반격
+                int enemyDamage = enemy.Atk - character.TotalDef;
+                if (enemyDamage < 0) enemyDamage = 0;
+                character.Hp -= enemyDamage;
+                Console.WriteLine($"{enemy.Name}이(가) 플레이어에게 {enemyDamage}의 데미지를 입혔습니다!");
+
+                if (character.Hp <= 0)
+                {
+                    Console.WriteLine("플레이어가 쓰러졌습니다...");
+                    Console.ReadKey();
+                    return VIEW_TYPE.DUNGEONCLEAR;
+                }
+
+                Console.WriteLine("\n계속하려면 아무 키나 누르세요...");
+                Console.ReadKey();
+                return VIEW_TYPE.BATTLE;
+
+            case 2:
+                Console.WriteLine("플레이어가 도망쳤습니다...");
+                Console.ReadKey();
+                return VIEW_TYPE.MAIN;
+
+            default:
+                Console.WriteLine("잘못된 입력입니다.");
+                return VIEW_TYPE.BATTLE;
         }
     }
 }

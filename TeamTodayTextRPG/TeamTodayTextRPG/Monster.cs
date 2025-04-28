@@ -63,13 +63,22 @@
         {
             if (HpChange < 0)
             {
-                Hp += HpChange;
+                Hp += HpChange; //최종 계산 자료를 음수로 입력해 주어야 합니다.
 
+                //Console.WriteLine($"{Name}이(가){HpChange}의 데미지를 입었습니다. ");
                 if (Hp <= 0)
                 {
                     Hp = 0;
                     Die();
                 }
+                /*
+                Console.Write($"HP {GameManager.Instance.Dungeon.TargetMonster.Hp-HpChange} -> ");
+                if (GameManager.Instance.Dungeon.TargetMonster.State == MONSTER_STATE.DEAD)
+                {
+                    Console.WriteLine("Dead");
+                }
+                else Console.WriteLine($"{GameManager.Instance.Dungeon.TargetMonster.Hp}");*/
+
             }
             else if (HpChange > 0)
             {
@@ -121,9 +130,9 @@
         {
             if (State == MONSTER_STATE.DEAD)
             {
-                Console.Write($"Lv. {Level}\t{Name}\tDead\t\t");
+                Console.WriteLine($"Lv. {Level}\t{Name}\tDead");
             }
-            else Console.Write($"Lv. {Level}\t{Name}\tHP {Hp}/{MaxHp}\t");
+            else Console.WriteLine($"Lv. {Level}\t{Name}\tHP {Hp}/{MaxHp}");
         }
     }
 
