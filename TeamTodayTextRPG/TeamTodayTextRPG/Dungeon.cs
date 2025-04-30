@@ -111,7 +111,6 @@ namespace TeamTodayTextRPG
     {
         public Dungeon_Easy()
         {
-            //Init(DataManager.Instance.DungeonDB.List[0]);
         }
     }
 
@@ -119,21 +118,18 @@ namespace TeamTodayTextRPG
     {
         public Dungeon_Normal()
         {
-            //Init(DataManager.Instance.DungeonDB.List[1]);
         }
     }
     public class Dungeon_Hard : Dungeon
     {
         public Dungeon_Hard()
         {
-            //Init(DataManager.Instance.DungeonDB.List[2]);
         }
     }
     public class Dungeon_Hell : Dungeon
     {
         public Dungeon_Hell()
         {
-            //Init(DataManager.Instance.DungeonDB.List[3]);
         }
     }
 }

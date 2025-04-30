@@ -16,6 +16,7 @@
             Player = new Player();
             Rand = new Random();
             Animation = new Animation();
+            ShopViewList = new List<Item>();
 
         }
 
@@ -26,7 +27,7 @@
         public Dungeon Dungeon { get; set; }
 
         public Animation Animation { get; set; }
-
+        public List<Item> ShopViewList { get; set; }
 
 
         public Monster BattleEnemy { get; set; }

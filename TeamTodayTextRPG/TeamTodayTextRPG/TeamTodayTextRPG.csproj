@@ -11,15 +11,19 @@
     <None Remove="Character_Database.json" />
     <None Remove="Database\Character_Database.json" />
     <None Remove="Database\Dungeon_Database.JSON" />
+    <None Remove="Database\Item_Database.JSON" />
     <None Remove="Database\Monster_Database.JSON" />
     <None Remove="Monster_Database.JSON" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Database\Character_Database.json">
+    <Content Include="Database\Character_Database.JSON">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Database\Dungeon_Database.JSON">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Database\Item_Database.JSON">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Database\Monster_Database.JSON">

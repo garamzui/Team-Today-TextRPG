@@ -3,7 +3,7 @@
     public class SceneManager
     {
         public Viewer CurrentViewer { get; set; }
-        public int TabPage { get; set; } = 0;
+        public ITEM_TYPE TabPage { get; set; }
         public VIEW_TYPE CurrentViewType { get; set; }
         public int BattleInput { get; set; }
 
@@ -254,7 +254,7 @@
 
                 cursorPos = Console.CursorTop;
                 classCode = InputAction(1, 3, cursorPos);
-                GameManager.Instance.Player.SetCharacter(classCode, name);
+                if (name != null) GameManager.Instance.Player.SetCharacter(classCode, name);
             }
             Console.Clear();
             SysDefault();
@@ -335,41 +335,73 @@
 
                     CurrentViewer.Attach_E_Mark(item);
 
-                    Console.WriteLine(" 『" + DataManager.Instance.ItemDB.List[item][1] + "』");
-                    ShowAtk(int.Parse(DataManager.Instance.ItemDB.List[item][2]));
-                    ShowDef(int.Parse(DataManager.Instance.ItemDB.List[item][3]));
-                    Console.WriteLine("\t  [ " + DataManager.Instance.ItemDB.List[item][6] + " ]");
+                    Console.WriteLine(" 『" + item.Name + "』");
+                    ShowAtk(item.Attack);
+                    ShowDef(item.Defence);
+                    Console.WriteLine("\t  [ " + item.Text + " ]");
                 }
                 Console.WriteLine("   -----------------------------------------------------------------------------\n");
             }
         }
 
-        //영훈) 미친하드코딩
         public void ShowShop(VIEW_TYPE view, ITEM_TYPE type)
         {
-            var item = DataManager.Instance.ItemDB.List;
-            if (DataManager.Instance.ItemDB.List != null)
+            var gm = GameManager.Instance;
+            var itemList = DataManager.Instance.ItemDB.List;
+            if (itemList != null)
             {
+                if (gm.ShopViewList != null) { gm.ShopViewList.Clear(); }
+                foreach(var item in itemList)
+                {
+                    if(item.Type == type)
+                    {
+                        gm.ShopViewList.Add(item);
+                    }
+                }
+                for (int i= 0 ; i < gm.ShopViewList.Count; i++)
+                {
+                    Console.WriteLine("   -----------------------------------------------------------------------------");
+                    if (gm.Player.CheckBag(gm.ShopViewList[i].Code)) Console.ForegroundColor = ConsoleColor.DarkGray;
+
+                    string idText = view == VIEW_TYPE.PURCHASE ? "- " + (i + 1).ToString() : "- ";
+
+                    Console.WriteLine($"     {idText} 『{gm.ShopViewList[i].Name}』");
+                    ShowAtk(gm.ShopViewList[i].Attack);
+                    ShowDef(gm.ShopViewList[i].Defence);
+                    if (gm.Player.CheckBag(gm.ShopViewList[i].Code))
+                    {
+                        SceneManager.Instance.ColText("\t [구매 완료]", ConsoleColor.Red, ConsoleColor.Black);
+                    }
+                    else Console.WriteLine("\t [" + gm.ShopViewList[i].Value + " G]");
+
+                    Console.WriteLine("\t  [ " + gm.ShopViewList[i].Text + " ]");
+                    Console.ResetColor();
+                }
+                Console.WriteLine("   -----------------------------------------------------------------------------\n");
+            }
+
+
+
+
+            /*            영훈) 미친하드코딩
                 switch (type)
                 {
                     case ITEM_TYPE.WEAPON:
                         for (int i = 2; i < 8; i++)
                         {
                             Console.WriteLine("   -----------------------------------------------------------------------------");
-                            if (GameManager.Instance.Player.CheckBag(int.Parse(item[i][0]))) Console.ForegroundColor = ConsoleColor.DarkGray;
+                            if (GameManager.Instance.Player.CheckBag(item[i].Code)) Console.ForegroundColor = ConsoleColor.DarkGray;
 
                             string idText = view == VIEW_TYPE.PURCHASE ? "-" + (int.Parse(item[i][0]) + 1).ToString() : "-";
-                            Console.WriteLine($"     {idText} 『{item[i][1]}』");
-                            ShowAtk(int.Parse(item[i][2]));
-                            ShowDef(int.Parse(item[i][3]));
+                            Console.WriteLine($"     {idText} 『{item[i].Name}』");
+                            ShowAtk(item[i].Attack);
+                            ShowDef(item[i].Defence);
                             if (GameManager.Instance.Player.CheckBag(int.Parse(item[i][0])))
                             {
-                                Console.ForegroundColor = ConsoleColor.Red;
-                                Console.WriteLine("\t [구매 완료]");
-                                Console.ResetColor();
+                                SceneManager.Instance.ColText("\t [구매 완료]", ConsoleColor.Red, ConsoleColor.Black);
                             }
                             else Console.WriteLine("\t [" + int.Parse(item[i][7]) + " G]");
-                            if (GameManager.Instance.Player.CheckBag(int.Parse(item[i][0]))) Console.ForegroundColor = ConsoleColor.DarkGray;
+
                             Console.WriteLine("\t  [ " + item[i][6] + " ]");
                             Console.ResetColor();
                         }
@@ -400,34 +432,33 @@
                         Console.WriteLine("   -----------------------------------------------------------------------------\n");
                         break;
 
-                }
+                }*/
 
-                //기존 코드
-                //foreach (var item in DataManager.Instance.ItemDB.List)
-                //{
+            //기존 코드
+            //foreach (var item in DataManager.Instance.ItemDB.List)
+            //{
 
-                //    {
-                //        Console.WriteLine("   -----------------------------------------------------------------------------");
-                //        if (GameManager.Instance.Player.CheckBag(int.Parse(item[0]))) Console.ForegroundColor = ConsoleColor.DarkGray;
+            //    {
+            //        Console.WriteLine("   -----------------------------------------------------------------------------");
+            //        if (GameManager.Instance.Player.CheckBag(int.Parse(item[0]))) Console.ForegroundColor = ConsoleColor.DarkGray;
 
-                //        string idText = view == VIEW_TYPE.PURCHASE ? "-" + (int.Parse(item[0]) + 1).ToString() : "-";
-                //        Console.WriteLine($"     {idText} 『{item[1]}』");
-                //        ShowAtk(int.Parse(item[2]));
-                //        ShowDef(int.Parse(item[3]));
-                //        if (GameManager.Instance.Player.CheckBag(int.Parse(item[0])))
-                //        {
-                //            Console.ForegroundColor = ConsoleColor.Red;
-                //            Console.WriteLine("\t [구매 완료]");
-                //            Console.ResetColor();
-                //        }
-                //        else Console.WriteLine("\t [" + int.Parse(item[7]) + " G]");
-                //        if (GameManager.Instance.Player.CheckBag(int.Parse(item[0]))) Console.ForegroundColor = ConsoleColor.DarkGray;
-                //        Console.WriteLine("\t  [ " + item[6] + " ]");
-                //        Console.ResetColor();
-                //    }
-                //}
-                //Console.WriteLine("   -----------------------------------------------------------------------------");
-            }
+            //        string idText = view == VIEW_TYPE.PURCHASE ? "-" + (int.Parse(item[0]) + 1).ToString() : "-";
+            //        Console.WriteLine($"     {idText} 『{item[1]}』");
+            //        ShowAtk(int.Parse(item[2]));
+            //        ShowDef(int.Parse(item[3]));
+            //        if (GameManager.Instance.Player.CheckBag(int.Parse(item[0])))
+            //        {
+            //            Console.ForegroundColor = ConsoleColor.Red;
+            //            Console.WriteLine("\t [구매 완료]");
+            //            Console.ResetColor();
+            //        }
+            //        else Console.WriteLine("\t [" + int.Parse(item[7]) + " G]");
+            //        if (GameManager.Instance.Player.CheckBag(int.Parse(item[0]))) Console.ForegroundColor = ConsoleColor.DarkGray;
+            //        Console.WriteLine("\t  [ " + item[6] + " ]");
+            //        Console.ResetColor();
+            //    }
+            //}
+            //Console.WriteLine("   -----------------------------------------------------------------------------");
         }
 
         public void ShowShopSale()
@@ -439,11 +470,11 @@
                 foreach (var item in GameManager.Instance.Player.Bag)
                 {
                     Console.WriteLine("   -----------------------------------------------------------------------------");
-                    Console.WriteLine("     -" + (++count) + " 『" + DataManager.Instance.ItemDB.List[item][1] + "』");
-                    ShowAtk(int.Parse(DataManager.Instance.ItemDB.List[item][2]));
-                    ShowDef(int.Parse(DataManager.Instance.ItemDB.List[item][3]));
-                    Console.WriteLine("\t [" + (int)(int.Parse(DataManager.Instance.ItemDB.List[item][7]) * 0.85) + " G]");
-                    Console.WriteLine("\t  [ " + DataManager.Instance.ItemDB.List[item][6] + " ]");
+                    Console.WriteLine("     -" + (++count) + " 『" + item.Name + "』");
+                    ShowAtk(item.Attack);
+                    ShowDef(item.Defence);
+                    Console.WriteLine("\t [" + (item.Value * 0.85) + " G]");
+                    Console.WriteLine("\t  [ " + item.Text + " ]");
                 }
                 Console.WriteLine("   -----------------------------------------------------------------------------\n");
             }
@@ -462,10 +493,10 @@
 
                     CurrentViewer.Attach_E_Mark(item);
 
-                    Console.WriteLine(" 『" + DataManager.Instance.ItemDB.List[item][1] + "』");
-                    ShowAtk(int.Parse(DataManager.Instance.ItemDB.List[item][2]));
-                    ShowDef(int.Parse(DataManager.Instance.ItemDB.List[item][3]));
-                    Console.WriteLine("\t  [ " + DataManager.Instance.ItemDB.List[item][6] + " ]");
+                    Console.WriteLine(" 『" + item.Name + "』");
+                    ShowAtk(item.Attack);
+                    ShowDef(item.Defence);
+                    Console.WriteLine("\t  [ " + item.Text + " ]");
                 }
                 //Console.WriteLine("   ------------------------------------------------------------------------------");
             }

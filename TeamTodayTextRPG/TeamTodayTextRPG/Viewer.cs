@@ -33,7 +33,6 @@
         public int StartIndex { get; set; }  // 화면에서 입력 가능한 시작 값
         public int EndIndex { get; set; }  // 화면에서 입력 가능한 끝 값
         public VIEW_TYPE Type { get; set; }
-        public int MaxPage { get; set; }  // 최대페이지
 
         protected Dictionary<int, Func<VIEW_TYPE>> inputActions;
 
@@ -49,14 +48,14 @@
         // 탭 페이지 전환 관련
         protected void ClampTabPage(int maxPage)
         {
-            if (SceneManager.Instance.TabPage < 0)
+            if ((int)SceneManager.Instance.TabPage < 0)
             {
                 SceneManager.Instance.TabPage = 0;
                 SceneManager.Instance.SysText("첫 페이지입니다", ConsoleColor.Red, ConsoleColor.Black);
             }
-            else if (SceneManager.Instance.TabPage > maxPage-1)
+            else if ((int)SceneManager.Instance.TabPage > maxPage-1)
             {
-                SceneManager.Instance.TabPage = maxPage - 1;
+                SceneManager.Instance.TabPage = (ITEM_TYPE)(maxPage - 1);
                 SceneManager.Instance.SysText("마지막 페이지입니다", ConsoleColor.Red, ConsoleColor.Black);
             }
             else
@@ -67,13 +66,13 @@
         protected VIEW_TYPE NextTab()
         {
             SceneManager.Instance.TabPage++;
-            ClampTabPage(2);
+            ClampTabPage(Enum.GetValues(typeof(ITEM_TYPE)).Length);
             return Type;
         }
         protected VIEW_TYPE PreviousTab()
         {
             SceneManager.Instance.TabPage--;
-            ClampTabPage(2);
+            ClampTabPage(Enum.GetValues(typeof(ITEM_TYPE)).Length);
             return Type;
         }
         protected void ResetTab()
@@ -288,27 +287,33 @@
         }
         protected void ViewEquipItem()
         {
-            if (Player.equipedWpCode != -1)
+            ITEM_CODE code;
+            if(Player.EquipSlot != null)
             {
-                SceneManager.Instance.ColText($"\t[ 무  기 ]  -  『{DataManager.Instance.ItemDB.List[Player.equipedWpCode][1]}』\n", ConsoleColor.DarkGreen, ConsoleColor.Black);
-                SceneManager.Instance.ShowAtk(int.Parse(DataManager.Instance.ItemDB.List[Player.equipedWpCode][2]));
-                SceneManager.Instance.ShowDef(int.Parse(DataManager.Instance.ItemDB.List[Player.equipedWpCode][3]));
-                Console.WriteLine("\n\t  [ " + DataManager.Instance.ItemDB.List[Player.equipedWpCode][6] + " ]");
-                Console.WriteLine();
+                if (Player.EquipSlot.TryGetValue(ITEM_TYPE.WEAPON, out code))
+                {
+                    SceneManager.Instance.ColText($"\t[ 무  기 ]  -  『{DataManager.Instance.ItemDB.List[(int)code].Name}』\n", ConsoleColor.DarkGreen, ConsoleColor.Black);
+                    SceneManager.Instance.ShowAtk(DataManager.Instance.ItemDB.List[(int)code].Attack);
+                    SceneManager.Instance.ShowDef(DataManager.Instance.ItemDB.List[(int)code].Defence);
+                    Console.WriteLine("\n\t  [ " + DataManager.Instance.ItemDB.List[(int)code].Text + " ]");
+                    Console.WriteLine();
+                }
+                if (Player.EquipSlot.TryGetValue(ITEM_TYPE.ARMOR, out code))
+                {
+                    SceneManager.Instance.ColText($"\t[ 방어구 ]  -  『{DataManager.Instance.ItemDB.List[(int)code].Name}』\n", ConsoleColor.DarkGreen, ConsoleColor.Black);
+                    SceneManager.Instance.ShowAtk(DataManager.Instance.ItemDB.List[(int)code].Attack);
+                    SceneManager.Instance.ShowDef(DataManager.Instance.ItemDB.List[(int)code].Defence);
+                    Console.WriteLine("\n\t  [ " + DataManager.Instance.ItemDB.List[(int)code].Text + " ]");
+                    Console.WriteLine();
+                }
             }
-            if (Player.equipedAmCode != -1)
-            {
-                SceneManager.Instance.ColText($"\t[ 방어구 ]  -  『{DataManager.Instance.ItemDB.List[Player.equipedAmCode][1]}』\n", ConsoleColor.DarkGreen, ConsoleColor.Black);
-                SceneManager.Instance.ShowAtk(int.Parse(DataManager.Instance.ItemDB.List[Player.equipedAmCode][2]));
-                SceneManager.Instance.ShowDef(int.Parse(DataManager.Instance.ItemDB.List[Player.equipedAmCode][3]));
-                Console.WriteLine("\n\t  [ " + DataManager.Instance.ItemDB.List[Player.equipedAmCode][6] + " ]");
-            }
+
         }
 
         // 장착중이라면 [E]붙여주는 함수
-        public void Attach_E_Mark(int itemCode)
+        public void Attach_E_Mark(Item item)
         {
-            if (Player.CheckEquip(itemCode, ITEM_TYPE.WEAPON) || Player.CheckEquip(itemCode, ITEM_TYPE.ARMOR))
+            if (Player.CheckEquip(item.Code, ITEM_TYPE.WEAPON) || Player.CheckEquip(item.Code, ITEM_TYPE.ARMOR))
             {
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.Write("[E]");
@@ -568,50 +573,33 @@
             }
             else if (index >= 0 && index < Player.Bag.Count)
             {
-                int itemCode = Player.Bag[index];  // 실제 아이템 코드 가져오기
-                int Itype = int.Parse(DataManager.Instance.ItemDB.List[itemCode][8]);
-
-                switch (Itype)
+                ITEM_CODE itemCode = Player.Bag[index].Code;  // 실제 아이템 코드 가져오기
+                ITEM_TYPE itemType = DataManager.Instance.ItemDB.List[(int)itemCode].Type;
+                
+                
+                ITEM_CODE nowEquipCode;
+                // 해당 타입 장비를 장착하고 있는 경우
+                if (GameManager.Instance.Player.EquipSlot.TryGetValue(itemType, out nowEquipCode))
                 {
-                    case (int)(ITEM_TYPE.WEAPON):
+                    // 장착하려는 장비와 현재 장착하고 있는 장비가 같을 경우
+                    if(nowEquipCode == itemCode)
+                    {
+                        GameManager.Instance.Player.EquipSlot.Remove(itemType);
+                        SceneManager.Instance.SysText($"『{DataManager.Instance.ItemDB.List[(int)itemCode].Name}』 을(를) 장착 해제 했습니다", ConsoleColor.DarkCyan, ConsoleColor.Black);
+                    }
+                    // 다를 경우
+                    else
+                    {
+                        GameManager.Instance.Player.EquipSlot[itemType] = nowEquipCode;
+                        SceneManager.Instance.SysText($"『{DataManager.Instance.ItemDB.List[(int)itemCode].Name}』 을(를) 장착 했습니다", ConsoleColor.DarkCyan, ConsoleColor.Black);
+                    }
 
-                        if (Player.equipedWpCode == -1)
-                        {
-                            Player.EquipItem(itemCode, ITEM_TYPE.WEAPON);
-                            SceneManager.Instance.SysText($"{DataManager.Instance.ItemDB.List[itemCode][1]} 을(를) 장착 했습니다", ConsoleColor.DarkCyan, ConsoleColor.Black);
-                        }
-
-                        else if (Player.equipedWpCode == itemCode)
-                        {
-                            Player.UnEquipItem(itemCode);
-                            SceneManager.Instance.SysText($"{DataManager.Instance.ItemDB.List[itemCode][1]} 을(를) 장착 해제 했습니다", ConsoleColor.DarkCyan, ConsoleColor.Black);
-                        }
-
-                        else
-                        {
-                            Player.ChangeItem(itemCode, ITEM_TYPE.WEAPON);
-                            SceneManager.Instance.SysText($"{DataManager.Instance.ItemDB.List[itemCode][1]} 을(를) 장착 했습니다", ConsoleColor.DarkCyan, ConsoleColor.Black);
-                        }
-                        break;
-                    case (int)(ITEM_TYPE.ARMOR):
-
-                        if (Player.equipedAmCode == -1)
-                        {
-                            Player.EquipItem(itemCode, ITEM_TYPE.ARMOR);
-                            SceneManager.Instance.SysText($"{DataManager.Instance.ItemDB.List[itemCode][1]} 을(를) 장착 했습니다", ConsoleColor.DarkCyan, ConsoleColor.Black);
-                        }
-
-                        else if (Player.equipedAmCode == itemCode)
-                        {
-                            Player.UnEquipItem(itemCode);
-                            SceneManager.Instance.SysText($"{DataManager.Instance.ItemDB.List[itemCode][1]} 을(를) 장착 해제 했습니다", ConsoleColor.DarkCyan, ConsoleColor.Black);
-                        }
-                        else
-                        {
-                            Player.ChangeItem(itemCode, ITEM_TYPE.ARMOR);
-                            SceneManager.Instance.SysText($"{DataManager.Instance.ItemDB.List[itemCode][1]} 을(를) 장착 했습니다", ConsoleColor.DarkCyan, ConsoleColor.Black);
-                        }
-                        break;
+                }
+                // 해당 타입 장비를 장착하고 있지 않은 경우
+                else
+                {
+                    GameManager.Instance.Player.EquipSlot.Add(itemType, itemCode);
+                    SceneManager.Instance.SysText($"『{DataManager.Instance.ItemDB.List[(int)itemCode].Name}』 을(를) 장착 했습니다", ConsoleColor.DarkCyan, ConsoleColor.Black);
                 }
                 return VIEW_TYPE.EQUIP;
             }
@@ -622,7 +610,6 @@
 
     public class ShopViewer : Viewer
     {
-        private readonly Dictionary<int, Func<VIEW_TYPE>> inputActions;
         public ShopViewer()
         {
             StartIndex = -2;
@@ -638,12 +625,6 @@
                 { 2, () => { ResetTab(); return VIEW_TYPE.SALE; } }
             };
         }
-        private VIEW_TYPE PreviousTab()
-        {
-            SceneManager.Instance.TabPage--;
-            ClampTabPage(2);
-            return VIEW_TYPE.SHOP;
-        }
         private void DisplayHeader()
         {
             SceneManager.Instance.ColText("    『상점』", ConsoleColor.Cyan, ConsoleColor.Black);
@@ -657,19 +638,26 @@
         }
         private void DisplayTabs()
         {
-            if (SceneManager.Instance.TabPage == 0)
+            if (SceneManager.Instance.TabPage == ITEM_TYPE.WEAPON)
             {
                 Console.Write($"  ━━━━━");
                 SceneManager.Instance.ColText(" ✦ 무  기 ✦ ", ConsoleColor.Yellow, ConsoleColor.Black);
-                Console.WriteLine($"━ ✦ 방어구 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+                Console.WriteLine($"━ ✦ 방어구 ✦ ━ ✦ 소모품 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
                 SceneManager.Instance.ShowShop(VIEW_TYPE.SHOP, ITEM_TYPE.WEAPON);
             }
-            else if (SceneManager.Instance.TabPage == 1)
+            else if (SceneManager.Instance.TabPage == ITEM_TYPE.ARMOR)
             {
                 Console.Write($"  ━━━━━ ✦ 무  기 ✦ ━");
                 SceneManager.Instance.ColText(" ✦ 방어구 ✦ ", ConsoleColor.Yellow, ConsoleColor.Black);
-                Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+                Console.WriteLine("━ ✦ 소모품 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
                 SceneManager.Instance.ShowShop(VIEW_TYPE.SHOP, ITEM_TYPE.ARMOR);
+            }
+            else if (SceneManager.Instance.TabPage == ITEM_TYPE.POTION)
+            {
+                Console.Write($"  ━━━━━ ✦ 무  기 ✦ ━ ✦ 방어구 ✦ ━");
+                SceneManager.Instance.ColText(" ✦ 소모품 ✦ ", ConsoleColor.Yellow, ConsoleColor.Black);
+                Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+                SceneManager.Instance.ShowShop(VIEW_TYPE.SHOP, ITEM_TYPE.POTION);
             }
             Console.WriteLine($"  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
         }
@@ -708,42 +696,62 @@
         public PurchaseViewer()
         {
             StartIndex = -3;
-            EndIndex = DataManager.Instance.ItemDB.List.Count; // 아이템 개수만큼
+            EndIndex = DataManager.Instance.ItemDB.List.Count; 
+            /*
+            inputActions = new Dictionary<int, Func<VIEW_TYPE>>()
+            {
+                { -1, PreviousTab},
+                { -2, NextTab},
+                { 0, ()=>{ ResetTab(); return VIEW_TYPE.SHOP}
+                // 이 많은 처리를 딕셔너리와 람다식으로 처리하는게 맞을까?
+              => 구매처리는 따로 뺀 이후에 커맨드 패턴으로..?
+            }*/
+        }
+        private void DisplayHeader()
+        {
+            SceneManager.Instance.ColText("    『상점 - 구매』", ConsoleColor.Cyan, ConsoleColor.Black);
+            SceneManager.Instance.ColText(" 필요한 아이템을 골드를 주고 구매합니다.\n\n", ConsoleColor.DarkCyan, ConsoleColor.Black);
+        }
+        private void DisplayGold()
+        {
+            Console.Write("\t\t\t\t\t소지금 : ");
+            SceneManager.Instance.ColText($"{Player.Gold}", ConsoleColor.Yellow, ConsoleColor.Black);
+            Console.WriteLine(" G");
+        }
+        private void DisplayTabs()
+        {
+            if (SceneManager.Instance.TabPage == ITEM_TYPE.WEAPON)
+            {
+                Console.Write($"  ━━━━━");
+                SceneManager.Instance.ColText(" ✦ 무  기 ✦ ", ConsoleColor.Yellow, ConsoleColor.Black);
+                Console.WriteLine($"━ ✦ 방어구 ✦ ━ ✦ 소모품 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+                SceneManager.Instance.ShowShop(VIEW_TYPE.PURCHASE, ITEM_TYPE.WEAPON);
+            }
+            else if (SceneManager.Instance.TabPage == ITEM_TYPE.ARMOR)
+            {
+                Console.Write($"  ━━━━━ ✦ 무  기 ✦ ━");
+                SceneManager.Instance.ColText(" ✦ 방어구 ✦ ", ConsoleColor.Yellow, ConsoleColor.Black);
+                Console.WriteLine("━ ✦ 소모품 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+                SceneManager.Instance.ShowShop(VIEW_TYPE.PURCHASE, ITEM_TYPE.ARMOR);
+            }
+            else if (SceneManager.Instance.TabPage == ITEM_TYPE.POTION)
+            {
+                Console.Write($"  ━━━━━ ✦ 무  기 ✦ ━ ✦ 방어구 ✦ ━");
+                SceneManager.Instance.ColText(" ✦ 소모품 ✦ ", ConsoleColor.Yellow, ConsoleColor.Black);
+                Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+                SceneManager.Instance.ShowShop(VIEW_TYPE.PURCHASE, ITEM_TYPE.POTION);
+            }
+            Console.WriteLine($"  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
         }
 
         public override void ViewAction()
         {
-            SceneManager.Instance.ColText("    『상점 - 구매』", ConsoleColor.Cyan, ConsoleColor.Black);
-            SceneManager.Instance.ColText(" 필요한 아이템을 골드를 주고 구매합니다.\n\n", ConsoleColor.DarkCyan, ConsoleColor.Black);
-
-            Console.Write("\t\t\t\t\t소지금 : ");
-            SceneManager.Instance.ColText($"{Player.Gold}", ConsoleColor.Yellow, ConsoleColor.Black);
-            Console.WriteLine(" G");
-
-            if (SceneManager.Instance.TabPage == 0)
-            {
-                Console.Write($"  ━━━━━");
-                SceneManager.Instance.ColText(" ✦ 무  기 ✦ ", ConsoleColor.Yellow, ConsoleColor.Black);
-                Console.WriteLine($"━ ✦ 방어구 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-                SceneManager.Instance.ShowShop(VIEW_TYPE.PURCHASE, ITEM_TYPE.WEAPON);
-            }
-            else if (SceneManager.Instance.TabPage == 1)
-            {
-                Console.Write($"  ━━━━━ ✦ 무  기 ✦ ━");
-                SceneManager.Instance.ColText(" ✦ 방어구 ✦ ", ConsoleColor.Yellow, ConsoleColor.Black);
-                Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-                SceneManager.Instance.ShowShop(VIEW_TYPE.PURCHASE, ITEM_TYPE.ARMOR);
-            }
-            //Console.WriteLine($"  ━━━━━ ✦ 아이템 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-            //Console.WriteLine($"  ━━━━━ ✦ 무  기 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-            //SceneManager.Instance.ShowShop(VIEW_TYPE.PURCHASE, ITEM_TYPE.WEAPON);
-            //Console.WriteLine($"  ━━━━━ ✦ 방어구 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-            //SceneManager.Instance.ShowShop(VIEW_TYPE.PURCHASE, ITEM_TYPE.ARMOR);
-            //Console.WriteLine($"  ━━━━━ ✦ 소모품 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-            Console.WriteLine($"  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+            DisplayHeader();
+            DisplayGold();
+            DisplayTabs();
 
             Console.WriteLine("\t-1. << 이전\t-2. 다음 >>\n");
-            Console.WriteLine($"\t1 ~ {DataManager.Instance.ItemDB.List.Count}. 아이템 구매\n");
+            Console.WriteLine($"\t1 ~ {GameManager.Instance.ShopViewList.Count}. 아이템 구매\n");
             Console.WriteLine("\t0. 상점으로");
             Console.WriteLine("\t-3. 판매 화면으로\n\n");
             SceneManager.Instance.CurrentViewType = SceneManager.Instance.CurrentViewer.NextView(SceneManager.Instance.InputAction(StartIndex, EndIndex, Console.CursorTop));
@@ -760,9 +768,9 @@
             else if (input == -1)
             {
                 SceneManager.Instance.TabPage--;
-                if (SceneManager.Instance.TabPage < 0)
+                if (SceneManager.Instance.TabPage < ITEM_TYPE.WEAPON)
                 {
-                    SceneManager.Instance.TabPage = 0;
+                    SceneManager.Instance.TabPage = ITEM_TYPE.WEAPON;
                     SceneManager.Instance.SysText("첫 페이지입니다", ConsoleColor.Red, ConsoleColor.Black);
                 }
                 else
@@ -774,9 +782,9 @@
             else if (input == -2)
             {
                 SceneManager.Instance.TabPage++;
-                if (SceneManager.Instance.TabPage > 1)
+                if (SceneManager.Instance.TabPage > ITEM_TYPE.POTION)
                 {
-                    SceneManager.Instance.TabPage = 1;
+                    SceneManager.Instance.TabPage = ITEM_TYPE.POTION;
                     SceneManager.Instance.SysText("마지막 페이지입니다", ConsoleColor.Red, ConsoleColor.Black);
                 }
                 else
@@ -794,14 +802,14 @@
             else if (input > 0 && input <= DataManager.Instance.ItemDB.List.Count)
             {
                 // 인벤토리에 아이템 존재 여부
-                if (!GameManager.Instance.Player.CheckBag(input - 1))
+                if (!GameManager.Instance.Player.CheckBag((ITEM_CODE)(input - 1)))
                 {
                     // 잔금 여부
-                    if (GameManager.Instance.Player.Gold >= int.Parse(DataManager.Instance.ItemDB.List[input - 1][7]))
+                    if (GameManager.Instance.Player.Gold >= GameManager.Instance.ShopViewList[input - 1].Value)
                     {
                         // 인벤토리에 아이템 추가
-                        GameManager.Instance.Player.InputBag(int.Parse(DataManager.Instance.ItemDB.List[input - 1][0]), VIEW_TYPE.PURCHASE);
-                        SceneManager.Instance.SysText($"{DataManager.Instance.ItemDB.List[input - 1][1]} 을(를) 구매 했습니다", ConsoleColor.DarkCyan, ConsoleColor.Black);
+                        GameManager.Instance.Player.InputBag(GameManager.Instance.ShopViewList[input - 1].Code, VIEW_TYPE.PURCHASE);
+                        SceneManager.Instance.SysText($"{GameManager.Instance.ShopViewList[input - 1].Name} 을(를) 구매 했습니다", ConsoleColor.DarkCyan, ConsoleColor.Black);
                     }
                     // 구매실패 (잔금 부족)
                     else
@@ -871,11 +879,11 @@
             else if (input > 0 && input <= Player.Bag.Count)
             {
                 // 인벤토리에 아이템 존재 여부
-                if (GameManager.Instance.Player.CheckBag(GameManager.Instance.Player.Bag[input - 1]))
+                if (Player.CheckBag(Player.Bag[input - 1].Code))
                 {
-                    SceneManager.Instance.SysText($"{DataManager.Instance.ItemDB.List[Player.Bag[input - 1]][1]} 을(를) 판매 했습니다", ConsoleColor.DarkCyan, ConsoleColor.Black);
+                    SceneManager.Instance.SysText($"{DataManager.Instance.ItemDB.List[(int)Player.Bag[input - 1].Code].Name} 을(를) 판매 했습니다", ConsoleColor.DarkCyan, ConsoleColor.Black);
 
-                    Player.RemoveBag(int.Parse(DataManager.Instance.ItemDB.List[Player.Bag[input - 1]][0]), VIEW_TYPE.SALE);
+                    Player.RemoveBag(DataManager.Instance.ItemDB.List[(int)Player.Bag[input - 1].Code].Code, VIEW_TYPE.SALE);
 
                 }
                 // 판매실패 (보유중이지 않은 물품)

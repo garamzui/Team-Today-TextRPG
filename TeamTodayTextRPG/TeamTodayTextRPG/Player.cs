@@ -4,7 +4,7 @@
     public partial class Player
     {
         public Character Character { get; set; }
-        public List<int> Bag { get; set; }
+        public List<Item> Bag { get; set; }
         public List<int> WeaponEquip { get; set; }
         public List<int> ArmorEquip { get; set; }
         public int Level { get; set; }
@@ -13,8 +13,7 @@
         public int RequiredExp { get; set; }
         public string Name { get; set; }
 
-        public int equipedWpCode = -1;
-        public int equipedAmCode = -1;
+        public Dictionary<ITEM_TYPE,ITEM_CODE> EquipSlot { get; set; }
     }
 
     //스탯 관련 스크립트
@@ -22,7 +21,7 @@
     {
         public Player()
         {
-            Bag = new List<int>();
+            Bag = new List<Item>();
             WeaponEquip = new List<int>();
             ArmorEquip = new List<int>();
             //SetCharacter()
@@ -35,15 +34,15 @@
             switch (classCode - 1)
             {
                 case 0:
-                    Character = new Warrior();
+                    Character = DataManager.Instance.CharacterDB.List[(int)CHAR_TYPE.WARRIOR];
                     SetStat();
                     break;
                 case 1:
-                    Character = new Magician();
+                    Character = DataManager.Instance.CharacterDB.List[(int)CHAR_TYPE.MAGICIAN];
                     SetStat();
                     break;
                 case 2:
-                    Character = new Assassin();
+                    Character = DataManager.Instance.CharacterDB.List[(int)CHAR_TYPE.ASSASSIN];
                     SetStat();
                     break;
             }
@@ -54,16 +53,14 @@
                 Gold = 150000;
                 RequiredExp = 100;
                 Name = name;
-                equipedWpCode = -1;
-                equipedAmCode = -1;
-                //WeaponEquip.Add(equipedWpCode);
-                //ArmorEquip.Add(equipedAmCode);
+                Character.MaxHp = Character.Hp;
+                Character.MaxMp = Character.Mp;
             }
 
             //천 옷과 목검 Bag 리스트에 저장한다
             //직업별 초기 장비가 다르다면 수정
-            Bag.Add(int.Parse(DataManager.Instance.ItemDB.List[0][0])); // 천 옷 기본제공
-            Bag.Add(int.Parse(DataManager.Instance.ItemDB.List[1][0])); // 목검 기본제공  <- 인덱스 바뀔 예정
+            Bag.Add(DataManager.Instance.ItemDB.List[(int)ITEM_CODE.Weapon_Wooden_Swoard]); // 천 옷 기본제공
+            Bag.Add(DataManager.Instance.ItemDB.List[(int)ITEM_CODE.Armor_Cloth_Armor]); // 목검 기본제공  <- 인덱스 바뀔 예정
 
             //초기 장비를 가지고 있되 장착은 되어있지 않은 상태로 시작해서
             //인벤토리를 처음 열면 장착&해제 튜토리얼 구현해 보는 것 괜찮을지도
@@ -114,17 +111,18 @@
     //장비 관련 스크립트
     public partial class Player
     {
-        public bool CheckBag(int inputItemCode)
+        public bool CheckBag(ITEM_CODE inputItemCode)
         {
             //해당 코드의 아이템이 bag에 있는지
-            return Bag.Contains(inputItemCode);
+            return Bag.Contains(DataManager.Instance.ItemDB.List[(int)inputItemCode]);
         }
 
         //인벤토리에 아이템이 들어오는 경우 1 - 상점 구매
-        public void InputBag(int inputItemCode, VIEW_TYPE type)
+        public void InputBag(ITEM_CODE inputItemCode, VIEW_TYPE type)
         {
             // 7번은 가격!
-            int prise = int.Parse(DataManager.Instance.ItemDB.List[inputItemCode][7]);
+            //int prise = int.Parse(DataManager.Instance.ItemDB.List[inputItemCode][7]);
+            int prise = DataManager.Instance.ItemDB.List[(int)inputItemCode].Value;
 
             //상점에서 아이템 구매
             if (type == VIEW_TYPE.PURCHASE)
@@ -134,7 +132,7 @@
                     Gold -= prise;
 
                     //해당 아이템의 코드를 bag에 저장
-                    Bag.Add(inputItemCode);
+                    Bag.Add(DataManager.Instance.ItemDB.List[(int)inputItemCode]);
                 }
             }
 
@@ -148,27 +146,32 @@
                 {
                     //랜덤 아이템 드롭
                     int dropItemCode = GameManager.Instance.Rand.Next(0, DataManager.Instance.ItemDB.List.Count + 1);
-                    Bag.Add(int.Parse(DataManager.Instance.ItemDB.List[dropItemCode][0]));
+                    Bag.Add(DataManager.Instance.ItemDB.List[dropItemCode]);
                 }
             }
         }
 
         //인벤토리에 아이템이 나가는 경우 1 - 상점 판매
-        public void RemoveBag(int inputItemCode, VIEW_TYPE Vtype)
+        public void RemoveBag(ITEM_CODE inputItemCode, VIEW_TYPE Vtype)
         {
-            int prise = int.Parse(DataManager.Instance.ItemDB.List[inputItemCode][7]);
+            int prise = DataManager.Instance.ItemDB.List[(int)inputItemCode].Value;
 
             //상점에서 아이템 판매와 버리기
             //Bag에 있고 장착중이 아니라면
-            if (CheckBag(inputItemCode) == true && CheckEquip(inputItemCode, ITEM_TYPE.WEAPON) == false ||
-                CheckBag(inputItemCode) == true && CheckEquip(inputItemCode, ITEM_TYPE.ARMOR) == false)
+            if (CheckBag(inputItemCode) == true)
+            {
+                if (CheckEquip(inputItemCode, ITEM_TYPE.WEAPON) == false || CheckEquip(inputItemCode, ITEM_TYPE.ARMOR) == false)
+                {
+
+                }
+            }
             {
                 //판매하기 화면이라면
                 if (Vtype == VIEW_TYPE.SALE)
                 {
                     Gold += (int)(prise * 0.85f);
                 }
-                Bag.Remove(inputItemCode);
+                Bag.Remove(DataManager.Instance.ItemDB.List[(int)inputItemCode]);
             }
         }
 
@@ -183,108 +186,67 @@
         //방어구는 방어구변수에
         //----
 
-        //해당 무기 아이템을 장착중이면
-        public bool CheckEquip(int equipItemCode, ITEM_TYPE Itype)
+        //해당 코드의 아이템을 장착하고 있는지
+        public bool CheckEquip(ITEM_CODE itemCode, ITEM_TYPE itemType)
         {
-            //해당 코드의 아이템을 장착하고 있는지
-            switch (Itype)
+            if (EquipSlot == null)
             {
-                case ITEM_TYPE.WEAPON:
-                    return WeaponEquip.Contains(equipItemCode);
-
-                case ITEM_TYPE.ARMOR:
-                    return ArmorEquip.Contains(equipItemCode);
-
-                default:
-                    return false;
+                return false;
             }
+            else
+                return EquipSlot.ContainsKey(itemType);
         }
 
         //장비 착용
-        public void EquipItem(int equipItemCode, ITEM_TYPE Itype)
+        public void EquipItem(ITEM_CODE itemCode, ITEM_TYPE itemType)
         {
-            //타입 비교
-            switch (Itype)
-            {
-                case ITEM_TYPE.WEAPON:
-                    WeaponEquip.Add(equipItemCode);
-                    equipedWpCode = equipItemCode;
-                    ChangeStat(equipItemCode);
-                    break;
-
-                case ITEM_TYPE.ARMOR:
-                    ArmorEquip.Add(equipItemCode);
-                    equipedAmCode = equipItemCode;
-                    ChangeStat(equipItemCode);
-                    break;
-            }
+            EquipSlot.Add(itemType, itemCode);
+            ChangeStat(itemCode);
         }
 
         //장비 교체
-        public void ChangeItem(int equipItemCode, ITEM_TYPE Itype)
+        public void ChangeItem(ITEM_CODE itemCode, ITEM_TYPE itemType)
         {
-            //장착중이 아니라면
-            //if (equipedWpCode == -1 || equipedAmCode == -1) return;
-
-            //if()
-
-            //타입비교
-            switch (Itype)
-            {
-                case ITEM_TYPE.WEAPON:
-                    WeaponEquip.Clear();
-                    WeaponEquip.Add(equipItemCode);
-                    ChangeStat(equipItemCode);
-                    ChangeStat(equipedWpCode);
-                    equipedWpCode = equipItemCode;
-                    break;
-
-                case ITEM_TYPE.ARMOR:
-                    ArmorEquip.Clear();
-                    ArmorEquip.Add(equipItemCode);
-                    ChangeStat(equipItemCode);
-                    ChangeStat(equipedAmCode);
-                    equipedAmCode = equipItemCode;
-                    break;
-            }
+            UnEquipItem(itemCode, itemType);
+            ChangeStat(itemCode);
+            EquipItem(itemCode, itemType);
+            ChangeStat(itemCode);
         }
 
         //장비 해제
-        public void UnEquipItem(int equipItemCode)
+        public void UnEquipItem(ITEM_CODE itemCode, ITEM_TYPE itemType)
         {
-            //장착중 이라면
-            if (WeaponEquip.Contains(equipItemCode) == true)
-            {
-                WeaponEquip.Clear();
-                equipedWpCode = -1;
-                ChangeStat(equipItemCode);
-            }
-
-            else
-            {
-                ArmorEquip.Clear();
-                equipedAmCode = -1;
-                ChangeStat(equipItemCode);
-            }
+            EquipSlot.Remove(itemType);
+            ChangeStat(itemCode);
         }
 
         //아이템 장착 및 해제에 따른 스탯 변화
-        public void ChangeStat(int code)
+        public void ChangeStat(ITEM_CODE code)
         {
-            var item = DataManager.Instance.ItemDB.List[code]; // 아이템 코드 그대로 사용!
-            int atk = int.Parse(item[2]);
-            int def = int.Parse(item[3]);
+            var item = DataManager.Instance.ItemDB.List[(int)code]; // 아이템 코드 그대로 사용!
+            int atk = item.Attack;
+            int def = item.Defence;
+            int dodge = item.Dodge;
+            int hp = item.Hp;
+            int mp = item.Mp;
 
-
+            // ↑위의 지역변수도 필요 없음
+            // 추후 아이템의 equip 함수와 unequip 함수를 호출하는 것으로 변경
             if (CheckEquip(code, ITEM_TYPE.WEAPON) || CheckEquip(code, ITEM_TYPE.ARMOR))
             {
                 Character.PlusAtk += atk;
                 Character.PlusDef += def;
+                Character.PlusDodge += dodge;
+                Character.MaxHp += hp;
+                Character.MaxMp += mp;
             }
             else
             {
                 Character.PlusAtk -= atk;
                 Character.PlusDef -= def;
+                Character.PlusDodge -= dodge;
+                Character.MaxHp -= hp;
+                Character.MaxMp -= mp;
             }
         }
     }

@@ -14,6 +14,7 @@
 
     public abstract class Character
     {
+        public const int MaxPassiveSkillLevel = 5;
         public List<string> ChooseBehavior { get; private set; }
 
         public Character()
@@ -50,29 +51,25 @@
         public string PasskillName { get; set; }
 
         public int PassiveSkillLevel = 1;
-        public int MaxPassiveSkillLevel { get; set; } = 5;  // <= 수정 생각해보기 위치...static
+        // public int MaxPassiveSkillLevel { get; set; } = 5;  // <= 수정 생각해보기 위치...static
 
+        /*
+public void Init(string[] data) //우선은 임의로 매서드로 초기화할 필드를 변경해 놓았습니다.
+{
 
-        public void Init(string[] data) //우선은 임의로 매서드로 초기화할 필드를 변경해 놓았습니다.
-        {
-            //직업이름,공격력,방어력,체력,마력,회피,액티브스킬이름,패시브스킬이름
-            Code = (CHAR_TYPE)int.Parse(data[0]);
-            Jobname = data[1];
-            Attack = int.Parse(data[2]);
-            Defence = int.Parse(data[3]);
-            Hp = int.Parse(data[4]);
-            MaxHp = Hp;
-            Mp = int.Parse(data[5]);
-            MaxMp = Mp;
-            Dodge = int.Parse(data[6]);
-            ActskillName = (data[7]);
-            PasskillName = (data[8]);
-        }
-
-        public virtual string JobDescription() //직업 설명
-        {
-            return "";
-        }
+ //직업이름,공격력,방어력,체력,마력,회피,액티브스킬이름,패시브스킬이름
+ Code = (CHAR_TYPE)int.Parse(data[0]);
+ Jobname = data[1];
+ Attack = int.Parse(data[2]);
+ Defence = int.Parse(data[3]);
+ Hp = int.Parse(data[4]);
+ MaxHp = Hp;
+ Mp = int.Parse(data[5]);
+ MaxMp = Mp;
+ Dodge = int.Parse(data[6]);
+ ActskillName = (data[7]);
+ PasskillName = (data[8]);
+}*/
         //영훈) ↓보시면 참조 0개라고 쓰여있어요 그러면 이 메서드는 호출이 안되었다는 뜻이죠
         //Viewer 스크립트의 109번 줄부터 보면 거기에서 이미 비슷한 동작을 하고 있어서
         //ViewStatus() 메서드는 지우셔도 될거같아요!
@@ -153,10 +150,6 @@
         {
             //Init(DataManager.Instance.CharacterDB.List[(int)CHAR_TYPE.WARRIOR]);
         }
-        public override string JobDescription()
-        {
-            return "높은 방어력,기본 공격력,체력";
-        }
         public override int DefaultAttack()
         {
             int attackDamage = GameManager.Instance.Player.Character.TotalAtk - GameManager.Instance.Dungeon.TargetMonster.Defence;
@@ -218,10 +211,6 @@
         public Magician()
         {
            // Init(DataManager.Instance.CharacterDB.List[(int)CHAR_TYPE.MAGICIAN]);
-        }
-        public override string JobDescription()
-        {
-            return "방어 무시, 높은 마나, 스킬의존성";
         }
         public override int DefaultAttack()
         {
@@ -293,10 +282,6 @@
         public Assassin()
         {
            // Init(DataManager.Instance.CharacterDB.List[(int)CHAR_TYPE.ASSASSIN]);
-        }
-        public override string JobDescription()
-        {
-            return "높은 회피, 크리티컬 히트";
         }
         public bool Critical(ref int damage)
         {
