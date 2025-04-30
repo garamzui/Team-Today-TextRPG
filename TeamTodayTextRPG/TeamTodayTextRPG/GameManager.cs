@@ -38,13 +38,13 @@
         {
             switch (code)
             {
-                case (int)DUNGEON_DIFF.Easy:
+                case (int)DUNGEON_DIFF.EASY:
                     return new Dungeon_Easy();
-                case (int)DUNGEON_DIFF.Normal:
+                case (int)DUNGEON_DIFF.NORMAL:
                     return new Dungeon_Normal();
-                case (int)DUNGEON_DIFF.Hard:
+                case (int)DUNGEON_DIFF.HARD:
                     return new Dungeon_Hard();
-                case (int)DUNGEON_DIFF.Hell:
+                case (int)DUNGEON_DIFF.HELL:
                     return new Dungeon_Hell();
                 default:
                     throw new ArgumentException("잘못된 던전 코드입니다.");

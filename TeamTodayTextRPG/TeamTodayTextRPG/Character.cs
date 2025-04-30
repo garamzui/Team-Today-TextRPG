@@ -33,13 +33,14 @@
         public int Defence { get; set; }
         public int PlusDef { get; set; } = 0;
         public int TotalDef { get { return Defence + PlusDef; } }
+        public int Dodge { get; set; }
+        public int PlusDodge { get; set; }
+        public int TotalDodge { get { return Dodge + PlusDodge; } }
         public int Hp { get; set; }
         public int MaxHp { get; set; }
         public int Mp { get; set; }
         public int MaxMp { get; set; }
-        public int Dodge { get; set; }
-        public int PlusDodge { get; set; }
-        public int TotalDodge { get { return Dodge + PlusDodge; } }
+        
         // 직업간 차이를 두어 보고자 Dodge 스탯도 추가 해 봤습니다.
 
 
@@ -110,13 +111,10 @@
                 Hp += HpChange;
                 if (Hp > MaxHp) Hp = MaxHp;
             }
-            // else { Console.WriteLine("아무 일도 일어나지 않았습니다."); }// 우선 예외처리 때문에 작성해 두었습니다.
         }
         public void Die()
         {
             State = CHAR_STATE.DEAD;
-            //Console.WriteLine("눈앞이 깜깜해진다..");
-            //GameManager.Instance.Animation.GameOverAnimation();
         }
 
         public void ManageMp(int ChangeMp) //Mp관리용 메서드입니다. Mp소모 매서드 이용시 최종 계산 자료를 음수로 입력하여야합니다
@@ -124,7 +122,6 @@
             if (ChangeMp < 0)
             {
                 Mp += ChangeMp;
-                //Console.WriteLine($" Mp {ChangeMp}소모 현재 Mp {Mp}/{MaxMp}");
                 if (Mp < 0) Mp = 0;
             }
 
@@ -132,7 +129,6 @@
             {
                 Mp += ChangeMp;
                 if (Mp > MaxMp) Mp = MaxMp;
-                //Console.WriteLine($"{ChangeMp}만큼 MP를 회복했습니다! 현재 MP: {Mp}/{MaxMp}");
             }
             else { }
 
@@ -155,7 +151,7 @@
     {
         public Warrior()
         {
-            Init(DataManager.Instance.CharacterDB.List[(int)CHAR_TYPE.WARRIOR]);
+            //Init(DataManager.Instance.CharacterDB.List[(int)CHAR_TYPE.WARRIOR]);
         }
         public override string JobDescription()
         {
@@ -163,7 +159,7 @@
         }
         public override int DefaultAttack()
         {
-            int attackDamage = GameManager.Instance.Player.Character.TotalAtk - GameManager.Instance.Dungeon.TargetMonster.Def;
+            int attackDamage = GameManager.Instance.Player.Character.TotalAtk - GameManager.Instance.Dungeon.TargetMonster.Defence;
             if (attackDamage <= 0)
                 attackDamage = 1;
 
@@ -175,7 +171,7 @@
         }
         public override int ActiveSkill()
         {
-            int skillDamage = (TotalAtk * 3) - GameManager.Instance.Dungeon.TargetMonster.Def;
+            int skillDamage = (TotalAtk * 3) - GameManager.Instance.Dungeon.TargetMonster.Defence;
             if (skillDamage <= 0)
                 skillDamage = 1;
 
@@ -183,14 +179,10 @@
             {
                 ManageMp(-10);
 
-
-                //GameManager.Instance.Dungeon.TargetMonster.ManageHp(-skillDamage);
-
                 return skillDamage;
             }
             else
             {
-                //Console.WriteLine("MP가 모자랍니다.");
                 return skillDamage = 0;
             }
         }
@@ -225,7 +217,7 @@
     {
         public Magician()
         {
-            Init(DataManager.Instance.CharacterDB.List[(int)CHAR_TYPE.MAGICIAN]);
+           // Init(DataManager.Instance.CharacterDB.List[(int)CHAR_TYPE.MAGICIAN]);
         }
         public override string JobDescription()
         {
@@ -233,7 +225,7 @@
         }
         public override int DefaultAttack()
         {
-            int attackDamage = GameManager.Instance.Player.Character.TotalAtk - GameManager.Instance.Dungeon.TargetMonster.Def;
+            int attackDamage = GameManager.Instance.Player.Character.TotalAtk - GameManager.Instance.Dungeon.TargetMonster.Defence;
             if (attackDamage <= 0)
                 attackDamage = 1;
 
@@ -245,7 +237,7 @@
         }
         public override int ActiveSkill()
         {
-            double itd = Math.Round(GameManager.Instance.Dungeon.TargetMonster.Def / 2.0); //방어무시를 구현하기위해서 방어도를 반으로 나누고 반올림하였습니다.
+            double itd = Math.Round(GameManager.Instance.Dungeon.TargetMonster.Defence / 2.0); //방어무시를 구현하기위해서 방어도를 반으로 나누고 반올림하였습니다.
             if (itd == 1)
             {
                 itd = 0;
@@ -300,7 +292,7 @@
     {
         public Assassin()
         {
-            Init(DataManager.Instance.CharacterDB.List[(int)CHAR_TYPE.ASSASSIN]);
+           // Init(DataManager.Instance.CharacterDB.List[(int)CHAR_TYPE.ASSASSIN]);
         }
         public override string JobDescription()
         {
@@ -320,7 +312,7 @@
         }
         public override int DefaultAttack()
         {
-            int attackDamage = GameManager.Instance.Player.Character.TotalAtk - GameManager.Instance.Dungeon.TargetMonster.Def;
+            int attackDamage = GameManager.Instance.Player.Character.TotalAtk - GameManager.Instance.Dungeon.TargetMonster.Defence;
             if (attackDamage <= 0) attackDamage = 1;
 
 
@@ -332,7 +324,7 @@
         }
         public override int ActiveSkill()
         {
-            int skillDamage = (TotalAtk * 2) - GameManager.Instance.Dungeon.TargetMonster.Def;
+            int skillDamage = (TotalAtk * 2) - GameManager.Instance.Dungeon.TargetMonster.Defence;
             if (skillDamage <= 0)
             { skillDamage = 1; }
             if (Mp >= 10)
@@ -373,10 +365,6 @@
 
         }
     }
-
-
-
-
 
 }
 

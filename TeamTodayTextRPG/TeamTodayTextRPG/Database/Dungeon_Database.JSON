@@ -1,0 +1,50 @@
+[
+  {
+    "$type": "TeamTodayTextRPG.Dungeon_Easy, TeamTodayTextRPG",
+    "Code": 0,
+    "Diff": "EASY",
+    "Name": "쉬움 던전",
+    "RewardGold": 1000,
+    "RewardExp": 500,
+    "LowLevel": 1,
+    "HighLevel": 2,
+    "MonsterCount": 2,
+    "Text": "하남자들이 가는 곳입니다"
+  },
+  {
+    "$type": "TeamTodayTextRPG.Dungeon_Normal, TeamTodayTextRPG",
+    "Code": 1,
+    "Diff": "NORMAL",
+    "Name": "일반 던전",
+    "RewardGold": 1700,
+    "RewardExp": 800,
+    "LowLevel": 2,
+    "HighLevel": 4,
+    "MonsterCount": 3,
+    "Text": "평범한 난이도의 던전입니다"
+  },
+  {
+    "$type": "TeamTodayTextRPG.Dungeon_Hard, TeamTodayTextRPG",
+    "Code": 2,
+    "Diff": "HARD",
+    "Name": "어려움 던전",
+    "RewardGold": 2500,
+    "RewardExp": 1500,
+    "LowLevel": 3,
+    "HighLevel": 5,
+    "MonsterCount": 4,
+    "Text": "좀 치는 사람들이 가는 곳입니다"
+  },
+  {
+    "$type": "TeamTodayTextRPG.Dungeon_Hell, TeamTodayTextRPG",
+    "Code": 3,
+    "Diff": "HELL",
+    "Name": "헬 던전",
+    "RewardGold": 10000,
+    "RewardExp": 3000,
+    "LowLevel": 5,
+    "HighLevel": 5,
+    "MonsterCount": 1,
+    "Text": "오줌을 지릴 수 있습니다"
+  }
+]

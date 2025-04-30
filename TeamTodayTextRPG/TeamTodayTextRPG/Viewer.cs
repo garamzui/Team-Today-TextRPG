@@ -906,9 +906,9 @@
             SceneManager.Instance.ColText(" 던전을 선택하여 진입합니다.\n\n", ConsoleColor.DarkMagenta, ConsoleColor.Black);
 
             Console.WriteLine($"  ━━━━━ ✦ 던  전 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-            foreach (var dun in DataManager.Instance.DungeonDB.List)
+            for (int i = 0; i < DataManager.Instance.DungeonDB.List.Count; i++)
             {
-                Console.WriteLine($"【 {int.Parse(dun[0]) + 1} 】 {dun[1]} \t\t|   {dun[8]}\n");
+                Console.WriteLine($"\t【 {i + 1} 】 {DataManager.Instance.DungeonDB.List[i].Name} \t\t|   {DataManager.Instance.DungeonDB.List[i].Text}\n");
             }
             Console.WriteLine($"  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 
@@ -955,7 +955,7 @@
 
             Console.WriteLine($"  ━━━━━ ✦ 정  보 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 
-            if (Dungeon.Diff == DUNGEON_DIFF.Hell)
+            if (Dungeon.Diff == DUNGEON_DIFF.HELL)
             {
                 //SceneManager.Instance.ColText("\t\t!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!\n\t\t     플레이어 능력치가 10% 감소합니다!     \n\t\t!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!\n",ConsoleColor.Red,ConsoleColor.Black);
                 SceneManager.Instance.ColText("\t\t!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!\n\t\t              기저귀를 착용하세요!!            \n\t\t!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!\n\n", ConsoleColor.Red, ConsoleColor.Black);
@@ -964,8 +964,8 @@
             Console.WriteLine($"\t던전 이름            : {Dungeon.Name}\n");
             Console.WriteLine($"\t난이도               : {Dungeon.Diff}\n");
             Console.WriteLine($"\t등장 몬스터 레벨     : {Dungeon.LowLevel} ~ {Dungeon.HighLevel}\n");
-            Console.WriteLine($"\t기본 보상 골드       : {Dungeon.Reward} G\n");
-            Console.WriteLine($"\t기본 보상 경험치     : {Dungeon.Exp}Exp\n");
+            Console.WriteLine($"\t기본 보상 골드       : {Dungeon.RewardGold} G\n");
+            Console.WriteLine($"\t기본 보상 경험치     : {Dungeon.RewardExp}Exp\n");
             Console.WriteLine($"  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 
 
@@ -1420,7 +1420,7 @@
                 }
                 else
                 {
-                    attackDamage = Dungeon.Dungeon_Monster[Dungeon.MonsterAtkCounter].Atk - Character.Defence;
+                    attackDamage = Dungeon.Dungeon_Monster[Dungeon.MonsterAtkCounter].Attack - Character.Defence;
                     if (attackDamage <= 0) attackDamage = 1;
                     Console.WriteLine($"\t>> 『{Player.Name}』이(가) 『{attackDamage}』의 데미지를 입었습니다.\n");
                     Console.Write($"\t>> HP {Character.Hp} -> ");
@@ -1527,26 +1527,26 @@
 
                 SceneManager.Instance.ColText("\t\t\t☆ 축하합니다! 던전을 클리어했습니다 ☆\n\n", ConsoleColor.Yellow, ConsoleColor.Black);
 
-                Console.WriteLine($"\t보상 골드       : {Dungeon.Reward} G\n");
+                Console.WriteLine($"\t보상 골드       : {Dungeon.RewardGold} G\n");
                 foreach (var monster in Dungeon.Dungeon_Monster)
                 {
                     Console.WriteLine($"\t\t\t\t+{monster.RewardGold} G …………{monster.Name} 토벌 추가 보상");
-                    Dungeon.Reward += monster.RewardGold;
+                    Dungeon.RewardGold += monster.RewardGold;
                 }
                 Console.WriteLine($"\t--------------------------------------------------------------------------\n");
-                SceneManager.Instance.ColText($"\t\t\t\t\t\t\t최종 보상 골드   :  {Dungeon.Reward} G\n\n", ConsoleColor.Green, ConsoleColor.Black);
+                SceneManager.Instance.ColText($"\t\t\t\t\t\t\t최종 보상 골드   :  {Dungeon.RewardGold} G\n\n", ConsoleColor.Green, ConsoleColor.Black);
 
-                Console.WriteLine($"\n\t보상 경험치     : {Dungeon.Exp} Exp\n");
+                Console.WriteLine($"\n\t보상 경험치     : {Dungeon.RewardExp} Exp\n");
                 foreach (var monster in Dungeon.Dungeon_Monster)
                 {
                     Console.WriteLine($"\t\t\t\t+{monster.RewardExp} Exp …………{monster.Name} 토벌 추가 보상");
-                    Dungeon.Exp += monster.RewardExp;
+                    Dungeon.RewardExp += monster.RewardExp;
                 }
                 Console.WriteLine($"\t--------------------------------------------------------------------------\n");
-                SceneManager.Instance.ColText($"\t\t\t\t\t\t\t최종 보상 경험치  :  {Dungeon.Exp} Exp\n\n", ConsoleColor.Green, ConsoleColor.Black);
+                SceneManager.Instance.ColText($"\t\t\t\t\t\t\t최종 보상 경험치  :  {Dungeon.RewardExp} Exp\n\n", ConsoleColor.Green, ConsoleColor.Black);
 
 
-                Player.GetReward(Dungeon.Reward, Dungeon.Exp);
+                Player.GetReward(Dungeon.RewardGold, Dungeon.RewardExp);
                 if (Player.LevelUp() > 0)
                 {
                     //Console.WriteLine($"  ━━━━━ ✦ 레벨 업 ✦ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");

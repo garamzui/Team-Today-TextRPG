@@ -7,7 +7,7 @@
     }
     public enum MONSTER_CODE
     {
-        SLIME = 0,
+        SLIME,
         GOBLIN,
         WOLF,
         BOAR,
@@ -16,7 +16,7 @@
     }
     public enum MONSTER_GRADE
     {
-        NORMAL = 0,
+        NORMAL,
         BOSS
     }
 
@@ -28,12 +28,14 @@
 
         public string? Name { get; set; }
         public int Level { get; set; }
-        public int Atk { get; set; }
+        public int Attack { get; set; }
         public int PlusAtk { get; set; }
-        public int Def { get; set; }
+        public int Defence { get; set; }
         public int PlusDef { get; set; }
         public int Hp { get; set; }
         public int MaxHp { get; set; }
+        public int Mp { get; set; }
+        public int MaxMp { get; set; }
         public int RewardGold { get; set; }
         public int RewardExp { get; set; }
         public string? Text { get; set; }
@@ -49,10 +51,12 @@
             Code = (MONSTER_CODE)(int.Parse(Parameter[0]));
             Name = Parameter[1];
             Level = int.Parse(Parameter[2]);
-            Atk = int.Parse(Parameter[3]);
-            Def = int.Parse(Parameter[4]);
+            Attack = int.Parse(Parameter[3]);
+            Defence = int.Parse(Parameter[4]);
             Hp = int.Parse(Parameter[5]);
             MaxHp = Hp;
+            Mp = int.Parse(Parameter[6]);
+            MaxMp = Mp;
             RewardGold = int.Parse(Parameter[6]);
             RewardExp = int.Parse(Parameter[7]);
             if (!Enum.TryParse(parameter[8], out MONSTER_GRADE grade))
@@ -133,7 +137,7 @@
     {
         public Slime()
         {
-            Init(DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.SLIME]);
+            //Init(DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.SLIME]);
         }
     }
 
@@ -141,7 +145,7 @@
     {
         public Goblin()
         {
-            Init(DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.GOBLIN]);
+            //Init(DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.GOBLIN]);
         }
     }
 
@@ -149,7 +153,7 @@
     {
         public Wolf()
         {
-            Init(DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.WOLF]);
+           //Init(DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.WOLF]);
         }
     }
 
@@ -157,7 +161,7 @@
     {
         public Boar()
         {
-            Init(DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.BOAR]);
+            //Init(DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.BOAR]);
         }
     }
 
@@ -165,7 +169,7 @@
     {
         public Ork()
         {
-            Init(DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.ORK]);
+            //Init(DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.ORK]);
         }
     }
 
@@ -173,7 +177,7 @@
     {
         public Zakum()
         {
-            Init(DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.ZAKUM]);
+            //Init(DataManager.Instance.MonsterDB.List[(int)MONSTER_CODE.ZAKUM]);
         }
     }
 }

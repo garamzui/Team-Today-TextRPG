@@ -2,7 +2,7 @@
 {
     public enum ITEM_TYPE
     {
-        WEAPON = 0,     //무기
+        WEAPON,     //무기
         ARMOR,          //방어구
         CONSUMABLE      //소모품
     }

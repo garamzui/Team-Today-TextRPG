@@ -1,4 +1,6 @@
-﻿namespace TeamTodayTextRPG
+﻿using System.Collections.Generic;
+
+namespace TeamTodayTextRPG
 {
     class TRPG
     {
@@ -9,12 +11,26 @@
             
             //GameManager.Instance.Animation.TitleAnimation();
             var sm = SceneManager.Instance;
-            sm.Intro();
-            // 『효빈』스테이트 머신
-            while (true)
+            var dm = DataManager.Instance;
+
+            /*
+            foreach (var ch in DataManager.Instance.DungeonDB.List)
             {
-                sm.SwitchScene(sm.CurrentViewType);
-            }
+                Console.WriteLine($"{ch.Code} / {ch.Diff} / {ch.Name} : 공격력 {ch.Text}, exP {ch.RewardExp}");
+            }*/
+
+
+
+        sm.Intro();
+
+
+
+
+         //『효빈』스테이트 머신
+        while (true)
+        {
+            sm.SwitchScene(sm.CurrentViewType);
         }
+    }
     }
 }

@@ -1,0 +1,41 @@
+[
+  {
+    "$type": "TeamTodayTextRPG.Warrior, TeamTodayTextRPG",
+    "Code": 0,
+    "Jobname": "전사",
+    "Attack": 12,
+    "Defence": 5,
+    "Hp": 100,
+    "Mp": 40,
+    "Dodge": 1,
+    "ActskillName": "겁나쎄게 올려치기",
+    "PasskillName": "강철피부",
+    "JobDescription": "높은 방어력, 기본 공격력, 체력"
+  },
+  {
+    "$type": "TeamTodayTextRPG.Magician, TeamTodayTextRPG",
+    "Code": 1,
+    "Jobname": "마법사",
+    "Attack": 3,
+    "Defence": 3,
+    "Hp": 50,
+    "Mp": 100,
+    "Dodge": 3,
+    "ActskillName": "썬더봁",
+    "PasskillName": "마력증강",
+    "JobDescription": "방어 무시, 높은 마나, 스킬의존성"
+  },
+  {
+    "$type": "TeamTodayTextRPG.Assassin, TeamTodayTextRPG",
+    "Code": 2,
+    "Jobname": "도적",
+    "Attack": 7,
+    "Defence": 1,
+    "Hp": 75,
+    "Mp": 75,
+    "Dodge": 10,
+    "ActskillName": "연격",
+    "PasskillName": "날쌘 움직임",
+    "JobDescription": "높은 회피, 크리티컬 히트"
+  }
+]

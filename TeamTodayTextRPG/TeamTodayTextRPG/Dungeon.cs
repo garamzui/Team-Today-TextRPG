@@ -1,17 +1,18 @@
 namespace TeamTodayTextRPG
 {
-    public enum DUNGEON_DIFF { Easy = 0, Normal, Hard, Hell }
+    public enum DUNGEON_DIFF { EASY, NORMAL, HARD, HELL }
 
     public abstract class Dungeon
     {
-        public int Code { get; set; }
+        public int Code { get; set; }       
         public string Name { get; set; }
-        public int Reward { get; set; }
-        public int Exp { get; set; }
         public string Text { get; set; }
 
+        public int RewardGold { get; set; }
+        public int RewardExp { get; set; }
         public int LowLevel { get; set; }
         public int HighLevel { get; set; }
+
         public int MonsterCount { get; set; }
         public int Turn { get; set; } = 0;
 
@@ -26,14 +27,12 @@ namespace TeamTodayTextRPG
         // 던전 진입시 등장할 몬스터 리스트
         public List<Monster> Dungeon_Monster { get; set; } = new List<Monster>();
 
-        //public Dungeon(int code, string name, int reward, int exp, int defLevel, DUNGEON_DIFF diff)
-
         public void Init(string[] parameter)
         {
             Code = int.Parse(parameter[0]);
             Name = parameter[1];
-            Reward = int.Parse(parameter[2]);
-            Exp = int.Parse(parameter[3]);
+            RewardGold = int.Parse(parameter[2]);
+            RewardExp = int.Parse(parameter[3]);
             LowLevel = int.Parse(parameter[4]);
             HighLevel = int.Parse(parameter[5]);
             MonsterCount = int.Parse(parameter[6]);
@@ -43,13 +42,12 @@ namespace TeamTodayTextRPG
 
         public void Enter()
         {
-            if (Diff == DUNGEON_DIFF.Hell)
+            if (Diff == DUNGEON_DIFF.HELL)
             {
                 Dungeon_Monster.Add(GameManager.Instance.MonsterFactory((int)MONSTER_CODE.ZAKUM));
             }
             else
             {
-
                 int randNum = GameManager.Instance.Rand.Next(1, MonsterCount + 1);
                 for (int i = 0; i < randNum; i++)
                 {
@@ -57,19 +55,17 @@ namespace TeamTodayTextRPG
                     int strongMon = 0;
                     Random randCode = new Random();
                     // 던전 난이도 별로 switch case 문 혹은 if문
-                    if (Diff == DUNGEON_DIFF.Easy)
+                    if (Diff == DUNGEON_DIFF.EASY)
                     {
                         weakMon = (int)MONSTER_CODE.SLIME;
                         strongMon = (int)MONSTER_CODE.WOLF;
                     }
-
-                    else if (Diff == DUNGEON_DIFF.Normal)
+                    else if (Diff == DUNGEON_DIFF.NORMAL)
                     {
                         weakMon = (int)MONSTER_CODE.GOBLIN;
                         strongMon = (int)MONSTER_CODE.ORK;
                     }
-
-                    else if (Diff == DUNGEON_DIFF.Hard)
+                    else if (Diff == DUNGEON_DIFF.HARD)
                     {
                         weakMon = (int)MONSTER_CODE.WOLF;
                         strongMon = (int)MONSTER_CODE.ZAKUM;
@@ -115,7 +111,7 @@ namespace TeamTodayTextRPG
     {
         public Dungeon_Easy()
         {
-            Init(DataManager.Instance.DungeonDB.List[0]);
+            //Init(DataManager.Instance.DungeonDB.List[0]);
         }
     }
 
@@ -123,21 +119,21 @@ namespace TeamTodayTextRPG
     {
         public Dungeon_Normal()
         {
-            Init(DataManager.Instance.DungeonDB.List[1]);
+            //Init(DataManager.Instance.DungeonDB.List[1]);
         }
     }
     public class Dungeon_Hard : Dungeon
     {
         public Dungeon_Hard()
         {
-            Init(DataManager.Instance.DungeonDB.List[2]);
+            //Init(DataManager.Instance.DungeonDB.List[2]);
         }
     }
     public class Dungeon_Hell : Dungeon
     {
         public Dungeon_Hell()
         {
-            Init(DataManager.Instance.DungeonDB.List[3]);
+            //Init(DataManager.Instance.DungeonDB.List[3]);
         }
     }
 }

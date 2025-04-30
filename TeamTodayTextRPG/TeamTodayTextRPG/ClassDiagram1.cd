@@ -38,7 +38,7 @@
   <Class Name="TeamTodayTextRPG.Dungeon">
     <Position X="3.25" Y="9" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAECAAAQAAgAABAAEAEiEARAAAAEBAIAABACCAgAAQA=</HashCode>
+      <HashCode>AAEAAAAQAAgAABAAEAEiEARAAAAkBAIAABACDAgAAAA=</HashCode>
       <FileName>Dungeon.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -70,17 +70,10 @@
       <FileName>Dungeon.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="TeamTodayTextRPG.TRPG">
-    <Position X="12.25" Y="5.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
-      <FileName>TRPG.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="TeamTodayTextRPG.Viewer">
     <Position X="15.75" Y="8.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AABEAAAAICAAgAAAgAAAIAMAACSAAIAAAAAAAUAgCEA=</HashCode>
+      <HashCode>AABEQAAAACAAgAAAgABAoAMAACSAAIAAAUIAAUIgCEA=</HashCode>
       <FileName>Viewer.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -115,7 +108,7 @@
   <Class Name="TeamTodayTextRPG.ShopViewer" Collapsed="true">
     <Position X="17.5" Y="10" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAEAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAEQAAACAAAAAgAAAAAAAIAgAAAAAAAAEAAQAAAAAA=</HashCode>
       <FileName>Viewer.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -206,7 +199,7 @@
   <Class Name="TeamTodayTextRPG.SceneManager">
     <Position X="15.75" Y="1.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AEACBAEAAAAAFAAAgAAkACAAEDAAQAAAwAAIIADAAAA=</HashCode>
+      <HashCode>AEACBAEAAAAAFAAAgAAEACAAETAAQAAAwAAIIADCAAA=</HashCode>
       <FileName>SceneManager.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -224,52 +217,10 @@
       <FileName>GameManager.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="TeamTodayTextRPG.DataManager">
-    <Position X="12.25" Y="1.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAQAAACAAAQAAAAACAACg=</HashCode>
-      <FileName>DataManager.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="TeamTodayTextRPG.Database&lt;T&gt;">
-    <Position X="7.5" Y="9.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAABAAAAAAAAAAAAQAAAAAAAAAAAAAACAAAAAAI=</HashCode>
-      <FileName>DataManager.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="TeamTodayTextRPG.CharacterDatabase" Collapsed="true">
-    <Position X="9.75" Y="9" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAABAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAA=</HashCode>
-      <FileName>DataManager.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="TeamTodayTextRPG.MonsterDatabase" Collapsed="true">
-    <Position X="9.75" Y="11.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAABAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAA=</HashCode>
-      <FileName>DataManager.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="TeamTodayTextRPG.ItemDatabase" Collapsed="true">
-    <Position X="9.75" Y="10.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAABAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAA=</HashCode>
-      <FileName>DataManager.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="TeamTodayTextRPG.DungeonDatabase" Collapsed="true">
-    <Position X="9.75" Y="9.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAABAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAA=</HashCode>
-      <FileName>DataManager.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="TeamTodayTextRPG.Monster">
     <Position X="20" Y="1.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>ACAAABAAAAABAACgAAAgAAQAAACwAAABABACDAEIQIA=</HashCode>
+      <HashCode>ACAAABACAAABAAAgAAAgAAQAAIAwAAABABACDgEIQoA=</HashCode>
       <FileName>Monster.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -315,6 +266,55 @@
       <FileName>Player.cs</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="TeamTodayTextRPG.DataManager">
+    <Position X="12.25" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAQAAACAAAQAAAAACAACg=</HashCode>
+      <FileName>DataManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.Database&lt;T&gt;">
+    <Position X="7.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAQAAAAAAAAAAAAAAAAAAgAAAACAAAAAAI=</HashCode>
+      <FileName>DataManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.DungeonDatabase" Collapsed="true">
+    <Position X="9.75" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>DataManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.TRPG">
+    <Position X="12.25" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>TRPG.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.CharacterDatabase" Collapsed="true">
+    <Position X="9.75" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DataManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.MonsterDatabase" Collapsed="true">
+    <Position X="9.75" Y="11.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DataManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamTodayTextRPG.ItemDatabase" Collapsed="true">
+    <Position X="9.75" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>DataManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
   <Enum Name="TeamTodayTextRPG.CHAR_TYPE" Collapsed="true">
     <Position X="3" Y="5" Width="1.5" />
     <TypeIdentifier>
@@ -339,7 +339,7 @@
   <Enum Name="TeamTodayTextRPG.VIEW_TYPE" Collapsed="true">
     <Position X="14" Y="9" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAQgiACEAAAAAI0AAAAIABQAAAAkIAAAAAAAgAAIA=</HashCode>
+      <HashCode>AAAAQgiACEAAAAAI0AAAAIABQAAAAkIAAAAAAAgAAAA=</HashCode>
       <FileName>Viewer.cs</FileName>
     </TypeIdentifier>
   </Enum>
@@ -348,13 +348,6 @@
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAACAAAAQAAAAQAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Item.cs</FileName>
-    </TypeIdentifier>
-  </Enum>
-  <Enum Name="TeamTodayTextRPG.DATA_TYPE">
-    <Position X="11.5" Y="9" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAIAIAAAQAAAAAAIA=</HashCode>
-      <FileName>DataManager.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Enum Name="TeamTodayTextRPG.MONSTER_STATE" Collapsed="true">
@@ -367,7 +360,7 @@
   <Enum Name="TeamTodayTextRPG.MONSTER_CODE" Collapsed="true">
     <Position X="18" Y="1.25" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>QAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAgAACAAAACAAA=</HashCode>
+      <HashCode>AAIAAAAAAAAAAgAAAAAAIAAAAAAIAAAAQAAAAIAAAAA=</HashCode>
       <FileName>Monster.cs</FileName>
     </TypeIdentifier>
   </Enum>
@@ -376,6 +369,13 @@
     <TypeIdentifier>
       <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAA=</HashCode>
       <FileName>Monster.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TeamTodayTextRPG.DATA_TYPE">
+    <Position X="11.5" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAIAIAAAQAAAAAAIA=</HashCode>
+      <FileName>DataManager.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Font Name="맑은 고딕" Size="9" />
