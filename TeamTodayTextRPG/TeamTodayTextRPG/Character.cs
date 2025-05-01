@@ -53,23 +53,6 @@
         public int PassiveSkillLevel = 1;
         // public int MaxPassiveSkillLevel { get; set; } = 5;  // <= 수정 생각해보기 위치...static
 
-        /*
-public void Init(string[] data) //우선은 임의로 매서드로 초기화할 필드를 변경해 놓았습니다.
-{
-
- //직업이름,공격력,방어력,체력,마력,회피,액티브스킬이름,패시브스킬이름
- Code = (CHAR_TYPE)int.Parse(data[0]);
- Jobname = data[1];
- Attack = int.Parse(data[2]);
- Defence = int.Parse(data[3]);
- Hp = int.Parse(data[4]);
- MaxHp = Hp;
- Mp = int.Parse(data[5]);
- MaxMp = Mp;
- Dodge = int.Parse(data[6]);
- ActskillName = (data[7]);
- PasskillName = (data[8]);
-}*/
         //영훈) ↓보시면 참조 0개라고 쓰여있어요 그러면 이 메서드는 호출이 안되었다는 뜻이죠
         //Viewer 스크립트의 109번 줄부터 보면 거기에서 이미 비슷한 동작을 하고 있어서
         //ViewStatus() 메서드는 지우셔도 될거같아요!
@@ -240,14 +223,10 @@ public void Init(string[] data) //우선은 임의로 매서드로 초기화할 
             {
                 ManageMp(-10);
 
-
-                //GameManager.Instance.Dungeon.TargetMonster.ManageHp(-skillDamage);
-
                 return skillDamage;
             }
             else
             {
-                //Console.WriteLine("MP가 모자랍니다.");
                 return skillDamage = 0;
             }
         }
@@ -281,7 +260,6 @@ public void Init(string[] data) //우선은 임의로 매서드로 초기화할 
     {
         public Assassin()
         {
-           // Init(DataManager.Instance.CharacterDB.List[(int)CHAR_TYPE.ASSASSIN]);
         }
         public bool Critical(ref int damage)
         {
@@ -300,10 +278,6 @@ public void Init(string[] data) //우선은 임의로 매서드로 초기화할 
             int attackDamage = GameManager.Instance.Player.Character.TotalAtk - GameManager.Instance.Dungeon.TargetMonster.Defence;
             if (attackDamage <= 0) attackDamage = 1;
 
-
-
-            //GameManager.Instance.Dungeon.TargetMonster.ManageHp(-attackDamage);
-
             return attackDamage;
 
         }
@@ -321,7 +295,6 @@ public void Init(string[] data) //우선은 임의로 매서드로 초기화할 
             }
             else
             {
-                //Console.WriteLine("MP가 모자랍니다.");
                 return 0;
             }
         }
