@@ -751,7 +751,7 @@
             DisplayTabs();
 
             Console.WriteLine("\t-1. << 이전\t-2. 다음 >>\n");
-            Console.WriteLine($"\t1 ~ {GameManager.Instance.ShopViewList.Count}. 아이템 구매\n");
+            Console.WriteLine($"\t1 ~ {GameManager.Instance.ShopViewList.Count}1. 아이템 구매\n");
             Console.WriteLine("\t0. 상점으로");
             Console.WriteLine("\t-3. 판매 화면으로\n\n");
             SceneManager.Instance.CurrentViewType = SceneManager.Instance.CurrentViewer.NextView(SceneManager.Instance.InputAction(StartIndex, EndIndex, Console.CursorTop));
